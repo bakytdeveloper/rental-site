@@ -1,0 +1,236 @@
+.site-card {
+    position: relative;
+    height: 100%;
+    perspective: 1000px;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    transform-style: preserve-3d;
+}
+
+.site-card:hover .card-inner {
+    transform: translateY(-8px) rotateX(2deg);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow:
+            0 15px 30px rgba(0, 0, 0, 0.3),
+            0 0 60px rgba(100, 255, 218, 0.1);
+}
+
+.card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: linear-gradient(45deg, #1a365d, #2d3748);
+}
+
+.card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.4s ease;
+}
+
+.site-card:hover .card-image img {
+    transform: scale(1.05);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    font-size: 2.5rem;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 25, 47, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.site-card:hover .card-overlay {
+    opacity: 1;
+}
+
+.btn-quick-view {
+    background: rgba(100, 255, 218, 0.9);
+    border: none;
+    color: #0a192f;
+    font-weight: 600;
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.btn-quick-view:hover {
+    background: #64ffda;
+    transform: scale(1.05);
+    color: #0a192f;
+}
+
+.card-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+}
+
+.card-badge.featured {
+    background: linear-gradient(135deg, #64ffda, #3bd6d4);
+    color: #0a192f;
+}
+
+.card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 200px);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.site-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+    flex: 1;
+    line-height: 1.3;
+}
+
+.site-price {
+    text-align: right;
+    color: #64ffda;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+}
+
+.site-price span {
+    font-size: 0.7rem;
+    color: #8892b0;
+    font-weight: 400;
+}
+
+.site-description {
+    color: #8892b0;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 1rem;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.site-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+
+.tech-tag {
+    background: rgba(100, 255, 218, 0.1);
+    color: #64ffda;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    border: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+.tech-tag.more {
+    background: rgba(136, 146, 176, 0.1);
+    color: #8892b0;
+    border-color: rgba(136, 146, 176, 0.2);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.site-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.site-category {
+    color: #8892b0;
+    font-size: 0.8rem;
+    font-weight: 500;
+    background: rgba(136, 146, 176, 0.1);
+    padding: 0.3rem 0.7rem;
+    border-radius: 12px;
+    border: 1px solid rgba(136, 146, 176, 0.2);
+}
+
+.btn-rent-now {
+    background: transparent;
+    border: 2px solid #64ffda;
+    color: #64ffda;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-rent-now:hover {
+    background: rgba(100, 255, 218, 0.1);
+    transform: translateY(-2px);
+    color: #64ffda;
+    border-color: #64ffda;
+}
+
+.card-glow {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #64ffda, #3bd6d4, #2979ff);
+    border-radius: 22px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    filter: blur(12px);
+}
+
+.site-card:hover .card-glow {
+    opacity: 0.5;
+}
