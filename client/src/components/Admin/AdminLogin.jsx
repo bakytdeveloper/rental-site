@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authAPI } from '../../services/api';
-import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './AdminLogin.css';
 
@@ -12,8 +11,8 @@ const AdminLogin = () => {
         password: ''
     });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const { loading, startLoading, stopLoading } = useLoading();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -36,7 +35,7 @@ const AdminLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-        startLoading();
+        setLoading(true);
 
         try {
             const response = await authAPI.login(formData);
@@ -57,7 +56,7 @@ const AdminLogin = () => {
             setError(message);
             toast.error(message);
         } finally {
-            stopLoading();
+            setLoading(false);
         }
     };
 
@@ -91,7 +90,7 @@ const AdminLogin = () => {
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             required
-                                            placeholder="Enter your email"
+                                            placeholder="Enter admin email"
                                             disabled={loading}
                                         />
                                     </Form.Group>
@@ -104,7 +103,7 @@ const AdminLogin = () => {
                                             value={formData.password}
                                             onChange={handleInputChange}
                                             required
-                                            placeholder="Enter your password"
+                                            placeholder="Enter admin password"
                                             disabled={loading}
                                         />
                                     </Form.Group>
@@ -133,9 +132,9 @@ const AdminLogin = () => {
                                     </Button>
                                 </Form>
 
-                                <div className="login-footer text-center mt-4">
+                                <div className="text-center mt-3">
                                     <small className="text-muted">
-                                        Forgot your credentials? Contact system administrator.
+                                        Demo credentials: admin@rentalsite.com / admin123
                                     </small>
                                 </div>
                             </Card.Body>

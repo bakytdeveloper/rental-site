@@ -1,9 +1,8 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
 
 // Generate JWT Token
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+const generateToken = (id, role = 'admin') => {
+    return jwt.sign({ id, role }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
 };
@@ -23,29 +22,31 @@ export const login = async (req, res) => {
             });
         }
 
-        // Check for user
-        const user = await User.findOne({ email, isActive: true }).select('+password');
+        // Check for admin credentials
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminPassword = process.env.ADMIN_PASSWORD;
+        const adminUsername = process.env.ADMIN_USERNAME;
 
-        if (!user || !(await user.comparePassword(password))) {
+        if (email === adminEmail && password === adminPassword) {
+            // Generate token with admin ID (using username as ID for simplicity)
+            const token = generateToken(adminUsername);
+
+            res.json({
+                success: true,
+                token: token,
+                user: {
+                    id: adminUsername,
+                    username: adminUsername,
+                    email: adminEmail,
+                    role: 'admin'
+                }
+            });
+        } else {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid credentials'
             });
         }
-
-        // Update last login
-        await user.updateLastLogin();
-
-        res.json({
-            success: true,
-            token: generateToken(user._id),
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            }
-        });
     } catch (error) {
         console.error('Login error:', error);
         res.status(500).json({
@@ -60,16 +61,17 @@ export const login = async (req, res) => {
 // @access  Private
 export const getMe = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const adminEmail = process.env.ADMIN_EMAIL;
+        const adminUsername = process.env.ADMIN_USERNAME;
 
         res.json({
             success: true,
             user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                role: user.role,
-                lastLogin: user.lastLogin
+                id: adminUsername,
+                username: adminUsername,
+                email: adminEmail,
+                role: 'admin',
+                lastLogin: new Date()
             }
         });
     } catch (error) {
@@ -88,31 +90,21 @@ export const updateProfile = async (req, res) => {
     try {
         const { username, email } = req.body;
 
-        const user = await User.findByIdAndUpdate(
-            req.user.id,
-            { username, email },
-            { new: true, runValidators: true }
-        );
+        // For simplified admin, we don't actually update credentials
+        // You can update environment variables here if needed
 
         res.json({
             success: true,
+            message: 'Profile update functionality disabled for demo admin',
             user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                role: user.role
+                id: process.env.ADMIN_USERNAME,
+                username: process.env.ADMIN_USERNAME,
+                email: process.env.ADMIN_EMAIL,
+                role: 'admin'
             }
         });
     } catch (error) {
         console.error('Update profile error:', error);
-
-        if (error.code === 11000) {
-            return res.status(400).json({
-                success: false,
-                message: 'Username or email already exists'
-            });
-        }
-
         res.status(500).json({
             success: false,
             message: 'Server error during profile update'

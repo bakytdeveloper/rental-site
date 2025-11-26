@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import User from '../models/User.js';
 
 export const protect = async (req, res, next) => {
     try {
@@ -18,16 +17,21 @@ export const protect = async (req, res, next) => {
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
-            req.user = await User.findById(decoded.id).select('-password');
 
-            if (!req.user || !req.user.isActive) {
+            // For simplified admin, we just check if the token is valid
+            // and matches our admin username
+            if (decoded.id === process.env.ADMIN_USERNAME) {
+                req.user = {
+                    id: decoded.id,
+                    role: decoded.role || 'admin'
+                };
+                next();
+            } else {
                 return res.status(401).json({
                     success: false,
-                    message: 'User not found or inactive'
+                    message: 'Not authorized to access this route'
                 });
             }
-
-            next();
         } catch (error) {
             return res.status(401).json({
                 success: false,
