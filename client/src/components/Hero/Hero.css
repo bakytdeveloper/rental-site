@@ -10,6 +10,7 @@
 
 .hero-background {
     position: absolute;
+    padding-top: 6rem;
     top: 0;
     left: 0;
     width: 100%;
@@ -101,7 +102,7 @@
     background: linear-gradient(135deg, #64ffda 0%, #3bd6d4 50%, #2979ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
+    /*background-clip: text;*/
 }
 
 .cursor {

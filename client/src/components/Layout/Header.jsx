@@ -1,13 +1,19 @@
 import { useState } from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
-import { Link, useLocation } from 'react-router-dom';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
     const [expanded, setExpanded] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
 
     const closeNavbar = () => setExpanded(false);
+
+    const handleAdminLogin = () => {
+        closeNavbar();
+        navigate('/admin/login');
+    };
 
     return (
         <Navbar expand="lg" fixed="top" expanded={expanded} className="custom-navbar">
@@ -55,6 +61,18 @@ const Header = () => {
                         >
                             Contact
                         </Nav.Link>
+
+                        {/* Кнопка входа в админ-панель */}
+                        <div className="admin-login-btn">
+                            <Button
+                                variant="outline-light"
+                                size="sm"
+                                onClick={handleAdminLogin}
+                                className="ms-2"
+                            >
+                                Admin Login
+                            </Button>
+                        </div>
                     </Nav>
                 </Navbar.Collapse>
             </Container>
