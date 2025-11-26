@@ -20,7 +20,7 @@ app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalsite')
+mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalSite')
     .then(() => console.log('✅ MongoDB connected successfully'))
     .catch(err => console.log('❌ MongoDB connection error:', err));
 
