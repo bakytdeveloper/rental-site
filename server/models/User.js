@@ -6,17 +6,21 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true,
-        trim: true
+        trim: true,
+        minlength: 3,
+        maxlength: 30
     },
     email: {
         type: String,
         required: true,
         unique: true,
-        trim: true
+        trim: true,
+        lowercase: true
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: 6
     },
     role: {
         type: String,
@@ -26,6 +30,9 @@ const UserSchema = new mongoose.Schema({
     isActive: {
         type: Boolean,
         default: true
+    },
+    lastLogin: {
+        type: Date
     }
 }, {
     timestamps: true
@@ -34,13 +41,25 @@ const UserSchema = new mongoose.Schema({
 // Hash password before saving
 UserSchema.pre('save', async function(next) {
     if (!this.isModified('password')) return next();
-    this.password = await bcrypt.hash(this.password, 12);
-    next();
+
+    try {
+        const salt = await bcrypt.genSalt(12);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (error) {
+        next(error);
+    }
 });
 
 // Compare password method
 UserSchema.methods.comparePassword = async function(candidatePassword) {
     return await bcrypt.compare(candidatePassword, this.password);
+};
+
+// Update last login on successful login
+UserSchema.methods.updateLastLogin = async function() {
+    this.lastLogin = new Date();
+    await this.save();
 };
 
 export default mongoose.model('User', UserSchema);

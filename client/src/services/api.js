@@ -1,13 +1,42 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+// Create axios instance
 const api = axios.create({
     baseURL: API_BASE_URL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
+
+// Request interceptor to add auth token
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('adminToken');
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
+
+// Response interceptor for error handling
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('adminToken');
+            localStorage.removeItem('adminUser');
+            window.location.href = '/admin/login';
+        }
+        return Promise.reject(error);
+    }
+);
 
 // Site API
 export const siteAPI = {
@@ -17,6 +46,31 @@ export const siteAPI = {
     create: (data) => api.post('/sites', data),
     update: (id, data) => api.put(`/sites/${id}`, data),
     delete: (id) => api.delete(`/sites/${id}`),
+};
+
+// Auth API
+export const authAPI = {
+    login: (credentials) => api.post('/auth/login', credentials),
+    getMe: () => api.get('/auth/me'),
+    updateProfile: (data) => api.put('/auth/profile', data),
+};
+
+// Contact API
+// Contact API - добавьте эти методы
+export const contactAPI = {
+    getAll: (params = {}) => api.get('/contacts', { params }),
+    getById: (id) => api.get(`/contacts/${id}`),
+    create: (data) => api.post('/contacts', data),
+    update: (id, data) => api.put(`/contacts/${id}`, data),
+    delete: (id) => api.delete(`/contacts/${id}`),
+    getStats: () => api.get('/contacts/stats/summary'),
+};
+
+// Utility function to handle API errors
+export const handleApiError = (error, defaultMessage = 'Something went wrong') => {
+    const message = error.response?.data?.message || defaultMessage;
+    toast.error(message);
+    return message;
 };
 
 export default api;

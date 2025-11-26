@@ -1,0 +1,250 @@
+.admin-contacts {
+    padding: 1rem 0;
+}
+
+.contact-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-badge {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #64ffda;
+    color: #64ffda;
+    background: transparent;
+}
+
+.filters-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    margin-bottom: 2rem;
+}
+
+.filters-card .card-body {
+    padding: 1.5rem;
+}
+
+.filters-card .form-label {
+    color: #ccd6f6;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.filters-card .form-control,
+.filters-card .form-select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: 8px;
+}
+
+.filters-card .form-control:focus,
+.filters-card .form-select:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #64ffda;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+}
+
+.contacts-table-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.contacts-table {
+    color: #ccd6f6;
+    margin: 0;
+}
+
+.contacts-table th {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #64ffda;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1rem 0.75rem;
+}
+
+.contacts-table td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
+    padding: 1rem 0.75rem;
+}
+
+.contact-info .contact-name {
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 0.25rem;
+}
+
+.contact-info .contact-email {
+    color: #64ffda;
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.contact-info .contact-phone {
+    color: #8892b0;
+    font-size: 0.85rem;
+}
+
+.site-badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 15px;
+}
+
+.date-info {
+    font-size: 0.85rem;
+}
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pagination-info {
+    color: #8892b0;
+    font-size: 0.9rem;
+}
+
+/* Contact Detail Modal */
+.contact-detail-modal .modal-content {
+    background: #0a192f;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    color: #ffffff;
+}
+
+.contact-detail-modal .modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+}
+
+.contact-detail-modal .modal-title {
+    color: #64ffda;
+    font-weight: 600;
+}
+
+.contact-detail-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.contact-detail-modal .modal-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+}
+
+.detail-section {
+    margin-bottom: 2rem;
+}
+
+.detail-section h6 {
+    color: #64ffda;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.5rem;
+}
+
+.detail-item {
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.detail-item strong {
+    color: #ccd6f6;
+    min-width: 100px;
+    margin-right: 1rem;
+}
+
+.status-actions,
+.priority-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.message-content,
+.notes-content {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 1rem;
+    color: #ccd6f6;
+    line-height: 1.5;
+}
+
+.notes-content {
+    background: rgba(100, 255, 218, 0.05);
+    border-color: rgba(100, 255, 218, 0.2);
+}
+
+.contact-detail-modal .form-control {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-radius: 8px;
+}
+
+.contact-detail-modal .form-control:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: #64ffda;
+    color: #ffffff;
+    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+}
+
+.admin-loading {
+    text-align: center;
+    padding: 3rem;
+    color: #8892b0;
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #8892b0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filters-card .card-body {
+        padding: 1rem;
+    }
+
+    .contacts-table {
+        font-size: 0.8rem;
+    }
+
+    .status-actions,
+    .priority-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .detail-item strong {
+        margin-bottom: 0.5rem;
+        min-width: auto;
+    }
+
+    .pagination-container {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}

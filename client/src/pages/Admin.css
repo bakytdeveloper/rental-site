@@ -1,0 +1,111 @@
+.admin-page {
+    min-height: 100vh;
+    background: #0a192f;
+    color: #ffffff;
+}
+
+.admin-sidebar {
+    background: #112240;
+    min-height: 100vh;
+    padding: 0;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+}
+
+.sidebar-header h3 {
+    color: #64ffda;
+    margin: 0 0 0.5rem 0;
+    font-size: 1.2rem;
+}
+
+.user-info {
+    color: #8892b0;
+    font-size: 0.8rem;
+}
+
+.admin-sidebar .nav {
+    padding: 1rem 0;
+    flex: 1;
+}
+
+.admin-sidebar .nav-link {
+    color: #ccd6f6;
+    padding: 0.75rem 1.5rem;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+    color: #64ffda;
+    background: rgba(100, 255, 218, 0.1);
+    border-left-color: #64ffda;
+}
+
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user-dropdown {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ccd6f6;
+    text-align: left;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-dropdown:hover,
+.user-dropdown:focus {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(100, 255, 218, 0.3);
+    color: #64ffda;
+}
+
+.user-dropdown::after {
+    margin-left: auto;
+}
+
+.dropdown-menu {
+    background: #112240;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.dropdown-item {
+    color: #ccd6f6;
+    padding: 0.5rem 1rem;
+}
+
+.dropdown-item:hover {
+    background: rgba(100, 255, 218, 0.1);
+    color: #64ffda;
+}
+
+.admin-main {
+    padding: 2rem;
+    background: #0a192f;
+    min-height: 100vh;
+}
+
+@media (max-width: 992px) {
+    .admin-sidebar {
+        min-height: auto;
+        border-right: none;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-main {
+        padding: 1rem;
+    }
+}
