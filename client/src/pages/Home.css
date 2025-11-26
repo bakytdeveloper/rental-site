@@ -1,0 +1,9 @@
+.home-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+}
+
+/* Ensure all sections have proper spacing */
+.home-page > * {
+    position: relative;
+}
