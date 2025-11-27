@@ -47,7 +47,7 @@ const AdminContacts = () => {
             }));
         } catch (error) {
             toast.error('Не удалось получить контакты');
-            console.error('Error fetching contacts:', error);
+            console.error('Ошибка при загрузке контактов:', error);
         } finally {
             stopLoading();
         }
