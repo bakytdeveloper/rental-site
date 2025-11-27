@@ -120,7 +120,7 @@ const AdminContacts = () => {
                     handleCloseModal();
                 }
             } catch (error) {
-                toast.error('Failed to delete contact');
+                toast.error('Не удалось удалить контакт.');
                 console.error('Error deleting contact:', error);
             }
         }
