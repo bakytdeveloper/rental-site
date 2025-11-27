@@ -99,7 +99,7 @@ const AdminContacts = () => {
     const addNote = async (contactId, note) => {
         try {
             await contactAPI.update(contactId, { notes: note });
-            toast.success('Note added successfully');
+            toast.success('Примечание успешно добавлено');
             fetchContacts();
             if (selectedContact?._id === contactId) {
                 setSelectedContact(prev => ({ ...prev, notes: note }));
