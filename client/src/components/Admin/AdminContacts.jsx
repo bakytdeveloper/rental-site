@@ -71,7 +71,7 @@ const AdminContacts = () => {
     const updateContactStatus = async (contactId, newStatus) => {
         try {
             await contactAPI.update(contactId, { status: newStatus });
-            toast.success(`Contact marked as ${newStatus}`);
+            toast.success(`Контакт отмечен как ${newStatus}`);
             fetchContacts();
             if (selectedContact?._id === contactId) {
                 setSelectedContact(prev => ({ ...prev, status: newStatus }));
