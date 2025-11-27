@@ -91,7 +91,7 @@ const AdminContacts = () => {
                 setSelectedContact(prev => ({ ...prev, priority: newPriority }));
             }
         } catch (error) {
-            toast.error('Failed to update contact priority');
+            toast.error('Не удалось обновить приоритет контакта.');
             console.error('Error updating contact priority:', error);
         }
     };
@@ -105,7 +105,7 @@ const AdminContacts = () => {
                 setSelectedContact(prev => ({ ...prev, notes: note }));
             }
         } catch (error) {
-            toast.error('Failed to add note');
+            toast.error('Не удалось добавить заметку');
             console.error('Error adding note:', error);
         }
     };
