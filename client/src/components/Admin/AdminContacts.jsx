@@ -78,7 +78,7 @@ const AdminContacts = () => {
             }
         } catch (error) {
             toast.error('Не удалось обновить статус контакта.');
-            console.error('Error updating contact status:', error);
+            console.error('Ошибка обновления статуса контакта:', error);
         }
     };
 
@@ -92,7 +92,7 @@ const AdminContacts = () => {
             }
         } catch (error) {
             toast.error('Не удалось обновить приоритет контакта.');
-            console.error('Error updating contact priority:', error);
+            console.error('Ошибка обновления приоритета контакта:', error);
         }
     };
 
@@ -106,7 +106,7 @@ const AdminContacts = () => {
             }
         } catch (error) {
             toast.error('Не удалось добавить заметку');
-            console.error('Error adding note:', error);
+            console.error('Ошибка добавления примечания:', error);
         }
     };
 
@@ -121,7 +121,7 @@ const AdminContacts = () => {
                 }
             } catch (error) {
                 toast.error('Не удалось удалить контакт.');
-                console.error('Error deleting contact:', error);
+                console.error('Ошибка при удалении контакта:', error);
             }
         }
     };
