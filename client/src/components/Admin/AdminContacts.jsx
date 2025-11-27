@@ -114,7 +114,7 @@ const AdminContacts = () => {
         if (window.confirm('Are you sure you want to delete this contact?')) {
             try {
                 await contactAPI.delete(contactId);
-                toast.success('Contact deleted successfully');
+                toast.success('Контакт успешно удален');
                 fetchContacts();
                 if (selectedContact?._id === contactId) {
                     handleCloseModal();
