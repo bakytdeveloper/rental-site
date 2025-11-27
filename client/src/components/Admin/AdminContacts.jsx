@@ -77,7 +77,7 @@ const AdminContacts = () => {
                 setSelectedContact(prev => ({ ...prev, status: newStatus }));
             }
         } catch (error) {
-            toast.error('Failed to update contact status');
+            toast.error('Не удалось обновить статус контакта.');
             console.error('Error updating contact status:', error);
         }
     };
