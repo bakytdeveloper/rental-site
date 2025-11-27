@@ -85,7 +85,7 @@ const AdminContacts = () => {
     const updateContactPriority = async (contactId, newPriority) => {
         try {
             await contactAPI.update(contactId, { priority: newPriority });
-            toast.success(`Priority updated to ${newPriority}`);
+            toast.success(`Приоритет обновлен до ${newPriority}`);
             fetchContacts();
             if (selectedContact?._id === contactId) {
                 setSelectedContact(prev => ({ ...prev, priority: newPriority }));
