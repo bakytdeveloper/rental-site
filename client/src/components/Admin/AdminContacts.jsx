@@ -46,7 +46,7 @@ const AdminContacts = () => {
                 total: response.data.total
             }));
         } catch (error) {
-            toast.error('Failed to fetch contacts');
+            toast.error('Не удалось получить контакты');
             console.error('Error fetching contacts:', error);
         } finally {
             stopLoading();
