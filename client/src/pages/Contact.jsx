@@ -1,5 +1,7 @@
 import { useState } from 'react';
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Card, Spinner } from 'react-bootstrap';
+import { contactAPI } from '../services/api';
+import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './Contact.css';
 
@@ -11,6 +13,8 @@ const Contact = () => {
         message: ''
     });
 
+    const { loading, startLoading, stopLoading } = useLoading();
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -18,12 +22,23 @@ const Contact = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Здесь будет API call
-        console.log('Form submitted:', formData);
-        toast.success('Message sent successfully! We will get back to you soon.');
-        setFormData({ name: '', email: '', subject: '', message: '' });
+        startLoading();
+
+        try {
+            const response = await contactAPI.create(formData);
+
+            if (response.data.success) {
+                toast.success('📧 Message sent successfully! We will get back to you within 24 hours.');
+                setFormData({ name: '', email: '', subject: '', message: '' });
+            }
+        } catch (error) {
+            console.error('Error submitting contact form:', error);
+            toast.error('Failed to send message. Please try again.');
+        } finally {
+            stopLoading();
+        }
     };
 
     return (
@@ -58,6 +73,7 @@ const Contact = () => {
                                                     onChange={handleChange}
                                                     required
                                                     placeholder="Enter your full name"
+                                                    disabled={loading}
                                                 />
                                             </Form.Group>
                                         </Col>
@@ -71,6 +87,7 @@ const Contact = () => {
                                                     onChange={handleChange}
                                                     required
                                                     placeholder="Enter your email"
+                                                    disabled={loading}
                                                 />
                                             </Form.Group>
                                         </Col>
@@ -85,6 +102,7 @@ const Contact = () => {
                                             onChange={handleChange}
                                             required
                                             placeholder="What is this regarding?"
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
@@ -98,11 +116,31 @@ const Contact = () => {
                                             onChange={handleChange}
                                             required
                                             placeholder="Tell us more about your inquiry..."
+                                            disabled={loading}
                                         />
                                     </Form.Group>
 
-                                    <Button type="submit" className="btn-submit-message" size="lg">
-                                        Send Message
+                                    <Button
+                                        type="submit"
+                                        className="btn-submit-message"
+                                        size="lg"
+                                        disabled={loading}
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <Spinner
+                                                    as="span"
+                                                    animation="border"
+                                                    size="sm"
+                                                    role="status"
+                                                    aria-hidden="true"
+                                                    className="me-2"
+                                                />
+                                                Sending...
+                                            </>
+                                        ) : (
+                                            'Send Message'
+                                        )}
                                     </Button>
                                 </Form>
                             </Card.Body>

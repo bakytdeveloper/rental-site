@@ -3,29 +3,48 @@ import mongoose from 'mongoose';
 const ContactSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
-        trim: true
+        required: [true, 'Name is required'],
+        trim: true,
+        minlength: [2, 'Name must be at least 2 characters long'],
+        maxlength: [100, 'Name cannot exceed 100 characters']
     },
     email: {
         type: String,
-        required: true,
+        required: [true, 'Email is required'],
         trim: true,
-        lowercase: true
+        lowercase: true,
+        match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
     },
     phone: {
         type: String,
-        trim: true
+        trim: true,
+        default: ''
+    },
+    company: {
+        type: String,
+        trim: true,
+        default: ''
+    },
+    subject: {
+        type: String,
+        trim: true,
+        default: 'General Inquiry'
     },
     message: {
         type: String,
-        required: true
+        required: [true, 'Message is required'],
+        trim: true,
+        minlength: [10, 'Message must be at least 10 characters long'],
+        maxlength: [2000, 'Message cannot exceed 2000 characters']
     },
     siteId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Site'
+        ref: 'Site',
+        default: null
     },
     siteTitle: {
-        type: String
+        type: String,
+        default: ''
     },
     status: {
         type: String,
@@ -38,26 +57,14 @@ const ContactSchema = new mongoose.Schema({
         default: 'medium'
     },
     notes: {
-        type: String
+        type: String,
+        default: ''
     }
 }, {
     timestamps: true
 });
 
-// Auto-populate siteTitle before save if siteId is provided
-ContactSchema.pre('save', async function(next) {
-    if (this.siteId && !this.siteTitle) {
-        try {
-            const Site = mongoose.model('Site');
-            const site = await Site.findById(this.siteId);
-            if (site) {
-                this.siteTitle = site.title;
-            }
-        } catch (error) {
-            // Continue without site title if error
-        }
-    }
-    next();
-});
+// Убираем ВСЕ pre-save хуки для начала
+// Мы добавим эту логику позже в контроллере
 
 export default mongoose.model('Contact', ContactSchema);

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Modal, Form, Badge } from 'react-bootstrap';
-import { siteAPI } from '../services/api';
+import { siteAPI, contactAPI } from '../services/api'; // Добавляем contactAPI
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './SiteDetail.css';
@@ -48,20 +48,47 @@ const SiteDetail = () => {
 
     const handleContactSubmit = async (e) => {
         e.preventDefault();
+        startLoading();
+
         try {
-            // Здесь будет API call для отправки формы
-            console.log('Contact form submitted:', { ...contactForm, siteId: id, siteTitle: site.title });
-            toast.success('🎉 Your rental request has been sent! We will contact you within 24 hours.');
-            setShowContactModal(false);
-            setContactForm({
-                name: '',
-                email: '',
-                phone: '',
-                company: '',
-                message: `I'm interested in renting "${site.title}" and would like to know more about the rental process, pricing details, and setup requirements.`
-            });
+            // Prepare contact data
+            const contactData = {
+                name: contactForm.name.trim(),
+                email: contactForm.email.trim(),
+                phone: contactForm.phone.trim() || 'Not provided',
+                company: contactForm.company.trim() || '',
+                message: contactForm.message.trim(),
+                siteId: id,
+                siteTitle: site.title,
+                subject: `Rental Inquiry: ${site.title}`
+            };
+
+            console.log('📤 Sending contact data:', contactData);
+
+            const response = await contactAPI.create(contactData);
+
+            if (response.data.success) {
+                toast.success('🎉 Your rental request has been sent! We will contact you within 24 hours.');
+                setShowContactModal(false);
+                setContactForm({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    company: '',
+                    message: `I'm interested in renting "${site.title}" and would like to know more about the rental process, pricing details, and setup requirements.`
+                });
+            }
         } catch (error) {
-            toast.error('Failed to send request. Please try again.');
+            console.error('❌ Error submitting contact form:', error);
+
+            // Show specific error message from server if available
+            const errorMessage = error.response?.data?.message ||
+                error.response?.data?.errors?.join(', ') ||
+                'Failed to send request. Please try again.';
+
+            toast.error(errorMessage);
+        } finally {
+            stopLoading();
         }
     };
 
@@ -79,7 +106,7 @@ const SiteDetail = () => {
         }
     };
 
-    if (loading) {
+    if (loading && !site) {
         return (
             <div className="site-detail-loading">
                 <Container>
@@ -373,6 +400,7 @@ const SiteDetail = () => {
                                         onChange={handleInputChange}
                                         required
                                         placeholder="Enter your full name"
+                                        disabled={loading}
                                     />
                                 </Form.Group>
                             </Col>
@@ -386,6 +414,7 @@ const SiteDetail = () => {
                                         onChange={handleInputChange}
                                         required
                                         placeholder="Enter your email"
+                                        disabled={loading}
                                     />
                                 </Form.Group>
                             </Col>
@@ -402,6 +431,7 @@ const SiteDetail = () => {
                                         onChange={handleInputChange}
                                         required
                                         placeholder="Enter your phone number"
+                                        disabled={loading}
                                     />
                                 </Form.Group>
                             </Col>
@@ -414,6 +444,7 @@ const SiteDetail = () => {
                                         value={contactForm.company}
                                         onChange={handleInputChange}
                                         placeholder="Your company (optional)"
+                                        disabled={loading}
                                     />
                                 </Form.Group>
                             </Col>
@@ -429,6 +460,7 @@ const SiteDetail = () => {
                                 onChange={handleInputChange}
                                 required
                                 placeholder="Tell us about your rental needs..."
+                                disabled={loading}
                             />
                         </Form.Group>
 
@@ -437,11 +469,30 @@ const SiteDetail = () => {
                                 variant="outline"
                                 onClick={() => setShowContactModal(false)}
                                 className="me-2"
+                                disabled={loading}
                             >
                                 Cancel
                             </Button>
-                            <Button type="submit" className="btn-submit-request">
-                                📧 Send Rental Request
+                            <Button
+                                type="submit"
+                                className="btn-submit-request"
+                                disabled={loading}
+                            >
+                                {loading ? (
+                                    <>
+                                        <Spinner
+                                            as="span"
+                                            animation="border"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                            className="me-2"
+                                        />
+                                        Sending...
+                                    </>
+                                ) : (
+                                    '📧 Send Rental Request'
+                                )}
                             </Button>
                         </div>
                     </Form>
