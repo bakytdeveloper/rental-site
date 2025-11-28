@@ -1,0 +1,680 @@
+.site-detail-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+    padding: 2rem 0;
+}
+
+/* Breadcrumb */
+.breadcrumb-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+    font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+    color: #64ffda;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: #3bd6d4;
+}
+
+.breadcrumb-separator {
+    color: #8892b0;
+}
+
+.breadcrumb-current {
+    color: #ccd6f6;
+    font-weight: 600;
+}
+
+/* Site Detail Content */
+.site-detail-content {
+    margin-bottom: 4rem;
+}
+
+/* Gallery Section */
+.gallery-section {
+    position: sticky;
+    top: 100px;
+}
+
+.main-gallery {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.main-image-container {
+    position: relative;
+    height: 400px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+}
+
+.gallery-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.featured-badge-large {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: linear-gradient(135deg, #64ffda, #3bd6d4) !important;
+    color: #0a192f !important;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: none;
+}
+
+.image-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: rgba(100, 255, 218, 0.2);
+    border-color: #64ffda;
+    transform: scale(1.1);
+}
+
+.image-counter {
+    color: #ccd6f6;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.thumbnail-gallery {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.thumbnail-btn {
+    flex: 0 0 auto;
+    width: 80px;
+    height: 60px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    overflow: hidden;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.thumbnail-btn.active {
+    border-color: #64ffda;
+    transform: scale(1.05);
+}
+
+.thumbnail-btn:hover {
+    border-color: rgba(100, 255, 218, 0.5);
+}
+
+.thumbnail-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Site Info Section */
+.site-info-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-left: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.site-meta-badges {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.category-badge {
+    background: linear-gradient(135deg, #64ffda, #3bd6d4) !important;
+    border: none;
+    color: #0a192f !important;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+.status-badge {
+    background: linear-gradient(135deg, #4CAF50, #45a049) !important;
+    border: none;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+}
+
+.site-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #ffffff;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #64ffda 0%, #2979ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*background-clip: text;*/
+}
+
+.price-section {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.price-amount {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #64ffda;
+}
+
+.price-period {
+    font-size: 1.2rem;
+    color: #8892b0;
+    font-weight: 500;
+}
+
+.site-description {
+    color: #ccd6f6;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.btn-rent-now-main {
+    background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn-rent-now-main:hover {
+    background: linear-gradient(135deg, #ff5252, #ff7b7b);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+    color: white;
+}
+
+/* Key Features */
+.key-features {
+    margin-bottom: 2rem;
+}
+
+.key-features h4 {
+    color: #64ffda;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.features-grid {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+    background: rgba(100, 255, 218, 0.1);
+    border-color: rgba(100, 255, 218, 0.3);
+    transform: translateX(5px);
+}
+
+.feature-icon {
+    color: #64ffda;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.feature-text {
+    color: #ccd6f6;
+    font-size: 0.9rem;
+}
+
+/* Technologies Section */
+.technologies-section {
+    margin-bottom: 2rem;
+}
+
+.technologies-section h4 {
+    color: #64ffda;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.tech-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.tech-tag {
+    background: rgba(100, 255, 218, 0.1) !important;
+    border: 1px solid rgba(100, 255, 218, 0.3) !important;
+    color: #64ffda !important;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+/* Demo Section */
+.demo-section {
+    margin-bottom: 2rem;
+}
+
+.demo-section h4 {
+    color: #64ffda;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.demo-link-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, #2979ff, #2962ff);
+    color: white;
+    text-decoration: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.demo-link-btn:hover {
+    background: linear-gradient(135deg, #2962ff, #2979ff);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(41, 121, 255, 0.4);
+    color: white;
+}
+
+/* Rent Section */
+.rent-section {
+    margin: 4rem 0;
+}
+
+.rent-card {
+    background: linear-gradient(135deg, rgba(100, 255, 218, 0.1), rgba(41, 121, 255, 0.1));
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.rent-card h2 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.rent-description {
+    color: #ccd6f6;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.rent-benefits {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+}
+
+.benefit-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.benefit-item h5 {
+    color: #64ffda;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.benefit-item p {
+    color: #8892b0;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.btn-rent-now-large {
+    background: linear-gradient(135deg, #ff6b6b, #ff5252);
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 1.2rem 3rem;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+}
+
+.btn-rent-now-large:hover {
+    background: linear-gradient(135deg, #ff5252, #ff6b6b);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(255, 107, 107, 0.6);
+    color: white;
+}
+
+/* Related Sites */
+.related-sites-section {
+    margin-top: 4rem;
+}
+
+.section-title {
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, #64ffda 0%, #2979ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*background-clip: text;*/
+}
+
+.related-site-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.related-site-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(100, 255, 218, 0.3);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.related-site-image {
+    position: relative;
+    height: 150px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+}
+
+.related-site-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.related-featured-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: linear-gradient(135deg, #64ffda, #3bd6d4) !important;
+    color: #0a192f !important;
+    font-weight: 600;
+    border: none;
+    font-size: 0.7rem;
+}
+
+.related-site-info {
+    padding: 1.5rem;
+}
+
+.related-site-info h4 {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.related-site-description {
+    color: #8892b0;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.related-site-price {
+    color: #64ffda;
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.btn-view-related {
+    background: transparent;
+    border: 1px solid #64ffda;
+    color: #64ffda;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-view-related:hover {
+    background: rgba(100, 255, 218, 0.1);
+    transform: translateY(-2px);
+    color: #64ffda;
+}
+
+/* Contact Modal */
+.contact-modal .modal-content {
+    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+}
+
+.contact-modal .modal-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 2rem;
+}
+
+.contact-modal .modal-title {
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.modal-subtitle {
+    color: #8892b0;
+    font-size: 0.9rem;
+}
+
+.contact-modal .modal-body {
+    padding: 2rem;
+}
+
+.rental-summary {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.summary-item:last-child {
+    border-bottom: none;
+}
+
+.summary-item span {
+    color: #8892b0;
+}
+
+.summary-item strong {
+    color: #64ffda;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn-submit-request {
+    background: linear-gradient(135deg, #64ffda, #3bd6d4);
+    border: none;
+    color: #0a192f;
+    font-weight: 700;
+    padding: 0.75rem 2rem;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+.btn-submit-request:hover {
+    background: linear-gradient(135deg, #3bd6d4, #64ffda);
+    transform: translateY(-2px);
+    color: #0a192f;
+    box-shadow: 0 8px 20px rgba(100, 255, 218, 0.4);
+}
+
+/* Loading States */
+.site-detail-loading {
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loading-spinner {
+    text-align: center;
+}
+
+.loading-spinner p {
+    color: #8892b0;
+    margin-top: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .site-info-section {
+        margin-left: 0;
+        margin-top: 2rem;
+    }
+
+    .site-title {
+        font-size: 2rem;
+    }
+
+    .price-amount {
+        font-size: 2.5rem;
+    }
+
+    .quick-actions {
+        flex-direction: column;
+    }
+
+    .btn-rent-now-main {
+        min-width: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .site-detail-page {
+        padding: 1rem 0;
+    }
+
+    .main-image-container {
+        height: 300px;
+    }
+
+    .site-title {
+        font-size: 1.8rem;
+    }
+
+    .rent-card {
+        padding: 2rem 1rem;
+    }
+
+    .rent-card h2 {
+        font-size: 2rem;
+    }
+
+    .rent-benefits {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .modal-actions {
+        flex-direction: column;
+    }
+}
