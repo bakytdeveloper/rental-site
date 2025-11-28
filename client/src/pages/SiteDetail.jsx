@@ -225,6 +225,7 @@ const SiteDetail = () => {
                                 </Button>
                                 <Button
                                     variant="outline-light"
+                                    className="btn-rent-now"
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
