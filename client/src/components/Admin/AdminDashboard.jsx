@@ -188,7 +188,7 @@ const AdminDashboard = () => {
                         </Card.Header>
                         <Card.Body>
                             {recentSites.length > 0 ? (
-                                <Table responsive>
+                                <Table responsive className="admin-dashboard-table-row">
                                     <thead>
                                     <tr>
                                         <th>Title</th>

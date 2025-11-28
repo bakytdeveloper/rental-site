@@ -112,12 +112,19 @@
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    background-color: #0a192f;
 }
 
 .recent-card .table td {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     vertical-align: middle;
-    padding: 1rem 0.75rem;
+    padding: 1rem 0.55rem;
+    background: rgba(20, 21, 20, 0.05);
+    color: whitesmoke;
+}
+
+.recent-card .table td:hover {
+    background: rgba(100, 255, 218, 0.05);
 }
 
 .contact-name {
