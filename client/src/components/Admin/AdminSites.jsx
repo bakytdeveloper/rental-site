@@ -92,6 +92,13 @@ const AdminSites = () => {
     };
 
     const handleCloseModal = () => {
+        // Освобождаем URL объектов для предотвращения утечек памяти
+        imagePreviews.forEach(preview => {
+            if (!preview.startsWith('http://localhost:5000/uploads/')) {
+                URL.revokeObjectURL(preview);
+            }
+        });
+
         setShowModal(false);
         setEditingSite(null);
         setTechInput('');
@@ -109,17 +116,31 @@ const AdminSites = () => {
     };
 
     // Обработчик выбора файлов
+    // Обработчик выбора файлов - исправленная версия
     const handleImageSelect = (e) => {
         const files = Array.from(e.target.files);
-        setSelectedImages(files);
 
-        // Создаем превью для выбранных файлов
-        const previews = files.map(file => URL.createObjectURL(file));
-        setImagePreviews(prev => [...prev, ...previews]);
+        // Проверяем общее количество изображений (существующие + новые)
+        const totalImages = imagePreviews.length + files.length;
+        if (totalImages > 7) {
+            toast.error(`Maximum 7 images allowed. You have ${imagePreviews.length} images and trying to add ${files.length} more.`);
+            return;
+        }
+
+        // Добавляем новые файлы к существующим
+        setSelectedImages(prev => [...prev, ...files]);
+
+        // Создаем превью для новых файлов
+        const newPreviews = files.map(file => URL.createObjectURL(file));
+        setImagePreviews(prev => [...prev, ...newPreviews]);
+
+        // Сбрасываем значение input, чтобы можно было выбрать те же файлы снова
+        e.target.value = '';
     };
 
 // Обновите функцию removeImage в модальном окне:
     // Удаление изображения из превью
+    // Удаление изображения из превью - исправленная версия
     const removeImage = async (index) => {
         console.log('Removing image at index:', index);
         console.log('Current imagePreviews:', imagePreviews);
@@ -130,8 +151,7 @@ const AdminSites = () => {
         console.log('Image to remove:', imageToRemove);
         console.log('Is server image:', isServerImage);
 
-        // Если это изображение с сервера (не новое), просто удаляем из previews
-        // Фактическое удаление с сервера произойдет при сохранении формы
+        // Если это изображение с сервера (не новое)
         if (isServerImage && editingSite) {
             if (window.confirm('Are you sure you want to remove this image?')) {
                 const newPreviews = imagePreviews.filter((_, i) => i !== index);
@@ -145,11 +165,17 @@ const AdminSites = () => {
         const newPreviews = [...imagePreviews];
         const newSelectedImages = [...selectedImages];
 
+        // Находим индекс в selectedImages
+        // Новые изображения всегда добавляются в конец, поэтому вычисляем корректный индекс
+        const selectedImagesIndex = index - (imagePreviews.length - selectedImages.length);
+
         newPreviews.splice(index, 1);
 
-        // Если это новое изображение (не с сервера), удаляем из selectedImages
-        if (index < selectedImages.length) {
-            newSelectedImages.splice(index, 1);
+        // Если это новое изображение, удаляем из selectedImages
+        if (selectedImagesIndex >= 0 && selectedImagesIndex < selectedImages.length) {
+            // Освобождаем URL объекта для предотвращения утечек памяти
+            URL.revokeObjectURL(imageToRemove);
+            newSelectedImages.splice(selectedImagesIndex, 1);
             setSelectedImages(newSelectedImages);
         }
 
@@ -565,7 +591,7 @@ const AdminSites = () => {
                             {editingSite && (
                                 <div className="debug-info mb-2">
                                     <small className="text-info">
-                                        Debug: {imagePreviews.length} previews, {selectedImages.length} new images
+                                        Debug: {imagePreviews.length} total previews ({imagePreviews.filter(p => p.startsWith('http://localhost:5000/uploads/')).length} server, {selectedImages.length} new)
                                     </small>
                                 </div>
                             )}
@@ -622,6 +648,9 @@ const AdminSites = () => {
                                     disabled={imagePreviews.length >= 7}
                                 >
                                     📷 Choose Images ({imagePreviews.length}/7)
+                                    {imagePreviews.length >= 7 && (
+                                        <span className="ms-1 text-warning">• Limit reached</span>
+                                    )}
                                 </Button>
                                 <Form.Text className="text-muted">
                                     Supported formats: JPG, PNG, WebP. Max 5MB per image. Maximum 7 images total.
@@ -718,12 +747,12 @@ const AdminSites = () => {
                             Cancel
                         </Button>
                         <Button
-                            type="submit"
-                            variant="primary"
-                            disabled={loading || (selectedImages.length === 0 && !editingSite)}
-                        >
-                            {loading ? 'Saving...' : (editingSite ? 'Update' : 'Create')}
-                        </Button>
+                        type="submit"
+                        variant="primary"
+                        disabled={loading || (imagePreviews.length === 0 && !editingSite) || imagePreviews.length > 7}
+                    >
+                        {loading ? 'Saving...' : (editingSite ? 'Update' : 'Create')}
+                    </Button>
                     </Modal.Footer>
                 </Form>
             </Modal>
