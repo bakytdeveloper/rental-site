@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Row, Col, Card, Table, Button, Badge, Form, Modal, Spinner, Alert } from 'react-bootstrap';
+import { Row, Col, Card, Table, Button, Badge, Form, Modal, Spinner } from 'react-bootstrap';
 import { siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
@@ -247,6 +247,14 @@ const AdminSites = () => {
         }
     };
 
+    // Функция для получения первого изображения сайта
+    const getSiteImage = (site) => {
+        if (site.images && site.images.length > 0) {
+            return `http://localhost:5000${site.images[0]}`;
+        }
+        return '/placeholder-image.jpg'; // Запасное изображение
+    };
+
     if (loading && sites.length === 0) {
         return (
             <div className="admin-loading">
@@ -266,96 +274,128 @@ const AdminSites = () => {
             </div>
 
             <Card className="sites-table-card">
-                <Card.Body>
+                <Card.Body className="p-0">
                     {sites.length > 0 ? (
-                        <Table responsive className="sites-table">
-                            <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Category</th>
-                                <th>Price</th>
-                                <th>Status</th>
-                                <th>Featured</th>
-                                <th>Technologies</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {sites.map(site => (
-                                <tr key={site._id}>
-                                    <td>
-                                        <div className="site-info">
-                                            <div className="site-title">{site.title}</div>
-                                            <div className="site-description">
-                                                {site.shortDescription}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <Badge bg="outline-primary" className="category-badge">
-                                            {site.category}
-                                        </Badge>
-                                    </td>
-                                    <td className="site-price">${site.price}/mo</td>
-                                    <td>
-                                        <Badge
-                                            bg={site.isActive ? 'success' : 'secondary'}
-                                            className="status-badge"
-                                            role="button"
-                                            onClick={() => toggleSiteStatus(site._id, site.isActive)}
-                                        >
-                                            {site.isActive ? 'Active' : 'Inactive'}
-                                        </Badge>
-                                    </td>
-                                    <td>
-                                        <Badge
-                                            bg={site.isFeatured ? 'warning' : 'outline-warning'}
-                                            className="featured-badge"
-                                            role="button"
-                                            onClick={() => toggleFeatured(site._id, site.isFeatured)}
-                                        >
-                                            {site.isFeatured ? 'Featured' : 'Not Featured'}
-                                        </Badge>
-                                    </td>
-                                    <td>
-                                        <div className="tech-tags">
-                                            {site.technologies?.slice(0, 2).map((tech, index) => (
-                                                <Badge key={index} bg="outline-info" className="tech-tag">
-                                                    {tech}
-                                                </Badge>
-                                            ))}
-                                            {site.technologies?.length > 2 && (
-                                                <Badge bg="outline-secondary" className="tech-tag">
-                                                    +{site.technologies.length - 2}
-                                                </Badge>
-                                            )}
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div className="action-buttons">
-                                            <Button
-                                                size="sm"
-                                                variant="outline-primary"
-                                                onClick={() => handleShowModal(site)}
-                                                className="me-1"
-                                            >
-                                                Edit
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="outline-danger"
-                                                onClick={() => handleDelete(site._id)}
-                                            >
-                                                Delete
-                                            </Button>
-                                        </div>
-                                    </td>
+                        <div className="table-responsive">
+                            <Table className="sites-table">
+                                <thead>
+                                <tr>
+                                    <th className="image-column">Image</th>
+                                    <th className="title-column">Website</th>
+                                    <th className="category-column">Category</th>
+                                    <th className="price-column">Price</th>
+                                    <th className="status-column">Status</th>
+                                    <th className="featured-column">Featured</th>
+                                    <th className="technologies-column">Technologies</th>
+                                    <th className="actions-column">Actions</th>
                                 </tr>
-                            ))}
-                            </tbody>
-                        </Table>
+                                </thead>
+                                <tbody>
+                                {sites.map(site => (
+                                    <tr key={site._id} className="site-row">
+                                        <td className="image-cell">
+                                            <div className="site-image-container">
+                                                <img
+                                                    src={getSiteImage(site)}
+                                                    alt={site.title}
+                                                    className="site-thumbnail"
+                                                    onError={(e) => {
+                                                        e.target.src = '/placeholder-image.jpg';
+                                                    }}
+                                                />
+                                                {site.isFeatured && (
+                                                    <div className="featured-indicator" title="Featured">
+                                                        ⭐
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="title-cell">
+                                            <div className="site-info">
+                                                <div className="site-title">{site.title}</div>
+                                                <div className="site-short-description">
+                                                    {site.shortDescription}
+                                                </div>
+                                                <div className="site-meta">
+                                                    <span className="created-date">
+                                                        Created: {new Date(site.createdAt).toLocaleDateString()}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="category-cell">
+                                            <Badge bg="outline-primary" className="category-badge">
+                                                {site.category}
+                                            </Badge>
+                                        </td>
+                                        <td className="price-cell">
+                                            <div className="price-amount">${site.price}</div>
+                                            <div className="price-period">/month</div>
+                                        </td>
+                                        <td className="status-cell">
+                                            <Badge
+                                                bg={site.isActive ? 'success' : 'secondary'}
+                                                className="status-badge"
+                                                role="button"
+                                                onClick={() => toggleSiteStatus(site._id, site.isActive)}
+                                            >
+                                                {site.isActive ? 'Active' : 'Inactive'}
+                                            </Badge>
+                                        </td>
+                                        <td className="featured-cell">
+                                            <Badge
+                                                bg={site.isFeatured ? 'warning' : 'outline-warning'}
+                                                className="featured-badge"
+                                                role="button"
+                                                onClick={() => toggleFeatured(site._id, site.isFeatured)}
+                                            >
+                                                {site.isFeatured ? 'Featured' : 'Standard'}
+                                            </Badge>
+                                        </td>
+                                        <td className="technologies-cell">
+                                            <div className="tech-tags">
+                                                {site.technologies?.slice(0, 3).map((tech, index) => (
+                                                    <Badge key={index} bg="outline-info" className="tech-tag">
+                                                        {tech}
+                                                    </Badge>
+                                                ))}
+                                                {site.technologies?.length > 3 && (
+                                                    <Badge bg="outline-secondary" className="tech-tag-more">
+                                                        +{site.technologies.length - 3}
+                                                    </Badge>
+                                                )}
+                                            </div>
+                                        </td>
+                                        <td className="actions-cell">
+                                            <div className="action-buttons">
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline-primary"
+                                                    onClick={() => handleShowModal(site)}
+                                                    className="btn-edit"
+                                                    title="Edit site"
+                                                >
+                                                    ✏️
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline-danger"
+                                                    onClick={() => handleDelete(site._id)}
+                                                    className="btn-delete"
+                                                    title="Delete site"
+                                                >
+                                                    🗑️
+                                                </Button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </Table>
+                        </div>
                     ) : (
                         <div className="no-data">
+                            <div className="no-data-icon">🌐</div>
                             <p>No websites found. Create your first website to get started.</p>
                             <Button onClick={() => handleShowModal()} className="btn-add-first">
                                 Add First Website
