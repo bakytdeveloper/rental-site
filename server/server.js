@@ -4,6 +4,10 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
+// Routes
+import siteRoutes from './routes/siteRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import contactRoutes from './routes/contactRoutes.js';
 
 // ES modules fix for __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -23,11 +27,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalSite')
     .then(() => console.log('✅ MongoDB connected successfully'))
     .catch(err => console.log('❌ MongoDB connection error:', err));
-
-// Routes
-import siteRoutes from './routes/siteRoutes.js';
-import authRoutes from './routes/authRoutes.js';
-import contactRoutes from './routes/contactRoutes.js';
 
 app.use('/api/sites', siteRoutes);
 app.use('/api/auth', authRoutes);

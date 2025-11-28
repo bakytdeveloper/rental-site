@@ -39,12 +39,28 @@ api.interceptors.response.use(
 );
 
 // Site API
+// Site API
 export const siteAPI = {
     getAll: (params = {}) => api.get('/sites', { params }),
+    getAllAdmin: () => api.get('/sites/admin'), // Добавьте этот метод
     getFeatured: () => api.get('/sites/featured'),
     getById: (id) => api.get(`/sites/${id}`),
-    create: (data) => api.post('/sites', data),
-    update: (id, data) => api.put(`/sites/${id}`, data),
+    create: (data) => {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        return api.post('/sites', data, config);
+    },
+    update: (id, data) => {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        return api.put(`/sites/${id}`, data, config);
+    },
     delete: (id) => api.delete(`/sites/${id}`),
 };
 

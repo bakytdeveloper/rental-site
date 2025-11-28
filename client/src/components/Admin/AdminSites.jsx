@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Row, Col, Card, Table, Button, Badge, Form, Modal, Spinner, Alert } from 'react-bootstrap';
 import { siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
@@ -9,6 +9,10 @@ const AdminSites = () => {
     const [sites, setSites] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [editingSite, setEditingSite] = useState(null);
+    const [selectedImages, setSelectedImages] = useState([]); // Новое состояние для изображений
+    const [imagePreviews, setImagePreviews] = useState([]); // Превью изображений
+    const fileInputRef = useRef(null); // Ref для input файлов
+
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -31,7 +35,8 @@ const AdminSites = () => {
     const fetchSites = async () => {
         startLoading();
         try {
-            const response = await siteAPI.getAll({ limit: 100 });
+            // Используем админский метод для получения всех сайтов
+            const response = await siteAPI.getAllAdmin();
             setSites(response.data.sites || []);
         } catch (error) {
             toast.error('Failed to fetch sites');
@@ -55,6 +60,12 @@ const AdminSites = () => {
                 isFeatured: site.isFeatured,
                 isActive: site.isActive
             });
+            // Устанавливаем превью существующих изображений
+            if (site.images && site.images.length > 0) {
+                setImagePreviews(site.images.map(img => `http://localhost:5000${img}`));
+            } else {
+                setImagePreviews([]);
+            }
         } else {
             setEditingSite(null);
             setFormData({
@@ -68,7 +79,9 @@ const AdminSites = () => {
                 isFeatured: false,
                 isActive: true
             });
+            setImagePreviews([]);
         }
+        setSelectedImages([]);
         setShowModal(true);
     };
 
@@ -77,6 +90,8 @@ const AdminSites = () => {
         setEditingSite(null);
         setTechInput('');
         setFeatureInput('');
+        setSelectedImages([]);
+        setImagePreviews([]);
     };
 
     const handleInputChange = (e) => {
@@ -85,6 +100,31 @@ const AdminSites = () => {
             ...prev,
             [name]: type === 'checkbox' ? checked : value
         }));
+    };
+
+    // Обработчик выбора файлов
+    const handleImageSelect = (e) => {
+        const files = Array.from(e.target.files);
+        setSelectedImages(files);
+
+        // Создаем превью для выбранных файлов
+        const previews = files.map(file => URL.createObjectURL(file));
+        setImagePreviews(prev => [...prev, ...previews]);
+    };
+
+    // Удаление изображения из превью
+    const removeImage = (index) => {
+        const newPreviews = [...imagePreviews];
+        const newSelectedImages = [...selectedImages];
+
+        newPreviews.splice(index, 1);
+        // Если это новое изображение (не с сервера), удаляем из selectedImages
+        if (index < selectedImages.length) {
+            newSelectedImages.splice(index, 1);
+            setSelectedImages(newSelectedImages);
+        }
+
+        setImagePreviews(newPreviews);
     };
 
     const addTechnology = () => {
@@ -126,19 +166,44 @@ const AdminSites = () => {
         startLoading();
 
         try {
+            // Создаем FormData для отправки файлов
+            const submitData = new FormData();
+
+            // Добавляем текстовые поля
+            Object.keys(formData).forEach(key => {
+                if (key === 'technologies' || key === 'features') {
+                    // Массивы преобразуем в JSON строки
+                    submitData.append(key, JSON.stringify(formData[key]));
+                } else {
+                    submitData.append(key, formData[key]);
+                }
+            });
+
+            // Добавляем изображения
+            selectedImages.forEach((image, index) => {
+                submitData.append('images', image);
+            });
+
+            // Отладочная информация
+            console.log('Submitting data:');
+            for (let [key, value] of submitData.entries()) {
+                console.log(key, value);
+            }
+
             if (editingSite) {
-                await siteAPI.update(editingSite._id, formData);
+                await siteAPI.update(editingSite._id, submitData);
                 toast.success('Site updated successfully');
             } else {
-                await siteAPI.create(formData);
+                await siteAPI.create(submitData);
                 toast.success('Site created successfully');
             }
 
             handleCloseModal();
             fetchSites();
         } catch (error) {
-            toast.error(`Failed to ${editingSite ? 'update' : 'create'} site`);
-            console.error('Error saving site:', error);
+            console.error('Full error details:', error);
+            console.error('Error response:', error.response?.data);
+            toast.error(`Failed to ${editingSite ? 'update' : 'create'} site: ${error.response?.data?.message || error.message}`);
         } finally {
             stopLoading();
         }
@@ -387,6 +452,70 @@ const AdminSites = () => {
                             </Col>
                         </Row>
 
+                        {/* Поле для загрузки изображений */}
+                        <Form.Group className="mb-4">
+                            <Form.Label>Website Images *</Form.Label>
+                            <Form.Text className="text-muted d-block mb-2">
+                                Upload screenshots of your website. First image will be used as main preview.
+                            </Form.Text>
+
+                            {/* Превью изображений */}
+                            {imagePreviews.length > 0 && (
+                                <div className="image-previews mb-3">
+                                    <Row>
+                                        {imagePreviews.map((preview, index) => (
+                                            <Col key={index} xs={6} md={4} className="mb-3">
+                                                <div className="image-preview-container">
+                                                    <img
+                                                        src={preview}
+                                                        alt={`Preview ${index + 1}`}
+                                                        className="image-preview"
+                                                    />
+                                                    <Button
+                                                        variant="danger"
+                                                        size="sm"
+                                                        className="remove-image-btn"
+                                                        onClick={() => removeImage(index)}
+                                                    >
+                                                        ×
+                                                    </Button>
+                                                </div>
+                                            </Col>
+                                        ))}
+                                    </Row>
+                                </div>
+                            )}
+
+                            {/* Input для выбора файлов */}
+                            <div className="image-upload-area">
+                                <Form.Control
+                                    type="file"
+                                    multiple
+                                    accept="image/*"
+                                    onChange={handleImageSelect}
+                                    ref={fileInputRef}
+                                    className="d-none"
+                                />
+                                <Button
+                                    variant="outline-primary"
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="w-100"
+                                >
+                                    📷 Choose Images
+                                </Button>
+                                <Form.Text className="text-muted">
+                                    Supported formats: JPG, PNG, WebP. Max 5MB per image.
+                                </Form.Text>
+                            </div>
+
+                            {/* Валидация */}
+                            {selectedImages.length === 0 && !editingSite && (
+                                <Form.Text className="text-danger">
+                                    At least one image is required
+                                </Form.Text>
+                            )}
+                        </Form.Group>
+
                         {/* Technologies */}
                         <Form.Group className="mb-3">
                             <Form.Label>Technologies</Form.Label>
@@ -407,8 +536,8 @@ const AdminSites = () => {
                                     <Badge key={index} bg="primary" className="tag">
                                         {tech}
                                         <span className="tag-remove" onClick={() => removeTechnology(tech)}>
-                      ×
-                    </span>
+                                            ×
+                                        </span>
                                     </Badge>
                                 ))}
                             </div>
@@ -434,8 +563,8 @@ const AdminSites = () => {
                                     <Badge key={index} bg="success" className="tag">
                                         {feature}
                                         <span className="tag-remove" onClick={() => removeFeature(feature)}>
-                      ×
-                    </span>
+                                            ×
+                                        </span>
                                     </Badge>
                                 ))}
                             </div>
@@ -468,7 +597,11 @@ const AdminSites = () => {
                         <Button variant="outline-secondary" onClick={handleCloseModal}>
                             Cancel
                         </Button>
-                        <Button type="submit" variant="primary" disabled={loading}>
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            disabled={loading || (selectedImages.length === 0 && !editingSite)}
+                        >
                             {loading ? 'Saving...' : (editingSite ? 'Update' : 'Create')}
                         </Button>
                     </Modal.Footer>

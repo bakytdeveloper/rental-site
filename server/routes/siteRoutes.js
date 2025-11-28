@@ -6,12 +6,14 @@ import {
     createSite,
     updateSite,
     deleteSite,
-    getFeaturedSites
+    getFeaturedSites,
+    getAllSitesAdmin  // Добавьте этот импорт
 } from '../controllers/siteController.js';
 
 const router = express.Router();
 
 router.get('/', getAllSites);
+router.get('/admin', getAllSitesAdmin); // Добавьте этот маршрут
 router.get('/featured', getFeaturedSites);
 router.get('/:id', getSiteById);
 router.post('/', createSite);
