@@ -1,156 +1,7 @@
-// // server/controllers/siteController.js
-// import Site from '../models/Site.js';
-// import { uploadMultiple } from '../middleware/uploadMiddleware.js';
-//
-// // @desc    Get all active sites with filtering and pagination
-// // @route   GET /api/sites
-// // @access  Public
-// export const getAllSites = async (req, res) => {
-//     try {
-//         const { category, featured, page = 1, limit = 12 } = req.query;
-//
-//         let query = { isActive: true };
-//
-//         if (category && category !== 'all') {
-//             query.category = category;
-//         }
-//
-//         if (featured === 'true') {
-//             query.isFeatured = true;
-//         }
-//
-//         const sites = await Site.find(query)
-//             .sort({ sortOrder: -1, createdAt: -1 })
-//             .limit(limit * 1)
-//             .skip((page - 1) * limit);
-//
-//         const total = await Site.countDocuments(query);
-//
-//         res.json({
-//             sites,
-//             totalPages: Math.ceil(total / limit),
-//             currentPage: page,
-//             total
-//         });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-//
-// // @desc    Get single site by ID
-// // @route   GET /api/sites/:id
-// // @access  Public
-// export const getSiteById = async (req, res) => {
-//     try {
-//         const site = await Site.findById(req.params.id);
-//         if (site && site.isActive) {
-//             res.json(site);
-//         } else {
-//             res.status(404).json({ message: 'Site not found' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-//
-// // @desc    Create a new site with image upload
-// // @route   POST /api/sites
-// // @access  Private/Admin
-// export const createSite = async (req, res) => {
-//     try {
-//         uploadMultiple(req, res, async (err) => {
-//             if (err) {
-//                 return res.status(400).json({ message: err.message });
-//             }
-//
-//             try {
-//                 const imagePaths = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
-//
-//                 const siteData = {
-//                     ...req.body,
-//                     images: imagePaths,
-//                     technologies: JSON.parse(req.body.technologies || '[]'),
-//                     features: JSON.parse(req.body.features || '[]'),
-//                     price: parseFloat(req.body.price),
-//                     sortOrder: parseInt(req.body.sortOrder || 0)
-//                 };
-//
-//                 const site = new Site(siteData);
-//                 const createdSite = await site.save();
-//
-//                 res.status(201).json(createdSite);
-//             } catch (parseError) {
-//                 res.status(400).json({ message: parseError.message });
-//             }
-//         });
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-//
-// // @desc    Update a site
-// // @route   PUT /api/sites/:id
-// // @access  Private/Admin
-// export const updateSite = async (req, res) => {
-//     try {
-//         const site = await Site.findById(req.params.id);
-//         if (site) {
-//             Object.keys(req.body).forEach(key => {
-//                 if (key !== 'images') {
-//                     site[key] = req.body[key];
-//                 }
-//             });
-//
-//             const updatedSite = await site.save();
-//             res.json(updatedSite);
-//         } else {
-//             res.status(404).json({ message: 'Site not found' });
-//         }
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
-//
-// // @desc    Delete a site
-// // @route   DELETE /api/sites/:id
-// // @access  Private/Admin
-// export const deleteSite = async (req, res) => {
-//     try {
-//         const site = await Site.findById(req.params.id);
-//         if (site) {
-//             // Здесь можно добавить удаление файлов изображений
-//             await Site.deleteOne({ _id: req.params.id });
-//             res.json({ message: 'Site removed successfully' });
-//         } else {
-//             res.status(404).json({ message: 'Site not found' });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-//
-// // @desc    Get featured sites
-// // @route   GET /api/sites/featured
-// // @access  Public
-// export const getFeaturedSites = async (req, res) => {
-//     try {
-//         const sites = await Site.find({
-//             isFeatured: true,
-//             isActive: true
-//         })
-//             .sort({ sortOrder: -1, createdAt: -1 })
-//             .limit(6);
-//
-//         res.json(sites);
-//     } catch (error) {
-//         res.status(500).json({ message: error.message });
-//     }
-// };
-
-
 // server/controllers/siteController.js
 import Site from '../models/Site.js';
-import { uploadMultiple } from '../middleware/uploadMiddleware.js';
+import { uploadMultiple, deleteFile } from '../middleware/uploadMiddleware.js';
+import path from 'path';
 
 // @desc    Get all active sites with filtering and pagination
 // @route   GET /api/sites
@@ -226,7 +77,21 @@ export const createSite = async (req, res) => {
             }
 
             try {
+                // Проверяем лимит изображений
+                if (req.files && req.files.length > 7) {
+                    // Удаляем загруженные файлы если превышен лимит
+                    req.files.forEach(file => {
+                        deleteFile(file.filename);
+                    });
+                    return res.status(400).json({ message: 'Maximum 7 images allowed' });
+                }
+
                 const imagePaths = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+
+                // Проверяем, что есть хотя бы одно изображение
+                if (imagePaths.length === 0) {
+                    return res.status(400).json({ message: 'At least one image is required' });
+                }
 
                 // Парсим JSON строки в массивы
                 const siteData = {
@@ -247,9 +112,16 @@ export const createSite = async (req, res) => {
                 const site = new Site(siteData);
                 const createdSite = await site.save();
 
+                console.log(`✅ Site created with ${imagePaths.length} images`);
                 res.status(201).json(createdSite);
             } catch (parseError) {
                 console.error('Parse error:', parseError);
+                // Удаляем загруженные файлы при ошибке парсинга
+                if (req.files) {
+                    req.files.forEach(file => {
+                        deleteFile(file.filename);
+                    });
+                }
                 res.status(400).json({ message: 'Invalid data format: ' + parseError.message });
             }
         });
@@ -258,6 +130,7 @@ export const createSite = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
 
 // @desc    Update a site with image upload
 // @route   PUT /api/sites/:id
@@ -272,11 +145,30 @@ export const updateSite = async (req, res) => {
             try {
                 const site = await Site.findById(req.params.id);
                 if (!site) {
+                    // Удаляем загруженные файлы если сайт не найден
+                    if (req.files) {
+                        req.files.forEach(file => {
+                            deleteFile(file.filename);
+                        });
+                    }
                     return res.status(404).json({ message: 'Site not found' });
                 }
 
                 // Обрабатываем новые изображения
                 const newImagePaths = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
+
+                // Проверяем общий лимит изображений (старые + новые)
+                const totalImages = site.images.length + newImagePaths.length;
+
+                if (totalImages > 7) {
+                    // Удаляем новые файлы если превышен лимит
+                    req.files.forEach(file => {
+                        deleteFile(file.filename);
+                    });
+                    return res.status(400).json({
+                        message: `Maximum 7 images allowed. You have ${site.images.length} existing images and tried to add ${newImagePaths.length} new ones.`
+                    });
+                }
 
                 // Подготавливаем данные для обновления
                 const updateData = { ...req.body };
@@ -302,9 +194,13 @@ export const updateSite = async (req, res) => {
                     updateData.price = parseFloat(req.body.price);
                 }
 
+                // ВАЖНО: Сохраняем старые изображения и добавляем новые
                 // Если есть новые изображения, добавляем их к существующим
                 if (newImagePaths.length > 0) {
                     updateData.images = [...site.images, ...newImagePaths];
+                } else {
+                    // Если новых изображений нет, сохраняем старые
+                    updateData.images = site.images;
                 }
 
                 // Обновляем сайт
@@ -314,9 +210,16 @@ export const updateSite = async (req, res) => {
                     { new: true, runValidators: true }
                 );
 
+                console.log(`✅ Site updated with ${newImagePaths.length} new images, total: ${updatedSite.images.length}`);
                 res.json(updatedSite);
             } catch (parseError) {
                 console.error('Parse error in update:', parseError);
+                // Удаляем загруженные файлы при ошибке парсинга
+                if (req.files) {
+                    req.files.forEach(file => {
+                        deleteFile(file.filename);
+                    });
+                }
                 res.status(400).json({ message: 'Invalid data format: ' + parseError.message });
             }
         });
@@ -326,20 +229,67 @@ export const updateSite = async (req, res) => {
     }
 };
 
-// @desc    Delete a site
+// @desc    Delete specific images from a site
+// @route   DELETE /api/sites/:id/images
+// @access  Private/Admin
+export const deleteSiteImages = async (req, res) => {
+    try {
+        const { imageUrls } = req.body;
+        const site = await Site.findById(req.params.id);
+
+        if (!site) {
+            return res.status(404).json({ message: 'Site not found' });
+        }
+
+        if (!imageUrls || !Array.isArray(imageUrls)) {
+            return res.status(400).json({ message: 'Image URLs array is required' });
+        }
+
+        // Удаляем файлы с сервера
+        imageUrls.forEach(imageUrl => {
+            const filename = path.basename(imageUrl);
+            deleteFile(filename);
+        });
+
+        // Обновляем массив изображений сайта
+        site.images = site.images.filter(img => !imageUrls.includes(img));
+        await site.save();
+
+        console.log(`🗑️ Deleted ${imageUrls.length} images from site`);
+        res.json({
+            message: 'Images deleted successfully',
+            remainingImages: site.images.length
+        });
+    } catch (error) {
+        console.error('Delete images error:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// @desc    Delete a site and all its images
 // @route   DELETE /api/sites/:id
 // @access  Private/Admin
 export const deleteSite = async (req, res) => {
     try {
         const site = await Site.findById(req.params.id);
         if (site) {
-            // Здесь можно добавить удаление файлов изображений
+            // Удаляем все изображения сайта с сервера
+            if (site.images && site.images.length > 0) {
+                site.images.forEach(imageUrl => {
+                    const filename = path.basename(imageUrl);
+                    deleteFile(filename);
+                });
+                console.log(`🗑️ Deleted ${site.images.length} images for site`);
+            }
+
             await Site.deleteOne({ _id: req.params.id });
-            res.json({ message: 'Site removed successfully' });
+            console.log(`✅ Site deleted: ${site.title}`);
+            res.json({ message: 'Site and all images removed successfully' });
         } else {
             res.status(404).json({ message: 'Site not found' });
         }
     } catch (error) {
+        console.error('Delete site error:', error);
         res.status(500).json({ message: error.message });
     }
 };

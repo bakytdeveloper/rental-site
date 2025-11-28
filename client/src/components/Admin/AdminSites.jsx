@@ -48,6 +48,8 @@ const AdminSites = () => {
 
     const handleShowModal = (site = null) => {
         if (site) {
+            console.log('Editing site:', site);
+            console.log('Site images:', site.images);
             setEditingSite(site);
             setFormData({
                 title: site.title,
@@ -62,11 +64,15 @@ const AdminSites = () => {
             });
             // Устанавливаем превью существующих изображений
             if (site.images && site.images.length > 0) {
-                setImagePreviews(site.images.map(img => `http://localhost:5000${img}`));
+                const previews = site.images.map(img => `http://localhost:5000${img}`);
+                console.log('Setting image previews:', previews);
+                setImagePreviews(previews);
             } else {
+                console.log('No images for site');
                 setImagePreviews([]);
             }
         } else {
+            console.log('Creating new site');
             setEditingSite(null);
             setFormData({
                 title: '',
@@ -113,11 +119,63 @@ const AdminSites = () => {
     };
 
     // Удаление изображения из превью
-    const removeImage = (index) => {
+    // В компоненте AdminSites добавьте эту функцию
+    const deleteSiteImages = async (siteId, imageUrls) => {
+        if (window.confirm('Are you sure you want to delete these images?')) {
+            try {
+                await siteAPI.deleteImages(siteId, imageUrls);
+                toast.success('Images deleted successfully');
+                fetchSites(); // Обновляем список сайтов
+            } catch (error) {
+                toast.error('Failed to delete images');
+                console.error('Error deleting images:', error);
+            }
+        }
+    };
+
+// Обновите функцию removeImage в модальном окне:
+    // Удаление изображения из превью
+    const removeImage = async (index) => {
+        console.log('Removing image at index:', index);
+        console.log('Current imagePreviews:', imagePreviews);
+        console.log('Current selectedImages:', selectedImages);
+
+        const imageToRemove = imagePreviews[index];
+        const isServerImage = imageToRemove.startsWith('http://localhost:5000/uploads/');
+
+        console.log('Image to remove:', imageToRemove);
+        console.log('Is server image:', isServerImage);
+
+        // Если это изображение с сервера (не новое), удаляем его с бекенда
+        if (isServerImage && editingSite) {
+            const imageUrl = imageToRemove.replace('http://localhost:5000', '');
+            console.log('Deleting server image:', imageUrl);
+
+            if (window.confirm('Are you sure you want to delete this image from the server?')) {
+                try {
+                    await siteAPI.deleteImages(editingSite._id, [imageUrl]);
+                    toast.success('Image deleted from server');
+
+                    // Обновляем локальное состояние после успешного удаления
+                    const newPreviews = imagePreviews.filter((_, i) => i !== index);
+                    setImagePreviews(newPreviews);
+                    return;
+                } catch (error) {
+                    toast.error('Failed to delete image from server');
+                    console.error('Error deleting image from server:', error);
+                    return;
+                }
+            } else {
+                return; // Пользователь отменил удаление
+            }
+        }
+
+        // Если это новое изображение (не загруженное на сервер)
         const newPreviews = [...imagePreviews];
         const newSelectedImages = [...selectedImages];
 
         newPreviews.splice(index, 1);
+
         // Если это новое изображение (не с сервера), удаляем из selectedImages
         if (index < selectedImages.length) {
             newSelectedImages.splice(index, 1);
@@ -125,6 +183,8 @@ const AdminSites = () => {
         }
 
         setImagePreviews(newPreviews);
+        console.log('After removal - imagePreviews:', newPreviews);
+        console.log('After removal - selectedImages:', newSelectedImages);
     };
 
     const addTechnology = () => {
@@ -179,22 +239,32 @@ const AdminSites = () => {
                 }
             });
 
-            // Добавляем изображения
+            // Добавляем изображения ТОЛЬКО новые
             selectedImages.forEach((image, index) => {
                 submitData.append('images', image);
             });
 
             // Отладочная информация
             console.log('Submitting data:');
+            console.log('Selected images count:', selectedImages.length);
+            console.log('Editing site:', editingSite);
             for (let [key, value] of submitData.entries()) {
-                console.log(key, value);
+                if (key === 'images') {
+                    console.log(key, value.name, value.type);
+                } else {
+                    console.log(key, value);
+                }
             }
 
             if (editingSite) {
-                await siteAPI.update(editingSite._id, submitData);
+                console.log('Updating site with ID:', editingSite._id);
+                const response = await siteAPI.update(editingSite._id, submitData);
+                console.log('Update response:', response.data);
                 toast.success('Site updated successfully');
             } else {
-                await siteAPI.create(submitData);
+                console.log('Creating new site');
+                const response = await siteAPI.create(submitData);
+                console.log('Create response:', response.data);
                 toast.success('Site created successfully');
             }
 
@@ -306,6 +376,11 @@ const AdminSites = () => {
                                                 {site.isFeatured && (
                                                     <div className="featured-indicator" title="Featured">
                                                         ⭐
+                                                    </div>
+                                                )}
+                                                {site.images && site.images.length > 1 && (
+                                                    <div className="image-count-badge" title={`${site.images.length} images`}>
+                                                        +{site.images.length - 1}
                                                     </div>
                                                 )}
                                             </div>
@@ -496,32 +571,49 @@ const AdminSites = () => {
                         <Form.Group className="mb-4">
                             <Form.Label>Website Images *</Form.Label>
                             <Form.Text className="text-muted d-block mb-2">
-                                Upload screenshots of your website. First image will be used as main preview.
+                                Upload screenshots of your website. First image will be used as main preview. Maximum 7 images.
                             </Form.Text>
+
+                            {/* Отладочная информация */}
+                            {editingSite && (
+                                <div className="debug-info mb-2">
+                                    <small className="text-info">
+                                        Debug: {imagePreviews.length} previews, {selectedImages.length} new images
+                                    </small>
+                                </div>
+                            )}
 
                             {/* Превью изображений */}
                             {imagePreviews.length > 0 && (
                                 <div className="image-previews mb-3">
                                     <Row>
-                                        {imagePreviews.map((preview, index) => (
-                                            <Col key={index} xs={6} md={4} className="mb-3">
-                                                <div className="image-preview-container">
-                                                    <img
-                                                        src={preview}
-                                                        alt={`Preview ${index + 1}`}
-                                                        className="image-preview"
-                                                    />
-                                                    <Button
-                                                        variant="danger"
-                                                        size="sm"
-                                                        className="remove-image-btn"
-                                                        onClick={() => removeImage(index)}
-                                                    >
-                                                        ×
-                                                    </Button>
-                                                </div>
-                                            </Col>
-                                        ))}
+                                        {imagePreviews.map((preview, index) => {
+                                            const isServerImage = preview.startsWith('http://localhost:5000/uploads/');
+                                            return (
+                                                <Col key={index} xs={6} md={4} className="mb-3">
+                                                    <div className="image-preview-container">
+                                                        <img
+                                                            src={preview}
+                                                            alt={`Preview ${index + 1}`}
+                                                            className="image-preview"
+                                                        />
+                                                        <div className="image-info">
+                                                            <small className={isServerImage ? 'text-success' : 'text-warning'}>
+                                                                {isServerImage ? 'Server' : 'New'}
+                                                            </small>
+                                                        </div>
+                                                        <Button
+                                                            variant="danger"
+                                                            size="sm"
+                                                            className="remove-image-btn"
+                                                            onClick={() => removeImage(index)}
+                                                        >
+                                                            ×
+                                                        </Button>
+                                                    </div>
+                                                </Col>
+                                            );
+                                        })}
                                     </Row>
                                 </div>
                             )}
@@ -540,11 +632,12 @@ const AdminSites = () => {
                                     variant="outline-primary"
                                     onClick={() => fileInputRef.current?.click()}
                                     className="w-100"
+                                    disabled={imagePreviews.length >= 7}
                                 >
-                                    📷 Choose Images
+                                    📷 Choose Images ({imagePreviews.length}/7)
                                 </Button>
                                 <Form.Text className="text-muted">
-                                    Supported formats: JPG, PNG, WebP. Max 5MB per image.
+                                    Supported formats: JPG, PNG, WebP. Max 5MB per image. Maximum 7 images total.
                                 </Form.Text>
                             </div>
 

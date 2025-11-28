@@ -40,9 +40,10 @@ api.interceptors.response.use(
 
 // Site API
 // Site API
+// В разделе Site API добавьте новый метод
 export const siteAPI = {
     getAll: (params = {}) => api.get('/sites', { params }),
-    getAllAdmin: () => api.get('/sites/admin'), // Добавьте этот метод
+    getAllAdmin: () => api.get('/sites/admin'),
     getFeatured: () => api.get('/sites/featured'),
     getById: (id) => api.get(`/sites/${id}`),
     create: (data) => {
@@ -61,6 +62,7 @@ export const siteAPI = {
         };
         return api.put(`/sites/${id}`, data, config);
     },
+    deleteImages: (id, imageUrls) => api.delete(`/sites/${id}/images`, { data: { imageUrls } }), // Новый метод
     delete: (id) => api.delete(`/sites/${id}`),
 };
 

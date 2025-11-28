@@ -21,7 +21,9 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+        const originalName = path.parse(file.originalname).name;
+        const extension = path.extname(file.originalname);
+        cb(null, 'site-' + uniqueSuffix + extension);
     }
 });
 
@@ -42,5 +44,17 @@ const upload = multer({
     }
 });
 
-export const uploadMultiple = upload.array('images', 10); // Максимум 10 изображений
+// Увеличиваем лимит до 7 изображений
+export const uploadMultiple = upload.array('images', 7); // Максимум 7 изображений
 export const uploadSingle = upload.single('image');
+
+// Функция для удаления файлов
+export const deleteFile = (filename) => {
+    const filePath = path.join(uploadsDir, filename);
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log('🗑️ Deleted file:', filename);
+        return true;
+    }
+    return false;
+};
