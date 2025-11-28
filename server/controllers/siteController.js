@@ -157,16 +157,39 @@ export const updateSite = async (req, res) => {
                 // Обрабатываем новые изображения
                 const newImagePaths = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
 
-                // Проверяем общий лимит изображений (старые + новые)
-                const totalImages = site.images.length + newImagePaths.length;
+                // Получаем информацию о существующих изображениях из запроса
+                let existingImages = [];
+                if (req.body.existingImages) {
+                    try {
+                        existingImages = JSON.parse(req.body.existingImages);
+                        console.log('Existing images from request:', existingImages);
+                    } catch (parseError) {
+                        console.error('Error parsing existingImages:', parseError);
+                    }
+                }
+
+                // ВАЖНО: Определяем, какие изображения нужно удалить с сервера
+                const imagesToDelete = site.images.filter(img => !existingImages.includes(img));
+                console.log('Images to delete:', imagesToDelete);
+
+                // Удаляем файлы с сервера
+                imagesToDelete.forEach(imageUrl => {
+                    const filename = path.basename(imageUrl);
+                    deleteFile(filename);
+                });
+
+                // Проверяем общий лимит изображений (существующие + новые)
+                const totalImages = existingImages.length + newImagePaths.length;
 
                 if (totalImages > 7) {
                     // Удаляем новые файлы если превышен лимит
-                    req.files.forEach(file => {
-                        deleteFile(file.filename);
-                    });
+                    if (req.files) {
+                        req.files.forEach(file => {
+                            deleteFile(file.filename);
+                        });
+                    }
                     return res.status(400).json({
-                        message: `Maximum 7 images allowed. You have ${site.images.length} existing images and tried to add ${newImagePaths.length} new ones.`
+                        message: `Maximum 7 images allowed. You have ${existingImages.length} existing images and tried to add ${newImagePaths.length} new ones.`
                     });
                 }
 
@@ -194,14 +217,10 @@ export const updateSite = async (req, res) => {
                     updateData.price = parseFloat(req.body.price);
                 }
 
-                // ВАЖНО: Сохраняем старые изображения и добавляем новые
-                // Если есть новые изображения, добавляем их к существующим
-                if (newImagePaths.length > 0) {
-                    updateData.images = [...site.images, ...newImagePaths];
-                } else {
-                    // Если новых изображений нет, сохраняем старые
-                    updateData.images = site.images;
-                }
+                // ВАЖНО: Сохраняем существующие изображения и добавляем новые
+                updateData.images = [...existingImages, ...newImagePaths];
+
+                console.log('Final images array:', updateData.images);
 
                 // Обновляем сайт
                 const updatedSite = await Site.findByIdAndUpdate(
@@ -211,6 +230,7 @@ export const updateSite = async (req, res) => {
                 );
 
                 console.log(`✅ Site updated with ${newImagePaths.length} new images, total: ${updatedSite.images.length}`);
+                console.log(`🗑️ Deleted ${imagesToDelete.length} old images`);
                 res.json(updatedSite);
             } catch (parseError) {
                 console.error('Parse error in update:', parseError);

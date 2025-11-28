@@ -118,27 +118,11 @@ const AdminSites = () => {
         setImagePreviews(prev => [...prev, ...previews]);
     };
 
-    // Удаление изображения из превью
-    // В компоненте AdminSites добавьте эту функцию
-    const deleteSiteImages = async (siteId, imageUrls) => {
-        if (window.confirm('Are you sure you want to delete these images?')) {
-            try {
-                await siteAPI.deleteImages(siteId, imageUrls);
-                toast.success('Images deleted successfully');
-                fetchSites(); // Обновляем список сайтов
-            } catch (error) {
-                toast.error('Failed to delete images');
-                console.error('Error deleting images:', error);
-            }
-        }
-    };
-
 // Обновите функцию removeImage в модальном окне:
     // Удаление изображения из превью
     const removeImage = async (index) => {
         console.log('Removing image at index:', index);
         console.log('Current imagePreviews:', imagePreviews);
-        console.log('Current selectedImages:', selectedImages);
 
         const imageToRemove = imagePreviews[index];
         const isServerImage = imageToRemove.startsWith('http://localhost:5000/uploads/');
@@ -146,28 +130,15 @@ const AdminSites = () => {
         console.log('Image to remove:', imageToRemove);
         console.log('Is server image:', isServerImage);
 
-        // Если это изображение с сервера (не новое), удаляем его с бекенда
+        // Если это изображение с сервера (не новое), просто удаляем из previews
+        // Фактическое удаление с сервера произойдет при сохранении формы
         if (isServerImage && editingSite) {
-            const imageUrl = imageToRemove.replace('http://localhost:5000', '');
-            console.log('Deleting server image:', imageUrl);
-
-            if (window.confirm('Are you sure you want to delete this image from the server?')) {
-                try {
-                    await siteAPI.deleteImages(editingSite._id, [imageUrl]);
-                    toast.success('Image deleted from server');
-
-                    // Обновляем локальное состояние после успешного удаления
-                    const newPreviews = imagePreviews.filter((_, i) => i !== index);
-                    setImagePreviews(newPreviews);
-                    return;
-                } catch (error) {
-                    toast.error('Failed to delete image from server');
-                    console.error('Error deleting image from server:', error);
-                    return;
-                }
-            } else {
-                return; // Пользователь отменил удаление
+            if (window.confirm('Are you sure you want to remove this image?')) {
+                const newPreviews = imagePreviews.filter((_, i) => i !== index);
+                setImagePreviews(newPreviews);
+                console.log('Removed server image from previews');
             }
+            return;
         }
 
         // Если это новое изображение (не загруженное на сервер)
@@ -239,6 +210,19 @@ const AdminSites = () => {
                 }
             });
 
+            // ВАЖНО: При обновлении передаем информацию о существующих изображениях
+            if (editingSite) {
+                // Получаем существующие изображения (только те, которые остались после удалений)
+                const remainingServerImages = imagePreviews
+                    .filter(preview => preview.startsWith('http://localhost:5000/uploads/'))
+                    .map(preview => preview.replace('http://localhost:5000', ''));
+
+                console.log('Remaining server images:', remainingServerImages);
+
+                // Добавляем информацию о существующих изображениях
+                submitData.append('existingImages', JSON.stringify(remainingServerImages));
+            }
+
             // Добавляем изображения ТОЛЬКО новые
             selectedImages.forEach((image, index) => {
                 submitData.append('images', image);
@@ -248,9 +232,12 @@ const AdminSites = () => {
             console.log('Submitting data:');
             console.log('Selected images count:', selectedImages.length);
             console.log('Editing site:', editingSite);
+            console.log('Image previews count:', imagePreviews.length);
             for (let [key, value] of submitData.entries()) {
                 if (key === 'images') {
                     console.log(key, value.name, value.type);
+                } else if (key === 'existingImages') {
+                    console.log(key, value);
                 } else {
                     console.log(key, value);
                 }
