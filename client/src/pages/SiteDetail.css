@@ -448,7 +448,6 @@
     background: linear-gradient(135deg, #64ffda 0%, #2979ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /*background-clip: text;*/
 }
 
 .related-site-card {
@@ -511,7 +510,7 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-    
+
 }
 
 .related-site-price {
