@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Spinner } from 'react-bootstrap';
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { siteAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import SiteCard from '../components/SiteCard/SiteCard';
@@ -24,7 +26,28 @@ const Catalog = () => {
     useEffect(() => {
         fetchSites();
         fetchCategories();
+        // eslint-disable-next-line
     }, [pagination.page]);
+
+    useEffect(() => {
+        // Инициализируем AOS при монтировании компонента
+        AOS.init({
+            duration: 800,
+            once: true, // анимация только один раз
+        });
+
+        // Обновляем AOS при изменении данных
+        AOS.refresh();
+    }, []);
+
+    useEffect(() => {
+        // Обновляем AOS каждый раз, когда меняются filteredSites
+        if (filteredSites.length > 0) {
+            setTimeout(() => {
+                AOS.refresh();
+            }, 100);
+        }
+    }, [filteredSites]);
 
     const fetchSites = async () => {
         startLoading();
