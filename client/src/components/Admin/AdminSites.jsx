@@ -312,6 +312,7 @@ const AdminSites = () => {
             <Card className="admin-sites-table-card">
                 <Card.Body className="p-0">
                     {sites.length > 0 ? (
+                        <div className="admin-sites-table-container">
                         <div className="table-responsive">
                             <Table className="admin-sites-table">
                                 <thead>
@@ -433,6 +434,7 @@ const AdminSites = () => {
                                 ))}
                                 </tbody>
                             </Table>
+                        </div>
                         </div>
                     ) : (
                         <div className="admin-sites-no-data">

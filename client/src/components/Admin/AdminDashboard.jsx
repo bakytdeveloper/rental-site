@@ -132,6 +132,7 @@ const AdminDashboard = () => {
 
             <Row>
                 {/* Recent Contacts */}
+                {/* Recent Contacts */}
                 <Col lg={6} className="mb-4">
                     <Card className="admin-dashboard-recent-card">
                         <Card.Header>
@@ -139,29 +140,31 @@ const AdminDashboard = () => {
                         </Card.Header>
                         <Card.Body>
                             {recentContacts.length > 0 ? (
-                                <Table responsive>
-                                    <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Status</th>
-                                        <th>Date</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {recentContacts.map(contact => (
-                                        <tr key={contact._id}>
-                                            <td>
-                                                <div className="admin-dashboard-contact-name">{contact.name}</div>
-                                                <small className="admin-dashboard-text-muted">{contact.email}</small>
-                                            </td>
-                                            <td>{getStatusBadge(contact.status)}</td>
-                                            <td>
-                                                {new Date(contact.createdAt).toLocaleDateString()}
-                                            </td>
+                                <div className="table-responsive">
+                                    <Table responsive>
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
                                         </tr>
-                                    ))}
-                                    </tbody>
-                                </Table>
+                                        </thead>
+                                        <tbody>
+                                        {recentContacts.map(contact => (
+                                            <tr key={contact._id}>
+                                                <td>
+                                                    <div className="admin-dashboard-contact-name">{contact.name}</div>
+                                                    <small className="admin-dashboard-text-muted">{contact.email}</small>
+                                                </td>
+                                                <td>{getStatusBadge(contact.status)}</td>
+                                                <td>
+                                                    {new Date(contact.createdAt).toLocaleDateString()}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </Table>
+                                </div>
                             ) : (
                                 <p className="admin-dashboard-text-muted text-center">No recent contacts</p>
                             )}
@@ -177,35 +180,37 @@ const AdminDashboard = () => {
                         </Card.Header>
                         <Card.Body>
                             {recentSites.length > 0 ? (
-                                <Table responsive>
-                                    <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-                                        <th>Status</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {recentSites.map(site => (
-                                        <tr key={site._id}>
-                                            <td>
-                                                <div className="admin-dashboard-site-title">{site.title}</div>
-                                                <small className="admin-dashboard-text-muted">
-                                                    {site.shortDescription.substring(0, 50)}...
-                                                </small>
-                                            </td>
-                                            <td>{site.category}</td>
-                                            <td>${site.price}/mo</td>
-                                            <td>
-                                                <Badge bg={site.isActive ? 'success' : 'secondary'}>
-                                                    {site.isActive ? 'Active' : 'Inactive'}
-                                                </Badge>
-                                            </td>
+                                <div className="table-responsive">
+                                    <Table responsive>
+                                        <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Status</th>
                                         </tr>
-                                    ))}
-                                    </tbody>
-                                </Table>
+                                        </thead>
+                                        <tbody>
+                                        {recentSites.map(site => (
+                                            <tr key={site._id}>
+                                                <td>
+                                                    <div className="admin-dashboard-site-title">{site.title}</div>
+                                                    <small className="admin-dashboard-text-muted">
+                                                        {site.shortDescription.substring(0, 50)}...
+                                                    </small>
+                                                </td>
+                                                <td>{site.category}</td>
+                                                <td>${site.price}/mo</td>
+                                                <td>
+                                                    <Badge bg={site.isActive ? 'success' : 'secondary'}>
+                                                        {site.isActive ? 'Active' : 'Inactive'}
+                                                    </Badge>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        </tbody>
+                                    </Table>
+                                </div>
                             ) : (
                                 <p className="admin-dashboard-text-muted text-center">No websites added yet</p>
                             )}
