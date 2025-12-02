@@ -271,7 +271,7 @@ const emailTemplates = {
             <div class="info-card">
               <h3>📞 Need Assistance?</h3>
               <p>If you have any questions about your rental or payment, please contact our support team.</p>
-              <p><strong>Email:</strong> support@rentalsite.com</p>
+              <p><strong>Email:</strong> rentalsite@gmail.com</p>
               <p><strong>Phone:</strong> +1 (555) 123-4567</p>
             </div>
           </div>
@@ -285,38 +285,314 @@ const emailTemplates = {
     `
     }),
 
+    // Обновленный шаблон adminRentalExpiring
     adminRentalExpiring: (contactData, siteData) => ({
-        subject: `⚠️ Rental Expiring: ${contactData.name} - ${siteData.title}`,
+        subject: `⚠️ Rental Expiring Soon: ${contactData.name} - ${siteData.title}`,
         html: `
       <!DOCTYPE html>
       <html>
       <head>
+        <meta charset="utf-8">
         <style>
-          body { font-family: Arial, sans-serif; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: #ff9f43; color: white; padding: 20px; text-align: center; }
-          .content { background: #f8f9fa; padding: 20px; }
-          .button { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+          body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            line-height: 1.6; 
+            color: #333; 
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+          }
+          .container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: #ffffff;
+          }
+          .header { 
+            background: linear-gradient(135deg, #ff9f43 0%, #ff7b00 100%); 
+            color: white; 
+            padding: 30px; 
+            text-align: center; 
+            border-radius: 10px 10px 0 0;
+          }
+          .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+          }
+          .header p {
+            margin: 10px 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+          }
+          .content { 
+            padding: 30px; 
+            border-radius: 0 0 10px 10px;
+            border: 1px solid #e9ecef;
+            border-top: none;
+          }
+          .alert-box {
+            background: #fff9e6;
+            border: 2px solid #ffc107;
+            border-left: 5px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+          }
+          .alert-title {
+            color: #856404;
+            font-weight: 600;
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+          }
+          .info-card { 
+            background: #f8f9fa; 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 8px; 
+            border-left: 4px solid #007bff;
+          }
+          .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+          }
+          .info-item {
+            margin-bottom: 12px;
+          }
+          .info-label {
+            color: #6c757d;
+            font-weight: 500;
+            font-size: 14px;
+            margin-bottom: 5px;
+            display: block;
+          }
+          .info-value {
+            color: #212529;
+            font-weight: 600;
+            font-size: 16px;
+          }
+          .days-badge {
+            display: inline-block;
+            background: ${contactData.daysRemaining <= 1 ? '#dc3545' : contactData.daysRemaining <= 3 ? '#fd7e14' : '#ffc107'};
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            margin-left: 10px;
+          }
+          .button-container {
+            text-align: center;
+            margin: 30px 0 20px;
+          }
+          .button { 
+            background: #007bff; 
+            color: white; 
+            padding: 14px 32px; 
+            text-decoration: none; 
+            border-radius: 6px; 
+            font-weight: 600;
+            font-size: 16px;
+            display: inline-block;
+            margin: 0 10px;
+            transition: background-color 0.3s;
+          }
+          .button:hover {
+            background: #0056b3;
+            color: white;
+            text-decoration: none;
+          }
+          .button-contact {
+            background: #28a745;
+          }
+          .button-contact:hover {
+            background: #1e7e34;
+          }
+          .footer {
+            text-align: center; 
+            margin-top: 30px; 
+            padding: 20px; 
+            color: #6c757d; 
+            font-size: 14px;
+            border-top: 1px solid #e9ecef;
+          }
+          .footer p {
+            margin: 5px 0;
+          }
+          .highlight {
+            color: #dc3545;
+            font-weight: 600;
+          }
+          .date-detail {
+            font-size: 15px;
+            color: #495057;
+            margin-top: 5px;
+          }
         </style>
       </head>
       <body>
         <div class="container">
           <div class="header">
-            <h2>⚠️ Rental Expiring Soon</h2>
+            <h1>⚠️ Rental Expiring Soon</h1>
+            <p>Client rental period is about to expire - Immediate action required</p>
           </div>
+          
           <div class="content">
-            <p><strong>Client:</strong> ${contactData.name}</p>
-            <p><strong>Email:</strong> ${contactData.email}</p>
-            <p><strong>Website:</strong> ${siteData.title}</p>
-            <p><strong>Expires:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString()}</p>
-            <p><strong>Days Remaining:</strong> ${contactData.daysRemaining}</p>
-            <p><a href="${process.env.ADMIN_URL}/contacts/${contactData._id}" class="button">View in Admin Panel</a></p>
+            <div class="alert-box">
+              <div class="alert-title">
+                ⏰ Urgent Notification
+                <span class="days-badge">
+                  ${contactData.daysRemaining === 1 ? '1 DAY LEFT' :
+            contactData.daysRemaining === 0 ? 'EXPIRES TODAY' :
+                `${contactData.daysRemaining} DAYS LEFT`}
+                </span>
+              </div>
+              <p style="color: #856404; margin: 0;">
+                The rental period for <strong>${siteData.title}</strong> will expire soon. 
+                Please contact the client to arrange payment extension.
+              </p>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📋 Rental Summary</h3>
+              
+              <div class="info-grid">
+                <div class="info-item">
+                  <span class="info-label">Client Name:</span>
+                  <div class="info-value">${contactData.name}</div>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-label">Website:</span>
+                  <div class="info-value">${siteData.title}</div>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-label">Monthly Price:</span>
+                  <div class="info-value">$${siteData.price}/month</div>
+                </div>
+                
+                <div class="info-item">
+                  <span class="info-label">Client Email:</span>
+                  <div class="info-value">${contactData.email}</div>
+                </div>
+              </div>
+              
+              ${contactData.phone ? `
+              <div class="info-item">
+                <span class="info-label">Client Phone:</span>
+                <div class="info-value">${contactData.phone}</div>
+              </div>
+              ` : ''}
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📅 Expiration Details</h3>
+              
+              <div class="info-item">
+                <span class="info-label">Expiration Date:</span>
+                <div class="info-value">
+                  ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}
+                </div>
+                <div class="date-detail">
+                  (${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        })})
+                </div>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Time Remaining:</span>
+                <div class="info-value">
+                  ${contactData.daysRemaining} day${contactData.daysRemaining !== 1 ? 's' : ''}
+                  ${contactData.daysRemaining === 0 ?
+            ' - <span class="highlight">Expires today!</span>' :
+            contactData.daysRemaining <= 3 ?
+                ' - <span class="highlight">Urgent attention required</span>' :
+                ''}
+                </div>
+              </div>
+              
+              <div class="info-item">
+                <span class="info-label">Exact Expiration Time:</span>
+                <div class="info-value">
+                  ${new Date(contactData.rentalEndDate).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZoneName: 'short'
+        })}
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">⚡ Quick Actions</h3>
+              
+              <div class="button-container">
+                <a href="${process.env.ADMIN_URL || 'http://localhost:3000/admin'}/contacts/${contactData._id}" 
+                   class="button">
+                   👁️ View in Admin Panel
+                </a>
+                
+                <a href="mailto:${contactData.email}?subject=Renewal: ${siteData.title}&body=Dear ${contactData.name},%0D%0A%0D%0AYour rental for ${siteData.title} is expiring on ${new Date(contactData.rentalEndDate).toLocaleDateString()}.%0D%0A%0D%0APlease let us know if you'd like to extend your rental period.%0D%0A%0D%0ABest regards,%0D%0ARentalSite Team" 
+                   class="button button-contact">
+                   📧 Email Client
+                </a>
+              </div>
+              
+              ${contactData.phone ? `
+              <div style="text-align: center; margin-top: 15px;">
+                <span style="color: #6c757d; font-size: 14px;">📞 Quick Call:</span>
+                <a href="tel:${contactData.phone}" style="color: #28a745; font-weight: 600; margin-left: 10px;">
+                  ${contactData.phone}
+                </a>
+              </div>
+              ` : ''}
+              
+              <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #6c757d;">
+                <p style="margin: 5px 0;">
+                  <strong>Recommended action:</strong> Contact client within 24 hours
+                </p>
+                <p style="margin: 5px 0;">
+                  <strong>Reminder:</strong> Client has already received expiration notification
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>This is an automated notification from RentalSite Management System</p>
+            <p>
+              <strong>Notification ID:</strong> EXP-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${Math.random().toString(36).substr(2, 6).toUpperCase()}
+            </p>
+            <p>📍 ${new Date().getFullYear()} RentalSite. All rights reserved.</p>
+            <p>⏰ Generated on: ${new Date().toLocaleString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        })}</p>
           </div>
         </div>
       </body>
       </html>
     `
-    })
+    }),
 };
 
 // Main email sending function
