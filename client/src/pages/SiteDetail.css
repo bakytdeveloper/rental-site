@@ -5,7 +5,7 @@
 }
 
 /* Breadcrumb */
-.breadcrumb-nav {
+.site-detail-breadcrumb-nav {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -15,21 +15,21 @@
     font-size: 0.9rem;
 }
 
-.breadcrumb-link {
+.site-detail-breadcrumb-link {
     color: #64ffda;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.breadcrumb-link:hover {
+.site-detail-breadcrumb-link:hover {
     color: #3bd6d4;
 }
 
-.breadcrumb-separator {
+.site-detail-breadcrumb-separator {
     color: #8892b0;
 }
 
-.breadcrumb-current {
+.site-detail-breadcrumb-current {
     color: #ccd6f6;
     font-weight: 600;
 }
@@ -40,12 +40,12 @@
 }
 
 /* Gallery Section */
-.gallery-section {
+.site-detail-gallery-section {
     position: sticky;
     top: 100px;
 }
 
-.main-gallery {
+.site-detail-main-gallery {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -54,20 +54,20 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.main-image-container {
+.site-detail-main-image-container {
     position: relative;
     height: 400px;
     overflow: hidden;
     background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
 }
 
-.gallery-main-img {
+.site-detail-gallery-main-img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;
 }
 
-.featured-badge-large {
+.site-detail-featured-badge-large {
     position: absolute;
     top: 1rem;
     left: 1rem;
@@ -78,7 +78,7 @@
     border: none;
 }
 
-.image-navigation {
+.site-detail-image-navigation {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -87,7 +87,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.nav-btn {
+.site-detail-nav-btn {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -101,19 +101,19 @@
     transition: all 0.3s ease;
 }
 
-.nav-btn:hover {
+.site-detail-nav-btn:hover {
     background: rgba(100, 255, 218, 0.2);
     border-color: #64ffda;
     transform: scale(1.1);
 }
 
-.image-counter {
+.site-detail-image-counter {
     color: #ccd6f6;
     font-weight: 600;
     font-size: 0.9rem;
 }
 
-.thumbnail-gallery {
+.site-detail-thumbnail-gallery {
     display: flex;
     gap: 0.5rem;
     padding: 1rem;
@@ -121,7 +121,7 @@
     background: rgba(0, 0, 0, 0.3);
 }
 
-.thumbnail-btn {
+.site-detail-thumbnail-btn {
     flex: 0 0 auto;
     width: 80px;
     height: 60px;
@@ -133,23 +133,23 @@
     transition: all 0.3s ease;
 }
 
-.thumbnail-btn.active {
+.site-detail-thumbnail-btn.active {
     border-color: #64ffda;
     transform: scale(1.05);
 }
 
-.thumbnail-btn:hover {
+.site-detail-thumbnail-btn:hover {
     border-color: rgba(100, 255, 218, 0.5);
 }
 
-.thumbnail-btn img {
+.site-detail-thumbnail-btn img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
 /* Site Info Section */
-.site-info-section {
+.site-detail-info-section {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -159,14 +159,14 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.site-meta-badges {
+.site-detail-meta-badges {
     display: flex;
     gap: 0.5rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
 }
 
-.category-badge {
+.site-detail-category-badge {
     background: linear-gradient(135deg, #64ffda, #3bd6d4) !important;
     border: none;
     color: #0a192f !important;
@@ -174,14 +174,14 @@
     padding: 0.5rem 1rem;
 }
 
-.status-badge {
+.site-detail-status-badge {
     background: linear-gradient(135deg, #4CAF50, #45a049) !important;
     border: none;
     font-weight: 600;
     padding: 0.5rem 1rem;
 }
 
-.site-title {
+.site-detail-title {
     font-size: 2.5rem;
     font-weight: 800;
     color: #ffffff;
@@ -192,26 +192,26 @@
     -webkit-text-fill-color: transparent;
 }
 
-.price-section {
+.site-detail-price-section {
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
     margin-bottom: 1.5rem;
 }
 
-.price-amount {
+.site-detail-price-amount {
     font-size: 3rem;
     font-weight: 800;
     color: #64ffda;
 }
 
-.price-period {
+.site-detail-price-period {
     font-size: 1.2rem;
     color: #8892b0;
     font-weight: 500;
 }
 
-.site-description {
+.site-detail-description {
     color: #ccd6f6;
     font-size: 1.1rem;
     line-height: 1.6;
@@ -219,14 +219,14 @@
 }
 
 /* Quick Actions */
-.quick-actions {
+.site-detail-quick-actions {
     display: flex;
     gap: 1rem;
     margin-bottom: 2rem;
     flex-wrap: wrap;
 }
 
-.btn-rent-now-main {
+.site-detail-btn-rent-now-main {
     background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
     border: none;
     color: white;
@@ -239,34 +239,30 @@
     font-size: 1rem;
 }
 
-.btn-rent-now-main:hover {
+.site-detail-btn-rent-now-main:hover {
     background: linear-gradient(135deg, #ff5252, #ff7b7b);
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
     color: white;
 }
 
-.btn-rent-now {
-    font-size: 1rem;
-}
-
 /* Key Features */
-.key-features {
+.site-detail-key-features {
     margin-bottom: 2rem;
 }
 
-.key-features h4 {
+.site-detail-key-features h4 {
     color: #64ffda;
     margin-bottom: 1rem;
     font-weight: 700;
 }
 
-.features-grid {
+.site-detail-features-grid {
     display: grid;
     gap: 0.8rem;
 }
 
-.feature-item {
+.site-detail-feature-item {
     display: flex;
     align-items: center;
     gap: 0.8rem;
@@ -277,46 +273,42 @@
     transition: all 0.3s ease;
 }
 
-.feature-item:hover {
+.site-detail-feature-item:hover {
     background: rgba(100, 255, 218, 0.1);
     border-color: rgba(100, 255, 218, 0.3);
     transform: translateX(5px);
 }
 
-.feature-icon {
+.site-detail-feature-icon {
     color: #64ffda;
     font-weight: bold;
     font-size: 1.1rem;
     margin: 0;
 }
 
-.bg-outline-info {
-    font-size: 0.9rem!important;
-}
-
-.feature-text {
+.site-detail-feature-text {
     color: #ccd6f6;
     font-size: 0.9rem;
 }
 
 /* Technologies Section */
-.technologies-section {
+.site-detail-technologies-section {
     margin-bottom: 2rem;
 }
 
-.technologies-section h4 {
+.site-detail-technologies-section h4 {
     color: #64ffda;
     margin-bottom: 1rem;
     font-weight: 700;
 }
 
-.tech-tags {
+.site-detail-tech-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.tech-tag {
+.site-detail-tech-tag {
     background: rgba(100, 255, 218, 0.1) !important;
     border: 1px solid rgba(100, 255, 218, 0.3) !important;
     color: #64ffda !important;
@@ -326,17 +318,17 @@
 }
 
 /* Demo Section */
-.demo-section {
+.site-detail-demo-section {
     margin-bottom: 2rem;
 }
 
-.demo-section h4 {
+.site-detail-demo-section h4 {
     color: #64ffda;
     margin-bottom: 1rem;
     font-weight: 700;
 }
 
-.demo-link-btn {
+.site-detail-demo-link-btn {
     display: inline-block;
     background: linear-gradient(135deg, #2979ff, #2962ff);
     color: white;
@@ -348,7 +340,7 @@
     border: none;
 }
 
-.demo-link-btn:hover {
+.site-detail-demo-link-btn:hover {
     background: linear-gradient(135deg, #2962ff, #2979ff);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(41, 121, 255, 0.4);
@@ -356,11 +348,11 @@
 }
 
 /* Rent Section */
-.rent-section {
+.site-detail-rent-section {
     margin: 4rem 0;
 }
 
-.rent-card {
+.site-detail-rent-card {
     background: linear-gradient(135deg, rgba(100, 255, 218, 0.1), rgba(41, 121, 255, 0.1));
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -370,52 +362,52 @@
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.rent-card h2 {
+.site-detail-rent-card h2 {
     color: #ffffff;
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 1rem;
 }
 
-.rent-description {
+.site-detail-rent-description {
     color: #ccd6f6;
     font-size: 1.1rem;
     margin-bottom: 2rem;
     line-height: 1.6;
 }
 
-.rent-benefits {
+.site-detail-rent-benefits {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 2rem;
     margin-bottom: 3rem;
 }
 
-.benefit-item {
+.site-detail-benefit-item {
     display: flex;
     align-items: flex-start;
     gap: 1rem;
     text-align: left;
 }
 
-.benefit-icon {
+.site-detail-benefit-icon {
     font-size: 2rem;
     flex-shrink: 0;
 }
 
-.benefit-item h5 {
+.site-detail-benefit-item h5 {
     color: #64ffda;
     margin-bottom: 0.5rem;
     font-weight: 700;
 }
 
-.benefit-item p {
+.site-detail-benefit-item p {
     color: #8892b0;
     margin: 0;
     font-size: 0.9rem;
 }
 
-.btn-rent-now-large {
+.site-detail-btn-rent-now-large {
     background: linear-gradient(135deg, #ff6b6b, #ff5252);
     border: none;
     color: white;
@@ -427,7 +419,7 @@
     box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
 }
 
-.btn-rent-now-large:hover {
+.site-detail-btn-rent-now-large:hover {
     background: linear-gradient(135deg, #ff5252, #ff6b6b);
     transform: translateY(-3px);
     box-shadow: 0 15px 35px rgba(255, 107, 107, 0.6);
@@ -435,11 +427,11 @@
 }
 
 /* Related Sites */
-.related-sites-section {
+.site-detail-related-sites-section {
     margin-top: 4rem;
 }
 
-.section-title {
+.site-detail-section-title {
     color: #ffffff;
     font-size: 2rem;
     font-weight: 800;
@@ -450,7 +442,7 @@
     -webkit-text-fill-color: transparent;
 }
 
-.related-site-card {
+.site-detail-related-site-card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -460,26 +452,26 @@
     height: 100%;
 }
 
-.related-site-card:hover {
+.site-detail-related-site-card:hover {
     transform: translateY(-5px);
     border-color: rgba(100, 255, 218, 0.3);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
 }
 
-.related-site-image {
+.site-detail-related-site-image {
     position: relative;
     height: 150px;
     overflow: hidden;
     background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
 }
 
-.related-site-image img {
+.site-detail-related-site-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.related-featured-badge {
+.site-detail-related-featured-badge {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
@@ -490,18 +482,18 @@
     font-size: 0.7rem;
 }
 
-.related-site-info {
+.site-detail-related-site-info {
     padding: 1.5rem;
 }
 
-.related-site-info h4 {
+.site-detail-related-site-info h4 {
     color: #ffffff;
     font-size: 1.1rem;
     font-weight: 700;
     margin-bottom: 0.5rem;
 }
 
-.related-site-description {
+.site-detail-related-site-description {
     color: #8892b0;
     font-size: 0.8rem;
     margin-bottom: 1rem;
@@ -510,17 +502,16 @@
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
-
 }
 
-.related-site-price {
+.site-detail-related-site-price {
     color: #64ffda;
     font-size: 1.2rem;
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
-.btn-view-related {
+.site-detail-btn-view-related {
     background: transparent;
     border: 1px solid #64ffda;
     color: #64ffda;
@@ -531,41 +522,41 @@
     width: 100%;
 }
 
-.btn-view-related:hover {
+.site-detail-btn-view-related:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-2px);
     color: #64ffda;
 }
 
 /* Contact Modal */
-.contact-modal .modal-content {
+.site-detail-contact-modal .modal-content {
     background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     backdrop-filter: blur(20px);
 }
 
-.contact-modal .modal-header {
+.site-detail-contact-modal .modal-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.5rem 2rem;
 }
 
-.contact-modal .modal-title {
+.site-detail-contact-modal .modal-title {
     color: #ffffff;
     font-weight: 700;
     font-size: 1.5rem;
 }
 
-.modal-subtitle {
+.site-detail-modal-subtitle {
     color: #8892b0;
     font-size: 0.9rem;
 }
 
-.contact-modal .modal-body {
+.site-detail-contact-modal .modal-body {
     padding: 2rem;
 }
 
-.rental-summary {
+.site-detail-rental-summary {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
     padding: 1rem;
@@ -573,7 +564,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.summary-item {
+.site-detail-summary-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -581,26 +572,26 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.summary-item:last-child {
+.site-detail-summary-item:last-child {
     border-bottom: none;
 }
 
-.summary-item span {
+.site-detail-summary-item span {
     color: #8892b0;
 }
 
-.summary-item strong {
+.site-detail-summary-item strong {
     color: #64ffda;
 }
 
-.modal-actions {
+.site-detail-modal-actions {
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
     margin-top: 1.5rem;
 }
 
-.btn-submit-request {
+.site-detail-btn-submit-request {
     background: linear-gradient(135deg, #64ffda, #3bd6d4);
     border: none;
     color: #0a192f;
@@ -610,7 +601,7 @@
     transition: all 0.3s ease;
 }
 
-.btn-submit-request:hover {
+.site-detail-btn-submit-request:hover {
     background: linear-gradient(135deg, #3bd6d4, #64ffda);
     transform: translateY(-2px);
     color: #0a192f;
@@ -625,35 +616,35 @@
     justify-content: center;
 }
 
-.loading-spinner {
+.site-detail-loading-spinner {
     text-align: center;
 }
 
-.loading-spinner p {
+.site-detail-loading-spinner p {
     color: #8892b0;
     margin-top: 1rem;
 }
 
 /* Responsive Design */
 @media (max-width: 992px) {
-    .site-info-section {
+    .site-detail-info-section {
         margin-left: 0;
         margin-top: 2rem;
     }
 
-    .site-title {
+    .site-detail-title {
         font-size: 2rem;
     }
 
-    .price-amount {
+    .site-detail-price-amount {
         font-size: 2.5rem;
     }
 
-    .quick-actions {
+    .site-detail-quick-actions {
         flex-direction: column;
     }
 
-    .btn-rent-now-main {
+    .site-detail-btn-rent-now-main {
         min-width: auto;
     }
 }
@@ -663,32 +654,32 @@
         padding: 1rem 0;
     }
 
-    .main-image-container {
+    .site-detail-main-image-container {
         height: 300px;
     }
 
-    .breadcrumb-nav {
+    .site-detail-breadcrumb-nav {
         margin-top: 3rem;
     }
 
-    .site-title {
+    .site-detail-title {
         font-size: 1.8rem;
     }
 
-    .rent-card {
+    .site-detail-rent-card {
         padding: 2rem 1rem;
     }
 
-    .rent-card h2 {
+    .site-detail-rent-card h2 {
         font-size: 2rem;
     }
 
-    .rent-benefits {
+    .site-detail-rent-benefits {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 
-    .modal-actions {
+    .site-detail-modal-actions {
         flex-direction: column;
     }
 }

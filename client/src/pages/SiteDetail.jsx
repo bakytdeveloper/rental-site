@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Modal, Form, Badge } from 'react-bootstrap';
-import { siteAPI, contactAPI } from '../services/api'; // Добавляем contactAPI
+import { siteAPI, contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './SiteDetail.css';
@@ -32,7 +32,6 @@ const SiteDetail = () => {
         try {
             const response = await siteAPI.getById(id);
             setSite(response.data);
-            // Set default message with site title
             setContactForm(prev => ({
                 ...prev,
                 message: `I'm interested in renting "${response.data.title}" and would like to know more about the rental process, pricing details, and setup requirements.`
@@ -51,7 +50,6 @@ const SiteDetail = () => {
         startLoading();
 
         try {
-            // Prepare contact data
             const contactData = {
                 name: contactForm.name.trim(),
                 email: contactForm.email.trim(),
@@ -80,8 +78,6 @@ const SiteDetail = () => {
             }
         } catch (error) {
             console.error('❌ Error submitting contact form:', error);
-
-            // Show specific error message from server if available
             const errorMessage = error.response?.data?.message ||
                 error.response?.data?.errors?.join(', ') ||
                 'Failed to send request. Please try again.';
@@ -110,7 +106,7 @@ const SiteDetail = () => {
         return (
             <div className="site-detail-loading">
                 <Container>
-                    <div className="loading-spinner">
+                    <div className="site-detail-loading-spinner">
                         <Spinner animation="border" variant="primary" />
                         <p>Loading website details...</p>
                     </div>
@@ -137,25 +133,25 @@ const SiteDetail = () => {
         <div className="site-detail-page">
             <Container>
                 {/* Breadcrumb */}
-                <nav className="breadcrumb-nav">
-                    <Link to="/" className="breadcrumb-link">Home</Link>
-                    <span className="breadcrumb-separator">/</span>
-                    <Link to="/catalog" className="breadcrumb-link">Catalog</Link>
-                    <span className="breadcrumb-separator">/</span>
-                    <span className="breadcrumb-current">{site.title}</span>
+                <nav className="site-detail-breadcrumb-nav">
+                    <Link to="/" className="site-detail-breadcrumb-link">Home</Link>
+                    <span className="site-detail-breadcrumb-separator">/</span>
+                    <Link to="/catalog" className="site-detail-breadcrumb-link">Catalog</Link>
+                    <span className="site-detail-breadcrumb-separator">/</span>
+                    <span className="site-detail-breadcrumb-current">{site.title}</span>
                 </nav>
 
                 <Row className="site-detail-content">
                     {/* Gallery Section */}
                     <Col lg={7}>
-                        <div className="gallery-section">
-                            <div className="main-gallery">
-                                <div className="main-image-container">
+                        <div className="site-detail-gallery-section">
+                            <div className="site-detail-main-gallery">
+                                <div className="site-detail-main-image-container">
                                     {site.images && site.images.length > 0 ? (
                                         <img
                                             src={`http://localhost:5000${site.images[selectedImage]}`}
                                             alt={site.title}
-                                            className="gallery-main-img"
+                                            className="site-detail-gallery-main-img"
                                         />
                                     ) : (
                                         <div className="no-image-placeholder">
@@ -164,28 +160,28 @@ const SiteDetail = () => {
                                         </div>
                                     )}
                                     {site.isFeatured && (
-                                        <Badge className="featured-badge-large">⭐ Featured Website</Badge>
+                                        <Badge className="site-detail-featured-badge-large">⭐ Featured Website</Badge>
                                     )}
                                 </div>
 
                                 {/* Image Navigation */}
                                 {site.images && site.images.length > 1 && (
-                                    <div className="image-navigation">
+                                    <div className="site-detail-image-navigation">
                                         <Button
                                             variant="outline-light"
-                                            className="nav-btn prev-btn"
+                                            className="site-detail-nav-btn prev-btn"
                                             onClick={() => setSelectedImage(prev =>
                                                 prev === 0 ? site.images.length - 1 : prev - 1
                                             )}
                                         >
                                             ‹
                                         </Button>
-                                        <span className="image-counter">
+                                        <span className="site-detail-image-counter">
                                             {selectedImage + 1} / {site.images.length}
                                         </span>
                                         <Button
                                             variant="outline-light"
-                                            className="nav-btn next-btn"
+                                            className="site-detail-nav-btn next-btn"
                                             onClick={() => setSelectedImage(prev =>
                                                 prev === site.images.length - 1 ? 0 : prev + 1
                                             )}
@@ -197,11 +193,11 @@ const SiteDetail = () => {
 
                                 {/* Thumbnail Gallery */}
                                 {site.images && site.images.length > 1 && (
-                                    <div className="thumbnail-gallery">
+                                    <div className="site-detail-thumbnail-gallery">
                                         {site.images.map((image, index) => (
                                             <button
                                                 key={index}
-                                                className={`thumbnail-btn ${selectedImage === index ? 'active' : ''}`}
+                                                className={`site-detail-thumbnail-btn ${selectedImage === index ? 'active' : ''}`}
                                                 onClick={() => setSelectedImage(index)}
                                             >
                                                 <img
@@ -218,33 +214,33 @@ const SiteDetail = () => {
 
                     {/* Site Info Section */}
                     <Col lg={5}>
-                        <div className="site-info-section">
+                        <div className="site-detail-info-section">
                             <div className="site-header">
-                                <div className="site-meta-badges">
-                                    <Badge bg="primary" className="category-badge">
+                                <div className="site-detail-meta-badges">
+                                    <Badge bg="primary" className="site-detail-category-badge">
                                         {site.category}
                                     </Badge>
                                     {site.isActive && (
-                                        <Badge bg="success" className="status-badge">
+                                        <Badge bg="success" className="site-detail-status-badge">
                                             ✅ Available for Rent
                                         </Badge>
                                     )}
                                 </div>
 
-                                <h1 className="site-title">{site.title}</h1>
+                                <h1 className="site-detail-title">{site.title}</h1>
 
-                                <div className="price-section">
-                                    <div className="price-amount">${site.price}</div>
-                                    <div className="price-period">/month</div>
+                                <div className="site-detail-price-section">
+                                    <div className="site-detail-price-amount">${site.price}</div>
+                                    <div className="site-detail-price-period">/month</div>
                                 </div>
 
-                                <p className="site-description">{site.description}</p>
+                                <p className="site-detail-description">{site.description}</p>
                             </div>
 
                             {/* Quick Actions */}
-                            <div className="quick-actions">
+                            <div className="site-detail-quick-actions">
                                 <Button
-                                    className="btn-rent-now-main"
+                                    className="site-detail-btn-rent-now-main"
                                     size="lg"
                                     onClick={scrollToRent}
                                 >
@@ -262,13 +258,13 @@ const SiteDetail = () => {
 
                             {/* Key Features */}
                             {site.features && site.features.length > 0 && (
-                                <div className="key-features">
+                                <div className="site-detail-key-features">
                                     <h4>🚀 Key Features</h4>
-                                    <div className="features-grid">
+                                    <div className="site-detail-features-grid">
                                         {site.features.map((feature, index) => (
-                                            <div key={index} className="feature-item">
-                                                <span className="feature-icon">✓</span>
-                                                <span className="feature-text">{feature}</span>
+                                            <div key={index} className="site-detail-feature-item">
+                                                <span className="site-detail-feature-icon">✓</span>
+                                                <span className="site-detail-feature-text">{feature}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -277,11 +273,11 @@ const SiteDetail = () => {
 
                             {/* Technologies */}
                             {site.technologies && site.technologies.length > 0 && (
-                                <div className="technologies-section">
+                                <div className="site-detail-technologies-section">
                                     <h4>🛠️ Built With</h4>
-                                    <div className="tech-tags">
+                                    <div className="site-detail-tech-tags">
                                         {site.technologies.map((tech, index) => (
-                                            <Badge key={index} bg="outline-info" className="tech-tag">
+                                            <Badge key={index} bg="outline-info" className="site-detail-tech-tag">
                                                 {tech}
                                             </Badge>
                                         ))}
@@ -291,13 +287,13 @@ const SiteDetail = () => {
 
                             {/* Demo Link */}
                             {site.demoUrl && (
-                                <div className="demo-section">
+                                <div className="site-detail-demo-section">
                                     <h4>🌐 Live Demo</h4>
                                     <a
                                         href={site.demoUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="demo-link-btn"
+                                        className="site-detail-demo-link-btn"
                                     >
                                         Visit Live Website ↗
                                     </a>
@@ -308,33 +304,33 @@ const SiteDetail = () => {
                 </Row>
 
                 {/* Rent Section */}
-                <section id="rent-section" className="rent-section">
+                <section id="rent-section" className="site-detail-rent-section">
                     <Row>
                         <Col lg={8} className="mx-auto">
-                            <div className="rent-card">
+                            <div className="site-detail-rent-card">
                                 <h2>Ready to Rent This Website?</h2>
-                                <p className="rent-description">
+                                <p className="site-detail-rent-description">
                                     Get started with this premium website today. Complete the form below
                                     and our team will contact you to discuss the rental process.
                                 </p>
 
-                                <div className="rent-benefits">
-                                    <div className="benefit-item">
-                                        <span className="benefit-icon">⚡</span>
+                                <div className="site-detail-rent-benefits">
+                                    <div className="site-detail-benefit-item">
+                                        <span className="site-detail-benefit-icon">⚡</span>
                                         <div>
                                             <h5>Instant Setup</h5>
                                             <p>Get your website live within 24 hours</p>
                                         </div>
                                     </div>
-                                    <div className="benefit-item">
-                                        <span className="benefit-icon">🔧</span>
+                                    <div className="site-detail-benefit-item">
+                                        <span className="site-detail-benefit-icon">🔧</span>
                                         <div>
                                             <h5>Full Support</h5>
                                             <p>Technical support and maintenance included</p>
                                         </div>
                                     </div>
-                                    <div className="benefit-item">
-                                        <span className="benefit-icon">🔄</span>
+                                    <div className="site-detail-benefit-item">
+                                        <span className="site-detail-benefit-icon">🔄</span>
                                         <div>
                                             <h5>Flexible Terms</h5>
                                             <p>Monthly rental with option to cancel anytime</p>
@@ -343,7 +339,7 @@ const SiteDetail = () => {
                                 </div>
 
                                 <Button
-                                    className="btn-rent-now-large"
+                                    className="site-detail-btn-rent-now-large"
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
@@ -364,25 +360,25 @@ const SiteDetail = () => {
                 onHide={() => setShowContactModal(false)}
                 centered
                 size="lg"
-                className="contact-modal"
+                className="site-detail-contact-modal"
             >
                 <Modal.Header closeButton>
                     <Modal.Title>Rent {site.title}</Modal.Title>
-                    <div className="modal-subtitle">
+                    <div className="site-detail-modal-subtitle">
                         ${site.price}/month • {site.category}
                     </div>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="rental-summary">
-                        <div className="summary-item">
+                    <div className="site-detail-rental-summary">
+                        <div className="site-detail-summary-item">
                             <span>Website:</span>
                             <strong>{site.title}</strong>
                         </div>
-                        <div className="summary-item">
+                        <div className="site-detail-summary-item">
                             <span>Monthly Price:</span>
                             <strong>${site.price}</strong>
                         </div>
-                        <div className="summary-item">
+                        <div className="site-detail-summary-item">
                             <span>Category:</span>
                             <strong>{site.category}</strong>
                         </div>
@@ -464,7 +460,7 @@ const SiteDetail = () => {
                             />
                         </Form.Group>
 
-                        <div className="modal-actions">
+                        <div className="site-detail-modal-actions">
                             <Button
                                 variant="outline"
                                 onClick={() => setShowContactModal(false)}
@@ -475,7 +471,7 @@ const SiteDetail = () => {
                             </Button>
                             <Button
                                 type="submit"
-                                className="btn-submit-request"
+                                className="site-detail-btn-submit-request"
                                 disabled={loading}
                             >
                                 {loading ? (
@@ -529,13 +525,13 @@ const RelatedSites = ({ currentSiteId, category }) => {
     if (relatedSites.length === 0) return null;
 
     return (
-        <section className="related-sites-section">
-            <h2 className="section-title">Similar Websites You Might Like</h2>
+        <section className="site-detail-related-sites-section">
+            <h2 className="site-detail-section-title">Similar Websites You Might Like</h2>
             <Row>
                 {relatedSites.map((site, index) => (
                     <Col lg={4} key={site._id}>
-                        <div className="related-site-card">
-                            <div className="related-site-image">
+                        <div className="site-detail-related-site-card">
+                            <div className="site-detail-related-site-image">
                                 {site.images && site.images.length > 0 ? (
                                     <img
                                         src={`http://localhost:5000${site.images[0]}`}
@@ -545,19 +541,19 @@ const RelatedSites = ({ currentSiteId, category }) => {
                                     <div className="no-image">🌐</div>
                                 )}
                                 {site.isFeatured && (
-                                    <Badge className="related-featured-badge">Featured</Badge>
+                                    <Badge className="site-detail-related-featured-badge">Featured</Badge>
                                 )}
                             </div>
-                            <div className="related-site-info">
+                            <div className="site-detail-related-site-info">
                                 <h4>{site.title}</h4>
-                                <p className="related-site-description">{site.shortDescription}</p>
-                                <div className="related-site-price">${site.price}/month</div>
+                                <p className="site-detail-related-site-description">{site.shortDescription}</p>
+                                <div className="site-detail-related-site-price">${site.price}/month</div>
                                 <Button
                                     as={Link}
                                     to={`/catalog/${site._id}`}
                                     size="sm"
                                     variant="outline"
-                                    className="btn-view-related"
+                                    className="site-detail-btn-view-related"
                                 >
                                     View Details
                                 </Button>
