@@ -39,8 +39,6 @@ api.interceptors.response.use(
 );
 
 // Site API
-// Site API
-// В разделе Site API добавьте новый метод
 export const siteAPI = {
     getAll: (params = {}) => api.get('/sites', { params }),
     getAllAdmin: () => api.get('/sites/admin'),
@@ -62,7 +60,7 @@ export const siteAPI = {
         };
         return api.put(`/sites/${id}`, data, config);
     },
-    deleteImages: (id, imageUrls) => api.delete(`/sites/${id}/images`, { data: { imageUrls } }), // Новый метод
+    deleteImages: (id, imageUrls) => api.delete(`/sites/${id}/images`, { data: { imageUrls } }),
     delete: (id) => api.delete(`/sites/${id}`),
 };
 
@@ -73,8 +71,7 @@ export const authAPI = {
     updateProfile: (data) => api.put('/auth/profile', data),
 };
 
-// Contact API
-// Contact API - добавьте эти методы
+// Contact API - удаляем priority из комментариев
 export const contactAPI = {
     getAll: (params = {}) => api.get('/contacts', { params }),
     getById: (id) => api.get(`/contacts/${id}`),

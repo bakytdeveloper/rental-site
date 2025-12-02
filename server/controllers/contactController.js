@@ -43,9 +43,8 @@ export const createContact = async (req, res) => {
             company: req.body.company?.trim() || '',
             subject: req.body.subject?.trim() || 'General Inquiry',
             siteId: req.body.siteId || null,
-            siteTitle: siteTitle, // Используем полученный siteTitle
-            status: 'new',
-            priority: 'medium'
+            siteTitle: siteTitle,
+            status: 'new'
         };
 
         console.log('📝 Final contact data:', contactData);
@@ -140,18 +139,13 @@ export const createContact = async (req, res) => {
 // @access  Private
 export const getContacts = async (req, res) => {
     try {
-        const { page = 1, limit = 10, status, priority, search } = req.query;
+        const { page = 1, limit = 10, status, search } = req.query;
 
         let query = {};
 
         // Filter by status
         if (status && status !== 'all') {
             query.status = status;
-        }
-
-        // Filter by priority
-        if (priority && priority !== 'all') {
-            query.priority = priority;
         }
 
         // Search in name, email, or message
@@ -305,36 +299,6 @@ export const getContactStats = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error fetching contact statistics'
-        });
-    }
-};
-
-// @desc    Test email configuration
-// @route   POST /api/contacts/test-email
-// @access  Private
-export const testEmailConfiguration = async (req, res) => {
-    try {
-        const { testEmailConfig } = await import('../services/emailService.js');
-        const result = await testEmailConfig();
-
-        if (result.success) {
-            res.json({
-                success: true,
-                message: 'Test email sent successfully',
-                messageId: result.messageId
-            });
-        } else {
-            res.status(500).json({
-                success: false,
-                message: 'Failed to send test email',
-                error: result.error
-            });
-        }
-    } catch (error) {
-        console.error('Test email configuration error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Error testing email configuration'
         });
     }
 };

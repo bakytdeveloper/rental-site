@@ -51,11 +51,6 @@ const ContactSchema = new mongoose.Schema({
         enum: ['new', 'contacted', 'completed', 'spam'],
         default: 'new'
     },
-    priority: {
-        type: String,
-        enum: ['low', 'medium', 'high'],
-        default: 'medium'
-    },
     notes: {
         type: String,
         default: ''

@@ -71,15 +71,6 @@ const AdminDashboard = () => {
         return <Badge bg={variants[status]}>{status}</Badge>;
     };
 
-    const getPriorityBadge = (priority) => {
-        const variants = {
-            high: 'danger',
-            medium: 'warning',
-            low: 'secondary'
-        };
-        return <Badge bg={variants[priority]}>{priority}</Badge>;
-    };
-
     if (loading) {
         return <div className="admin-loading">Loading dashboard...</div>;
     }
@@ -153,7 +144,6 @@ const AdminDashboard = () => {
                                     <tr>
                                         <th>Name</th>
                                         <th>Status</th>
-                                        <th>Priority</th>
                                         <th>Date</th>
                                     </tr>
                                     </thead>
@@ -165,7 +155,6 @@ const AdminDashboard = () => {
                                                 <small className="text-muted">{contact.email}</small>
                                             </td>
                                             <td>{getStatusBadge(contact.status)}</td>
-                                            <td>{getPriorityBadge(contact.priority)}</td>
                                             <td>
                                                 {new Date(contact.createdAt).toLocaleDateString()}
                                             </td>

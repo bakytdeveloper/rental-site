@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-// Create transporter - исправляем название функции
+// Create transporter
 const createTransporter = () => {
     return nodemailer.createTransport({
         service: process.env.SMTP_SERVICE || 'gmail',
@@ -14,7 +14,7 @@ const createTransporter = () => {
     });
 };
 
-// Email templates (оставляем без изменений)
+// Email templates (изменяем только subject в highPriorityAlert)
 const emailTemplates = {
     newRentalInquiry: (contactData, siteData) => ({
         subject: `🎯 New Rental Inquiry: ${siteData.title}`,
@@ -168,7 +168,7 @@ const emailTemplates = {
     }),
 
     highPriorityAlert: (contactData, siteData) => ({
-        subject: `🚨 HIGH PRIORITY: Urgent Rental Inquiry - ${siteData.title}`,
+        subject: `🚨 URGENT: Rental Inquiry - ${siteData.title}`, // Убрали "HIGH PRIORITY"
         html: `
       <!DOCTYPE html>
       <html>
@@ -187,13 +187,13 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🚨 URGENT: High Priority Inquiry</h1>
+            <h1>🚨 URGENT: Rental Inquiry</h1> <!-- Убрали "High Priority" -->
             <p>Immediate attention required for this rental request</p>
           </div>
           
           <div class="content">
             <div class="info-card">
-              <div class="urgent-badge">⚠️ HIGH PRIORITY</div>
+              <div class="urgent-badge">⚠️ URGENT</div> <!-- Изменили текст бейджа -->
               <h3>📋 Urgent Rental Request</h3>
               <p><strong>Website:</strong> ${siteData.title} ($${siteData.price}/month)</p>
               <p><strong>Client:</strong> ${contactData.name} - ${contactData.email}</p>
