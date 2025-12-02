@@ -110,9 +110,10 @@ const ContactSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    notificationSent: {
-        type: Boolean,
-        default: false
+    // УДАЛЕНО: notificationSent - чтобы убрать ограничение на 1 уведомление
+    lastNotificationDate: {
+        type: Date,
+        default: null
     }
 }, {
     timestamps: true
@@ -127,13 +128,13 @@ ContactSchema.methods.getDaysRemaining = function() {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
-// Метод для проверки необходимости уведомления
+// Метод для проверки необходимости уведомления (без ограничений)
 ContactSchema.methods.needsNotification = function() {
     const daysRemaining = this.getDaysRemaining();
-    return daysRemaining !== null && daysRemaining <= 3 && daysRemaining >= 0 && !this.notificationSent;
+    return daysRemaining !== null && daysRemaining <= 3 && daysRemaining >= 0;
 };
 
-// Статический метод для поиска клиентов с истекающей арендой
+// Статический метод для поиска клиентов с истекающей арендой (без ограничений)
 ContactSchema.statics.findExpiringRentals = function(days = 3) {
     const now = new Date();
     const notificationDate = new Date();
@@ -144,8 +145,8 @@ ContactSchema.statics.findExpiringRentals = function(days = 3) {
         rentalEndDate: {
             $lte: notificationDate,
             $gte: now
-        },
-        notificationSent: false
+        }
+        // УДАЛЕНО: notificationSent: false
     });
 };
 

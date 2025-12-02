@@ -387,7 +387,7 @@ export const addPayment = async (req, res) => {
         contact.nextPaymentDate = nextPaymentDate;
 
         // Сбрасываем флаг уведомления
-        contact.notificationSent = false;
+        contact.lastNotificationDate = null
 
         // Обновляем статус
         contact.status = 'active_rental';

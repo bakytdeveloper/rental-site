@@ -631,33 +631,3 @@ export const sendEmailNotification = async (type, contactData, siteData = null, 
     }
 };
 
-// Test email configuration
-export const testEmailConfig = async () => {
-    try {
-        const transporter = createTransporter();
-
-        const mailOptions = {
-            from: process.env.SMTP_FROM,
-            to: process.env.SMTP_FROM,
-            subject: '✅ RentalSite Email Test',
-            html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px;">
-          <h2 style="color: #64ffda;">🎉 Email Configuration Test</h2>
-          <p>This is a test email from your RentalSite application.</p>
-          <p><strong>Timestamp:</strong> ${new Date().toLocaleString()}</p>
-          <p><strong>Status:</strong> ✅ Email system is working correctly</p>
-        </div>
-      `
-        };
-
-        console.log('🧪 Sending test email...');
-        const result = await transporter.sendMail(mailOptions);
-        console.log('✅ Test email sent successfully');
-        return { success: true, messageId: result.messageId };
-
-    } catch (error) {
-        console.error('❌ Test email failed:', error);
-        console.error('❌ Test error details:', error.message);
-        return { success: false, error: error.message };
-    }
-};
