@@ -4,7 +4,7 @@
     perspective: 1000px;
 }
 
-.card-inner {
+.site-card__inner {
     position: relative;
     width: 100%;
     height: 100%;
@@ -17,7 +17,7 @@
     transform-style: preserve-3d;
 }
 
-.site-card:hover .card-inner {
+.site-card:hover .site-card__inner {
     transform: translateY(-8px) rotateX(2deg);
     border-color: rgba(100, 255, 218, 0.3);
     box-shadow:
@@ -25,25 +25,25 @@
             0 0 60px rgba(100, 255, 218, 0.1);
 }
 
-.card-image {
+.site-card__image {
     position: relative;
     height: 200px;
     overflow: hidden;
     background: linear-gradient(45deg, #1a365d, #2d3748);
 }
 
-.card-image img {
+.site-card__image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: all 0.4s ease;
 }
 
-.site-card:hover .card-image img {
+.site-card:hover .site-card__image img {
     transform: scale(1.05);
 }
 
-.image-placeholder {
+.site-card__image-placeholder {
     width: 100%;
     height: 100%;
     display: flex;
@@ -53,7 +53,7 @@
     font-size: 2.5rem;
 }
 
-.card-overlay {
+.site-card__overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -67,11 +67,11 @@
     transition: all 0.3s ease;
 }
 
-.site-card:hover .card-overlay {
+.site-card:hover .site-card__overlay {
     opacity: 1;
 }
 
-.btn-quick-view {
+.site-card__btn-quick-view {
     background: rgba(100, 255, 218, 0.9);
     border: none;
     color: #0a192f;
@@ -81,13 +81,13 @@
     transition: all 0.3s ease;
 }
 
-.btn-quick-view:hover {
+.site-card__btn-quick-view:hover {
     background: #64ffda;
     transform: scale(1.05);
     color: #0a192f;
 }
 
-.card-badge {
+.site-card__badge {
     position: absolute;
     top: 1rem;
     right: 1rem;
@@ -98,50 +98,50 @@
     box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
 }
 
-.card-badge.featured {
+.site-card__badge--featured {
     background: linear-gradient(135deg, #64ffda, #3bd6d4);
     color: #0a192f;
 }
 
-.card-content {
+.site-card__content {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     height: calc(100% - 200px);
 }
 
-.card-header {
+.site-card__header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 1rem;
 }
 
-.site-title {
+.site-card__title {
     font-size: 1.1rem;
     font-weight: 600;
     color: #ffffff;
     margin: 0;
-    flex: 1;
+    /*flex: 1;*/
     line-height: 1.3;
 }
 
-.site-price {
+.site-card__price {
     text-align: right;
     color: #64ffda;
     font-weight: 700;
     font-size: 1.2rem;
-    margin-left: 0.5rem;
+    /*margin-left: 0.5rem;*/
     white-space: nowrap;
 }
 
-.site-price span {
+.site-card__price span {
     font-size: 0.7rem;
     color: #8892b0;
     font-weight: 400;
 }
 
-.site-description {
+.site-card__description {
     color: #8892b0;
     font-size: 0.85rem;
     line-height: 1.4;
@@ -153,14 +153,14 @@
     overflow: hidden;
 }
 
-.site-features {
+.site-card__features {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
     margin-bottom: 1rem;
 }
 
-.tech-tag {
+.site-card__tech-tag {
     background: rgba(100, 255, 218, 0.1);
     color: #64ffda;
     padding: 0.2rem 0.6rem;
@@ -169,26 +169,26 @@
     border: 1px solid rgba(100, 255, 218, 0.2);
 }
 
-.tech-tag.more {
+.site-card__tech-tag--more {
     background: rgba(136, 146, 176, 0.1);
     color: #8892b0;
     border-color: rgba(136, 146, 176, 0.2);
 }
 
-.card-footer {
+.site-card__footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: auto;
 }
 
-.site-meta {
+.site-card__meta {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.site-category {
+.site-card__category {
     color: #8892b0;
     font-size: 0.8rem;
     font-weight: 500;
@@ -198,7 +198,7 @@
     border: 1px solid rgba(136, 146, 176, 0.2);
 }
 
-.btn-rent-now {
+.site-card__btn-rent-now {
     background: transparent;
     border: 2px solid #64ffda;
     color: #64ffda;
@@ -210,14 +210,14 @@
     white-space: nowrap;
 }
 
-.btn-rent-now:hover {
+.site-card__btn-rent-now:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-2px);
     color: #64ffda;
     border-color: #64ffda;
 }
 
-.card-glow {
+.site-card__glow {
     position: absolute;
     top: -2px;
     left: -2px;
@@ -231,6 +231,6 @@
     filter: blur(12px);
 }
 
-.site-card:hover .card-glow {
+.site-card:hover .site-card__glow {
     opacity: 0.5;
 }

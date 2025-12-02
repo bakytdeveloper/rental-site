@@ -12,8 +12,8 @@ const SiteCard = ({ site, index }) => {
             data-aos="fade-up"
             data-aos-delay={index * 100}
         >
-            <div className="card-inner">
-                <div className="card-image">
+            <div className="site-card__inner">
+                <div className="site-card__image">
                     {site.images && site.images.length > 0 ? (
                         <>
                             <img
@@ -22,19 +22,19 @@ const SiteCard = ({ site, index }) => {
                                 onLoad={() => setImageLoaded(true)}
                                 style={{ opacity: imageLoaded ? 1 : 0 }}
                             />
-                            {!imageLoaded && <div className="image-placeholder"></div>}
+                            {!imageLoaded && <div className="site-card__image-placeholder"></div>}
                         </>
                     ) : (
-                        <div className="image-placeholder">
+                        <div className="site-card__image-placeholder">
                             <span>🌐</span>
                         </div>
                     )}
-                    <div className="card-overlay">
-                        <div className="overlay-content">
+                    <div className="site-card__overlay">
+                        <div className="site-card__overlay-content">
                             <Button
                                 as={Link}
                                 to={`/catalog/${site._id}`}
-                                className="btn-quick-view"
+                                className="site-card__btn-quick-view"
                                 size="sm"
                             >
                                 Quick View
@@ -42,45 +42,45 @@ const SiteCard = ({ site, index }) => {
                         </div>
                     </div>
                     {site.isFeatured && (
-                        <div className="card-badge featured">
+                        <div className="site-card__badge site-card__badge--featured">
                             Featured
                         </div>
                     )}
                 </div>
 
-                <div className="card-content">
-                    <div className="card-header">
-                        <h3 className="site-title">{site.title}</h3>
-                        <div className="site-price">
+                <div className="site-card__content">
+                    <div className="site-card__header">
+                        <h3 className="site-card__title">{site.title}</h3>
+                        <div className="site-card__price">
                             ${site.price}<span>/month</span>
                         </div>
                     </div>
 
-                    <p className="site-description">
+                    <p className="site-card__description">
                         {site.shortDescription}
                     </p>
 
-                    <div className="site-features">
+                    <div className="site-card__features">
                         {site.technologies && site.technologies.slice(0, 3).map((tech, techIndex) => (
-                            <span key={techIndex} className="tech-tag">
+                            <span key={techIndex} className="site-card__tech-tag">
                 {tech}
               </span>
                         ))}
                         {site.technologies && site.technologies.length > 3 && (
-                            <span className="tech-tag more">
+                            <span className="site-card__tech-tag site-card__tech-tag--more">
                 +{site.technologies.length - 3}
               </span>
                         )}
                     </div>
 
-                    <div className="card-footer">
-                        <div className="site-meta">
-                            <span className="site-category">{site.category}</span>
+                    <div className="site-card__footer">
+                        <div className="site-card__meta">
+                            <span className="site-card__category">{site.category}</span>
                         </div>
                         <Button
                             as={Link}
                             to={`/catalog/${site._id}`}
-                            className="btn-rent-now"
+                            className="site-card__btn-rent-now"
                             size="sm"
                         >
                             Rent Now
@@ -88,7 +88,7 @@ const SiteCard = ({ site, index }) => {
                     </div>
                 </div>
 
-                <div className="card-glow"></div>
+                <div className="site-card__glow"></div>
             </div>
         </div>
     );
