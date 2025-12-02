@@ -9,9 +9,9 @@ const AdminSites = () => {
     const [sites, setSites] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [editingSite, setEditingSite] = useState(null);
-    const [selectedImages, setSelectedImages] = useState([]); // Новое состояние для изображений
-    const [imagePreviews, setImagePreviews] = useState([]); // Превью изображений
-    const fileInputRef = useRef(null); // Ref для input файлов
+    const [selectedImages, setSelectedImages] = useState([]);
+    const [imagePreviews, setImagePreviews] = useState([]);
+    const fileInputRef = useRef(null);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -35,7 +35,6 @@ const AdminSites = () => {
     const fetchSites = async () => {
         startLoading();
         try {
-            // Используем админский метод для получения всех сайтов
             const response = await siteAPI.getAllAdmin();
             setSites(response.data.sites || []);
         } catch (error) {
@@ -62,7 +61,6 @@ const AdminSites = () => {
                 isFeatured: site.isFeatured,
                 isActive: site.isActive
             });
-            // Устанавливаем превью существующих изображений
             if (site.images && site.images.length > 0) {
                 const previews = site.images.map(img => `http://localhost:5000${img}`);
                 console.log('Setting image previews:', previews);
@@ -92,7 +90,6 @@ const AdminSites = () => {
     };
 
     const handleCloseModal = () => {
-        // Освобождаем URL объектов для предотвращения утечек памяти
         imagePreviews.forEach(preview => {
             if (!preview.startsWith('http://localhost:5000/uploads/')) {
                 URL.revokeObjectURL(preview);
@@ -115,32 +112,21 @@ const AdminSites = () => {
         }));
     };
 
-    // Обработчик выбора файлов
-    // Обработчик выбора файлов - исправленная версия
     const handleImageSelect = (e) => {
         const files = Array.from(e.target.files);
-
-        // Проверяем общее количество изображений (существующие + новые)
         const totalImages = imagePreviews.length + files.length;
+
         if (totalImages > 7) {
             toast.error(`Maximum 7 images allowed. You have ${imagePreviews.length} images and trying to add ${files.length} more.`);
             return;
         }
 
-        // Добавляем новые файлы к существующим
         setSelectedImages(prev => [...prev, ...files]);
-
-        // Создаем превью для новых файлов
         const newPreviews = files.map(file => URL.createObjectURL(file));
         setImagePreviews(prev => [...prev, ...newPreviews]);
-
-        // Сбрасываем значение input, чтобы можно было выбрать те же файлы снова
         e.target.value = '';
     };
 
-// Обновите функцию removeImage в модальном окне:
-    // Удаление изображения из превью
-    // Удаление изображения из превью - исправленная версия
     const removeImage = async (index) => {
         console.log('Removing image at index:', index);
         console.log('Current imagePreviews:', imagePreviews);
@@ -148,10 +134,6 @@ const AdminSites = () => {
         const imageToRemove = imagePreviews[index];
         const isServerImage = imageToRemove.startsWith('http://localhost:5000/uploads/');
 
-        console.log('Image to remove:', imageToRemove);
-        console.log('Is server image:', isServerImage);
-
-        // Если это изображение с сервера (не новое)
         if (isServerImage && editingSite) {
             if (window.confirm('Are you sure you want to remove this image?')) {
                 const newPreviews = imagePreviews.filter((_, i) => i !== index);
@@ -161,27 +143,19 @@ const AdminSites = () => {
             return;
         }
 
-        // Если это новое изображение (не загруженное на сервер)
         const newPreviews = [...imagePreviews];
         const newSelectedImages = [...selectedImages];
-
-        // Находим индекс в selectedImages
-        // Новые изображения всегда добавляются в конец, поэтому вычисляем корректный индекс
         const selectedImagesIndex = index - (imagePreviews.length - selectedImages.length);
 
         newPreviews.splice(index, 1);
 
-        // Если это новое изображение, удаляем из selectedImages
         if (selectedImagesIndex >= 0 && selectedImagesIndex < selectedImages.length) {
-            // Освобождаем URL объекта для предотвращения утечек памяти
             URL.revokeObjectURL(imageToRemove);
             newSelectedImages.splice(selectedImagesIndex, 1);
             setSelectedImages(newSelectedImages);
         }
 
         setImagePreviews(newPreviews);
-        console.log('After removal - imagePreviews:', newPreviews);
-        console.log('After removal - selectedImages:', newSelectedImages);
     };
 
     const addTechnology = () => {
@@ -223,51 +197,31 @@ const AdminSites = () => {
         startLoading();
 
         try {
-            // Создаем FormData для отправки файлов
             const submitData = new FormData();
-
-            // Добавляем текстовые поля
             Object.keys(formData).forEach(key => {
                 if (key === 'technologies' || key === 'features') {
-                    // Массивы преобразуем в JSON строки
                     submitData.append(key, JSON.stringify(formData[key]));
                 } else {
                     submitData.append(key, formData[key]);
                 }
             });
 
-            // ВАЖНО: При обновлении передаем информацию о существующих изображениях
             if (editingSite) {
-                // Получаем существующие изображения (только те, которые остались после удалений)
                 const remainingServerImages = imagePreviews
                     .filter(preview => preview.startsWith('http://localhost:5000/uploads/'))
                     .map(preview => preview.replace('http://localhost:5000', ''));
 
                 console.log('Remaining server images:', remainingServerImages);
-
-                // Добавляем информацию о существующих изображениях
                 submitData.append('existingImages', JSON.stringify(remainingServerImages));
             }
 
-            // Добавляем изображения ТОЛЬКО новые
             selectedImages.forEach((image, index) => {
                 submitData.append('images', image);
             });
 
-            // Отладочная информация
             console.log('Submitting data:');
             console.log('Selected images count:', selectedImages.length);
             console.log('Editing site:', editingSite);
-            console.log('Image previews count:', imagePreviews.length);
-            for (let [key, value] of submitData.entries()) {
-                if (key === 'images') {
-                    console.log(key, value.name, value.type);
-                } else if (key === 'existingImages') {
-                    console.log(key, value);
-                } else {
-                    console.log(key, value);
-                }
-            }
 
             if (editingSite) {
                 console.log('Updating site with ID:', editingSite._id);
@@ -330,17 +284,16 @@ const AdminSites = () => {
         }
     };
 
-    // Функция для получения первого изображения сайта
     const getSiteImage = (site) => {
         if (site.images && site.images.length > 0) {
             return `http://localhost:5000${site.images[0]}`;
         }
-        return '/placeholder-image.jpg'; // Запасное изображение
+        return '/placeholder-image.jpg';
     };
 
     if (loading && sites.length === 0) {
         return (
-            <div className="admin-loading">
+            <div className="admin-sites-loading">
                 <Spinner animation="border" variant="primary" />
                 <p>Loading websites...</p>
             </div>
@@ -349,118 +302,118 @@ const AdminSites = () => {
 
     return (
         <div className="admin-sites">
-            <div className="page-header">
+            <div className="admin-sites-page-header">
                 <h1>Website Management</h1>
-                <Button onClick={() => handleShowModal()} className="btn-add-site">
+                <Button onClick={() => handleShowModal()} className="admin-sites-btn-add-site">
                     + Add New Website
                 </Button>
             </div>
 
-            <Card className="sites-table-card">
+            <Card className="admin-sites-table-card">
                 <Card.Body className="p-0">
                     {sites.length > 0 ? (
                         <div className="table-responsive">
-                            <Table className="sites-table">
+                            <Table className="admin-sites-table">
                                 <thead>
                                 <tr>
-                                    <th className="image-column">Image</th>
-                                    <th className="title-column">Website</th>
-                                    <th className="category-column">Category</th>
-                                    <th className="price-column">Price</th>
-                                    <th className="status-column">Status</th>
-                                    <th className="featured-column">Featured</th>
-                                    <th className="technologies-column">Technologies</th>
-                                    <th className="actions-column">Actions</th>
+                                    <th className="admin-sites-image-cell">Image</th>
+                                    <th className="admin-sites-title-cell">Website</th>
+                                    <th className="admin-sites-category-cell">Category</th>
+                                    <th className="admin-sites-price-cell">Price</th>
+                                    <th className="admin-sites-status-cell">Status</th>
+                                    <th className="admin-sites-featured-cell">Featured</th>
+                                    <th className="admin-sites-technologies-cell">Technologies</th>
+                                    <th className="admin-sites-actions-cell">Actions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {sites.map(site => (
-                                    <tr key={site._id} className="site-row">
-                                        <td className="image-cell">
-                                            <div className="site-image-container">
+                                    <tr key={site._id} className="admin-sites-site-row">
+                                        <td className="admin-sites-image-cell">
+                                            <div className="admin-sites-image-container">
                                                 <img
                                                     src={getSiteImage(site)}
                                                     alt={site.title}
-                                                    className="site-thumbnail"
+                                                    className="admin-sites-thumbnail"
                                                     onError={(e) => {
                                                         e.target.src = '/placeholder-image.jpg';
                                                     }}
                                                 />
                                                 {site.isFeatured && (
-                                                    <div className="featured-indicator" title="Featured">
+                                                    <div className="admin-sites-featured-indicator" title="Featured">
                                                         ⭐
                                                     </div>
                                                 )}
                                                 {site.images && site.images.length > 1 && (
-                                                    <div className="image-count-badge" title={`${site.images.length} images`}>
+                                                    <div className="admin-sites-image-count-badge" title={`${site.images.length} images`}>
                                                         +{site.images.length - 1}
                                                     </div>
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="title-cell">
-                                            <div className="site-info">
-                                                <div className="site-title">{site.title}</div>
-                                                <div className="site-short-description">
+                                        <td className="admin-sites-title-cell">
+                                            <div className="admin-sites-info">
+                                                <div className="admin-sites-title">{site.title}</div>
+                                                <div className="admin-sites-short-description">
                                                     {site.shortDescription}
                                                 </div>
-                                                <div className="site-meta">
-                                                    <span className="created-date">
+                                                <div className="admin-sites-meta">
+                                                    <span className="admin-sites-created-date">
                                                         Created: {new Date(site.createdAt).toLocaleDateString()}
                                                     </span>
                                                 </div>
                                             </div>
                                         </td>
-                                        <td className="category-cell">
-                                            <Badge bg="outline-primary" className="category-badge">
+                                        <td className="admin-sites-category-cell">
+                                            <Badge bg="outline-primary" className="admin-sites-category-badge">
                                                 {site.category}
                                             </Badge>
                                         </td>
-                                        <td className="price-cell">
-                                            <div className="price-amount">${site.price}</div>
-                                            <div className="price-period">/month</div>
+                                        <td className="admin-sites-price-cell">
+                                            <div className="admin-sites-price-amount">${site.price}</div>
+                                            <div className="admin-sites-price-period">/month</div>
                                         </td>
-                                        <td className="status-cell">
+                                        <td className="admin-sites-status-cell">
                                             <Badge
                                                 bg={site.isActive ? 'success' : 'secondary'}
-                                                className="status-badge"
+                                                className="admin-sites-status-badge"
                                                 role="button"
                                                 onClick={() => toggleSiteStatus(site._id, site.isActive)}
                                             >
                                                 {site.isActive ? 'Active' : 'Inactive'}
                                             </Badge>
                                         </td>
-                                        <td className="featured-cell">
+                                        <td className="admin-sites-featured-cell">
                                             <Badge
                                                 bg={site.isFeatured ? 'warning' : 'outline-warning'}
-                                                className="featured-badge"
+                                                className="admin-sites-featured-badge"
                                                 role="button"
                                                 onClick={() => toggleFeatured(site._id, site.isFeatured)}
                                             >
                                                 {site.isFeatured ? 'Featured' : 'Standard'}
                                             </Badge>
                                         </td>
-                                        <td className="technologies-cell">
-                                            <div className="tech-tags">
+                                        <td className="admin-sites-technologies-cell">
+                                            <div className="admin-sites-tech-tags">
                                                 {site.technologies?.slice(0, 3).map((tech, index) => (
-                                                    <Badge key={index} bg="outline-info" className="tech-tag">
+                                                    <Badge key={index} bg="outline-info" className="admin-sites-tech-tag">
                                                         {tech}
                                                     </Badge>
                                                 ))}
                                                 {site.technologies?.length > 3 && (
-                                                    <Badge bg="outline-secondary" className="tech-tag-more">
+                                                    <Badge bg="outline-secondary" className="admin-sites-tech-tag-more">
                                                         +{site.technologies.length - 3}
                                                     </Badge>
                                                 )}
                                             </div>
                                         </td>
-                                        <td className="actions-cell">
-                                            <div className="action-buttons">
+                                        <td className="admin-sites-actions-cell">
+                                            <div className="admin-sites-action-buttons">
                                                 <Button
                                                     size="sm"
                                                     variant="outline-primary"
                                                     onClick={() => handleShowModal(site)}
-                                                    className="btn-edit"
+                                                    className="admin-sites-btn-edit"
                                                     title="Edit site"
                                                 >
                                                     ✏️
@@ -469,7 +422,7 @@ const AdminSites = () => {
                                                     size="sm"
                                                     variant="outline-danger"
                                                     onClick={() => handleDelete(site._id)}
-                                                    className="btn-delete"
+                                                    className="admin-sites-btn-delete"
                                                     title="Delete site"
                                                 >
                                                     🗑️
@@ -482,10 +435,10 @@ const AdminSites = () => {
                             </Table>
                         </div>
                     ) : (
-                        <div className="no-data">
-                            <div className="no-data-icon">🌐</div>
+                        <div className="admin-sites-no-data">
+                            <div className="admin-sites-no-data-icon">🌐</div>
                             <p>No websites found. Create your first website to get started.</p>
-                            <Button onClick={() => handleShowModal()} className="btn-add-first">
+                            <Button onClick={() => handleShowModal()} className="admin-sites-btn-add-first">
                                 Add First Website
                             </Button>
                         </div>
@@ -494,7 +447,7 @@ const AdminSites = () => {
             </Card>
 
             {/* Add/Edit Modal */}
-            <Modal show={showModal} onHide={handleCloseModal} size="lg" className="site-modal">
+            <Modal show={showModal} onHide={handleCloseModal} size="lg" className="admin-sites-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>
                         {editingSite ? 'Edit Website' : 'Add New Website'}
@@ -580,37 +533,35 @@ const AdminSites = () => {
                             </Col>
                         </Row>
 
-                        {/* Поле для загрузки изображений */}
+                        {/* Image Upload Section */}
                         <Form.Group className="mb-4">
                             <Form.Label>Website Images *</Form.Label>
                             <Form.Text className="text-muted d-block mb-2">
                                 Upload screenshots of your website. First image will be used as main preview. Maximum 7 images.
                             </Form.Text>
 
-                            {/* Отладочная информация */}
                             {editingSite && (
-                                <div className="debug-info mb-2">
+                                <div className="admin-sites-debug-info mb-2">
                                     <small className="text-info">
                                         Debug: {imagePreviews.length} total previews ({imagePreviews.filter(p => p.startsWith('http://localhost:5000/uploads/')).length} server, {selectedImages.length} new)
                                     </small>
                                 </div>
                             )}
 
-                            {/* Превью изображений */}
                             {imagePreviews.length > 0 && (
-                                <div className="image-previews mb-3">
+                                <div className="admin-sites-image-previews mb-3">
                                     <Row>
                                         {imagePreviews.map((preview, index) => {
                                             const isServerImage = preview.startsWith('http://localhost:5000/uploads/');
                                             return (
                                                 <Col key={index} xs={6} md={4} className="mb-3">
-                                                    <div className="image-preview-container">
+                                                    <div className="admin-sites-image-preview-container">
                                                         <img
                                                             src={preview}
                                                             alt={`Preview ${index + 1}`}
-                                                            className="image-preview"
+                                                            className="admin-sites-image-preview"
                                                         />
-                                                        <div className="image-info">
+                                                        <div className="admin-sites-image-info">
                                                             <small className={isServerImage ? 'text-success' : 'text-warning'}>
                                                                 {isServerImage ? 'Server' : 'New'}
                                                             </small>
@@ -618,7 +569,7 @@ const AdminSites = () => {
                                                         <Button
                                                             variant="danger"
                                                             size="sm"
-                                                            className="remove-image-btn"
+                                                            className="admin-sites-remove-image-btn"
                                                             onClick={() => removeImage(index)}
                                                         >
                                                             ×
@@ -631,8 +582,7 @@ const AdminSites = () => {
                                 </div>
                             )}
 
-                            {/* Input для выбора файлов */}
-                            <div className="image-upload-area">
+                            <div className="admin-sites-image-upload-area">
                                 <Form.Control
                                     type="file"
                                     multiple
@@ -657,7 +607,6 @@ const AdminSites = () => {
                                 </Form.Text>
                             </div>
 
-                            {/* Валидация */}
                             {selectedImages.length === 0 && !editingSite && (
                                 <Form.Text className="text-danger">
                                     At least one image is required
@@ -680,11 +629,11 @@ const AdminSites = () => {
                                     Add
                                 </Button>
                             </div>
-                            <div className="tags-container">
+                            <div className="admin-sites-tags-container">
                                 {formData.technologies.map((tech, index) => (
-                                    <Badge key={index} bg="primary" className="tag">
+                                    <Badge key={index} bg="primary" className="admin-sites-tag">
                                         {tech}
-                                        <span className="tag-remove" onClick={() => removeTechnology(tech)}>
+                                        <span className="admin-sites-tag-remove" onClick={() => removeTechnology(tech)}>
                                             ×
                                         </span>
                                     </Badge>
@@ -707,11 +656,11 @@ const AdminSites = () => {
                                     Add
                                 </Button>
                             </div>
-                            <div className="tags-container">
+                            <div className="admin-sites-tags-container">
                                 {formData.features.map((feature, index) => (
-                                    <Badge key={index} bg="success" className="tag">
+                                    <Badge key={index} bg="success" className="admin-sites-tag">
                                         {feature}
-                                        <span className="tag-remove" onClick={() => removeFeature(feature)}>
+                                        <span className="admin-sites-tag-remove" onClick={() => removeFeature(feature)}>
                                             ×
                                         </span>
                                     </Badge>
@@ -747,12 +696,12 @@ const AdminSites = () => {
                             Cancel
                         </Button>
                         <Button
-                        type="submit"
-                        variant="primary"
-                        disabled={loading || (imagePreviews.length === 0 && !editingSite) || imagePreviews.length > 7}
-                    >
-                        {loading ? 'Saving...' : (editingSite ? 'Update' : 'Create')}
-                    </Button>
+                            type="submit"
+                            variant="primary"
+                            disabled={loading || (imagePreviews.length === 0 && !editingSite) || imagePreviews.length > 7}
+                        >
+                            {loading ? 'Saving...' : (editingSite ? 'Update' : 'Create')}
+                        </Button>
                     </Modal.Footer>
                 </Form>
             </Modal>

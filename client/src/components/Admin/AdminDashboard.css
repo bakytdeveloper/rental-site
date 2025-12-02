@@ -2,17 +2,17 @@
     padding: 4rem 0 1rem;
 }
 
-.dashboard-title {
+.admin-dashboard-title {
     color: #64ffda;
     margin-bottom: 2rem;
     font-weight: 600;
 }
 
-.stats-row {
+.admin-dashboard-stats-row {
     margin-bottom: 2rem;
 }
 
-.stats-card {
+.admin-dashboard-stats-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
@@ -20,19 +20,19 @@
     height: 100%;
 }
 
-.stats-card:hover {
+.admin-dashboard-stats-card:hover {
     transform: translateY(-5px);
     border-color: rgba(100, 255, 218, 0.3);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-.stats-card .card-body {
+.admin-dashboard-stats-card .card-body {
     display: flex;
     align-items: center;
     padding: 1.5rem;
 }
 
-.stats-icon {
+.admin-dashboard-stats-icon {
     font-size: 2.5rem;
     margin-right: 1rem;
     width: 60px;
@@ -43,27 +43,27 @@
     border-radius: 12px;
 }
 
-.stats-icon.sites {
+.admin-dashboard-stats-icon.sites {
     background: rgba(100, 255, 218, 0.1);
     color: #64ffda;
 }
 
-.stats-icon.active {
+.admin-dashboard-stats-icon.active {
     background: rgba(40, 167, 69, 0.1);
     color: #28a745;
 }
 
-.stats-icon.featured {
+.admin-dashboard-stats-icon.featured {
     background: rgba(255, 193, 7, 0.1);
     color: #ffc107;
 }
 
-.stats-icon.contacts {
+.admin-dashboard-stats-icon.contacts {
     background: rgba(0, 123, 255, 0.1);
     color: #007bff;
 }
 
-.stats-content h3 {
+.admin-dashboard-stats-content h3 {
     font-size: 2rem;
     font-weight: 700;
     color: #ffffff;
@@ -71,41 +71,41 @@
     line-height: 1;
 }
 
-.stats-content p {
+.admin-dashboard-stats-content p {
     color: #8892b0;
     margin: 0.5rem 0 0 0;
     font-size: 0.9rem;
 }
 
-.recent-card {
+.admin-dashboard-recent-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     height: 100%;
 }
 
-.recent-card .card-header {
+.admin-dashboard-recent-card .card-header {
     background: rgba(255, 255, 255, 0.02);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem 1.5rem;
 }
 
-.recent-card .card-header h5 {
+.admin-dashboard-recent-card .card-header h5 {
     color: #64ffda;
     margin: 0;
     font-weight: 600;
 }
 
-.recent-card .card-body {
+.admin-dashboard-recent-card .card-body {
     padding: 1.5rem;
 }
 
-.recent-card .table {
+.admin-dashboard-recent-card .table {
     color: #ccd6f6;
     margin: 0;
 }
 
-.recent-card .table th {
+.admin-dashboard-recent-card .table th {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     color: #64ffda;
     font-weight: 600;
@@ -115,7 +115,7 @@
     background-color: #0a192f;
 }
 
-.recent-card .table td {
+.admin-dashboard-recent-card .table td {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     vertical-align: middle;
     padding: 1rem 0.55rem;
@@ -123,43 +123,43 @@
     color: whitesmoke;
 }
 
-.recent-card .table td:hover {
+.admin-dashboard-recent-card .table td:hover {
     background: rgba(100, 255, 218, 0.05);
 }
 
-.contact-name {
+.admin-dashboard-contact-name {
     font-weight: 500;
     color: #ffffff;
 }
 
-.site-title {
+.admin-dashboard-site-title {
     font-weight: 500;
     color: #ffffff;
 }
 
-.admin-loading {
+.admin-dashboard-loading {
     text-align: center;
     padding: 3rem;
     color: #8892b0;
 }
 
-.text-muted {
+.admin-dashboard-text-muted {
     color: white!important;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .stats-card .card-body {
+    .admin-dashboard-stats-card .card-body {
         flex-direction: column;
         text-align: center;
     }
 
-    .stats-icon {
+    .admin-dashboard-stats-icon {
         margin-right: 0;
         margin-bottom: 1rem;
     }
 
-    .recent-card .table {
+    .admin-dashboard-recent-card .table {
         font-size: 0.8rem;
     }
 }

@@ -72,20 +72,20 @@ const AdminDashboard = () => {
     };
 
     if (loading) {
-        return <div className="admin-loading">Loading dashboard...</div>;
+        return <div className="admin-dashboard-loading">Loading dashboard...</div>;
     }
 
     return (
         <div className="admin-dashboard">
-            <h1 className="dashboard-title">Dashboard Overview</h1>
+            <h1 className="admin-dashboard-title">Dashboard Overview</h1>
 
             {/* Stats Cards */}
-            <Row className="stats-row">
+            <Row className="admin-dashboard-stats-row">
                 <Col lg={3} md={6} className="mb-4">
-                    <Card className="stats-card">
+                    <Card className="admin-dashboard-stats-card">
                         <Card.Body>
-                            <div className="stats-icon sites">🌐</div>
-                            <div className="stats-content">
+                            <div className="admin-dashboard-stats-icon sites">🌐</div>
+                            <div className="admin-dashboard-stats-content">
                                 <h3>{stats.totalSites}</h3>
                                 <p>Total Websites</p>
                             </div>
@@ -94,10 +94,10 @@ const AdminDashboard = () => {
                 </Col>
 
                 <Col lg={3} md={6} className="mb-4">
-                    <Card className="stats-card">
+                    <Card className="admin-dashboard-stats-card">
                         <Card.Body>
-                            <div className="stats-icon active">✅</div>
-                            <div className="stats-content">
+                            <div className="admin-dashboard-stats-icon active">✅</div>
+                            <div className="admin-dashboard-stats-content">
                                 <h3>{stats.activeSites}</h3>
                                 <p>Active Websites</p>
                             </div>
@@ -106,10 +106,10 @@ const AdminDashboard = () => {
                 </Col>
 
                 <Col lg={3} md={6} className="mb-4">
-                    <Card className="stats-card">
+                    <Card className="admin-dashboard-stats-card">
                         <Card.Body>
-                            <div className="stats-icon featured">⭐</div>
-                            <div className="stats-content">
+                            <div className="admin-dashboard-stats-icon featured">⭐</div>
+                            <div className="admin-dashboard-stats-content">
                                 <h3>{stats.featuredSites}</h3>
                                 <p>Featured Websites</p>
                             </div>
@@ -118,10 +118,10 @@ const AdminDashboard = () => {
                 </Col>
 
                 <Col lg={3} md={6} className="mb-4">
-                    <Card className="stats-card">
+                    <Card className="admin-dashboard-stats-card">
                         <Card.Body>
-                            <div className="stats-icon contacts">📧</div>
-                            <div className="stats-content">
+                            <div className="admin-dashboard-stats-icon contacts">📧</div>
+                            <div className="admin-dashboard-stats-content">
                                 <h3>{stats.totalContacts}</h3>
                                 <p>Total Contacts</p>
                             </div>
@@ -133,7 +133,7 @@ const AdminDashboard = () => {
             <Row>
                 {/* Recent Contacts */}
                 <Col lg={6} className="mb-4">
-                    <Card className="recent-card">
+                    <Card className="admin-dashboard-recent-card">
                         <Card.Header>
                             <h5>Recent Contact Requests</h5>
                         </Card.Header>
@@ -151,8 +151,8 @@ const AdminDashboard = () => {
                                     {recentContacts.map(contact => (
                                         <tr key={contact._id}>
                                             <td>
-                                                <div className="contact-name">{contact.name}</div>
-                                                <small className="text-muted">{contact.email}</small>
+                                                <div className="admin-dashboard-contact-name">{contact.name}</div>
+                                                <small className="admin-dashboard-text-muted">{contact.email}</small>
                                             </td>
                                             <td>{getStatusBadge(contact.status)}</td>
                                             <td>
@@ -163,7 +163,7 @@ const AdminDashboard = () => {
                                     </tbody>
                                 </Table>
                             ) : (
-                                <p className="text-muted text-center">No recent contacts</p>
+                                <p className="admin-dashboard-text-muted text-center">No recent contacts</p>
                             )}
                         </Card.Body>
                     </Card>
@@ -171,13 +171,13 @@ const AdminDashboard = () => {
 
                 {/* Recent Sites */}
                 <Col lg={6} className="mb-4">
-                    <Card className="recent-card">
+                    <Card className="admin-dashboard-recent-card">
                         <Card.Header>
                             <h5>Recently Added Websites</h5>
                         </Card.Header>
                         <Card.Body>
                             {recentSites.length > 0 ? (
-                                <Table responsive className="admin-dashboard-table-row">
+                                <Table responsive>
                                     <thead>
                                     <tr>
                                         <th>Title</th>
@@ -190,8 +190,8 @@ const AdminDashboard = () => {
                                     {recentSites.map(site => (
                                         <tr key={site._id}>
                                             <td>
-                                                <div className="site-title">{site.title}</div>
-                                                <small className="text-muted">
+                                                <div className="admin-dashboard-site-title">{site.title}</div>
+                                                <small className="admin-dashboard-text-muted">
                                                     {site.shortDescription.substring(0, 50)}...
                                                 </small>
                                             </td>
@@ -207,7 +207,7 @@ const AdminDashboard = () => {
                                     </tbody>
                                 </Table>
                             ) : (
-                                <p className="text-muted text-center">No websites added yet</p>
+                                <p className="admin-dashboard-text-muted text-center">No websites added yet</p>
                             )}
                         </Card.Body>
                     </Card>

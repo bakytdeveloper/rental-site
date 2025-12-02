@@ -1,316 +1,24 @@
-/*.admin-sites {*/
-/*    padding: 4rem 0;*/
-/*}*/
-
-/*.page-header {*/
-/*    display: flex;*/
-/*    justify-content: space-between;*/
-/*    align-items: center;*/
-/*    margin-bottom: 2rem;*/
-/*}*/
-
-/*.page-header h1 {*/
-/*    color: #64ffda;*/
-/*    margin: 0;*/
-/*    font-weight: 600;*/
-/*}*/
-
-/*.btn-add-site {*/
-/*    background: linear-gradient(135deg, #64ffda, #3bd6d4);*/
-/*    border: none;*/
-/*    color: #0a192f;*/
-/*    font-weight: 600;*/
-/*    padding: 0.75rem 1.5rem;*/
-/*    border-radius: 10px;*/
-/*    transition: all 0.3s ease;*/
-/*}*/
-
-/*.btn-add-site:hover {*/
-/*    transform: translateY(-2px);*/
-/*    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);*/
-/*    color: #0a192f;*/
-/*}*/
-
-/*.sites-table-card {*/
-/*    background: rgba(255, 255, 255, 0.05);*/
-/*    border: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    border-radius: 15px;*/
-/*}*/
-
-/*.sites-table {*/
-/*    color: #ccd6f6;*/
-/*    margin: 0;*/
-/*}*/
-
-/*.sites-table th {*/
-/*    border-bottom: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    color: #64ffda;*/
-/*    font-weight: 600;*/
-/*    font-size: 0.85rem;*/
-/*    text-transform: uppercase;*/
-/*    letter-spacing: 0.5px;*/
-/*    padding: 1rem 0.75rem;*/
-/*}*/
-
-/*.sites-table td {*/
-/*    border-bottom: 1px solid rgba(255, 255, 255, 0.05);*/
-/*    vertical-align: middle;*/
-/*    padding: 1rem 0.75rem;*/
-/*}*/
-
-/*.site-info .site-title {*/
-/*    font-weight: 600;*/
-/*    color: #ffffff;*/
-/*    margin-bottom: 0.25rem;*/
-/*}*/
-
-/*.site-info .site-description {*/
-/*    color: #8892b0;*/
-/*    font-size: 0.85rem;*/
-/*    line-height: 1.3;*/
-/*}*/
-
-/*.site-price {*/
-/*    font-weight: 600;*/
-/*    color: #64ffda;*/
-/*}*/
-
-/*.category-badge,*/
-/*.status-badge,*/
-/*.featured-badge {*/
-/*    font-size: 0.75rem;*/
-/*    font-weight: 500;*/
-/*    padding: 0.35rem 0.75rem;*/
-/*    border-radius: 20px;*/
-/*}*/
-
-/*.status-badge,*/
-/*.featured-badge {*/
-/*    cursor: pointer;*/
-/*    transition: all 0.3s ease;*/
-/*}*/
-
-/*.status-badge:hover,*/
-/*.featured-badge:hover {*/
-/*    transform: scale(1.05);*/
-/*}*/
-
-/*.tech-tags {*/
-/*    display: flex;*/
-/*    flex-wrap: wrap;*/
-/*    gap: 0.25rem;*/
-/*}*/
-
-/*.tech-tag {*/
-/*    font-size: 0.7rem;*/
-/*    padding: 0.25rem 0.5rem;*/
-/*    border-radius: 10px;*/
-/*}*/
-
-/*.action-buttons {*/
-/*    display: flex;*/
-/*    gap: 0.5rem;*/
-/*}*/
-
-/*.action-buttons .btn {*/
-/*    font-size: 0.8rem;*/
-/*    padding: 0.25rem 0.75rem;*/
-/*}*/
-
-/*.no-data {*/
-/*    text-align: center;*/
-/*    padding: 3rem;*/
-/*    color: #8892b0;*/
-/*}*/
-
-/*.btn-add-first {*/
-/*    background: linear-gradient(135deg, #64ffda, #3bd6d4);*/
-/*    border: none;*/
-/*    color: #0a192f;*/
-/*    font-weight: 600;*/
-/*    margin-top: 1rem;*/
-/*}*/
-
-/*!* Modal Styles *!*/
-/*.site-modal .modal-content {*/
-/*    background: #0a192f;*/
-/*    border: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    border-radius: 15px;*/
-/*    color: #ffffff;*/
-/*}*/
-
-/*.site-modal .modal-header {*/
-/*    border-bottom: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    padding: 1.5rem;*/
-/*}*/
-
-/*.site-modal .modal-title {*/
-/*    color: #64ffda;*/
-/*    font-weight: 600;*/
-/*}*/
-
-/*.site-modal .modal-body {*/
-/*    padding: 1.5rem;*/
-/*}*/
-
-/*.site-modal .modal-footer {*/
-/*    border-top: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    padding: 1rem 1.5rem;*/
-/*}*/
-
-/*.site-modal .form-label {*/
-/*    color: #ccd6f6;*/
-/*    font-weight: 500;*/
-/*    margin-bottom: 0.5rem;*/
-/*}*/
-
-/*.site-modal .form-control,*/
-/*.site-modal .form-select {*/
-/*    background: rgba(255, 255, 255, 0.05);*/
-/*    border: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    color: #ffffff;*/
-/*    border-radius: 8px;*/
-/*    padding: 0.75rem;*/
-/*}*/
-
-/*.site-modal .form-control:focus,*/
-/*.site-modal .form-select:focus {*/
-/*    background: rgba(255, 255, 255, 0.08);*/
-/*    border-color: #64ffda;*/
-/*    color: #ffffff;*/
-/*    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);*/
-/*}*/
-
-/*.site-modal .input-group {*/
-/*    margin-bottom: 0.5rem;*/
-/*}*/
-
-/*.tags-container {*/
-/*    display: flex;*/
-/*    flex-wrap: wrap;*/
-/*    gap: 0.5rem;*/
-/*    margin-top: 0.5rem;*/
-/*}*/
-
-/*.tag {*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    gap: 0.5rem;*/
-/*    padding: 0.4rem 0.8rem;*/
-/*    border-radius: 15px;*/
-/*    font-size: 0.8rem;*/
-/*    font-weight: 500;*/
-/*}*/
-
-/*.tag-remove {*/
-/*    cursor: pointer;*/
-/*    font-weight: bold;*/
-/*    font-size: 1rem;*/
-/*    line-height: 1;*/
-/*    transition: color 0.3s ease;*/
-/*}*/
-
-/*.tag-remove:hover {*/
-/*    color: #ff6b6b;*/
-/*}*/
-
-/*.admin-loading {*/
-/*    text-align: center;*/
-/*    padding: 3rem;*/
-/*    color: #8892b0;*/
-/*}*/
-
-/*!* Responsive *!*/
-/*@media (max-width: 768px) {*/
-/*    .page-header {*/
-/*        flex-direction: column;*/
-/*        gap: 1rem;*/
-/*        align-items: flex-start;*/
-/*    }*/
-
-/*    .sites-table {*/
-/*        font-size: 0.8rem;*/
-/*    }*/
-
-/*    .action-buttons {*/
-/*        flex-direction: column;*/
-/*        gap: 0.25rem;*/
-/*    }*/
-
-/*    .tech-tags {*/
-/*        justify-content: flex-start;*/
-/*    }*/
-/*}*/
-
-/*!*1234567890*!*/
-
-/*!* Стили для превью изображений *!*/
-/*.image-previews {*/
-/*    margin-top: 10px;*/
-/*}*/
-
-/*.image-preview-container {*/
-/*    position: relative;*/
-/*    border-radius: 8px;*/
-/*    overflow: hidden;*/
-/*    box-shadow: 0 2px 4px rgba(0,0,0,0.1);*/
-/*}*/
-
-/*.image-preview {*/
-/*    width: 100%;*/
-/*    height: 120px;*/
-/*    object-fit: cover;*/
-/*    border-radius: 8px;*/
-/*}*/
-
-/*.remove-image-btn {*/
-/*    position: absolute;*/
-/*    top: 5px;*/
-/*    right: 5px;*/
-/*    width: 24px;*/
-/*    height: 24px;*/
-/*    border-radius: 50%;*/
-/*    display: flex;*/
-/*    align-items: center;*/
-/*    justify-content: center;*/
-/*    font-size: 14px;*/
-/*    padding: 0;*/
-/*}*/
-
-/*.image-upload-area {*/
-/*    border: 2px dashed #dee2e6;*/
-/*    border-radius: 8px;*/
-/*    padding: 20px;*/
-/*    text-align: center;*/
-/*    background-color: #f8f9fa;*/
-/*    transition: all 0.3s ease;*/
-/*}*/
-
-/*.image-upload-area:hover {*/
-/*    border-color: #007bff;*/
-/*    background-color: #e9f7fe;*/
-/*}*/
-
 .admin-sites {
     padding: 2rem 0;
 }
 
-.page-header {
+.admin-sites-page-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    margin-top: 2rem;
     padding: 0 1rem;
 }
 
-.page-header h1 {
+.admin-sites-page-header h1 {
     color: #64ffda;
     margin: 0;
     font-weight: 600;
     font-size: 2rem;
 }
 
-.btn-add-site {
+.admin-sites-btn-add-site {
     background: linear-gradient(135deg, #64ffda, #3bd6d4);
     border: none;
     color: #0a192f;
@@ -320,27 +28,31 @@
     transition: all 0.3s ease;
 }
 
-.btn-add-site:hover {
+.admin-sites-btn-add-site:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
     color: #0a192f;
 }
 
-.sites-table-card {
+.admin-sites-table-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     backdrop-filter: blur(10px);
 }
 
-.sites-table {
+.admin-sites-table {
     color: #ccd6f6;
     margin: 0;
     border-collapse: separate;
     border-spacing: 0;
 }
 
-.sites-table th {
+.btn-close {
+    background-color: #2a57a9;
+}
+
+.admin-sites-table th {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     color: #64ffda;
     font-weight: 600;
@@ -351,28 +63,28 @@
     background: rgba(255, 255, 255, 0.02);
 }
 
-.sites-table td {
+.admin-sites-table td {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     vertical-align: middle;
     padding: 1rem 0.75rem;
     transition: background-color 0.3s ease;
 }
 
-.site-row td {
+.admin-sites-site-row td {
     background: rgba(20, 21, 20, 0.05);
 }
 
-.site-row:hover td {
+.admin-sites-site-row:hover td {
     background: rgba(100, 255, 218, 0.05);
 }
 
 /* Image Column */
-.image-cell {
+.admin-sites-image-cell {
     width: 80px;
     padding: 0.75rem !important;
 }
 
-.site-image-container {
+.admin-sites-image-container {
     position: relative;
     width: 60px;
     height: 60px;
@@ -381,18 +93,18 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.site-thumbnail {
+.admin-sites-thumbnail {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.site-row:hover .site-thumbnail {
+.admin-sites-site-row:hover .admin-sites-thumbnail {
     transform: scale(1.05);
 }
 
-.featured-indicator {
+.admin-sites-featured-indicator {
     position: absolute;
     top: -5px;
     right: -5px;
@@ -409,11 +121,11 @@
 }
 
 /* Title Column */
-.title-cell {
+.admin-sites-title-cell {
     min-width: 250px;
 }
 
-.site-info .site-title {
+.admin-sites-info .admin-sites-title {
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 0.5rem;
@@ -421,7 +133,7 @@
     line-height: 1.2;
 }
 
-.site-info .site-short-description {
+.admin-sites-info .admin-sites-short-description {
     color: #8892b0;
     font-size: 0.85rem;
     line-height: 1.4;
@@ -432,18 +144,18 @@
     overflow: hidden;
 }
 
-.site-meta .created-date {
+.admin-sites-meta .admin-sites-created-date {
     color: #495670;
     font-size: 0.75rem;
     font-style: italic;
 }
 
 /* Category Column */
-.category-cell {
+.admin-sites-category-cell {
     width: 140px;
 }
 
-.category-badge {
+.admin-sites-category-badge {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 0.4rem 0.8rem;
@@ -454,34 +166,34 @@
 }
 
 /* Price Column */
-.price-cell {
+.admin-sites-price-cell {
     width: 100px;
     text-align: center;
 }
 
-.price-amount {
+.admin-sites-price-amount {
     font-weight: 700;
     color: #64ffda;
     font-size: 1.1rem;
     margin-bottom: 0.2rem;
 }
 
-.price-period {
+.admin-sites-price-period {
     color: #8892b0;
     font-size: 0.75rem;
 }
 
-.site-price {
+.admin-sites-price {
     font-weight: 600;
     color: #64ffda;
 }
 
 /* Status Column */
-.status-cell {
+.admin-sites-status-cell {
     width: 100px;
 }
 
-.status-badge {
+.admin-sites-status-badge {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 0.4rem 0.8rem;
@@ -493,16 +205,16 @@
     text-align: center;
 }
 
-.status-badge:hover {
+.admin-sites-status-badge:hover {
     transform: scale(1.05);
 }
 
 /* Featured Column */
-.featured-cell {
+.admin-sites-featured-cell {
     width: 110px;
 }
 
-.featured-badge {
+.admin-sites-featured-badge {
     font-size: 0.75rem;
     font-weight: 500;
     padding: 0.4rem 0.8rem;
@@ -514,23 +226,23 @@
     text-align: center;
 }
 
-.featured-badge:hover {
+.admin-sites-featured-badge:hover {
     transform: scale(1.05);
 }
 
 /* Technologies Column */
-.technologies-cell {
+.admin-sites-technologies-cell {
     min-width: 150px;
     max-width: 200px;
 }
 
-.tech-tags {
+.admin-sites-tech-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.3rem;
 }
 
-.tech-tag {
+.admin-sites-tech-tag {
     font-size: 0.7rem;
     padding: 0.3rem 0.6rem;
     border-radius: 12px;
@@ -539,7 +251,7 @@
     background: transparent;
 }
 
-.tech-tag-more {
+.admin-sites-tech-tag-more {
     font-size: 0.7rem;
     padding: 0.3rem 0.6rem;
     border-radius: 12px;
@@ -549,18 +261,18 @@
 }
 
 /* Actions Column */
-.actions-cell {
+.admin-sites-actions-cell {
     width: 120px;
 }
 
-.action-buttons {
+.admin-sites-action-buttons {
     display: flex;
     gap: 0.4rem;
     justify-content: center;
 }
 
-.btn-edit,
-.btn-delete {
+.admin-sites-btn-edit,
+.admin-sites-btn-delete {
     font-size: 0.9rem;
     padding: 0.4rem 0.6rem;
     border-radius: 8px;
@@ -569,52 +281,52 @@
     transition: all 0.3s ease;
 }
 
-.btn-edit {
+.admin-sites-btn-edit {
     border-color: #0d6efd;
     color: #0d6efd;
 }
 
-.btn-edit:hover {
+.admin-sites-btn-edit:hover {
     background: #0d6efd;
     color: white;
     transform: translateY(-1px);
 }
 
-.btn-delete {
+.admin-sites-btn-delete {
     border-color: #dc3545;
     color: #dc3545;
 }
 
-.btn-delete:hover {
+.admin-sites-btn-delete:hover {
     background: #dc3545;
     color: white;
     transform: translateY(-1px);
 }
 
-.action-buttons .btn {
+.admin-sites-action-buttons .btn {
     font-size: 0.8rem;
     padding: 0.25rem 0.75rem;
 }
 
 /* No Data State */
-.no-data {
+.admin-sites-no-data {
     text-align: center;
     padding: 4rem 2rem;
     color: #8892b0;
 }
 
-.no-data-icon {
+.admin-sites-no-data-icon {
     font-size: 4rem;
     margin-bottom: 1rem;
     opacity: 0.5;
 }
 
-.no-data p {
+.admin-sites-no-data p {
     font-size: 1.1rem;
     margin-bottom: 1.5rem;
 }
 
-.btn-add-first {
+.admin-sites-btn-add-first {
     background: linear-gradient(135deg, #64ffda, #3bd6d4);
     border: none;
     color: #0a192f;
@@ -625,54 +337,54 @@
     margin-top: 1rem;
 }
 
-.btn-add-first:hover {
+.admin-sites-btn-add-first:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
     color: #0a192f;
 }
 
 /* Loading State */
-.admin-loading {
+.admin-sites-loading {
     text-align: center;
     padding: 3rem;
     color: #8892b0;
 }
 
 /* Modal Styles */
-.site-modal .modal-content {
+.admin-sites-modal .modal-content {
     background: #0a192f;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     color: #ffffff;
 }
 
-.site-modal .modal-header {
+.admin-sites-modal .modal-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
 }
 
-.site-modal .modal-title {
+.admin-sites-modal .modal-title {
     color: #64ffda;
     font-weight: 600;
 }
 
-.site-modal .modal-body {
+.admin-sites-modal .modal-body {
     padding: 1.5rem;
 }
 
-.site-modal .modal-footer {
+.admin-sites-modal .modal-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem 1.5rem;
 }
 
-.site-modal .form-label {
+.admin-sites-modal .form-label {
     color: #ccd6f6;
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
-.site-modal .form-control,
-.site-modal .form-select {
+.admin-sites-modal .form-control,
+.admin-sites-modal .form-select {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
@@ -680,26 +392,26 @@
     padding: 0.75rem;
 }
 
-.site-modal .form-control:focus,
-.site-modal .form-select:focus {
+.admin-sites-modal .form-control:focus,
+.admin-sites-modal .form-select:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: #64ffda;
     color: #ffffff;
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
 }
 
-.site-modal .input-group {
+.admin-sites-modal .input-group {
     margin-bottom: 0.5rem;
 }
 
-.tags-container {
+.admin-sites-tags-container {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 0.5rem;
 }
 
-.tag {
+.admin-sites-tag {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -709,7 +421,7 @@
     font-weight: 500;
 }
 
-.tag-remove {
+.admin-sites-tag-remove {
     cursor: pointer;
     font-weight: bold;
     font-size: 1rem;
@@ -717,30 +429,30 @@
     transition: color 0.3s ease;
 }
 
-.tag-remove:hover {
+.admin-sites-tag-remove:hover {
     color: #ff6b6b;
 }
 
 /* Стили для превью изображений в модальном окне */
-.image-previews {
+.admin-sites-image-previews {
     margin-top: 10px;
 }
 
-.image-preview-container {
+.admin-sites-image-preview-container {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
-.image-preview {
+.admin-sites-image-preview {
     width: 100%;
     height: 120px;
     object-fit: cover;
     border-radius: 8px;
 }
 
-.remove-image-btn {
+.admin-sites-remove-image-btn {
     position: absolute;
     top: 5px;
     right: 5px;
@@ -756,7 +468,7 @@
     border: none;
 }
 
-.image-upload-area {
+.admin-sites-image-upload-area {
     border: 2px dashed rgba(100, 255, 218, 0.3);
     border-radius: 8px;
     padding: 20px;
@@ -765,12 +477,12 @@
     transition: all 0.3s ease;
 }
 
-.image-upload-area:hover {
+.admin-sites-image-upload-area:hover {
     border-color: #64ffda;
     background: rgba(100, 255, 218, 0.05);
 }
 
-.image-count-badge {
+.admin-sites-image-count-badge {
     position: absolute;
     bottom: 5px;
     right: 5px;
@@ -782,75 +494,11 @@
     font-weight: 600;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .sites-table {
-        font-size: 0.9rem;
-    }
-
-    .site-info .site-title {
-        font-size: 0.9rem;
-    }
-
-    .site-info .site-short-description {
-        font-size: 0.8rem;
-    }
+.admin-sites-debug-info {
+    margin-bottom: 0.5rem;
 }
 
-@media (max-width: 768px) {
-    .page-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: flex-start;
-    }
-
-    .table-responsive {
-        border-radius: 10px;
-        overflow: hidden;
-    }
-
-    .sites-table th,
-    .sites-table td {
-        padding: 0.75rem 0.5rem;
-    }
-
-    .action-buttons {
-        flex-direction: column;
-        gap: 0.3rem;
-    }
-
-    .btn-edit,
-    .btn-delete {
-        font-size: 0.8rem;
-        padding: 0.3rem 0.5rem;
-    }
-
-    .sites-table {
-        font-size: 0.8rem;
-    }
-
-    .tech-tags {
-        justify-content: flex-start;
-    }
-}
-
-
-.image-preview-container {
-    position: relative;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 4px;
-    background: white;
-}
-
-.image-preview {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 4px;
-}
-
-.image-info {
+.admin-sites-image-info {
     position: absolute;
     top: 4px;
     left: 4px;
@@ -861,16 +509,54 @@
     font-size: 10px;
 }
 
-.remove-image-btn {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    padding: 0;
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .admin-sites-table {
+        font-size: 0.9rem;
+    }
+
+    .admin-sites-info .admin-sites-title {
+        font-size: 0.9rem;
+    }
+
+    .admin-sites-info .admin-sites-short-description {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-sites-page-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .table-responsive {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .admin-sites-table th,
+    .admin-sites-table td {
+        padding: 0.75rem 0.5rem;
+    }
+
+    .admin-sites-action-buttons {
+        flex-direction: column;
+        gap: 0.3rem;
+    }
+
+    .admin-sites-btn-edit,
+    .admin-sites-btn-delete {
+        font-size: 0.8rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    .admin-sites-table {
+        font-size: 0.8rem;
+    }
+
+    .admin-sites-tech-tags {
+        justify-content: flex-start;
+    }
 }
