@@ -1,13 +1,30 @@
 .admin-contacts {
     padding: 4rem 0 1rem;
+    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+    min-height: 100vh;
 }
 
-.contact-stats {
+.admin-contacts__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+}
+
+.admin-contacts__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+}
+
+.admin-contacts__stats {
     display: flex;
     gap: 1rem;
 }
 
-.stat-badge {
+.admin-contacts__stat-badge {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
     border: 1px solid #64ffda;
@@ -15,236 +32,478 @@
     background: transparent;
 }
 
-.filters-card {
+/* Filters Card */
+.admin-contacts__filters-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     margin-bottom: 2rem;
 }
 
-.filters-card .card-body {
+.admin-contacts__filters-card-body {
     padding: 1.5rem;
 }
 
-.filters-card .form-label {
+.admin-contacts__form-group {
+    margin-bottom: 0;
+}
+
+.admin-contacts__form-label {
     color: #ccd6f6;
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
-.filters-card .form-control,
-.filters-card .form-select {
+.admin-contacts__form-control,
+.admin-contacts__form-select {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
     border-radius: 8px;
+    padding: 0.75rem 1rem;
+    width: 100%;
 }
 
-.filters-card .form-control:focus,
-.filters-card .form-select:focus {
+.admin-contacts__form-control:focus,
+.admin-contacts__form-select:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: #64ffda;
     color: #ffffff;
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
 }
 
-.contacts-table-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
+.admin-contacts__form-control::placeholder {
+    color: #8892b0;
 }
 
-.contacts-table {
+/* Contacts Table */.admin-contacts__table-card {
+                        background: rgba(255, 255, 255, 0.05) !important;
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                        border-radius: 15px;
+                        overflow: hidden;
+                    }
+
+.admin-contacts__table-card-body {
+    padding: 0;
+}
+
+.admin-contacts__table {
     color: #ccd6f6;
     margin: 0;
+    width: 100%;
+    /* Основной фон для таблицы */
+    background: rgba(0, 123, 255, 0.1) !important;
 }
 
-.contacts-table th {
+/* Убедимся, что этот селектор также имеет нужный фон */
+.admin-contacts__table.table {
+    color: #ccd6f6;
+    margin: 0;
+    width: 100%;
+    background: rgba(0, 123, 255, 0.1) !important; /* Изменено с background-color на background */
+}
+
+.admin-contacts__table-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: #64ffda;
+    color: #bec1c0 !important;
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 1rem 0.75rem;
+    background: rgba(255, 255, 255, 0.02) !important; /* Фон для заголовков */
 }
 
-.contacts-table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+.admin-contacts__table-cell {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     vertical-align: middle;
     padding: 1rem 0.75rem;
+    background: rgba(0, 123, 255, 0.1) !important; /* Фон для заголовков */
 }
 
-.contact-info .contact-name {
+.admin-contacts__table-row:last-child .admin-contacts__table-cell {
+    border-bottom: none;
+}
+
+.admin-contacts__contact-info {
+    padding: 0.5rem 0;
+}
+
+.admin-contacts__contact-name {
     font-weight: 600;
     color: #ffffff;
     margin-bottom: 0.25rem;
+    font-size: 0.95rem;
 }
 
-.contact-info .contact-email {
+.admin-contacts__contact-email {
     color: #64ffda;
     font-size: 0.85rem;
     margin-bottom: 0.25rem;
+    word-break: break-all;
 }
 
-.contact-info .contact-phone {
+.admin-contacts__contact-phone {
     color: #8892b0;
     font-size: 0.85rem;
 }
 
-.site-badge {
+.admin-contacts__site-info {
+    display: flex;
+    align-items: center;
+}
+
+.admin-contacts__site-badge {
     font-size: 0.75rem;
     padding: 0.35rem 0.75rem;
     border-radius: 15px;
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    background: rgba(100, 255, 218, 0.1);
+    color: #64ffda;
 }
 
-.date-info {
+.admin-contacts__no-website {
+    color: #8892b0;
+    font-style: italic;
     font-size: 0.85rem;
 }
 
-.pagination-container {
+.admin-contacts__date-info {
+    font-size: 0.85rem;
+}
+
+.admin-contacts__date-time {
+    color: #8892b0;
+    font-size: 0.8rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.admin-contacts__action-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.admin-contacts__view-btn,
+.admin-contacts__delete-btn {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+}
+
+.admin-contacts__view-btn {
+    border: 1px solid #64ffda;
+    color: #64ffda;
+    background: transparent;
+}
+
+.admin-contacts__view-btn:hover {
+    background: rgba(100, 255, 218, 0.1);
+    color: #64ffda;
+    border-color: #64ffda;
+}
+
+.admin-contacts__delete-btn {
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    background: transparent;
+}
+
+.admin-contacts__delete-btn:hover {
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+/* Pagination */
+.admin-contacts__pagination-container {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
     margin-top: 2rem;
-    padding-top: 1rem;
+    padding: 1.5rem;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.pagination-info {
+.admin-contacts__pagination-info {
     color: #8892b0;
     font-size: 0.9rem;
 }
 
+.admin-contacts__pagination-btn {
+    border: 1px solid #64ffda;
+    color: #64ffda;
+    background: transparent;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+.admin-contacts__pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.admin-contacts__pagination-btn:hover:not(:disabled) {
+    background: rgba(100, 255, 218, 0.1);
+    color: #64ffda;
+}
+
+/* No Data */
+.admin-contacts__no-data {
+    text-align: center;
+    padding: 3rem;
+    color: #8892b0;
+    font-size: 1.1rem;
+}
+
+/* Loading */
+.admin-contacts__loading {
+    text-align: center;
+    padding: 3rem;
+    color: #8892b0;
+}
+
+.admin-contacts__loading p {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
 /* Contact Detail Modal */
-.contact-detail-modal .modal-content {
+.admin-contacts__modal .modal-content {
     background: #0a192f;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 15px;
     color: #ffffff;
 }
 
-.contact-detail-modal .modal-header {
+.admin-contacts__modal-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1.5rem;
 }
 
-.contact-detail-modal .modal-title {
+.admin-contacts__modal-title {
     color: #64ffda;
     font-weight: 600;
+    font-size: 1.5rem;
 }
 
-.contact-detail-modal .modal-body {
+.admin-contacts__modal-body {
     padding: 1.5rem;
 }
 
-.contact-detail-modal .modal-footer {
+.admin-contacts__modal-footer {
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
 }
 
-.detail-section {
+.admin-contacts__detail-section {
     margin-bottom: 2rem;
 }
 
-.detail-section h6 {
+.admin-contacts__detail-section:last-child {
+    margin-bottom: 0;
+}
+
+.admin-contacts__detail-section-title {
     color: #64ffda;
     font-weight: 600;
     margin-bottom: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     padding-bottom: 0.5rem;
+    font-size: 1.1rem;
 }
 
-.detail-item {
+.admin-contacts__detail-item {
     margin-bottom: 1rem;
     display: flex;
     align-items: flex-start;
+    font-size: 0.95rem;
 }
 
-.detail-item strong {
+.admin-contacts__detail-item:last-child {
+    margin-bottom: 0;
+}
+
+.admin-contacts__detail-label {
     color: #ccd6f6;
     min-width: 100px;
     margin-right: 1rem;
+    font-weight: 600;
 }
 
-.status-actions,
-.priority-actions {
+.admin-contacts__status-actions,
+.admin-contacts__priority-actions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
     gap: 0.5rem;
+    width: 100%;
 }
 
-.message-content,
-.notes-content {
+.admin-contacts__status-buttons,
+.admin-contacts__priority-buttons {
+    display: flex;
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.admin-contacts__status-btn,
+.admin-contacts__priority-btn {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+}
+
+.admin-contacts__message-content,
+.admin-contacts__notes-content {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 1rem;
     color: #ccd6f6;
     line-height: 1.5;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
-.notes-content {
+.admin-contacts__notes-content {
     background: rgba(100, 255, 218, 0.05);
     border-color: rgba(100, 255, 218, 0.2);
 }
 
-.contact-detail-modal .form-control {
+.admin-contacts__notes-textarea {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: #ffffff;
     border-radius: 8px;
+    width: 100%;
+    font-size: 0.95rem;
 }
 
-.contact-detail-modal .form-control:focus {
+.admin-contacts__notes-textarea:focus {
     background: rgba(255, 255, 255, 0.08);
     border-color: #64ffda;
     color: #ffffff;
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
 }
 
-.admin-loading {
-    text-align: center;
-    padding: 3rem;
+.admin-contacts__notes-textarea::placeholder {
     color: #8892b0;
 }
 
-.no-data {
-    text-align: center;
-    padding: 3rem;
+.admin-contacts__modal-close-btn {
+    border: 1px solid #8892b0;
     color: #8892b0;
+    background: transparent;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+}
+
+.admin-contacts__modal-close-btn:hover {
+    background: rgba(136, 146, 176, 0.1);
+    color: #8892b0;
+    border-color: #8892b0;
+}
+
+.admin-contacts__modal-delete-btn {
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    background: transparent;
+    padding: 0.5rem 1.5rem;
+    border-radius: 6px;
+}
+
+.admin-contacts__modal-delete-btn:hover {
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;
+    border-color: #ff6b6b;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .filters-card .card-body {
+    .admin-contacts {
+        padding: 3rem 0 1rem;
+    }
+
+    .admin-contacts__header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .admin-contacts__title {
+        font-size: 1.5rem;
+    }
+
+    .admin-contacts__filters-card-body {
         padding: 1rem;
     }
 
-    .contacts-table {
+    .admin-contacts__table-header {
+        font-size: 0.75rem;
+        padding: 0.75rem 0.5rem;
+    }
+
+    .admin-contacts__table-cell {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .admin-contacts__contact-name {
+        font-size: 0.9rem;
+    }
+
+    .admin-contacts__contact-email,
+    .admin-contacts__contact-phone {
         font-size: 0.8rem;
     }
 
-    .status-actions,
-    .priority-actions {
+    .admin-contacts__status-actions,
+    .admin-contacts__priority-actions {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.5rem;
     }
 
-    .detail-item {
+    .admin-contacts__detail-item {
         flex-direction: column;
         align-items: flex-start;
+        gap: 0.25rem;
     }
 
-    .detail-item strong {
-        margin-bottom: 0.5rem;
+    .admin-contacts__detail-label {
         min-width: auto;
+        margin-right: 0;
+        margin-bottom: 0.25rem;
     }
 
-    .pagination-container {
+    .admin-contacts__pagination-container {
         flex-direction: column;
         gap: 0.5rem;
+        padding: 1rem;
+    }
+
+    .admin-contacts__modal-header,
+    .admin-contacts__modal-body,
+    .admin-contacts__modal-footer {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-contacts__action-buttons {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .admin-contacts__view-btn,
+    .admin-contacts__delete-btn {
+        width: 100%;
+        text-align: center;
     }
 }
