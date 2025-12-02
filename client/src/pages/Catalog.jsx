@@ -244,13 +244,13 @@ const Catalog = () => {
                                 ))}
                             </div>
                         ) : filteredSites.length > 0 ? (
-                            <Row>
+                            <div className="catalog-grid-container">
                                 {filteredSites.map((site, index) => (
-                                    <Col lg={6} xl={4} key={site._id} className="mb-4">
+                                    <div key={site._id} className="catalog-grid-item">
                                         <SiteCard site={site} index={index} />
-                                    </Col>
+                                    </div>
                                 ))}
-                            </Row>
+                            </div>
                         ) : (
                             <div className="catalog-no-results">
                                 <div className="catalog-no-results-icon">🔍</div>

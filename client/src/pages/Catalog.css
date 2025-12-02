@@ -287,6 +287,44 @@
     border-color: #64ffda;
 }
 
+/* Адаптивная сетка */
+.catalog-grid-container {
+    display: grid;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.catalog-grid-item {
+    width: 100%;
+    height: 100%;
+}
+
+/* Мобильные устройства (до 768px) - 1 колонка */
+@media (max-width: 767.98px) {
+    .catalog-grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    .catalog-grid-item {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+}
+
+/* Планшеты и MacBook (768px - 1199px) - 2 колонки */
+@media (min-width: 768px) and (max-width: 1199.98px) {
+    .catalog-grid-container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Большие экраны (1200px и больше) - 3 колонки */
+@media (min-width: 1200px) {
+    .catalog-grid-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .catalog-navbar-filters__nav {
