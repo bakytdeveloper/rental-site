@@ -119,10 +119,11 @@
     vertical-align: middle;
     padding: 1rem 0.75rem;
     background: rgba(0, 123, 255, 0.1) !important; /* Фон для заголовков */
+
 }
 
 .admin-contacts__table-row:last-child .admin-contacts__table-cell {
-    border-bottom: none;
+    /*border-bottom: none;*/
 }
 
 .admin-contacts__contact-info {
@@ -170,6 +171,7 @@
 
 .admin-contacts__date-info {
     font-size: 0.85rem;
+    color: white;
 }
 
 .admin-contacts__date-time {
