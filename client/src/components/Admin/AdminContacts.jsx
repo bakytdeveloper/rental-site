@@ -20,6 +20,66 @@ const AdminContacts = () => {
         total: 0
     });
     const { loading, startLoading, stopLoading } = useLoading();
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
+    const [paymentData, setPaymentData] = useState({
+        amount: '',
+        paymentMethod: 'bank_transfer',
+        periodMonths: '',
+        notes: ''
+    });
+    const [payments, setPayments] = useState([]);
+    const [loadingPayments, setLoadingPayments] = useState(false);
+
+    // Функция для загрузки платежей
+    const loadPayments = async (contactId) => {
+        setLoadingPayments(true);
+        try {
+            const response = await contactAPI.getPayments(contactId);
+            setPayments(response.data.payments);
+        } catch (error) {
+            console.error('Error loading payments:', error);
+        } finally {
+            setLoadingPayments(false);
+        }
+    };
+
+    // Загружаем платежи при открытии модального окна
+    useEffect(() => {
+        if (selectedContact && showDetailModal) {
+            loadPayments(selectedContact._id);
+        }
+    }, [selectedContact, showDetailModal]);
+
+    // Функция для добавления платежа
+    const handleAddPayment = async () => {
+        if (!paymentData.amount || paymentData.amount <= 0) {
+            toast.error('Please enter a valid amount');
+            return;
+        }
+
+        try {
+            await contactAPI.addPayment(selectedContact._id, paymentData);
+            toast.success('Payment added successfully');
+            setShowPaymentModal(false);
+            setPaymentData({
+                amount: '',
+                paymentMethod: 'bank_transfer',
+                periodMonths: '',
+                notes: ''
+            });
+            fetchContacts();
+            if (selectedContact) {
+                // Обновляем выбранный контакт
+                const updated = await contactAPI.getById(selectedContact._id);
+                setSelectedContact(updated.data.contact);
+                // Перезагружаем платежи
+                loadPayments(selectedContact._id);
+            }
+        } catch (error) {
+            toast.error('Failed to add payment');
+            console.error('Payment error:', error);
+        }
+    };
 
     useEffect(() => {
         fetchContacts();
@@ -64,6 +124,7 @@ const AdminContacts = () => {
     const handleCloseModal = () => {
         setShowDetailModal(false);
         setSelectedContact(null);
+        setPayments([]); // Очищаем платежи при закрытии
     };
 
     const updateContactStatus = async (contactId, newStatus) => {
@@ -115,9 +176,20 @@ const AdminContacts = () => {
             new: 'danger',
             contacted: 'warning',
             completed: 'success',
-            spam: 'secondary'
+            spam: 'secondary',
+            active_rental: 'info',
+            payment_due: 'warning'
         };
-        return <Badge bg={variants[status]}>{status}</Badge>;
+        return <Badge bg={variants[status] || 'secondary'}>{status}</Badge>;
+    };
+
+    // Функция для расчета оставшихся дней
+    const getDaysRemaining = (endDate) => {
+        if (!endDate) return null;
+        const now = new Date();
+        const end = new Date(endDate);
+        const diffTime = end - now;
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     };
 
     if (loading && contacts.length === 0) {
@@ -157,6 +229,8 @@ const AdminContacts = () => {
                                     <option value="contacted">Contacted</option>
                                     <option value="completed">Completed</option>
                                     <option value="spam">Spam</option>
+                                    <option value="active_rental">Active Rental</option>
+                                    <option value="payment_due">Payment Due</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>
@@ -214,7 +288,19 @@ const AdminContacts = () => {
                                                 <span className="admin-contacts__no-website">General Inquiry</span>
                                             )}
                                         </td>
-                                        <td className="admin-contacts__table-cell">{getStatusBadge(contact.status)}</td>
+                                        <td className="admin-contacts__table-cell">
+                                            {getStatusBadge(contact.status)}
+                                            {contact.rentalEndDate && (
+                                                <div className="small mt-1">
+                                                    {getDaysRemaining(contact.rentalEndDate) !== null &&
+                                                    getDaysRemaining(contact.rentalEndDate) > 0 && (
+                                                        <Badge bg={getDaysRemaining(contact.rentalEndDate) <= 3 ? 'warning' : 'info'} className="ms-1">
+                                                            {getDaysRemaining(contact.rentalEndDate)}d
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </td>
                                         <td className="admin-contacts__table-cell">
                                             <div className="admin-contacts__date-info">
                                                 <div>{new Date(contact.createdAt).toLocaleDateString()}</div>
@@ -322,7 +408,7 @@ const AdminContacts = () => {
                                             <div className="admin-contacts__status-actions">
                                                 {getStatusBadge(selectedContact.status)}
                                                 <div className="admin-contacts__status-buttons">
-                                                    {['new', 'contacted', 'completed', 'spam'].map(status => (
+                                                    {['new', 'contacted', 'completed', 'spam', 'active_rental', 'payment_due'].map(status => (
                                                         <Button
                                                             key={status}
                                                             size="sm"
@@ -347,6 +433,97 @@ const AdminContacts = () => {
                                     </div>
                                 </Col>
                             </Row>
+
+                            {/* Rental Information Section */}
+                            <div className="admin-contacts__detail-section">
+                                <h6 className="admin-contacts__detail-section-title">Rental Information</h6>
+
+                                {selectedContact.monthlyPrice > 0 && (
+                                    <div className="admin-contacts__detail-item">
+                                        <strong className="admin-contacts__detail-label">Monthly Price:</strong>
+                                        ${selectedContact.monthlyPrice}
+                                    </div>
+                                )}
+
+                                {selectedContact.rentalEndDate && (
+                                    <div className="admin-contacts__detail-item">
+                                        <strong className="admin-contacts__detail-label">Rental Ends:</strong>
+                                        {new Date(selectedContact.rentalEndDate).toLocaleDateString()}
+                                        {getDaysRemaining(selectedContact.rentalEndDate) !== null && (
+                                            <span className={`ms-2 badge ${getDaysRemaining(selectedContact.rentalEndDate) <= 3 ? 'bg-warning' : 'bg-info'}`}>
+                                                {getDaysRemaining(selectedContact.rentalEndDate)} days remaining
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+
+                                {selectedContact.totalPaid > 0 && (
+                                    <div className="admin-contacts__detail-item">
+                                        <strong className="admin-contacts__detail-label">Total Paid:</strong>
+                                        ${selectedContact.totalPaid}
+                                    </div>
+                                )}
+
+                                <div className="admin-contacts__detail-item">
+                                    <Button
+                                        variant="success"
+                                        size="sm"
+                                        onClick={() => setShowPaymentModal(true)}
+                                    >
+                                        Add Payment
+                                    </Button>
+                                </div>
+                            </div>
+
+                            {/* Payment History Section */}
+                            <div className="admin-contacts__detail-section">
+                                <h6 className="admin-contacts__detail-section-title">Payment History</h6>
+
+                                {loadingPayments ? (
+                                    <div className="text-center py-3">
+                                        <Spinner animation="border" size="sm" />
+                                    </div>
+                                ) : payments.length > 0 ? (
+                                    <div className="admin-contacts__payment-history">
+                                        {payments.map((payment, index) => (
+                                            <div key={index} className="admin-contacts__payment-item">
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div>
+                                                        <div className="admin-contacts__payment-amount">
+                                                            ${payment.amount}
+                                                        </div>
+                                                        <div className="admin-contacts__payment-date">
+                                                            {new Date(payment.paymentDate).toLocaleDateString()} •
+                                                            {payment.periodMonths} month(s) • {payment.paymentMethod}
+                                                        </div>
+                                                        {payment.notes && (
+                                                            <div className="text-muted small mt-1">
+                                                                {payment.notes}
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <Badge bg="info">
+                                                        ${(payment.amount / payment.periodMonths).toFixed(2)}/month
+                                                    </Badge>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        <div className="admin-contacts__payment-total mt-3 p-3 bg-dark rounded">
+                                            <div className="d-flex justify-content-between">
+                                                <strong>Total Paid:</strong>
+                                                <strong className="text-success">
+                                                    ${payments.reduce((sum, payment) => sum + payment.amount, 0)}
+                                                </strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="text-muted text-center py-3">
+                                        No payments recorded yet
+                                    </div>
+                                )}
+                            </div>
 
                             <div className="admin-contacts__detail-section">
                                 <h6 className="admin-contacts__detail-section-title">Message</h6>
@@ -396,6 +573,99 @@ const AdminContacts = () => {
                         </Modal.Footer>
                     </>
                 )}
+            </Modal>
+
+            {/* Payment Modal */}
+            <Modal
+                show={showPaymentModal}
+                onHide={() => setShowPaymentModal(false)}
+                className="admin-contacts__modal"
+            >
+                <Modal.Header closeButton className="admin-contacts__modal-header">
+                    <Modal.Title className="admin-contacts__modal-title">
+                        Add Payment for {selectedContact?.name}
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="admin-contacts__modal-body">
+                    <Form>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Payment Amount ($)</Form.Label>
+                            <Form.Control
+                                type="number"
+                                min="1"
+                                step="0.01"
+                                value={paymentData.amount}
+                                onChange={(e) => setPaymentData(prev => ({
+                                    ...prev,
+                                    amount: parseFloat(e.target.value) || ''
+                                }))}
+                                placeholder="Enter payment amount"
+                            />
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Payment Method</Form.Label>
+                            <Form.Select
+                                value={paymentData.paymentMethod}
+                                onChange={(e) => setPaymentData(prev => ({
+                                    ...prev,
+                                    paymentMethod: e.target.value
+                                }))}
+                            >
+                                <option value="bank_transfer">Bank Transfer</option>
+                                <option value="card">Credit Card</option>
+                                <option value="cash">Cash</option>
+                                <option value="other">Other</option>
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Months to Extend (optional)</Form.Label>
+                            <Form.Control
+                                type="number"
+                                min="1"
+                                value={paymentData.periodMonths}
+                                onChange={(e) => setPaymentData(prev => ({
+                                    ...prev,
+                                    periodMonths: parseInt(e.target.value) || ''
+                                }))}
+                                placeholder="Auto-calculated from amount"
+                            />
+                            <Form.Text className="text-muted">
+                                Leave empty to auto-calculate based on monthly price
+                            </Form.Text>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Notes</Form.Label>
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                value={paymentData.notes}
+                                onChange={(e) => setPaymentData(prev => ({
+                                    ...prev,
+                                    notes: e.target.value
+                                }))}
+                                placeholder="Payment notes..."
+                            />
+                        </Form.Group>
+                    </Form>
+
+                    {selectedContact?.monthlyPrice && paymentData.amount && (
+                        <div className="alert alert-info">
+                            <strong>Calculation:</strong> ${paymentData.amount} / ${selectedContact.monthlyPrice} =
+                            {Math.floor(paymentData.amount / selectedContact.monthlyPrice)} month(s)
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer className="admin-contacts__modal-footer">
+                    <Button variant="secondary" onClick={() => setShowPaymentModal(false)}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleAddPayment}>
+                        Add Payment
+                    </Button>
+                </Modal.Footer>
             </Modal>
         </div>
     );

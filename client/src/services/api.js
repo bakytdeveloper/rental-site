@@ -72,6 +72,7 @@ export const authAPI = {
 };
 
 // Contact API - удаляем priority из комментариев
+// Обновим contactAPI
 export const contactAPI = {
     getAll: (params = {}) => api.get('/contacts', { params }),
     getById: (id) => api.get(`/contacts/${id}`),
@@ -79,6 +80,12 @@ export const contactAPI = {
     update: (id, data) => api.put(`/contacts/${id}`, data),
     delete: (id) => api.delete(`/contacts/${id}`),
     getStats: () => api.get('/contacts/stats/summary'),
+    // Новые методы для платежей
+    addPayment: (id, paymentData) => api.post(`/contacts/${id}/payments`, paymentData),
+    getPayments: (id) => api.get(`/contacts/${id}/payments`),
+    getExpiringRentals: (days = 3) => api.get(`/contacts/rentals/expiring?days=${days}`),
+    sendReminders: () => api.post('/contacts/rentals/send-reminders'),
+    getRentalStats: () => api.get('/contacts/rentals/stats')
 };
 
 // Utility function to handle API errors

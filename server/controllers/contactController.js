@@ -302,3 +302,322 @@ export const getContactStats = async (req, res) => {
         });
     }
 };
+
+
+// @desc    Add payment to contact
+// @route   POST /api/contacts/:id/payments
+// @access  Private
+export const addPayment = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { amount, paymentMethod = 'bank_transfer', notes = '', periodMonths = 1 } = req.body;
+
+        if (!amount || amount <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Valid payment amount is required'
+            });
+        }
+
+        const contact = await Contact.findById(id);
+        if (!contact) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contact not found'
+            });
+        }
+
+        // Получаем информацию о сайте для расчета цены
+        let sitePrice = contact.monthlyPrice;
+        if (!sitePrice && contact.siteId) {
+            const site = await Site.findById(contact.siteId);
+            if (site) {
+                sitePrice = site.price;
+                contact.monthlyPrice = sitePrice;
+            }
+        }
+
+        if (!sitePrice || sitePrice <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Monthly price is not set for this contact'
+            });
+        }
+
+        // Рассчитываем количество месяцев за оплаченную сумму
+        const calculatedMonths = Math.floor(amount / sitePrice);
+        const actualMonths = periodMonths || calculatedMonths || 1;
+
+        // Создаем платеж
+        const payment = {
+            amount,
+            paymentDate: new Date(),
+            periodMonths: actualMonths,
+            notes,
+            paymentMethod
+        };
+
+        // Добавляем платеж к контакту
+        contact.payments.push(payment);
+
+        // Обновляем общую сумму оплат
+        contact.totalPaid = (contact.totalPaid || 0) + amount;
+        contact.lastPaymentDate = new Date();
+
+        // Обновляем даты аренды
+        const now = new Date();
+        if (!contact.rentalStartDate) {
+            contact.rentalStartDate = now;
+            contact.rentalStatus = 'active';
+        }
+
+        // Обновляем дату окончания аренды
+        if (!contact.rentalEndDate || contact.rentalEndDate < now) {
+            contact.rentalEndDate = now;
+        }
+
+        // Добавляем оплаченные месяцы к дате окончания
+        const newEndDate = new Date(contact.rentalEndDate);
+        newEndDate.setMonth(newEndDate.getMonth() + actualMonths);
+        contact.rentalEndDate = newEndDate;
+
+        // Рассчитываем следующую дату платежа (за 7 дней до окончания)
+        const nextPaymentDate = new Date(newEndDate);
+        nextPaymentDate.setDate(nextPaymentDate.getDate() - 7);
+        contact.nextPaymentDate = nextPaymentDate;
+
+        // Сбрасываем флаг уведомления
+        contact.notificationSent = false;
+
+        // Обновляем статус
+        contact.status = 'active_rental';
+
+        await contact.save();
+
+        // Отправляем уведомление клиенту (если указан email)
+        if (contact.email) {
+            const site = contact.siteId ? await Site.findById(contact.siteId) : null;
+            setTimeout(async () => {
+                try {
+                    await sendEmailNotification('paymentReceived', {
+                        name: contact.name,
+                        email: contact.email,
+                        amount: amount,
+                        months: actualMonths,
+                        rentalEndDate: contact.rentalEndDate,
+                        siteTitle: contact.siteTitle || (site ? site.title : 'Website')
+                    }, site);
+                    console.log('✅ Payment confirmation email sent');
+                } catch (emailError) {
+                    console.error('❌ Payment email failed:', emailError);
+                }
+            }, 0);
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Payment added successfully',
+            payment,
+            contact: {
+                id: contact._id,
+                name: contact.name,
+                totalPaid: contact.totalPaid,
+                rentalEndDate: contact.rentalEndDate,
+                monthsPaid: actualMonths,
+                nextPaymentDate: contact.nextPaymentDate
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ Add payment error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding payment: ' + error.message
+        });
+    }
+};
+
+// @desc    Get contact payments
+// @route   GET /api/contacts/:id/payments
+// @access  Private
+export const getPayments = async (req, res) => {
+    try {
+        const contact = await Contact.findById(req.params.id).select('payments monthlyPrice');
+
+        if (!contact) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contact not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            payments: contact.payments,
+            monthlyPrice: contact.monthlyPrice,
+            totalPayments: contact.payments.length,
+            totalAmount: contact.payments.reduce((sum, payment) => sum + payment.amount, 0)
+        });
+    } catch (error) {
+        console.error('Get payments error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching payments'
+        });
+    }
+};
+
+// @desc    Check expiring rentals
+// @route   GET /api/contacts/rentals/expiring
+// @access  Private
+export const getExpiringRentals = async (req, res) => {
+    try {
+        const { days = 3 } = req.query;
+
+        const now = new Date();
+        const notificationDate = new Date();
+        notificationDate.setDate(now.getDate() + parseInt(days));
+
+        const expiringContacts = await Contact.find({
+            rentalStatus: 'active',
+            rentalEndDate: {
+                $lte: notificationDate,
+                $gte: now
+            },
+            notificationSent: false
+        }).populate('siteId', 'title price');
+
+        res.json({
+            success: true,
+            count: expiringContacts.length,
+            contacts: expiringContacts.map(contact => ({
+                id: contact._id,
+                name: contact.name,
+                email: contact.email,
+                siteTitle: contact.siteTitle,
+                monthlyPrice: contact.monthlyPrice,
+                rentalEndDate: contact.rentalEndDate,
+                daysRemaining: contact.getDaysRemaining(),
+                phone: contact.phone
+            }))
+        });
+    } catch (error) {
+        console.error('Get expiring rentals error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching expiring rentals'
+        });
+    }
+};
+
+// @desc    Send rental reminders
+// @route   POST /api/contacts/rentals/send-reminders
+// @access  Private
+export const sendRentalReminders = async (req, res) => {
+    try {
+        const contacts = await Contact.findExpiringRentals();
+        let sentCount = 0;
+
+        for (const contact of contacts) {
+            try {
+                const site = contact.siteId ? await Site.findById(contact.siteId) : null;
+                const daysRemaining = contact.getDaysRemaining();
+
+                // Отправляем уведомление клиенту
+                if (contact.email) {
+                    await sendEmailNotification('rentalExpiringSoon', {
+                        name: contact.name,
+                        email: contact.email,
+                        rentalEndDate: contact.rentalEndDate,
+                        daysRemaining: daysRemaining,
+                        siteTitle: contact.siteTitle || (site ? site.title : 'Website')
+                    }, site);
+                }
+
+                // Отправляем уведомление админу
+                await sendEmailNotification('adminRentalExpiring', {
+                    name: contact.name,
+                    email: contact.email,
+                    rentalEndDate: contact.rentalEndDate,
+                    daysRemaining: daysRemaining,
+                    _id: contact._id,
+                    phone: contact.phone
+                }, site);
+
+                // Отмечаем, что уведомление отправлено
+                contact.notificationSent = true;
+                await contact.save();
+
+                sentCount++;
+
+            } catch (emailError) {
+                console.error(`❌ Failed to send reminder for ${contact.email}:`, emailError);
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `Reminders sent to ${sentCount} contacts`,
+            sentCount,
+            totalContacts: contacts.length
+        });
+
+    } catch (error) {
+        console.error('Send reminders error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error sending reminders: ' + error.message
+        });
+    }
+};
+
+// @desc    Get rental statistics
+// @route   GET /api/contacts/rentals/stats
+// @access  Private
+export const getRentalStats = async (req, res) => {
+    try {
+        const totalActive = await Contact.countDocuments({ rentalStatus: 'active' });
+        const totalExpired = await Contact.countDocuments({ rentalStatus: 'expired' });
+        const expiringSoon = await Contact.countDocuments({
+            rentalStatus: 'active',
+            rentalEndDate: {
+                $lte: new Date(new Date().setDate(new Date().getDate() + 7)),
+                $gte: new Date()
+            }
+        });
+
+        const totalRevenue = await Contact.aggregate([
+            { $match: { rentalStatus: 'active' } },
+            { $group: { _id: null, total: { $sum: '$totalPaid' } } }
+        ]);
+
+        const monthlyRevenue = await Contact.aggregate([
+            {
+                $match: {
+                    rentalStatus: 'active',
+                    lastPaymentDate: {
+                        $gte: new Date(new Date().setMonth(new Date().getMonth() - 1))
+                    }
+                }
+            },
+            { $group: { _id: null, total: { $sum: '$totalPaid' } } }
+        ]);
+
+        res.json({
+            success: true,
+            stats: {
+                totalActive,
+                totalExpired,
+                expiringSoon,
+                totalRevenue: totalRevenue[0]?.total || 0,
+                monthlyRevenue: monthlyRevenue[0]?.total || 0
+            }
+        });
+    } catch (error) {
+        console.error('Get rental stats error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching rental statistics'
+        });
+    }
+};

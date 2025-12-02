@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 import siteRoutes from './routes/siteRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
+import { setupRentalCronJobs } from './cronJobs.js';
 
 // ES modules fix for __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -23,10 +24,22 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// MongoDB connection
+// // MongoDB connection
+// mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalSite')
+//     .then(() => console.log('✅ MongoDB connected successfully'))
+//     .catch(err => console.log('❌ MongoDB connection error:', err));
+
+// После подключения к MongoDB
 mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalSite')
-    .then(() => console.log('✅ MongoDB connected successfully'))
+    .then(() => {
+        console.log('✅ MongoDB connected successfully');
+        // Запускаем cron jobs
+        if (process.env.NODE_ENV !== 'test') {
+            setupRentalCronJobs();
+        }
+    })
     .catch(err => console.log('❌ MongoDB connection error:', err));
+
 
 app.use('/api/sites', siteRoutes);
 app.use('/api/auth', authRoutes);

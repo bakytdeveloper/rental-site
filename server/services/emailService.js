@@ -221,34 +221,136 @@ const emailTemplates = {
       </body>
       </html>
     `
+    }),
+    rentalExpiringSoon: (contactData, siteData) => ({
+        subject: `⏰ Rental Expiring Soon: ${siteData.title}`,
+        html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #ff9f43 0%, #ff9f43 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: #fffaf0; padding: 30px; border-radius: 0 0 10px 10px; }
+          .info-card { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #ff9f43; }
+          .button { background: #ff9f43; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 10px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>⏰ Rental Expiring Soon</h1>
+            <p>Your website rental period is about to expire</p>
+          </div>
+          
+          <div class="content">
+            <div class="info-card">
+              <h3>📋 Rental Details</h3>
+              <p><strong>Website:</strong> ${siteData.title}</p>
+              <p><strong>Monthly Price:</strong> $${siteData.price}</p>
+              <p><strong>Expiration Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}</p>
+              <p><strong>Days Remaining:</strong> ${contactData.daysRemaining} days</p>
+            </div>
+
+            <div class="info-card">
+              <h3>💳 Renew Your Rental</h3>
+              <p>To continue using ${siteData.title}, please make a payment to extend your rental period.</p>
+              <p><strong>Next Payment Amount:</strong> $${siteData.price}</p>
+              <a href="mailto:support@rentalsite.com?subject=Renewal: ${siteData.title}" class="button">
+                📧 Contact Support to Renew
+              </a>
+            </div>
+
+            <div class="info-card">
+              <h3>📞 Need Assistance?</h3>
+              <p>If you have any questions about your rental or payment, please contact our support team.</p>
+              <p><strong>Email:</strong> support@rentalsite.com</p>
+              <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+            </div>
+          </div>
+
+          <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 12px;">
+            <p>This is an automated reminder from RentalSite</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `
+    }),
+
+    adminRentalExpiring: (contactData, siteData) => ({
+        subject: `⚠️ Rental Expiring: ${contactData.name} - ${siteData.title}`,
+        html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <style>
+          body { font-family: Arial, sans-serif; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: #ff9f43; color: white; padding: 20px; text-align: center; }
+          .content { background: #f8f9fa; padding: 20px; }
+          .button { background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h2>⚠️ Rental Expiring Soon</h2>
+          </div>
+          <div class="content">
+            <p><strong>Client:</strong> ${contactData.name}</p>
+            <p><strong>Email:</strong> ${contactData.email}</p>
+            <p><strong>Website:</strong> ${siteData.title}</p>
+            <p><strong>Expires:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString()}</p>
+            <p><strong>Days Remaining:</strong> ${contactData.daysRemaining}</p>
+            <p><a href="${process.env.ADMIN_URL}/contacts/${contactData._id}" class="button">View in Admin Panel</a></p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `
     })
 };
 
 // Main email sending function
-export const sendEmailNotification = async (type, contactData, siteData = null) => {
+export const sendEmailNotification = async (type, contactData, siteData = null, additionalData = {}) => {
     try {
         const transporter = createTransporter();
 
-        const template = emailTemplates[type](contactData, siteData);
+        // Добавляем дополнительные данные
+        const dataWithExtras = {
+            ...contactData,
+            ...additionalData
+        };
+
+        const template = emailTemplates[type](dataWithExtras, siteData);
 
         const mailOptions = {
             from: {
                 name: 'RentalSite Notification System',
                 address: process.env.SMTP_FROM
             },
-            to: process.env.SMTP_FROM, // Send to admin email
+            to: type === 'adminRentalExpiring'
+                ? process.env.ADMIN_NOTIFICATION_EMAIL || process.env.SMTP_FROM
+                : contactData.email,
             subject: template.subject,
             html: template.html
         };
 
-        console.log('📤 Attempting to send email...');
+        console.log(`📤 Sending ${type} email...`);
         const result = await transporter.sendMail(mailOptions);
-        console.log('✅ Email notification sent successfully:', result.messageId);
+        console.log(`✅ ${type} email sent successfully:`, result.messageId);
         return { success: true, messageId: result.messageId };
 
     } catch (error) {
-        console.error('❌ Error sending email notification:', error);
-        console.error('❌ Error details:', error.message);
+        console.error(`❌ Error sending ${type} email:`, error);
         return { success: false, error: error.message };
     }
 };
