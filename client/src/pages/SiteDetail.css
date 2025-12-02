@@ -9,7 +9,8 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    margin-bottom: 2rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
     padding: 1rem 0;
     font-size: 0.9rem;
 }
@@ -664,6 +665,10 @@
 
     .main-image-container {
         height: 300px;
+    }
+
+    .breadcrumb-nav {
+        margin-top: 3rem;
     }
 
     .site-title {
