@@ -5,8 +5,24 @@ import './Header.css';
 
 const Header = () => {
     const [expanded, setExpanded] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
+
+    // Listen to scroll event
+    useState(() => {
+        const handleScroll = () => {
+            const isScrolled = window.scrollY > 20;
+            if (isScrolled !== scrolled) {
+                setScrolled(isScrolled);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [scrolled]);
 
     const closeNavbar = () => setExpanded(false);
 
@@ -16,24 +32,31 @@ const Header = () => {
     };
 
     return (
-        <Navbar expand="lg" fixed="top" expanded={expanded} className="custom-navbar">
+        <Navbar
+            expand="lg"
+            fixed="top"
+            expanded={expanded}
+            className={`header-custom-navbar ${scrolled ? 'header-scrolled' : ''}`}
+        >
             <Container>
-                <Navbar.Brand as={Link} to="/" className="brand-logo">
-                    <span className="brand-accent">Rental</span>Site
+                <Navbar.Brand as={Link} to="/" className="header-brand-logo">
+                    <span className="header-brand-accent">Rental</span>Site
                 </Navbar.Brand>
 
                 <Navbar.Toggle
                     aria-controls="basic-navbar-nav"
                     onClick={() => setExpanded(expanded ? false : "expanded")}
+                    className="header-navbar-toggler"
                 />
 
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="ms-auto">
+                    <Nav className="ms-auto header-navbar-nav">
                         <Nav.Link
                             as={Link}
                             to="/"
                             active={location.pathname === '/'}
                             onClick={closeNavbar}
+                            className={`header-nav-link ${location.pathname === '/' ? 'header-active' : ''}`}
                         >
                             Home
                         </Nav.Link>
@@ -42,6 +65,7 @@ const Header = () => {
                             to="/catalog"
                             active={location.pathname === '/catalog'}
                             onClick={closeNavbar}
+                            className={`header-nav-link ${location.pathname === '/catalog' ? 'header-active' : ''}`}
                         >
                             Catalog
                         </Nav.Link>
@@ -50,6 +74,7 @@ const Header = () => {
                             to="/about"
                             active={location.pathname === '/about'}
                             onClick={closeNavbar}
+                            className={`header-nav-link ${location.pathname === '/about' ? 'header-active' : ''}`}
                         >
                             About
                         </Nav.Link>
@@ -58,17 +83,18 @@ const Header = () => {
                             to="/contact"
                             active={location.pathname === '/contact'}
                             onClick={closeNavbar}
+                            className={`header-nav-link ${location.pathname === '/contact' ? 'header-active' : ''}`}
                         >
                             Contact
                         </Nav.Link>
 
                         {/* Кнопка входа в админ-панель */}
-                        <div className="admin-login-btn">
+                        <div className="header-admin-login-btn">
                             <Button
                                 variant="outline-light"
                                 size="sm"
                                 onClick={handleAdminLogin}
-                                className="ms-2"
+                                className="ms-2 header-btn"
                             >
                                 Admin Login
                             </Button>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import { Container, Row, Col, Form, Button } from 'react-bootstrap';
+import { Container, Row, Col, Form, Button, Navbar, Nav } from 'react-bootstrap';
 import { siteAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import SiteCard from '../components/SiteCard/SiteCard';
@@ -30,18 +30,14 @@ const Catalog = () => {
     }, [pagination.page]);
 
     useEffect(() => {
-        // Инициализируем AOS при монтировании компонента
         AOS.init({
             duration: 800,
-            once: true, // анимация только один раз
+            once: true,
         });
-
-        // Обновляем AOS при изменении данных
         AOS.refresh();
     }, []);
 
     useEffect(() => {
-        // Обновляем AOS каждый раз, когда меняются filteredSites
         if (filteredSites.length > 0) {
             setTimeout(() => {
                 AOS.refresh();
@@ -75,7 +71,6 @@ const Catalog = () => {
 
     const fetchCategories = async () => {
         try {
-            // This would typically come from an API endpoint
             const categoriesList = [
                 'All',
                 'Landing Page',
@@ -99,7 +94,6 @@ const Catalog = () => {
     const applyFilters = (filterSettings) => {
         let filtered = [...sites];
 
-        // Search filter
         if (filterSettings.search) {
             filtered = filtered.filter(site =>
                 site.title.toLowerCase().includes(filterSettings.search.toLowerCase()) ||
@@ -107,12 +101,10 @@ const Catalog = () => {
             );
         }
 
-        // Category filter
         if (filterSettings.category !== 'all') {
             filtered = filtered.filter(site => site.category === filterSettings.category);
         }
 
-        // Sort
         switch (filterSettings.sort) {
             case 'price-low':
                 filtered.sort((a, b) => a.price - b.price);
@@ -123,7 +115,7 @@ const Catalog = () => {
             case 'name':
                 filtered.sort((a, b) => a.title.localeCompare(b.title));
                 break;
-            default: // newest
+            default:
                 filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
 
@@ -154,30 +146,41 @@ const Catalog = () => {
                 </Container>
             </div>
 
-            <Container className="catalog-container">
-                <Row>
-                    {/* Filters Sidebar */}
-                    <Col lg={3} className="filters-sidebar">
-                        <div className="filters-card">
-                            <h3 className="filters-title">Filters</h3>
+            {/* Фильтры в навбаре */}
+            <Navbar expand="lg" className="catalog-navbar-filters">
+                <Container>
+                    {/* Поле поиска всегда видимое (рядом с гамбургером) */}
+                    <div className="catalog-navbar-filters__search--always-visible">
+                        <Form.Control
+                            type="text"
+                            placeholder="Search websites..."
+                            value={filters.search}
+                            onChange={(e) => handleFilterChange('search', e.target.value)}
+                            className="catalog-navbar-filters__search-input catalog-navbar-filters__search-input--always-visible"
+                        />
+                    </div>
 
-                            {/* Search */}
-                            <Form.Group className="mb-3">
-                                <Form.Label>Search</Form.Label>
+                    <Navbar.Toggle aria-controls="catalog-filters-nav" className="catalog-navbar-filters__toggle" />
+
+                    <Navbar.Collapse id="catalog-filters-nav">
+                        <Nav className="catalog-navbar-filters__nav">
+                            {/* Это поле поиска скрывается в мобильном меню */}
+                            <div className="catalog-navbar-filters__search--hidden-mobile">
                                 <Form.Control
                                     type="text"
                                     placeholder="Search websites..."
                                     value={filters.search}
                                     onChange={(e) => handleFilterChange('search', e.target.value)}
+                                    className="catalog-navbar-filters__search-input"
                                 />
-                            </Form.Group>
+                            </div>
 
-                            {/* Category */}
-                            <Form.Group className="mb-3">
-                                <Form.Label>Category</Form.Label>
+                            {/* Категории */}
+                            <div className="catalog-navbar-filters__category">
                                 <Form.Select
                                     value={filters.category}
                                     onChange={(e) => handleFilterChange('category', e.target.value)}
+                                    className="catalog-navbar-filters__select"
                                 >
                                     {categories.map(category => (
                                         <option key={category} value={category === 'All' ? 'all' : category}>
@@ -185,50 +188,57 @@ const Catalog = () => {
                                         </option>
                                     ))}
                                 </Form.Select>
-                            </Form.Group>
+                            </div>
 
-                            {/* Sort */}
-                            <Form.Group className="mb-4">
-                                <Form.Label>Sort By</Form.Label>
+                            {/* Сортировка */}
+                            <div className="catalog-navbar-filters__sort">
                                 <Form.Select
                                     value={filters.sort}
                                     onChange={(e) => handleFilterChange('sort', e.target.value)}
+                                    className="catalog-navbar-filters__select"
                                 >
                                     <option value="newest">Newest First</option>
                                     <option value="price-low">Price: Low to High</option>
                                     <option value="price-high">Price: High to Low</option>
                                     <option value="name">Name A-Z</option>
                                 </Form.Select>
-                            </Form.Group>
+                            </div>
 
-                            <Button
-                                variant="outline"
-                                onClick={resetFilters}
-                                className="btn-reset"
-                            >
-                                Reset Filters
-                            </Button>
-                        </div>
-                    </Col>
+                            {/* Кнопка сброса */}
+                            <div className="catalog-navbar-filters__reset">
+                                <Button
+                                    variant="outline"
+                                    onClick={resetFilters}
+                                    className="catalog-navbar-filters__reset-btn"
+                                >
+                                    Reset Filters
+                                </Button>
+                            </div>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Container>
+            </Navbar>
 
-                    {/* Sites Grid */}
-                    <Col lg={9}>
-                        <div className="results-header">
-                            <p className="results-count">
+            {/* Основной контент */}
+            <Container className="catalog-container">
+                <Row>
+                    <Col>
+                        <div className="catalog-results-header">
+                            <p className="catalog-results-count">
                                 Showing {filteredSites.length} of {pagination.total} websites
                             </p>
                         </div>
 
                         {loading ? (
-                            <div className="loading-grid">
+                            <div className="catalog-loading-grid">
                                 {Array.from({ length: 6 }).map((_, index) => (
-                                    <div key={index} className="site-card-skeleton">
-                                        <div className="skeleton-image"></div>
-                                        <div className="skeleton-content">
-                                            <div className="skeleton-title"></div>
-                                            <div className="skeleton-text"></div>
-                                            <div className="skeleton-text short"></div>
-                                            <div className="skeleton-button"></div>
+                                    <div key={index} className="catalog-site-card-skeleton">
+                                        <div className="catalog-skeleton-image"></div>
+                                        <div className="catalog-skeleton-content">
+                                            <div className="catalog-skeleton-title"></div>
+                                            <div className="catalog-skeleton-text"></div>
+                                            <div className="catalog-skeleton-text catalog-skeleton-text--short"></div>
+                                            <div className="catalog-skeleton-button"></div>
                                         </div>
                                     </div>
                                 ))}
@@ -242,11 +252,13 @@ const Catalog = () => {
                                 ))}
                             </Row>
                         ) : (
-                            <div className="no-results">
-                                <div className="no-results-icon">🔍</div>
-                                <h3>No websites found</h3>
-                                <p>Try adjusting your search criteria or browse all categories</p>
-                                <Button onClick={resetFilters} className="btn-primary-custom">
+                            <div className="catalog-no-results">
+                                <div className="catalog-no-results-icon">🔍</div>
+                                <h3 className="catalog-no-results-title">No websites found</h3>
+                                <p className="catalog-no-results-description">
+                                    Try adjusting your search criteria or browse all categories
+                                </p>
+                                <Button onClick={resetFilters} className="catalog-no-results-btn">
                                     Show All Websites
                                 </Button>
                             </div>

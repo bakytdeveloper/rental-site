@@ -1,4 +1,4 @@
-.custom-navbar {
+.header-custom-navbar {
     background: rgba(10, 25, 47, 0.95) !important;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(100, 255, 218, 0.1);
@@ -6,12 +6,12 @@
     padding: 1rem 0;
 }
 
-.custom-navbar.scrolled {
+.header-custom-navbar.header-scrolled {
     padding: 0.5rem 0;
     background: rgba(10, 25, 47, 0.98) !important;
 }
 
-.brand-logo {
+.header-brand-logo {
     font-size: 1.8rem !important;
     font-weight: 700;
     color: #64ffda !important;
@@ -19,11 +19,11 @@
     letter-spacing: -0.5px;
 }
 
-.brand-accent {
+.header-brand-accent {
     color: #ffffff;
 }
 
-.navbar-nav .nav-link {
+.header-navbar-nav .header-nav-link {
     color: #ccd6f6 !important;
     font-weight: 500;
     margin: 0 0.5rem;
@@ -33,23 +33,24 @@
     position: relative;
 }
 
-.navbar-nav .nav-link:hover,
-.navbar-nav .nav-link.active {
+.header-navbar-nav .header-nav-link:hover,
+.header-navbar-nav .header-nav-link.header-active {
     color: #64ffda !important;
     background: rgba(100, 255, 218, 0.1);
 }
 
-.navbar-toggler {
-    border: 1px solid #64ffda !important;
+.header-navbar-toggler {
+    border: 1px solid #363737 !important;
     padding: 0.25rem 0.5rem;
+    background-color: #64ffda;
 }
 
-.navbar-toggler-icon {
+.header-navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28100, 255, 218, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
 }
 
 /* Admin Login Button Styles */
-.admin-login-btn .btn {
+.header-admin-login-btn .header-btn {
     border: 1px solid #64ffda;
     color: #64ffda;
     background: transparent;
@@ -61,7 +62,7 @@
     margin-left: 0.5rem;
 }
 
-.admin-login-btn .btn:hover {
+.header-admin-login-btn .header-btn:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-2px);
     color: #64ffda;
@@ -70,12 +71,12 @@
 
 /* Responsive for admin button */
 @media (max-width: 992px) {
-    .admin-login-btn {
+    .header-admin-login-btn {
         margin-top: 1rem;
         padding: 0 1rem;
     }
 
-    .admin-login-btn .btn {
+    .header-admin-login-btn .header-btn {
         width: 100%;
         margin-left: 0;
     }
