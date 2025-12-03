@@ -9,7 +9,7 @@ const About = () => {
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
                             <h1 className="page-title">О RentalSite</h1>
-                            
+
                             <p className="page-subtitle">
                                 Изменяем способ, которым бизнесы создают свое онлайн-присутствие
                             </p>
@@ -22,6 +22,7 @@ const About = () => {
                 <Row className="mb-5">
                     <Col lg={6}>
                         <h2 className="section-title">Наша миссия</h2>
+                        
                         <p className="section-text">
                             В RentalSite мы верим, что каждый бизнес заслуживает профессионального онлайн-присутствия
                             без сложностей и затрат традиционной веб-разработки. Наша миссия - сделать премиальные
