@@ -593,11 +593,339 @@ const emailTemplates = {
       </html>
     `
     }),
+    rentalExpired: (contactData, siteData) => ({
+        subject: `🔴 Rental Expired: ${siteData.title}`,
+        html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <style>
+                body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                .header { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
+                .info-card { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #dc3545; }
+                .button { background: #dc3545; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; }
+                .alert-box { background: #fff3cd; border: 2px solid #ffc107; padding: 15px; border-radius: 5px; margin: 15px 0; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <div class="header">
+                    <h1>🔴 Rental Period Ended</h1>
+                    <p>Your website rental has expired</p>
+                </div>
+                
+                <div class="content">
+                    <div class="alert-box">
+                        <h3 style="color: #856404; margin-top: 0;">⚠️ Important Notice</h3>
+                        <p style="color: #856404;">
+                            Your rental period for <strong>${siteData.title}</strong> has ended on 
+                            ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                })}.
+                        </p>
+                    </div>
+        
+                    <div class="info-card">
+                        <h3>📋 Rental Details</h3>
+                        <p><strong>Website:</strong> ${siteData.title}</p>
+                        <p><strong>Monthly Price:</strong> $${siteData.price}</p>
+                        <p><strong>Expiration Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString()}</p>
+                    </div>
+        
+                    <div class="info-card">
+                        <h3>💳 Renew Your Rental</h3>
+                        <p>To continue using ${siteData.title}, please make a payment to extend your rental period.</p>
+                        <p><strong>Next Payment Amount:</strong> $${siteData.price}</p>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <a href="mailto:${process.env.SMTP_FROM}?subject=Renewal Request: ${siteData.title}&body=Hello,%0D%0A%0D%0AI would like to renew my rental for ${siteData.title}.%0D%0A%0D%0AName: ${contactData.name}%0D%0AEmail: ${contactData.email}%0D%0A%0D%0APlease let me know the payment details." 
+                               class="button">
+                               📧 Request Renewal
+                            </a>
+                        </div>
+                    </div>
+        
+                    <div class="info-card">
+                        <h3>⚠️ Important Information</h3>
+                        <p>Please note that access to the website will be suspended if payment is not received within 7 days.</p>
+                        <p>For immediate assistance, please contact our support team.</p>
+                    </div>
+                </div>
+        
+                <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 12px;">
+                    <p>This is an automated notification from RentalSite</p>
+                </div>
+            </div>
+        </body>
+        </html>
+`
+    }),
+
+    adminRentalExpired: (contactData, siteData) => ({
+        subject: `🚨 RENTAL EXPIRED: ${contactData.name} - ${siteData.title}`,
+        html: `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 700px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+            .header { background: linear-gradient(135deg, #dc3545 0%, #bd2130 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+            .content { padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e9ecef; border-top: none; }
+            .alert-box { background: #f8d7da; border: 2px solid #f5c6cb; border-left: 5px solid #dc3545; border-radius: 8px; padding: 20px; margin-bottom: 25px; }
+            .info-card { background: #f8f9fa; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #6c757d; }
+            .button { background: #dc3545; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 16px; display: inline-block; margin: 0 10px; }
+            .button-renew { background: #28a745; }
+            .button-renew:hover { background: #218838; }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🚨 RENTAL EXPIRED</h1>
+                <p>Client rental has ended - Immediate action required</p>
+            </div>
+            
+            <div class="content">
+                <div class="alert-box">
+                    <h3 style="color: #721c24; margin-top: 0;">⚠️ URGENT: Rental Expired</h3>
+                    <p style="color: #721c24;">
+                        The rental for <strong>${siteData.title}</strong> has expired. 
+                        Client status has been changed to <strong>payment_due</strong>.
+                    </p>
+                </div>
+    
+                <div class="info-card">
+                    <h3 style="color: #343a40;">📋 Client Information</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                        <div>
+                            <strong>Client:</strong> ${contactData.name}<br>
+                            <strong>Email:</strong> ${contactData.email}<br>
+                            ${contactData.phone ? `<strong>Phone:</strong> ${contactData.phone}<br>` : ''}
+                        </div>
+                        <div>
+                            <strong>Website:</strong> ${siteData.title}<br>
+                            <strong>Monthly Price:</strong> $${siteData.price}<br>
+                            <strong>Total Paid:</strong> $${contactData.totalPaid || 0}
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="info-card">
+                    <h3 style="color: #343a40;">📅 Expiration Details</h3>
+                    <p><strong>Expiration Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            })}</p>
+                    <p><strong>Expiration Time:</strong> ${new Date(contactData.rentalEndDate).toLocaleTimeString()}</p>
+                    <p><strong>Days Overdue:</strong> <span style="color: #dc3545; font-weight: bold;">
+                        ${Math.floor((new Date() - new Date(contactData.rentalEndDate)) / (1000 * 60 * 60 * 24))} days
+                    </span></p>
+                </div>
+    
+                <div class="info-card">
+                    <h3 style="color: #343a40;">⚡ Required Actions</h3>
+                    <div style="text-align: center; margin: 20px 0;">
+                        <a href="${process.env.ADMIN_URL || 'http://localhost:3000/admin'}/contacts/${contactData._id}" 
+                           class="button">
+                           👁️ View in Admin
+                        </a>
+                        
+                        <a href="mailto:${contactData.email}?subject=URGENT: Rental Expired - ${siteData.title}&body=Dear ${contactData.name},%0D%0A%0D%0AYour rental for ${siteData.title} has expired.%0D%0A%0D%0APlease contact us immediately to renew and avoid service interruption.%0D%0A%0D%0ABest regards,%0D%0ARentalSite Team" 
+                           class="button button-renew">
+                           📧 Contact Client
+                        </a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #6c757d; font-size: 14px;">
+                <p>This is an automated notification from RentalSite Management System</p>
+            </div>
+        </div>
+    </body>
+    </html>
+`
+    }),
+    // В emailService.js, добавьте после adminRentalExpired шаблона:
+
+    paymentReceived: (contactData, siteData) => ({
+        subject: `✅ Payment Received - ${siteData.title}`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <style>
+                    body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                    .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
+                    .info-card { background: white; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #28a745; }
+                    .success-icon { color: #28a745; font-size: 40px; text-align: center; margin: 20px 0; }
+                    .footer { text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>✅ Payment Received</h1>
+                        <p>Thank you for your payment</p>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="success-icon">
+                            ✓
+                        </div>
+                        
+                        <div class="info-card">
+                            <h3>📋 Payment Details</h3>
+                            <p><strong>Amount:</strong> $${contactData.amount}</p>
+                            <p><strong>For Website:</strong> ${siteData.title}</p>
+                            <p><strong>Months Extended:</strong> ${contactData.months || 1}</p>
+                            <p><strong>Payment Date:</strong> ${new Date().toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}</p>
+                        </div>
+            
+                        <div class="info-card">
+                            <h3>📅 New Rental Period</h3>
+                            <p>Your rental has been extended until:</p>
+                            <p style="font-size: 18px; font-weight: bold; color: #28a745;">
+                                ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}
+                            </p>
+                            <p><strong>Next Payment Due:</strong> Approximately ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    })}</p>
+                        </div>
+            
+                        <div class="info-card">
+                            <h3>📞 Support Information</h3>
+                            <p>If you have any questions about your rental or payment, please contact our support team.</p>
+                            <p><strong>Email:</strong> support@rentalsite.com</p>
+                            <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                        </div>
+                    </div>
+            
+                    <div class="footer">
+                        <p>This is an automated payment confirmation from RentalSite</p>
+                        <p>📍 ${new Date().getFullYear()} RentalSite. All rights reserved.</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            `
+                }),
+
+            // Также добавьте шаблон для уведомления админа о платеже:
+    adminPaymentReceived: (contactData, siteData) => ({
+        subject: `💰 Payment Received from ${contactData.name} - ${siteData.title}`,
+        html: `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="utf-8">
+                <style>
+                    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 700px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+                    .header { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+                    .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+                    .content { padding: 30px; border-radius: 0 0 10px 10px; border: 1px solid #e9ecef; border-top: none; }
+                    .info-card { background: #f8f9fa; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #28a745; }
+                    .button { background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: 600; display: inline-block; }
+                </style>
+            </head>
+            <body>
+                <div class="container">
+                    <div class="header">
+                        <h1>💰 Payment Received</h1>
+                        <p>Client has made a payment for website rental</p>
+                    </div>
+                    
+                    <div class="content">
+                        <div class="info-card">
+                            <h3 style="color: #28a745; margin-top: 0;">📋 Payment Summary</h3>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
+                                <div>
+                                    <strong>Client:</strong> ${contactData.name}<br>
+                                    <strong>Email:</strong> ${contactData.email}<br>
+                                    ${contactData.phone ? `<strong>Phone:</strong> ${contactData.phone}<br>` : ''}
+                                </div>
+                                <div>
+                                    <strong>Website:</strong> ${siteData.title}<br>
+                                    <strong>Amount:</strong> $${contactData.amount}<br>
+                                    <strong>Months:</strong> ${contactData.months || 1}
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="info-card">
+                            <h3 style="color: #28a745;">📅 Rental Extension</h3>
+                            <p><strong>Old End Date:</strong> Before payment</p>
+                            <p><strong>New End Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}</p>
+                            <p><strong>Extended By:</strong> ${contactData.months || 1} month${contactData.months !== 1 ? 's' : ''}</p>
+                        </div>
+            
+                        <div class="info-card">
+                            <h3 style="color: #28a745;">⚡ Quick Actions</h3>
+                            <div style="text-align: center; margin: 20px 0;">
+                                <a href="${process.env.ADMIN_URL || 'http://localhost:3000/admin'}/contacts/${contactData._id}" 
+                                   class="button">
+                                   👁️ View in Admin Panel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #6c757d; font-size: 14px;">
+                        <p>This is an automated payment notification from RentalSite Management System</p>
+                    </div>
+                </div>
+            </body>
+            </html>
+            `
+    })
 };
 
 // Main email sending function
+// Обновите функцию sendEmailNotification в emailService.js:
+
 export const sendEmailNotification = async (type, contactData, siteData = null, additionalData = {}) => {
     try {
+        // Проверяем, существует ли такой шаблон
+        if (!emailTemplates[type]) {
+            console.error(`❌ Email template "${type}" not found`);
+            return {
+                success: false,
+                error: `Email template "${type}" not found`,
+                availableTemplates: Object.keys(emailTemplates)
+            };
+        }
+
         const transporter = createTransporter();
 
         // Добавляем дополнительные данные
@@ -608,19 +936,40 @@ export const sendEmailNotification = async (type, contactData, siteData = null, 
 
         const template = emailTemplates[type](dataWithExtras, siteData);
 
+        // Определяем получателя в зависимости от типа письма
+        let toEmail;
+
+        switch(type) {
+            case 'adminRentalExpiring':
+            case 'adminRentalExpired':
+            case 'adminPaymentReceived':
+                toEmail = process.env.ADMIN_NOTIFICATION_EMAIL || process.env.SMTP_FROM;
+                break;
+            case 'rentalExpiringSoon':
+            case 'rentalExpired':
+            case 'paymentReceived':
+                toEmail = contactData.email;
+                break;
+            case 'newRentalInquiry':
+            case 'newContactMessage':
+            case 'highPriorityAlert':
+                toEmail = process.env.SMTP_FROM; // Отправляем админу
+                break;
+            default:
+                toEmail = process.env.SMTP_FROM;
+        }
+
         const mailOptions = {
             from: {
                 name: 'RentalSite Notification System',
                 address: process.env.SMTP_FROM
             },
-            to: type === 'adminRentalExpiring'
-                ? process.env.ADMIN_NOTIFICATION_EMAIL || process.env.SMTP_FROM
-                : contactData.email,
+            to: toEmail,
             subject: template.subject,
             html: template.html
         };
 
-        console.log(`📤 Sending ${type} email...`);
+        console.log(`📤 Sending ${type} email to ${toEmail}...`);
         const result = await transporter.sendMail(mailOptions);
         console.log(`✅ ${type} email sent successfully:`, result.messageId);
         return { success: true, messageId: result.messageId };
@@ -630,4 +979,3 @@ export const sendEmailNotification = async (type, contactData, siteData = null, 
         return { success: false, error: error.message };
     }
 };
-

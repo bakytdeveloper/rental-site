@@ -304,6 +304,7 @@ export const getContactStats = async (req, res) => {
 };
 
 
+
 // @desc    Add payment to contact
 // @route   POST /api/contacts/:id/payments
 // @access  Private
@@ -366,10 +367,27 @@ export const addPayment = async (req, res) => {
 
         // Обновляем даты аренды
         const now = new Date();
+
+        // Если аренда еще не начиналась
         if (!contact.rentalStartDate) {
             contact.rentalStartDate = now;
             contact.rentalStatus = 'active';
+            console.log(`✅ Started new rental for ${contact.email}`);
         }
+
+        // Если аренда была приостановлена или закончилась
+        if (contact.rentalStatus === 'expired' || contact.rentalStatus === 'suspended') {
+            contact.rentalStatus = 'active';
+            console.log(`✅ Reactivated rental for ${contact.email}`);
+        }
+
+        // Если статус был payment_due, меняем обратно на active_rental
+        if (contact.status === 'payment_due') {
+            console.log(`🔄 Changing status from payment_due to active_rental for ${contact.email}`);
+        }
+
+        // ВСЕГДА устанавливаем статус active_rental при оплате
+        contact.status = 'active_rental';
 
         // Обновляем дату окончания аренды
         if (!contact.rentalEndDate || contact.rentalEndDate < now) {
@@ -387,18 +405,27 @@ export const addPayment = async (req, res) => {
         contact.nextPaymentDate = nextPaymentDate;
 
         // Сбрасываем флаг уведомления
-        contact.lastNotificationDate = null
+        contact.lastNotificationDate = null;
 
-        // Обновляем статус
-        contact.status = 'active_rental';
+        // Также сбрасываем notificationSent, если оно существует
+        if (contact.notificationSent !== undefined) {
+            contact.notificationSent = false;
+        }
+
+        console.log(`💰 Payment processed for ${contact.email}: $${amount} for ${actualMonths} month(s)`);
+        console.log(`📅 New rental end date: ${contact.rentalEndDate.toLocaleDateString()}`);
 
         await contact.save();
 
         // Отправляем уведомление клиенту (если указан email)
+        // В функции addPayment в contactController.js, обновите часть отправки email:
+
+// Отправляем уведомление клиенту (если указан email)
         if (contact.email) {
             const site = contact.siteId ? await Site.findById(contact.siteId) : null;
             setTimeout(async () => {
                 try {
+                    // Уведомление клиенту
                     await sendEmailNotification('paymentReceived', {
                         name: contact.name,
                         email: contact.email,
@@ -407,7 +434,21 @@ export const addPayment = async (req, res) => {
                         rentalEndDate: contact.rentalEndDate,
                         siteTitle: contact.siteTitle || (site ? site.title : 'Website')
                     }, site);
-                    console.log('✅ Payment confirmation email sent');
+                    console.log('✅ Payment confirmation email sent to client');
+
+                    // Уведомление админу
+                    await sendEmailNotification('adminPaymentReceived', {
+                        name: contact.name,
+                        email: contact.email,
+                        amount: amount,
+                        months: actualMonths,
+                        rentalEndDate: contact.rentalEndDate,
+                        _id: contact._id,
+                        phone: contact.phone,
+                        siteTitle: contact.siteTitle || (site ? site.title : 'Website')
+                    }, site);
+                    console.log('✅ Payment notification sent to admin');
+
                 } catch (emailError) {
                     console.error('❌ Payment email failed:', emailError);
                 }
@@ -421,10 +462,14 @@ export const addPayment = async (req, res) => {
             contact: {
                 id: contact._id,
                 name: contact.name,
+                email: contact.email,
+                status: contact.status,
+                rentalStatus: contact.rentalStatus,
                 totalPaid: contact.totalPaid,
                 rentalEndDate: contact.rentalEndDate,
                 monthsPaid: actualMonths,
-                nextPaymentDate: contact.nextPaymentDate
+                nextPaymentDate: contact.nextPaymentDate,
+                siteTitle: contact.siteTitle
             }
         });
 
@@ -436,7 +481,6 @@ export const addPayment = async (req, res) => {
         });
     }
 };
-
 // @desc    Get contact payments
 // @route   GET /api/contacts/:id/payments
 // @access  Private
@@ -474,23 +518,12 @@ export const getExpiringRentals = async (req, res) => {
     try {
         const { days = 3 } = req.query;
 
-        const now = new Date();
-        const notificationDate = new Date();
-        notificationDate.setDate(now.getDate() + parseInt(days));
-
-        const expiringContacts = await Contact.find({
-            rentalStatus: 'active',
-            rentalEndDate: {
-                $lte: notificationDate,
-                $gte: now
-            },
-            notificationSent: false
-        }).populate('siteId', 'title price');
+        const contacts = await Contact.findExpiringRentals(parseInt(days));
 
         res.json({
             success: true,
-            count: expiringContacts.length,
-            contacts: expiringContacts.map(contact => ({
+            count: contacts.length,
+            contacts: contacts.map(contact => ({
                 id: contact._id,
                 name: contact.name,
                 email: contact.email,
@@ -498,7 +531,9 @@ export const getExpiringRentals = async (req, res) => {
                 monthlyPrice: contact.monthlyPrice,
                 rentalEndDate: contact.rentalEndDate,
                 daysRemaining: contact.getDaysRemaining(),
-                phone: contact.phone
+                phone: contact.phone,
+                status: contact.status,
+                rentalStatus: contact.rentalStatus
             }))
         });
     } catch (error) {
@@ -618,6 +653,131 @@ export const getRentalStats = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error fetching rental statistics'
+        });
+    }
+};
+
+// Добавьте новую функцию в contactController.js
+// @desc    Check and update expired rentals
+// @route   POST /api/contacts/rentals/check-expired
+// @access  Private
+export const checkAndUpdateExpiredRentals = async (req, res) => {
+    try {
+        const now = new Date();
+
+        // Находим все активные аренды, которые закончились
+        const expiredContacts = await Contact.find({
+            rentalStatus: 'active',
+            rentalEndDate: { $lt: now },
+            status: 'active_rental'
+        });
+
+        let updatedCount = 0;
+        let notificationsSent = 0;
+
+        for (const contact of expiredContacts) {
+            try {
+                // Обновляем статусы
+                contact.rentalStatus = 'expired';
+                contact.status = 'payment_due';
+
+                // Сохраняем изменения
+                await contact.save();
+                updatedCount++;
+
+                // Получаем информацию о сайте для уведомления
+                const site = contact.siteId ? await Site.findById(contact.siteId) : null;
+
+                // Отправляем уведомление клиенту
+                if (contact.email && site) {
+                    await sendEmailNotification('rentalExpired', {
+                        name: contact.name,
+                        email: contact.email,
+                        rentalEndDate: contact.rentalEndDate,
+                        totalPaid: contact.totalPaid,
+                        siteTitle: contact.siteTitle || (site ? site.title : 'Website')
+                    }, site);
+                }
+
+                // Отправляем уведомление админу
+                if (site) {
+                    await sendEmailNotification('adminRentalExpired', {
+                        name: contact.name,
+                        email: contact.email,
+                        rentalEndDate: contact.rentalEndDate,
+                        totalPaid: contact.totalPaid,
+                        _id: contact._id,
+                        phone: contact.phone
+                    }, site);
+                }
+
+                notificationsSent++;
+
+            } catch (error) {
+                console.error(`❌ Error processing contact ${contact._id}:`, error);
+            }
+        }
+
+        res.json({
+            success: true,
+            message: `Updated ${updatedCount} expired rentals, sent ${notificationsSent} notifications`,
+            stats: {
+                updated: updatedCount,
+                notificationsSent: notificationsSent,
+                totalExpired: expiredContacts.length
+            }
+        });
+
+    } catch (error) {
+        console.error('❌ Check expired rentals error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error checking expired rentals: ' + error.message
+        });
+    }
+};
+
+// @desc    Check rental status
+// @route   GET /api/contacts/:id/rental-status
+// @access  Private
+export const checkRentalStatus = async (req, res) => {
+    try {
+        const contact = await Contact.findById(req.params.id);
+
+        if (!contact) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contact not found'
+            });
+        }
+
+        // Проверяем и обновляем статус аренды
+        const needsUpdate = contact.checkAndUpdateExpiredRentals();
+
+        if (needsUpdate) {
+            await contact.save();
+        }
+
+        const daysRemaining = contact.getDaysRemaining();
+
+        res.json({
+            success: true,
+            contact: {
+                id: contact._id,
+                name: contact.name,
+                email: contact.email,
+                status: contact.status,
+                rentalStatus: contact.rentalStatus,
+                rentalEndDate: contact.rentalEndDate,
+                daysRemaining: daysRemaining,
+                needsRenewal: daysRemaining !== null && daysRemaining <= 0
+            }
+        });
+    } catch (error) {
+        console.error('Check rental status error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error checking rental status'
         });
     }
 };

@@ -10,7 +10,8 @@ import {
     getPayments,
     getExpiringRentals,
     sendRentalReminders,
-    getRentalStats
+    getRentalStats,
+    checkAndUpdateExpiredRentals
 } from '../controllers/contactController.js';
 import { protect, authorize } from '../middleware/authMiddleware.js';
 
@@ -28,6 +29,7 @@ router.get('/stats/summary', getContactStats);
 router.get('/rentals/stats', getRentalStats);
 router.get('/rentals/expiring', getExpiringRentals);
 router.post('/rentals/send-reminders', sendRentalReminders);
+router.post('/rentals/check-expired', checkAndUpdateExpiredRentals);
 router.get('/:id', getContact);
 router.put('/:id', updateContact);
 router.delete('/:id', deleteContact);

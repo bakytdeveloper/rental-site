@@ -110,7 +110,6 @@ const ContactSchema = new mongoose.Schema({
         type: String,
         default: ''
     },
-    // УДАЛЕНО: notificationSent - чтобы убрать ограничение на 1 уведомление
     lastNotificationDate: {
         type: Date,
         default: null
@@ -128,26 +127,105 @@ ContactSchema.methods.getDaysRemaining = function() {
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
 
-// Метод для проверки необходимости уведомления (без ограничений)
+// Метод для проверки необходимости уведомления
 ContactSchema.methods.needsNotification = function() {
     const daysRemaining = this.getDaysRemaining();
-    return daysRemaining !== null && daysRemaining <= 3 && daysRemaining >= 0;
+
+    if (daysRemaining === 0 && this.rentalStatus === 'active') {
+        return true;
+    }
+    return daysRemaining !== null && daysRemaining <= 3 && daysRemaining >= 1;
 };
 
-// Статический метод для поиска клиентов с истекающей арендой (без ограничений)
+// Статический метод для поиска клиентов с истекающей арендой
 ContactSchema.statics.findExpiringRentals = function(days = 3) {
     const now = new Date();
     const notificationDate = new Date();
     notificationDate.setDate(now.getDate() + days);
 
     return this.find({
-        rentalStatus: 'active',
+        $or: [
+            { rentalStatus: 'active' },
+            { status: 'active_rental' }
+        ],
         rentalEndDate: {
             $lte: notificationDate,
             $gte: now
         }
-        // УДАЛЕНО: notificationSent: false
     });
 };
+
+// Метод для проверки истечения аренды - исправленный
+ContactSchema.methods.checkAndUpdateExpiredRentals = function() {
+    const now = new Date();
+    let updated = false;
+
+    if (this.rentalEndDate && new Date(this.rentalEndDate) < now) {
+        // Проверяем, нужно ли обновлять rentalStatus
+        if (this.rentalStatus === 'active') {
+            this.rentalStatus = 'expired';
+            console.log(`🔄 Updated rentalStatus to expired for ${this.email}`);
+            updated = true;
+        }
+
+        // Проверяем, нужно ли обновлять status
+        if (this.status === 'active_rental') {
+            this.status = 'payment_due';
+            console.log(`🔄 Updated status to payment_due for ${this.email}`);
+            updated = true;
+        }
+    }
+    return updated;
+};
+
+// Метод для обновления статусов
+ContactSchema.methods.updateRentalStatus = function() {
+    const now = new Date();
+
+    if (this.rentalEndDate) {
+        const endDate = new Date(this.rentalEndDate);
+
+        if (endDate < now) {
+            this.rentalStatus = 'expired';
+            if (this.status === 'active_rental') {
+                this.status = 'payment_due';
+            }
+        } else if (endDate >= now) {
+            if (this.status === 'payment_due') {
+                this.status = 'active_rental';
+            }
+        }
+    }
+    return this;
+};
+
+// pre('save') без next()
+// pre('save') хук — исправленный без next
+ContactSchema.pre('save', async function() {
+    const now = new Date();
+
+    if (this.rentalEndDate) {
+        const endDate = new Date(this.rentalEndDate);
+
+        // Если аренда истекла
+        if (endDate < now) {
+            if (this.rentalStatus === 'active') {
+                this.rentalStatus = 'expired';
+                console.log(`🔄 Auto-update: rentalStatus to expired for ${this.email}`);
+            }
+
+            if (this.status === 'active_rental') {
+                this.status = 'payment_due';
+                console.log(`🔄 Auto-update: status to payment_due for ${this.email}`);
+            }
+        } else {
+            // Аренда еще активна
+            if (this.status === 'payment_due' && this.rentalStatus === 'active') {
+                this.status = 'active_rental';
+                console.log(`🔄 Auto-update: status to active_rental for ${this.email}`);
+            }
+        }
+    }
+});
 
 export default mongoose.model('Contact', ContactSchema);

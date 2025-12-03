@@ -85,7 +85,8 @@ export const contactAPI = {
     getPayments: (id) => api.get(`/contacts/${id}/payments`),
     getExpiringRentals: (days = 3) => api.get(`/contacts/rentals/expiring?days=${days}`),
     sendReminders: () => api.post('/contacts/rentals/send-reminders'),
-    getRentalStats: () => api.get('/contacts/rentals/stats')
+    getRentalStats: () => api.get('/contacts/rentals/stats'),
+    checkExpiredRentals: () => api.post('/contacts/rentals/check-expired'),
 };
 
 // Utility function to handle API errors
