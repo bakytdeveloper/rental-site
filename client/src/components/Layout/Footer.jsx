@@ -3,65 +3,66 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
+    const currentYear = new Date().getFullYear();
+
     return (
-        <footer className="custom-footer">
+        <footer className="footer">
             <Container>
-                <Row>
-                    <Col lg={4} md={6} className="mb-4">
+                <Row className="footer-content">
+                    <Col xl={4} lg={4} md={6} className="footer-section">
                         <div className="footer-brand">
-                            <h3 className="brand-logo">
-                                <span className="brand-accent">Rental</span>Site
+                            <h3 className="footer-logo">
+                                <span className="footer-logo-accent">Rental</span>Site
                             </h3>
                             <p className="footer-description">
-                                Revolutionizing web presence with premium website rentals.
-                                Fast, reliable, and professional solutions for modern businesses.
+                                Изменяем веб-присутствие с помощью премиальной аренды сайтов.
+                                Быстрые, надежные и профессиональные решения для современных бизнесов.
                             </p>
                         </div>
                     </Col>
 
-                    <Col lg={2} md={6} className="mb-4">
-                        <h4 className="footer-title">Quick Links</h4>
+                    <Col xl={2} lg={2} md={3} className="footer-section">
+                        <h4 className="footer-title">Навигация</h4>
                         <ul className="footer-links">
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/catalog">Catalog</Link></li>
-                            <li><Link to="/about">About</Link></li>
-                            <li><Link to="/contact">Contact</Link></li>
+                            <li><Link to="/" className="footer-link">Главная</Link></li>
+                            <li><Link to="/catalog" className="footer-link">Каталог</Link></li>
+                            <li><Link to="/about" className="footer-link">О нас</Link></li>
+                            <li><Link to="/contact" className="footer-link">Контакты</Link></li>
                         </ul>
                     </Col>
 
-                    <Col lg={3} md={6} className="mb-4">
-                        <h4 className="footer-title">Services</h4>
-                        <ul className="footer-links">
-                            <li><a href="#website-rental">Website Rental</a></li>
-                            <li><a href="#maintenance">Maintenance</a></li>
-                            <li><a href="#support">24/7 Support</a></li>
-                            <li><a href="#customization">Customization</a></li>
-                        </ul>
-                    </Col>
-
-                    <Col lg={3} md={6} className="mb-4">
-                        <h4 className="footer-title">Contact Info</h4>
-                        <div className="contact-info">
-                            <p>📧 hello@rentalsite.com</p>
-                            <p>📞 +1 (555) 123-4567</p>
-                            <p>📍 123 Business Ave, Suite 100</p>
+                    <Col xl={3} lg={3} md={3} className="footer-section">
+                        <h4 className="footer-title">Контакты</h4>
+                        <div className="footer-contact">
+                            <div className="footer-contact-item">
+                                <span className="footer-contact-icon">✉️</span>
+                                <span className="footer-contact-text">hello@rentalsite.com</span>
+                            </div>
+                            <div className="footer-contact-item">
+                                <span className="footer-contact-icon">📱</span>
+                                <span className="footer-contact-text">+7 (778) 008-33-14</span>
+                            </div>
+                            <div className="footer-contact-item">
+                                <span className="footer-contact-icon">📍</span>
+                                <span className="footer-contact-text">123 Бизнес Авеню, Офис 100</span>
+                            </div>
                         </div>
                     </Col>
                 </Row>
 
-                <hr className="footer-divider" />
+                <div className="footer-divider"></div>
 
-                <Row className="align-items-center">
-                    <Col md={6}>
+                <Row className="footer-bottom align-items-center">
+                    <Col lg={6} md={12} className="mb-3 mb-md-0">
                         <p className="footer-copyright">
-                            © 2024 RentalSite. All rights reserved.
+                            © {currentYear} RentalSite. Все права защищены.
                         </p>
                     </Col>
-                    <Col md={6} className="text-md-end">
+                    <Col lg={6} md={12} className="text-lg-end">
                         <div className="footer-social">
-                            <a href="#" className="social-link">Twitter</a>
-                            <a href="#" className="social-link">LinkedIn</a>
-                            <a href="#" className="social-link">GitHub</a>
+                            <a href="#" className="footer-social-link" aria-label="Twitter">Twitter</a>
+                            <a href="#" className="footer-social-link" aria-label="LinkedIn">LinkedIn</a>
+                            <a href="#" className="footer-social-link" aria-label="GitHub">GitHub</a>
                         </div>
                     </Col>
                 </Row>

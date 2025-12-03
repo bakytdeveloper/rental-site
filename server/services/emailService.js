@@ -14,10 +14,10 @@ const createTransporter = () => {
     });
 };
 
-// Email templates (изменяем только subject в highPriorityAlert)
+// Русские email шаблоны
 const emailTemplates = {
     newRentalInquiry: (contactData, siteData) => ({
-        subject: `🎯 New Rental Inquiry: ${siteData.title}`,
+        subject: `🎯 Новый запрос на аренду: ${siteData.title}`,
         html: `
       <!DOCTYPE html>
       <html>
@@ -37,17 +37,17 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🚀 New Website Rental Inquiry</h1>
-            <p>A potential client is interested in renting your website</p>
+            <h1>🚀 Новый запрос на аренду сайта</h1>
+            <p>Потенциальный клиент заинтересован в аренде вашего сайта</p>
           </div>
           
           <div class="content">
             <div class="info-card">
-              <h3>📋 Inquiry Summary</h3>
-              <p><strong>Website:</strong> ${siteData.title}</p>
-              <p><strong>Category:</strong> <span class="badge">${siteData.category}</span></p>
-              <p><strong>Monthly Price:</strong> $${siteData.price}</p>
-              <p><strong>Inquiry Date:</strong> ${new Date().toLocaleDateString('en-US', {
+              <h3>📋 Информация о запросе</h3>
+              <p><strong>Сайт:</strong> ${siteData.title}</p>
+              <p><strong>Категория:</strong> <span class="badge">${siteData.category}</span></p>
+              <p><strong>Месячная цена:</strong> $${siteData.price}</p>
+              <p><strong>Дата запроса:</strong> ${new Date().toLocaleDateString('ru-RU', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -56,41 +56,41 @@ const emailTemplates = {
             </div>
 
             <div class="info-card">
-              <h3>👤 Client Information</h3>
-              <p><strong>Name:</strong> ${contactData.name}</p>
+              <h3>👤 Информация о клиенте</h3>
+              <p><strong>Имя:</strong> ${contactData.name}</p>
               <p><strong>Email:</strong> ${contactData.email}</p>
-              <p><strong>Phone:</strong> ${contactData.phone || 'Not provided'}</p>
-              ${contactData.company ? `<p><strong>Company:</strong> ${contactData.company}</p>` : ''}
+              <p><strong>Телефон:</strong> ${contactData.phone || 'Не указан'}</p>
+              ${contactData.company ? `<p><strong>Компания:</strong> ${contactData.company}</p>` : ''}
             </div>
 
             <div class="info-card">
-              <h3>💬 Client Message</h3>
+              <h3>💬 Сообщение клиента</h3>
               <p style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 3px solid #667eea;">
                 ${contactData.message}
               </p>
             </div>
 
             <div class="info-card">
-              <h3>⚡ Quick Actions</h3>
+              <h3>⚡ Быстрые действия</h3>
               <p>
-                <a href="mailto:${contactData.email}" class="button">📧 Reply to Client</a>
-                <a href="tel:${contactData.phone || ''}" class="button" style="background: #28a745;">📞 Call Client</a>
+                <a href="mailto:${contactData.email}" class="button">📧 Ответить клиенту</a>
+                <a href="tel:${contactData.phone || ''}" class="button" style="background: #28a745;">📞 Позвонить клиенту</a>
               </p>
-              <p><small>Client timezone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}</small></p>
+              <p><small>Часовой пояс клиента: ${Intl.DateTimeFormat().resolvedOptions().timeZone}</small></p>
             </div>
 
             <div class="info-card">
-              <h3>📊 Website Details</h3>
-              <p><strong>Features:</strong> ${siteData.features?.join(', ') || 'No specific features listed'}</p>
-              <p><strong>Technologies:</strong> ${siteData.technologies?.join(', ') || 'Not specified'}</p>
-              ${siteData.demoUrl ? `<p><strong>Demo:</strong> <a href="${siteData.demoUrl}">View Live Demo</a></p>` : ''}
+              <h3>📊 Детали сайта</h3>
+              <p><strong>Особенности:</strong> ${siteData.features?.join(', ') || 'Особенности не указаны'}</p>
+              <p><strong>Технологии:</strong> ${siteData.technologies?.join(', ') || 'Не указаны'}</p>
+              ${siteData.demoUrl ? `<p><strong>Демо:</strong> <a href="${siteData.demoUrl}">Посмотреть живое демо</a></p>` : ''}
             </div>
           </div>
 
           <div class="footer">
-            <p>This email was automatically generated by RentalSite Admin System</p>
-            <p>💼 <strong>RentalSite Business</strong> | Professional Website Rentals</p>
-            <p>📍 ${new Date().getFullYear()} RentalSite. All rights reserved.</p>
+            <p>Это письмо было автоматически сгенерировано системой RentalSite</p>
+            <p>💼 <strong>RentalSite Business</strong> | Профессиональная аренда сайтов</p>
+            <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
           </div>
         </div>
       </body>
@@ -99,7 +99,7 @@ const emailTemplates = {
     }),
 
     newContactMessage: (contactData) => ({
-        subject: `📧 New Contact Form Submission: ${contactData.subject || 'General Inquiry'}`,
+        subject: `📧 Новое сообщение с контактной формы: ${contactData.subject || 'Общий запрос'}`,
         html: `
       <!DOCTYPE html>
       <html>
@@ -118,17 +118,17 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>📬 New Contact Message</h1>
-            <p>Someone reached out through your website contact form</p>
+            <h1>📬 Новое контактное сообщение</h1>
+            <p>Кто-то связался через контактную форму вашего сайта</p>
           </div>
           
           <div class="content">
             <div class="info-card">
-              <h3>👤 Sender Information</h3>
-              <p><strong>Name:</strong> ${contactData.name}</p>
+              <h3>👤 Информация об отправителе</h3>
+              <p><strong>Имя:</strong> ${contactData.name}</p>
               <p><strong>Email:</strong> ${contactData.email}</p>
-              <p><strong>Subject:</strong> ${contactData.subject || 'Not specified'}</p>
-              <p><strong>Received:</strong> ${new Date().toLocaleString('en-US', {
+              <p><strong>Тема:</strong> ${contactData.subject || 'Не указана'}</p>
+              <p><strong>Получено:</strong> ${new Date().toLocaleString('ru-RU', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
@@ -139,27 +139,27 @@ const emailTemplates = {
             </div>
 
             <div class="info-card">
-              <h3>💬 Message Content</h3>
+              <h3>💬 Содержание сообщения</h3>
               <p style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 3px solid #ff6b6b; white-space: pre-wrap;">
                 ${contactData.message}
               </p>
             </div>
 
             <div class="info-card">
-              <h3>⚡ Quick Response</h3>
+              <h3>⚡ Быстрый ответ</h3>
               <p>
-                <a href="mailto:${contactData.email}?subject=Re: ${contactData.subject || 'Your Inquiry'}" class="button">
-                  📧 Reply to Message
+                <a href="mailto:${contactData.email}?subject=Re: ${contactData.subject || 'Ваш запрос'}" class="button">
+                  📧 Ответить на сообщение
                 </a>
               </p>
-              <p><small>Response recommended within 24 hours</small></p>
+              <p><small>Рекомендуется ответить в течение 24 часов</small></p>
             </div>
           </div>
 
           <div class="footer">
-            <p>This email was automatically generated by RentalSite Contact System</p>
-            <p>💼 <strong>RentalSite Business</strong> | Professional Website Rentals</p>
-            <p>📍 ${new Date().getFullYear()} RentalSite. All rights reserved.</p>
+            <p>Это письмо было автоматически сгенерировано системой RentalSite</p>
+            <p>💼 <strong>RentalSite Business</strong> | Профессиональная аренда сайтов</p>
+            <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
           </div>
         </div>
       </body>
@@ -168,7 +168,7 @@ const emailTemplates = {
     }),
 
     highPriorityAlert: (contactData, siteData) => ({
-        subject: `🚨 URGENT: Rental Inquiry - ${siteData.title}`, // Убрали "HIGH PRIORITY"
+        subject: `🚨 СРОЧНО: Запрос на аренду - ${siteData.title}`,
         html: `
       <!DOCTYPE html>
       <html>
@@ -187,31 +187,31 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>🚨 URGENT: Rental Inquiry</h1> <!-- Убрали "High Priority" -->
-            <p>Immediate attention required for this rental request</p>
+            <h1>🚨 СРОЧНЫЙ запрос на аренду</h1>
+            <p>Требуется немедленное внимание к этому запросу на аренду</p>
           </div>
           
           <div class="content">
             <div class="info-card">
-              <div class="urgent-badge">⚠️ URGENT</div> <!-- Изменили текст бейджа -->
-              <h3>📋 Urgent Rental Request</h3>
-              <p><strong>Website:</strong> ${siteData.title} ($${siteData.price}/month)</p>
-              <p><strong>Client:</strong> ${contactData.name} - ${contactData.email}</p>
-              <p><strong>Phone:</strong> ${contactData.phone || 'Not provided'}</p>
-              <p><strong>Time:</strong> ${new Date().toLocaleString()}</p>
+              <div class="urgent-badge">⚠️ СРОЧНО</div>
+              <h3>📋 Срочный запрос на аренду</h3>
+              <p><strong>Сайт:</strong> ${siteData.title} ($${siteData.price}/месяц)</p>
+              <p><strong>Клиент:</strong> ${contactData.name} - ${contactData.email}</p>
+              <p><strong>Телефон:</strong> ${contactData.phone || 'Не указан'}</p>
+              <p><strong>Время:</strong> ${new Date().toLocaleString('ru-RU')}</p>
             </div>
 
             <div class="info-card">
-              <h3>🎯 Immediate Actions Required</h3>
+              <h3>🎯 Необходимые немедленные действия</h3>
               <p>
-                <a href="mailto:${contactData.email}" class="button">📧 Email Client</a>
-                ${contactData.phone ? `<a href="tel:${contactData.phone}" class="button" style="background: #2ed573;">📞 Call Now</a>` : ''}
+                <a href="mailto:${contactData.email}" class="button">📧 Написать клиенту</a>
+                ${contactData.phone ? `<a href="tel:${contactData.phone}" class="button" style="background: #2ed573;">📞 Позвонить сейчас</a>` : ''}
               </p>
-              <p><strong>Response Time:</strong> Recommended within 1-2 hours</p>
+              <p><strong>Время ответа:</strong> Рекомендуется в течение 1-2 часов</p>
             </div>
 
             <div class="info-card">
-              <h3>💬 Client Message</h3>
+              <h3>💬 Сообщение клиента</h3>
               <p style="background: #fff1f1; padding: 15px; border-radius: 5px; border-left: 3px solid #ff4757;">
                 ${contactData.message}
               </p>
@@ -222,8 +222,9 @@ const emailTemplates = {
       </html>
     `
     }),
+
     rentalExpiringSoon: (contactData, siteData) => ({
-        subject: `⏰ Rental Expiring Soon: ${siteData.title}`,
+        subject: `⏰ Аренда скоро закончится: ${siteData.title}`,
         html: `
       <!DOCTYPE html>
       <html>
@@ -241,43 +242,43 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>⏰ Rental Expiring Soon</h1>
-            <p>Your website rental period is about to expire</p>
+            <h1>⏰ Аренда скоро закончится</h1>
+            <p>Период аренды вашего сайта скоро истекает</p>
           </div>
           
           <div class="content">
             <div class="info-card">
-              <h3>📋 Rental Details</h3>
-              <p><strong>Website:</strong> ${siteData.title}</p>
-              <p><strong>Monthly Price:</strong> $${siteData.price}</p>
-              <p><strong>Expiration Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
+              <h3>📋 Детали аренды</h3>
+              <p><strong>Сайт:</strong> ${siteData.title}</p>
+              <p><strong>Месячная цена:</strong> $${siteData.price}</p>
+              <p><strong>Дата окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         })}</p>
-              <p><strong>Days Remaining:</strong> ${contactData.daysRemaining} days</p>
+              <p><strong>Осталось дней:</strong> ${contactData.daysRemaining}</p>
             </div>
 
             <div class="info-card">
-              <h3>💳 Renew Your Rental</h3>
-              <p>To continue using ${siteData.title}, please make a payment to extend your rental period.</p>
-              <p><strong>Next Payment Amount:</strong> $${siteData.price}</p>
-              <a href="mailto:support@rentalsite.com?subject=Renewal: ${siteData.title}" class="button">
-                📧 Contact Support to Renew
+              <h3>💳 Продлите вашу аренду</h3>
+              <p>Чтобы продолжить использование ${siteData.title}, пожалуйста, произведите оплату для продления периода аренды.</p>
+              <p><strong>Сумма следующего платежа:</strong> $${siteData.price}</p>
+              <a href="mailto:support@rentalsite.com?subject=Продление: ${siteData.title}" class="button">
+                📧 Связаться с поддержкой для продления
               </a>
             </div>
 
             <div class="info-card">
-              <h3>📞 Need Assistance?</h3>
-              <p>If you have any questions about your rental or payment, please contact our support team.</p>
-              <p><strong>Email:</strong> rentalsite@gmail.com</p>
-              <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+              <h3>📞 Нужна помощь?</h3>
+              <p>Если у вас есть вопросы по аренде или оплате, пожалуйста, свяжитесь с нашей службой поддержки.</p>
+              <p><strong>Email:</strong> support@rentalsite.com</p>
+              <p><strong>Телефон:</strong> +7 (XXX) XXX-XXXX</p>
             </div>
           </div>
 
           <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 12px;">
-            <p>This is an automated reminder from RentalSite</p>
+            <p>Это автоматическое напоминание от RentalSite</p>
           </div>
         </div>
       </body>
@@ -287,7 +288,7 @@ const emailTemplates = {
 
     // Обновленный шаблон adminRentalExpiring
     adminRentalExpiring: (contactData, siteData) => ({
-        subject: `⚠️ Rental Expiring Soon: ${contactData.name} - ${siteData.title}`,
+        subject: `⚠️ Аренда скоро закончится: ${contactData.name} - ${siteData.title}`,
         html: `
       <!DOCTYPE html>
       <html>
@@ -438,123 +439,122 @@ const emailTemplates = {
       <body>
         <div class="container">
           <div class="header">
-            <h1>⚠️ Rental Expiring Soon</h1>
-            <p>Client rental period is about to expire - Immediate action required</p>
+            <h1>⚠️ Аренда скоро закончится</h1>
+            <p>Период аренды клиента скоро истекает - требуется немедленное действие</p>
           </div>
           
           <div class="content">
             <div class="alert-box">
               <div class="alert-title">
-                ⏰ Urgent Notification
+                ⏰ Срочное уведомление
                 <span class="days-badge">
-                  ${contactData.daysRemaining === 1 ? '1 DAY LEFT' :
-            contactData.daysRemaining === 0 ? 'EXPIRES TODAY' :
-                `${contactData.daysRemaining} DAYS LEFT`}
+                  ${contactData.daysRemaining === 1 ? '1 ДЕНЬ ОСТАЛСЯ' :
+                 contactData.daysRemaining === 0 ? 'ЗАКОНЧИТСЯ СЕГОДНЯ' :
+                `${contactData.daysRemaining} ДНЯ ОСТАЛОСЬ`}
                 </span>
               </div>
               <p style="color: #856404; margin: 0;">
-                The rental period for <strong>${siteData.title}</strong> will expire soon. 
-                Please contact the client to arrange payment extension.
+                Период аренды для <strong>${siteData.title}</strong> скоро закончится. 
+                Пожалуйста, свяжитесь с клиентом для продления оплаты.
               </p>
             </div>
 
             <div class="info-card">
-              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📋 Rental Summary</h3>
+              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📋 Сводка по аренде</h3>
               
               <div class="info-grid">
                 <div class="info-item">
-                  <span class="info-label">Client Name:</span>
+                  <span class="info-label">Имя клиента:</span>
                   <div class="info-value">${contactData.name}</div>
                 </div>
                 
                 <div class="info-item">
-                  <span class="info-label">Website:</span>
+                  <span class="info-label">Сайт:</span>
                   <div class="info-value">${siteData.title}</div>
                 </div>
                 
                 <div class="info-item">
-                  <span class="info-label">Monthly Price:</span>
-                  <div class="info-value">$${siteData.price}/month</div>
+                  <span class="info-label">Месячная цена:</span>
+                  <div class="info-value">$${siteData.price}/месяц</div>
                 </div>
                 
                 <div class="info-item">
-                  <span class="info-label">Client Email:</span>
+                  <span class="info-label">Email клиента:</span>
                   <div class="info-value">${contactData.email}</div>
                 </div>
               </div>
               
               ${contactData.phone ? `
               <div class="info-item">
-                <span class="info-label">Client Phone:</span>
+                <span class="info-label">Телефон клиента:</span>
                 <div class="info-value">${contactData.phone}</div>
               </div>
               ` : ''}
             </div>
 
             <div class="info-card">
-              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📅 Expiration Details</h3>
+              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">📅 Детали окончания</h3>
               
               <div class="info-item">
-                <span class="info-label">Expiration Date:</span>
+                <span class="info-label">Дата окончания:</span>
                 <div class="info-value">
-                  ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        })}
+                  ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}
                 </div>
                 <div class="date-detail">
-                  (${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric'
-        })})
+                  (${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    })})
                 </div>
               </div>
               
               <div class="info-item">
-                <span class="info-label">Time Remaining:</span>
+                <span class="info-label">Осталось времени:</span>
                 <div class="info-value">
-                  ${contactData.daysRemaining} day${contactData.daysRemaining !== 1 ? 's' : ''}
+                  ${contactData.daysRemaining} ${contactData.daysRemaining === 1 ? 'день' : contactData.daysRemaining < 5 ? 'дня' : 'дней'}
                   ${contactData.daysRemaining === 0 ?
-            ' - <span class="highlight">Expires today!</span>' :
+            ' - <span class="highlight">Истекает сегодня!</span>' :
             contactData.daysRemaining <= 3 ?
-                ' - <span class="highlight">Urgent attention required</span>' :
+                ' - <span class="highlight">Требуется срочное внимание</span>' :
                 ''}
                 </div>
               </div>
               
               <div class="info-item">
-                <span class="info-label">Exact Expiration Time:</span>
+                <span class="info-label">Точное время окончания:</span>
                 <div class="info-value">
-                  ${new Date(contactData.rentalEndDate).toLocaleTimeString('en-US', {
+                  ${new Date(contactData.rentalEndDate).toLocaleTimeString('ru-RU', {
             hour: '2-digit',
-            minute: '2-digit',
-            timeZoneName: 'short'
+            minute: '2-digit'
         })}
                 </div>
               </div>
             </div>
 
             <div class="info-card">
-              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">⚡ Quick Actions</h3>
+              <h3 style="color: #007bff; margin-top: 0; margin-bottom: 20px; font-size: 20px;">⚡ Быстрые действия</h3>
               
               <div class="button-container">
                 <a href="${process.env.ADMIN_URL || 'http://localhost:3000/admin'}/contacts/${contactData._id}" 
                    class="button">
-                   👁️ View in Admin Panel
+                   👁️ Посмотреть в админ-панели
                 </a>
                 
-                <a href="mailto:${contactData.email}?subject=Renewal: ${siteData.title}&body=Dear ${contactData.name},%0D%0A%0D%0AYour rental for ${siteData.title} is expiring on ${new Date(contactData.rentalEndDate).toLocaleDateString()}.%0D%0A%0D%0APlease let us know if you'd like to extend your rental period.%0D%0A%0D%0ABest regards,%0D%0ARentalSite Team" 
+                <a href="mailto:${contactData.email}?subject=Продление: ${siteData.title}&body=Уважаемый(ая) ${contactData.name},%0D%0A%0D%0AВаша аренда ${siteData.title} истекает ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU')}.%0D%0A%0D%0AПожалуйста, сообщите нам, хотите ли вы продлить период аренды.%0D%0A%0D%0АС уважением,%0D%0AКоманда RentalSite" 
                    class="button button-contact">
-                   📧 Email Client
+                   📧 Написать клиенту
                 </a>
               </div>
               
               ${contactData.phone ? `
               <div style="text-align: center; margin-top: 15px;">
-                <span style="color: #6c757d; font-size: 14px;">📞 Quick Call:</span>
+                <span style="color: #6c757d; font-size: 14px;">📞 Быстрый звонок:</span>
                 <a href="tel:${contactData.phone}" style="color: #28a745; font-weight: 600; margin-left: 10px;">
                   ${contactData.phone}
                 </a>
@@ -563,29 +563,28 @@ const emailTemplates = {
               
               <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #6c757d;">
                 <p style="margin: 5px 0;">
-                  <strong>Recommended action:</strong> Contact client within 24 hours
+                  <strong>Рекомендуемое действие:</strong> Связаться с клиентом в течение 24 часов
                 </p>
                 <p style="margin: 5px 0;">
-                  <strong>Reminder:</strong> Client has already received expiration notification
+                  <strong>Напоминание:</strong> Клиент уже получил уведомление об окончании
                 </p>
               </div>
             </div>
           </div>
 
           <div class="footer">
-            <p>This is an automated notification from RentalSite Management System</p>
+            <p>Это автоматическое уведомление от системы управления RentalSite</p>
             <p>
-              <strong>Notification ID:</strong> EXP-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${Math.random().toString(36).substr(2, 6).toUpperCase()}
+              <strong>ID уведомления:</strong> EXP-${new Date().getFullYear()}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}-${Math.random().toString(36).substr(2, 6).toUpperCase()}
             </p>
-            <p>📍 ${new Date().getFullYear()} RentalSite. All rights reserved.</p>
-            <p>⏰ Generated on: ${new Date().toLocaleString('en-US', {
+            <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
+            <p>⏰ Создано: ${new Date().toLocaleString('ru-RU', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric',
             hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
+            minute: '2-digit'
         })}</p>
           </div>
         </div>
@@ -593,8 +592,9 @@ const emailTemplates = {
       </html>
     `
     }),
+
     rentalExpired: (contactData, siteData) => ({
-        subject: `🔴 Rental Expired: ${siteData.title}`,
+        subject: `🔴 Аренда закончилась: ${siteData.title}`,
         html: `
         <!DOCTYPE html>
         <html>
@@ -613,61 +613,61 @@ const emailTemplates = {
         <body>
             <div class="container">
                 <div class="header">
-                    <h1>🔴 Rental Period Ended</h1>
-                    <p>Your website rental has expired</p>
+                    <h1>🔴 Период аренды закончился</h1>
+                    <p>Аренда вашего сайта истекла</p>
                 </div>
                 
                 <div class="content">
                     <div class="alert-box">
-                        <h3 style="color: #856404; margin-top: 0;">⚠️ Important Notice</h3>
+                        <h3 style="color: #856404; margin-top: 0;">⚠️ Важное уведомление</h3>
                         <p style="color: #856404;">
-                            Your rental period for <strong>${siteData.title}</strong> has ended on 
-                            ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-                    weekday: 'long',
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                })}.
+                            Ваш период аренды для <strong>${siteData.title}</strong> закончился 
+                            ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}.
                         </p>
                     </div>
         
                     <div class="info-card">
-                        <h3>📋 Rental Details</h3>
-                        <p><strong>Website:</strong> ${siteData.title}</p>
-                        <p><strong>Monthly Price:</strong> $${siteData.price}</p>
-                        <p><strong>Expiration Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString()}</p>
+                        <h3>📋 Детали аренды</h3>
+                        <p><strong>Сайт:</strong> ${siteData.title}</p>
+                        <p><strong>Месячная цена:</strong> $${siteData.price}</p>
+                        <p><strong>Дата окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU')}</p>
                     </div>
         
                     <div class="info-card">
-                        <h3>💳 Renew Your Rental</h3>
-                        <p>To continue using ${siteData.title}, please make a payment to extend your rental period.</p>
-                        <p><strong>Next Payment Amount:</strong> $${siteData.price}</p>
+                        <h3>💳 Продлите вашу аренду</h3>
+                        <p>Чтобы продолжить использование ${siteData.title}, пожалуйста, произведите оплату для продления периода аренды.</p>
+                        <p><strong>Сумма следующего платежа:</strong> $${siteData.price}</p>
                         <div style="text-align: center; margin: 20px 0;">
-                            <a href="mailto:${process.env.SMTP_FROM}?subject=Renewal Request: ${siteData.title}&body=Hello,%0D%0A%0D%0AI would like to renew my rental for ${siteData.title}.%0D%0A%0D%0AName: ${contactData.name}%0D%0AEmail: ${contactData.email}%0D%0A%0D%0APlease let me know the payment details." 
+                            <a href="mailto:${process.env.SMTP_FROM}?subject=Запрос на продление: ${siteData.title}&body=Здравствуйте,%0D%0A%0D%0AЯ хотел(а) бы продлить аренду для ${siteData.title}.%0D%0A%0D%0AИмя: ${contactData.name}%0D%0AEmail: ${contactData.email}%0D%0A%0D%0АПожалуйста, сообщите детали оплаты." 
                                class="button">
-                               📧 Request Renewal
+                               📧 Запросить продление
                             </a>
                         </div>
                     </div>
         
                     <div class="info-card">
-                        <h3>⚠️ Important Information</h3>
-                        <p>Please note that access to the website will be suspended if payment is not received within 7 days.</p>
-                        <p>For immediate assistance, please contact our support team.</p>
+                        <h3>⚠️ Важная информация</h3>
+                        <p>Пожалуйста, обратите внимание, что доступ к сайту будет приостановлен, если оплата не будет получена в течение 7 дней.</p>
+                        <p>Для немедленной помощи свяжитесь с нашей службой поддержки.</p>
                     </div>
                 </div>
         
                 <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #666; font-size: 12px;">
-                    <p>This is an automated notification from RentalSite</p>
+                    <p>Это автоматическое уведомление от RentalSite</p>
                 </div>
             </div>
         </body>
         </html>
-`
+        `
     }),
 
     adminRentalExpired: (contactData, siteData) => ({
-        subject: `🚨 RENTAL EXPIRED: ${contactData.name} - ${siteData.title}`,
+        subject: `🚨 АРЕНДА ЗАКОНЧИЛАСЬ: ${contactData.name} - ${siteData.title}`,
         html: `
     <!DOCTYPE html>
     <html>
@@ -689,77 +689,76 @@ const emailTemplates = {
     <body>
         <div class="container">
             <div class="header">
-                <h1>🚨 RENTAL EXPIRED</h1>
-                <p>Client rental has ended - Immediate action required</p>
+                <h1>🚨 АРЕНДА ЗАКОНЧИЛАСЬ</h1>
+                <p>Аренда клиента завершена - требуется немедленное действие</p>
             </div>
             
             <div class="content">
                 <div class="alert-box">
-                    <h3 style="color: #721c24; margin-top: 0;">⚠️ URGENT: Rental Expired</h3>
+                    <h3 style="color: #721c24; margin-top: 0;">⚠️ СРОЧНО: Аренда закончилась</h3>
                     <p style="color: #721c24;">
-                        The rental for <strong>${siteData.title}</strong> has expired. 
-                        Client status has been changed to <strong>payment_due</strong>.
+                        Аренда для <strong>${siteData.title}</strong> закончилась. 
+                        Статус клиента изменен на <strong>ожидает оплаты</strong>.
                     </p>
                 </div>
     
                 <div class="info-card">
-                    <h3 style="color: #343a40;">📋 Client Information</h3>
+                    <h3 style="color: #343a40;">📋 Информация о клиенте</h3>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                         <div>
-                            <strong>Client:</strong> ${contactData.name}<br>
+                            <strong>Клиент:</strong> ${contactData.name}<br>
                             <strong>Email:</strong> ${contactData.email}<br>
-                            ${contactData.phone ? `<strong>Phone:</strong> ${contactData.phone}<br>` : ''}
+                            ${contactData.phone ? `<strong>Телефон:</strong> ${contactData.phone}<br>` : ''}
                         </div>
                         <div>
-                            <strong>Website:</strong> ${siteData.title}<br>
-                            <strong>Monthly Price:</strong> $${siteData.price}<br>
-                            <strong>Total Paid:</strong> $${contactData.totalPaid || 0}
+                            <strong>Сайт:</strong> ${siteData.title}<br>
+                            <strong>Месячная цена:</strong> $${siteData.price}<br>
+                            <strong>Всего оплачено:</strong> $${contactData.totalPaid || 0}
                         </div>
                     </div>
                 </div>
     
                 <div class="info-card">
-                    <h3 style="color: #343a40;">📅 Expiration Details</h3>
-                    <p><strong>Expiration Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            })}</p>
-                    <p><strong>Expiration Time:</strong> ${new Date(contactData.rentalEndDate).toLocaleTimeString()}</p>
-                    <p><strong>Days Overdue:</strong> <span style="color: #dc3545; font-weight: bold;">
-                        ${Math.floor((new Date() - new Date(contactData.rentalEndDate)) / (1000 * 60 * 60 * 24))} days
+                    <h3 style="color: #343a40;">📅 Детали окончания</h3>
+                    <p><strong>Дата окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    })}</p>
+                    <p><strong>Время окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleTimeString('ru-RU')}</p>
+                    <p><strong>Дней просрочки:</strong> <span style="color: #dc3545; font-weight: bold;">
+                        ${Math.floor((new Date() - new Date(contactData.rentalEndDate)) / (1000 * 60 * 60 * 24))}
                     </span></p>
                 </div>
     
                 <div class="info-card">
-                    <h3 style="color: #343a40;">⚡ Required Actions</h3>
+                    <h3 style="color: #343a40;">⚡ Требуемые действия</h3>
                     <div style="text-align: center; margin: 20px 0;">
                         <a href="${process.env.ADMIN_URL || 'http://localhost:3000/admin'}/contacts/${contactData._id}" 
                            class="button">
-                           👁️ View in Admin
+                           👁️ Посмотреть в админке
                         </a>
                         
-                        <a href="mailto:${contactData.email}?subject=URGENT: Rental Expired - ${siteData.title}&body=Dear ${contactData.name},%0D%0A%0D%0AYour rental for ${siteData.title} has expired.%0D%0A%0D%0APlease contact us immediately to renew and avoid service interruption.%0D%0A%0D%0ABest regards,%0D%0ARentalSite Team" 
+                        <a href="mailto:${contactData.email}?subject=СРОЧНО: Аренда закончилась - ${siteData.title}&body=Уважаемый(ая) ${contactData.name},%0D%0A%0D%0AВаша аренда ${siteData.title} закончилась.%0D%0A%0D%0AПожалуйста, свяжитесь с нами немедленно для продления и избежания прерывания службы.%0D%0A%0D%0АС уважением,%0D%0AКоманда RentalSite" 
                            class="button button-renew">
-                           📧 Contact Client
+                           📧 Связаться с клиентом
                         </a>
                     </div>
                 </div>
             </div>
     
             <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #6c757d; font-size: 14px;">
-                <p>This is an automated notification from RentalSite Management System</p>
+                <p>Это автоматическое уведомление от системы управления RentalSite</p>
             </div>
         </div>
     </body>
     </html>
-`
+    `
     }),
-    // В emailService.js, добавьте после adminRentalExpired шаблона:
 
     paymentReceived: (contactData, siteData) => ({
-        subject: `✅ Payment Received - ${siteData.title}`,
+        subject: `✅ Платеж получен - ${siteData.title}`,
         html: `
             <!DOCTYPE html>
             <html>
@@ -778,8 +777,8 @@ const emailTemplates = {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>✅ Payment Received</h1>
-                        <p>Thank you for your payment</p>
+                        <h1>✅ Платеж получен</h1>
+                        <p>Спасибо за ваш платеж</p>
                     </div>
                     
                     <div class="content">
@@ -788,57 +787,56 @@ const emailTemplates = {
                         </div>
                         
                         <div class="info-card">
-                            <h3>📋 Payment Details</h3>
-                            <p><strong>Amount:</strong> $${contactData.amount}</p>
-                            <p><strong>For Website:</strong> ${siteData.title}</p>
-                            <p><strong>Months Extended:</strong> ${contactData.months || 1}</p>
-                            <p><strong>Payment Date:</strong> ${new Date().toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    })}</p>
+                            <h3>📋 Детали платежа</h3>
+                            <p><strong>Сумма:</strong> $${contactData.amount}</p>
+                            <p><strong>За сайт:</strong> ${siteData.title}</p>
+                            <p><strong>Месяцев продлено:</strong> ${contactData.months || 1}</p>
+                            <p><strong>Дата платежа:</strong> ${new Date().toLocaleDateString('ru-RU', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}</p>
                         </div>
             
                         <div class="info-card">
-                            <h3>📅 New Rental Period</h3>
-                            <p>Your rental has been extended until:</p>
+                            <h3>📅 Новый период аренды</h3>
+                            <p>Ваша аренда продлена до:</p>
                             <p style="font-size: 18px; font-weight: bold; color: #28a745;">
-                                ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    })}
+                                ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                                    weekday: 'long',
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })}
                             </p>
-                            <p><strong>Next Payment Due:</strong> Approximately ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-                        month: 'long',
-                        day: 'numeric',
-                        year: 'numeric'
-                    })}</p>
+                            <p><strong>Следующий платеж:</strong> Приблизительно ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                                    month: 'long',
+                                    day: 'numeric',
+                                    year: 'numeric'
+                                })}</p>
                         </div>
             
                         <div class="info-card">
-                            <h3>📞 Support Information</h3>
-                            <p>If you have any questions about your rental or payment, please contact our support team.</p>
+                            <h3>📞 Информация о поддержке</h3>
+                            <p>Если у вас есть вопросы по аренде или оплате, пожалуйста, свяжитесь с нашей службой поддержки.</p>
                             <p><strong>Email:</strong> support@rentalsite.com</p>
-                            <p><strong>Phone:</strong> +1 (555) 123-4567</p>
+                            <p><strong>Телефон:</strong> +7 (XXX) XXX-XXXX</p>
                         </div>
                     </div>
             
                     <div class="footer">
-                        <p>This is an automated payment confirmation from RentalSite</p>
-                        <p>📍 ${new Date().getFullYear()} RentalSite. All rights reserved.</p>
+                        <p>Это автоматическое подтверждение платежа от RentalSite</p>
+                        <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
                     </div>
                 </div>
             </body>
             </html>
             `
-                }),
+    }),
 
-            // Также добавьте шаблон для уведомления админа о платеже:
     adminPaymentReceived: (contactData, siteData) => ({
-        subject: `💰 Payment Received from ${contactData.name} - ${siteData.title}`,
+        subject: `💰 Платеж получен от ${contactData.name} - ${siteData.title}`,
         html: `
             <!DOCTYPE html>
             <html>
@@ -857,52 +855,52 @@ const emailTemplates = {
             <body>
                 <div class="container">
                     <div class="header">
-                        <h1>💰 Payment Received</h1>
-                        <p>Client has made a payment for website rental</p>
+                        <h1>💰 Платеж получен</h1>
+                        <p>Клиент произвел оплату за аренду сайта</p>
                     </div>
                     
                     <div class="content">
                         <div class="info-card">
-                            <h3 style="color: #28a745; margin-top: 0;">📋 Payment Summary</h3>
+                            <h3 style="color: #28a745; margin-top: 0;">📋 Сводка по платежу</h3>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px;">
                                 <div>
-                                    <strong>Client:</strong> ${contactData.name}<br>
+                                    <strong>Клиент:</strong> ${contactData.name}<br>
                                     <strong>Email:</strong> ${contactData.email}<br>
-                                    ${contactData.phone ? `<strong>Phone:</strong> ${contactData.phone}<br>` : ''}
+                                    ${contactData.phone ? `<strong>Телефон:</strong> ${contactData.phone}<br>` : ''}
                                 </div>
                                 <div>
-                                    <strong>Website:</strong> ${siteData.title}<br>
-                                    <strong>Amount:</strong> $${contactData.amount}<br>
-                                    <strong>Months:</strong> ${contactData.months || 1}
+                                    <strong>Сайт:</strong> ${siteData.title}<br>
+                                    <strong>Сумма:</strong> $${contactData.amount}<br>
+                                    <strong>Месяцев:</strong> ${contactData.months || 1}
                                 </div>
                             </div>
                         </div>
             
                         <div class="info-card">
-                            <h3 style="color: #28a745;">📅 Rental Extension</h3>
-                            <p><strong>Old End Date:</strong> Before payment</p>
-                            <p><strong>New End Date:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    })}</p>
-                            <p><strong>Extended By:</strong> ${contactData.months || 1} month${contactData.months !== 1 ? 's' : ''}</p>
+                            <h3 style="color: #28a745;">📅 Продление аренды</h3>
+                            <p><strong>Старая дата окончания:</strong> До оплаты</p>
+                            <p><strong>Новая дата окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
+                                weekday: 'long',
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            })}</p>
+                            <p><strong>Продлено на:</strong> ${contactData.months || 1} ${contactData.months === 1 ? 'месяц' : contactData.months < 5 ? 'месяца' : 'месяцев'}</p>
                         </div>
             
                         <div class="info-card">
-                            <h3 style="color: #28a745;">⚡ Quick Actions</h3>
+                            <h3 style="color: #28a745;">⚡ Быстрые действия</h3>
                             <div style="text-align: center; margin: 20px 0;">
                                 <a href="${process.env.ADMIN_URL || 'http://localhost:3000/admin'}/contacts/${contactData._id}" 
                                    class="button">
-                                   👁️ View in Admin Panel
+                                   👁️ Посмотреть в админ-панели
                                 </a>
                             </div>
                         </div>
                     </div>
             
                     <div class="footer" style="text-align: center; margin-top: 30px; padding: 20px; color: #6c757d; font-size: 14px;">
-                        <p>This is an automated payment notification from RentalSite Management System</p>
+                        <p>Это автоматическое уведомление о платеже от системы управления RentalSite</p>
                     </div>
                 </div>
             </body>
@@ -912,8 +910,6 @@ const emailTemplates = {
 };
 
 // Main email sending function
-// Обновите функцию sendEmailNotification в emailService.js:
-
 export const sendEmailNotification = async (type, contactData, siteData = null, additionalData = {}) => {
     try {
         // Проверяем, существует ли такой шаблон
@@ -969,13 +965,13 @@ export const sendEmailNotification = async (type, contactData, siteData = null, 
             html: template.html
         };
 
-        console.log(`📤 Sending ${type} email to ${toEmail}...`);
+        console.log(`📤 Отправка ${type} письма на ${toEmail}...`);
         const result = await transporter.sendMail(mailOptions);
-        console.log(`✅ ${type} email sent successfully:`, result.messageId);
+        console.log(`✅ ${type} письмо успешно отправлено:`, result.messageId);
         return { success: true, messageId: result.messageId };
 
     } catch (error) {
-        console.error(`❌ Error sending ${type} email:`, error);
+        console.error(`❌ Ошибка отправки ${type} письма:`, error);
         return { success: false, error: error.message };
     }
 };

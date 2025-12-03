@@ -16,7 +16,7 @@ const AdminLogin = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Check if user is already logged in
+    // Проверяем, не вошел ли пользователь уже
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
         if (token) {
@@ -41,18 +41,18 @@ const AdminLogin = () => {
             const response = await authAPI.login(formData);
 
             if (response.data.success) {
-                // Save token and user data
+                // Сохраняем токен и данные пользователя
                 localStorage.setItem('adminToken', response.data.token);
                 localStorage.setItem('adminUser', JSON.stringify(response.data.user));
 
-                toast.success('Welcome back!');
+                toast.success('С возвращением!');
 
-                // Redirect to intended page or admin dashboard
+                // Перенаправляем на нужную страницу или панель управления
                 const from = location.state?.from?.pathname || '/admin';
                 navigate(from, { replace: true });
             }
         } catch (error) {
-            const message = error.response?.data?.message || 'Login failed';
+            const message = error.response?.data?.message || 'Ошибка входа';
             setError(message);
             toast.error(message);
         } finally {
@@ -64,15 +64,15 @@ const AdminLogin = () => {
         <div className="admin-login-page">
             <Container>
                 <Row className="justify-content-center align-items-center min-vh-100">
-                    <Col lg={4} md={6} sm={8}>
+                    <Col lg={6} md={6} sm={8}>
                         <Card className="login-card">
                             <Card.Body className="p-4">
                                 <div className="text-center mb-4">
                                     <div className="login-logo">
                                         <span className="brand-accent">Rental</span>Site
                                     </div>
-                                    <h3 className="login-title">Admin Panel</h3>
-                                    <p className="login-subtitle">Sign in to manage your websites</p>
+                                    <h3 className="login-title">Панель авторизации</h3>
+                                    {/*<p className="login-subtitle">Войдите для управления вашими сайтами</p>*/}
                                 </div>
 
                                 {error && (
@@ -83,27 +83,27 @@ const AdminLogin = () => {
 
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Email Address</Form.Label>
+                                        <Form.Label>Email адрес</Form.Label>
                                         <Form.Control
                                             type="email"
                                             name="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             required
-                                            placeholder="Enter admin email"
+                                            placeholder="Введите email администратора"
                                             disabled={loading}
                                         />
                                     </Form.Group>
 
                                     <Form.Group className="mb-4">
-                                        <Form.Label>Password</Form.Label>
+                                        <Form.Label>Пароль</Form.Label>
                                         <Form.Control
                                             type="password"
                                             name="password"
                                             value={formData.password}
                                             onChange={handleInputChange}
                                             required
-                                            placeholder="Enter admin password"
+                                            placeholder="Введите пароль администратора"
                                             disabled={loading}
                                         />
                                     </Form.Group>
@@ -124,19 +124,19 @@ const AdminLogin = () => {
                                                     aria-hidden="true"
                                                     className="me-2"
                                                 />
-                                                Signing in...
+                                                Вход...
                                             </>
                                         ) : (
-                                            'Sign In'
+                                            'Войти'
                                         )}
                                     </Button>
                                 </Form>
 
-                                <div className="text-center mt-3">
-                                    <small className="text-muted">
-                                        Demo credentials: admin@rentalsite.com / admin123
-                                    </small>
-                                </div>
+                                {/*<div className="text-center mt-3">*/}
+                                {/*    <small className="text-muted">*/}
+                                {/*        Демо-данные: admin@rentalsite.com*/}
+                                {/*    </small>*/}
+                                {/*</div>*/}
                             </Card.Body>
                         </Card>
                     </Col>

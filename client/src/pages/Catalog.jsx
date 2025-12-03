@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { Container, Row, Col, Form, Button, Navbar, Nav } from 'react-bootstrap';
@@ -22,6 +24,18 @@ const Catalog = () => {
         total: 0
     });
     const { loading, startLoading, stopLoading } = useLoading();
+    const location = useLocation();
+
+
+    // Функция для прокрутки наверх
+    // Прокрутка вверх при монтировании компонента и изменении фильтров
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }, [location.search]);
 
     useEffect(() => {
         fetchSites();
@@ -63,7 +77,7 @@ const Catalog = () => {
                 total: response.data.total
             }));
         } catch (error) {
-            console.error('Error fetching sites:', error);
+            console.error('Ошибка при загрузке сайтов:', error);
         } finally {
             stopLoading();
         }
@@ -72,16 +86,16 @@ const Catalog = () => {
     const fetchCategories = async () => {
         try {
             const categoriesList = [
-                'All',
-                'Landing Page',
-                'Corporate Website',
-                'E-commerce',
-                'Portfolio',
-                'Web Application'
+                'Все',
+                'Лендинг',
+                'Корпоративный сайт',
+                'Интернет-магазин',
+                'Портфолио',
+                'Веб-приложение'
             ];
             setCategories(categoriesList);
         } catch (error) {
-            console.error('Error fetching categories:', error);
+            console.error('Ошибка при загрузке категорий:', error);
         }
     };
 
@@ -137,9 +151,9 @@ const Catalog = () => {
                 <Container>
                     <Row>
                         <Col>
-                            <h1 className="page-title">Website Catalog</h1>
+                            <h1 className="page-title">Каталог сайтов</h1>
                             <p className="page-subtitle">
-                                Discover our collection of premium websites available for instant rental
+                                Откройте для себя нашу коллекцию премиальных сайтов, доступных для мгновенной аренды
                             </p>
                         </Col>
                     </Row>
@@ -149,11 +163,11 @@ const Catalog = () => {
             {/* Фильтры в навбаре */}
             <Navbar expand="lg" className="catalog-navbar-filters">
                 <Container>
-                    {/* Поле поиска всегда видимое (рядом с гамбургером) */}
+                    {/* Поле поиска всегда видимое */}
                     <div className="catalog-navbar-filters__search--always-visible">
                         <Form.Control
                             type="text"
-                            placeholder="Search websites..."
+                            placeholder="Поиск сайтов..."
                             value={filters.search}
                             onChange={(e) => handleFilterChange('search', e.target.value)}
                             className="catalog-navbar-filters__search-input catalog-navbar-filters__search-input--always-visible"
@@ -168,7 +182,7 @@ const Catalog = () => {
                             <div className="catalog-navbar-filters__search--hidden-mobile">
                                 <Form.Control
                                     type="text"
-                                    placeholder="Search websites..."
+                                    placeholder="Поиск сайтов..."
                                     value={filters.search}
                                     onChange={(e) => handleFilterChange('search', e.target.value)}
                                     className="catalog-navbar-filters__search-input"
@@ -183,7 +197,7 @@ const Catalog = () => {
                                     className="catalog-navbar-filters__select"
                                 >
                                     {categories.map(category => (
-                                        <option key={category} value={category === 'All' ? 'all' : category}>
+                                        <option key={category} value={category === 'Все' ? 'all' : category}>
                                             {category}
                                         </option>
                                     ))}
@@ -197,10 +211,10 @@ const Catalog = () => {
                                     onChange={(e) => handleFilterChange('sort', e.target.value)}
                                     className="catalog-navbar-filters__select"
                                 >
-                                    <option value="newest">Newest First</option>
-                                    <option value="price-low">Price: Low to High</option>
-                                    <option value="price-high">Price: High to Low</option>
-                                    <option value="name">Name A-Z</option>
+                                    <option value="newest">Сначала новые</option>
+                                    <option value="price-low">Цена: по возрастанию</option>
+                                    <option value="price-high">Цена: по убыванию</option>
+                                    <option value="name">Название А-Я</option>
                                 </Form.Select>
                             </div>
 
@@ -211,7 +225,7 @@ const Catalog = () => {
                                     onClick={resetFilters}
                                     className="catalog-navbar-filters__reset-btn"
                                 >
-                                    Reset Filters
+                                    Сбросить фильтры
                                 </Button>
                             </div>
                         </Nav>
@@ -225,7 +239,7 @@ const Catalog = () => {
                     <Col>
                         <div className="catalog-results-header">
                             <p className="catalog-results-count">
-                                Showing {filteredSites.length} of {pagination.total} websites
+                                Показано {filteredSites.length} из {pagination.total} сайтов
                             </p>
                         </div>
 
@@ -254,12 +268,12 @@ const Catalog = () => {
                         ) : (
                             <div className="catalog-no-results">
                                 <div className="catalog-no-results-icon">🔍</div>
-                                <h3 className="catalog-no-results-title">No websites found</h3>
+                                <h3 className="catalog-no-results-title">Сайты не найдены</h3>
                                 <p className="catalog-no-results-description">
-                                    Try adjusting your search criteria or browse all categories
+                                    Попробуйте изменить критерии поиска или просмотрите все категории
                                 </p>
                                 <Button onClick={resetFilters} className="catalog-no-results-btn">
-                                    Show All Websites
+                                    Показать все сайты
                                 </Button>
                             </div>
                         )}

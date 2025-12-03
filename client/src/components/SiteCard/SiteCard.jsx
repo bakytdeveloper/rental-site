@@ -91,7 +91,7 @@ const SiteCard = ({ site, index }) => {
                                             e.stopPropagation();
                                             handlePrevImage();
                                         }}
-                                        aria-label="Previous image"
+                                        aria-label="Предыдущее изображение"
                                     >
                                         <ChevronLeft size={20} />
                                     </button>
@@ -102,7 +102,7 @@ const SiteCard = ({ site, index }) => {
                                             e.stopPropagation();
                                             handleNextImage();
                                         }}
-                                        aria-label="Next image"
+                                        aria-label="Следующее изображение"
                                     >
                                         <ChevronRight size={20} />
                                     </button>
@@ -116,7 +116,7 @@ const SiteCard = ({ site, index }) => {
                                                     e.stopPropagation();
                                                     setCurrentImageIndex(idx);
                                                 }}
-                                                aria-label={`Go to image ${idx + 1}`}
+                                                aria-label={`Перейти к изображению ${idx + 1}`}
                                             />
                                         ))}
                                     </div>
@@ -141,14 +141,14 @@ const SiteCard = ({ site, index }) => {
                                 className="site-card__btn-quick-view"
                                 size="sm"
                             >
-                                Quick View
+                                Быстрый просмотр
                             </Button>
                         </div>
                     </div>
 
                     {site.isFeatured && (
                         <div className="site-card__badge site-card__badge--featured">
-                            Featured
+                            Рекомендуемый
                         </div>
                     )}
                 </div>
@@ -157,7 +157,7 @@ const SiteCard = ({ site, index }) => {
                     <div className="site-card__header">
                         <h3 className="site-card__title">{site.title}</h3>
                         <div className="site-card__price">
-                            ${site.price}<span>/month</span>
+                            ${site.price}<span>/месяц</span>
                         </div>
                     </div>
 
@@ -188,7 +188,7 @@ const SiteCard = ({ site, index }) => {
                             className="site-card__btn-rent-now"
                             size="sm"
                         >
-                            Rent Now
+                            Арендовать
                         </Button>
                     </div>
                 </div>

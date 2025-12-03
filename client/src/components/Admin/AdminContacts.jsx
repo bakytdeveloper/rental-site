@@ -37,7 +37,7 @@ const AdminContacts = () => {
             const response = await contactAPI.getPayments(contactId);
             setPayments(response.data.payments);
         } catch (error) {
-            console.error('Error loading payments:', error);
+            console.error('Ошибка при загрузке платежей:', error);
         } finally {
             setLoadingPayments(false);
         }
@@ -53,13 +53,13 @@ const AdminContacts = () => {
     // Функция для добавления платежа
     const handleAddPayment = async () => {
         if (!paymentData.amount || paymentData.amount <= 0) {
-            toast.error('Please enter a valid amount');
+            toast.error('Пожалуйста, введите корректную сумму');
             return;
         }
 
         try {
             await contactAPI.addPayment(selectedContact._id, paymentData);
-            toast.success('Payment added successfully');
+            toast.success('Платеж успешно добавлен');
             setShowPaymentModal(false);
             setPaymentData({
                 amount: '',
@@ -76,13 +76,14 @@ const AdminContacts = () => {
                 loadPayments(selectedContact._id);
             }
         } catch (error) {
-            toast.error('Failed to add payment');
-            console.error('Payment error:', error);
+            toast.error('Не удалось добавить платеж');
+            console.error('Ошибка платежа:', error);
         }
     };
 
     useEffect(() => {
         fetchContacts();
+        // eslint-disable-next-line
     }, [pagination.page, filters]);
 
     const fetchContacts = async () => {
@@ -156,7 +157,7 @@ const AdminContacts = () => {
     };
 
     const deleteContact = async (contactId) => {
-        if (window.confirm('Are you sure you want to delete this contact?')) {
+        if (window.confirm('Вы уверены, что хотите удалить этот контакт?')) {
             try {
                 await contactAPI.delete(contactId);
                 toast.success('Контакт успешно удален');
@@ -172,6 +173,15 @@ const AdminContacts = () => {
     };
 
     const getStatusBadge = (status) => {
+        const statusTranslations = {
+            new: 'новый',
+            contacted: 'на связи',
+            completed: 'завершен',
+            spam: 'спам',
+            active_rental: 'активная аренда',
+            payment_due: 'ожидает оплаты'
+        };
+
         const variants = {
             new: 'danger',
             contacted: 'warning',
@@ -180,7 +190,8 @@ const AdminContacts = () => {
             active_rental: 'info',
             payment_due: 'warning'
         };
-        return <Badge bg={variants[status] || 'secondary'}>{status}</Badge>;
+
+        return <Badge bg={variants[status] || 'secondary'}>{statusTranslations[status] || status}</Badge>;
     };
 
     // Функция для расчета оставшихся дней
@@ -196,7 +207,7 @@ const AdminContacts = () => {
         return (
             <div className="admin-contacts__loading">
                 <Spinner animation="border" variant="primary" />
-                <p>Loading contacts...</p>
+                <p>Загрузка контактов...</p>
             </div>
         );
     }
@@ -204,42 +215,42 @@ const AdminContacts = () => {
     return (
         <div className="admin-contacts">
             <div className="admin-contacts__header">
-                <h1 className="admin-contacts__title">Contact Management</h1>
+                <h1 className="admin-contacts__title">Управление контактами</h1>
                 <div className="admin-contacts__stats">
                     <Badge bg="outline-info" className="admin-contacts__stat-badge">
-                        Total: {pagination.total}
+                        Всего: {pagination.total}
                     </Badge>
                 </div>
             </div>
 
-            {/* Filters */}
+            {/* Фильтры */}
             <Card className="admin-contacts__filters-card">
                 <Card.Body className="admin-contacts__filters-card-body">
                     <Row>
                         <Col md={6}>
                             <Form.Group className="admin-contacts__form-group">
-                                <Form.Label className="admin-contacts__form-label">Status</Form.Label>
+                                <Form.Label className="admin-contacts__form-label">Статус</Form.Label>
                                 <Form.Select
                                     value={filters.status}
                                     onChange={(e) => handleFilterChange('status', e.target.value)}
                                     className="admin-contacts__form-select"
                                 >
-                                    <option value="all">All Status</option>
-                                    <option value="new">New</option>
-                                    <option value="contacted">Contacted</option>
-                                    <option value="completed">Completed</option>
-                                    <option value="spam">Spam</option>
-                                    <option value="active_rental">Active Rental</option>
-                                    <option value="payment_due">Payment Due</option>
+                                    <option value="all">Все статусы</option>
+                                    <option value="new">Новый</option>
+                                    <option value="contacted">На связи</option>
+                                    <option value="completed">Завершен</option>
+                                    <option value="spam">Спам</option>
+                                    <option value="active_rental">Активная аренда</option>
+                                    <option value="payment_due">Ожидает оплаты</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>
                         <Col md={6}>
                             <Form.Group className="admin-contacts__form-group">
-                                <Form.Label className="admin-contacts__form-label">Search</Form.Label>
+                                <Form.Label className="admin-contacts__form-label">Поиск</Form.Label>
                                 <Form.Control
                                     type="text"
-                                    placeholder="Search by name, email, or message..."
+                                    placeholder="Поиск по имени, email или сообщению..."
                                     value={filters.search}
                                     onChange={(e) => handleFilterChange('search', e.target.value)}
                                     className="admin-contacts__form-control"
@@ -250,7 +261,7 @@ const AdminContacts = () => {
                 </Card.Body>
             </Card>
 
-            {/* Contacts Table */}
+            {/* Таблица контактов */}
             <Card className="admin-contacts__table-card">
                 <Card.Body className="admin-contacts__table-card-body">
                     {filteredContacts.length > 0 ? (
@@ -258,11 +269,11 @@ const AdminContacts = () => {
                             <Table responsive className="admin-contacts__table">
                                 <thead>
                                 <tr>
-                                    <th className="admin-contacts__table-header">Contact Info</th>
-                                    <th className="admin-contacts__table-header">Website</th>
-                                    <th className="admin-contacts__table-header">Status</th>
-                                    <th className="admin-contacts__table-header">Date</th>
-                                    <th className="admin-contacts__table-header">Actions</th>
+                                    <th className="admin-contacts__table-header">Контактная информация</th>
+                                    <th className="admin-contacts__table-header">Сайт</th>
+                                    <th className="admin-contacts__table-header">Статус</th>
+                                    <th className="admin-contacts__table-header">Дата</th>
+                                    <th className="admin-contacts__table-header">Действия</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -285,7 +296,7 @@ const AdminContacts = () => {
                                                     </Badge>
                                                 </div>
                                             ) : (
-                                                <span className="admin-contacts__no-website">General Inquiry</span>
+                                                <span className="admin-contacts__no-website">Общий запрос</span>
                                             )}
                                         </td>
                                         <td className="admin-contacts__table-cell">
@@ -295,7 +306,7 @@ const AdminContacts = () => {
                                                     {getDaysRemaining(contact.rentalEndDate) !== null &&
                                                     getDaysRemaining(contact.rentalEndDate) > 0 && (
                                                         <Badge bg={getDaysRemaining(contact.rentalEndDate) <= 3 ? 'warning' : 'info'} className="ms-1">
-                                                            {getDaysRemaining(contact.rentalEndDate)}d
+                                                            {getDaysRemaining(contact.rentalEndDate)}д
                                                         </Badge>
                                                     )}
                                                 </div>
@@ -317,7 +328,7 @@ const AdminContacts = () => {
                                                     onClick={() => handleViewDetails(contact)}
                                                     className="admin-contacts__view-btn"
                                                 >
-                                                    View
+                                                    Просмотр
                                                 </Button>
                                                 <Button
                                                     size="sm"
@@ -325,7 +336,7 @@ const AdminContacts = () => {
                                                     onClick={() => deleteContact(contact._id)}
                                                     className="admin-contacts__delete-btn"
                                                 >
-                                                    Delete
+                                                    Удалить
                                                 </Button>
                                             </div>
                                         </td>
@@ -334,7 +345,7 @@ const AdminContacts = () => {
                                 </tbody>
                             </Table>
 
-                            {/* Pagination */}
+                            {/* Пагинация */}
                             {pagination.totalPages > 1 && (
                                 <div className="admin-contacts__pagination-container">
                                     <Button
@@ -344,10 +355,10 @@ const AdminContacts = () => {
                                         onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
                                         className="admin-contacts__pagination-btn"
                                     >
-                                        Previous
+                                        Назад
                                     </Button>
                                     <span className="admin-contacts__pagination-info">
-                                        Page {pagination.page} of {pagination.totalPages}
+                                        Страница {pagination.page} из {pagination.totalPages}
                                     </span>
                                     <Button
                                         variant="outline-secondary"
@@ -356,20 +367,20 @@ const AdminContacts = () => {
                                         onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
                                         className="admin-contacts__pagination-btn"
                                     >
-                                        Next
+                                        Вперед
                                     </Button>
                                 </div>
                             )}
                         </>
                     ) : (
                         <div className="admin-contacts__no-data">
-                            <p>No contacts found matching your criteria.</p>
+                            <p>Контактов, соответствующих критериям, не найдено.</p>
                         </div>
                     )}
                 </Card.Body>
             </Card>
 
-            {/* Contact Detail Modal */}
+            {/* Модальное окно деталей контакта */}
             <Modal
                 show={showDetailModal}
                 onHide={handleCloseModal}
@@ -378,7 +389,7 @@ const AdminContacts = () => {
                 dialogClassName="admin-contacts__modal-dialog"
             >
                 <Modal.Header closeButton className="admin-contacts__modal-header">
-                    <Modal.Title className="admin-contacts__modal-title">Contact Details</Modal.Title>
+                    <Modal.Title className="admin-contacts__modal-title">Детали контакта</Modal.Title>
                 </Modal.Header>
                 {selectedContact && (
                     <>
@@ -386,25 +397,25 @@ const AdminContacts = () => {
                             <Row>
                                 <Col md={6}>
                                     <div className="admin-contacts__detail-section">
-                                        <h6 className="admin-contacts__detail-section-title">Personal Information</h6>
+                                        <h6 className="admin-contacts__detail-section-title">Личная информация</h6>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Name:</strong> {selectedContact.name}
+                                            <strong className="admin-contacts__detail-label">Имя:</strong> {selectedContact.name}
                                         </div>
                                         <div className="admin-contacts__detail-item">
                                             <strong className="admin-contacts__detail-label">Email:</strong> {selectedContact.email}
                                         </div>
                                         {selectedContact.phone && (
                                             <div className="admin-contacts__detail-item">
-                                                <strong className="admin-contacts__detail-label">Phone:</strong> {selectedContact.phone}
+                                                <strong className="admin-contacts__detail-label">Телефон:</strong> {selectedContact.phone}
                                             </div>
                                         )}
                                     </div>
                                 </Col>
                                 <Col md={6}>
                                     <div className="admin-contacts__detail-section">
-                                        <h6 className="admin-contacts__detail-section-title">Request Information</h6>
+                                        <h6 className="admin-contacts__detail-section-title">Информация о запросе</h6>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Status:</strong>
+                                            <strong className="admin-contacts__detail-label">Статус:</strong>
                                             <div className="admin-contacts__status-actions">
                                                 {getStatusBadge(selectedContact.status)}
                                                 <div className="admin-contacts__status-buttons">
@@ -416,7 +427,12 @@ const AdminContacts = () => {
                                                             onClick={() => updateContactStatus(selectedContact._id, status)}
                                                             className="admin-contacts__status-btn"
                                                         >
-                                                            {status}
+                                                            {status === 'new' ? 'новый' :
+                                                                status === 'contacted' ? 'на связи' :
+                                                                    status === 'completed' ? 'завершен' :
+                                                                        status === 'spam' ? 'спам' :
+                                                                            status === 'active_rental' ? 'активная аренда' :
+                                                                                'ожидает оплаты'}
                                                         </Button>
                                                     ))}
                                                 </div>
@@ -424,34 +440,34 @@ const AdminContacts = () => {
                                         </div>
                                         {selectedContact.siteTitle && (
                                             <div className="admin-contacts__detail-item">
-                                                <strong className="admin-contacts__detail-label">Website:</strong> {selectedContact.siteTitle}
+                                                <strong className="admin-contacts__detail-label">Сайт:</strong> {selectedContact.siteTitle}
                                             </div>
                                         )}
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Submitted:</strong> {new Date(selectedContact.createdAt).toLocaleString()}
+                                            <strong className="admin-contacts__detail-label">Отправлено:</strong> {new Date(selectedContact.createdAt).toLocaleString()}
                                         </div>
                                     </div>
                                 </Col>
                             </Row>
 
-                            {/* Rental Information Section */}
+                            {/* Раздел информации об аренде */}
                             <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Rental Information</h6>
+                                <h6 className="admin-contacts__detail-section-title">Информация об аренде</h6>
 
                                 {selectedContact.monthlyPrice > 0 && (
                                     <div className="admin-contacts__detail-item">
-                                        <strong className="admin-contacts__detail-label">Monthly Price:</strong>
+                                        <strong className="admin-contacts__detail-label">Ежемесячная цена:</strong>
                                         ${selectedContact.monthlyPrice}
                                     </div>
                                 )}
 
                                 {selectedContact.rentalEndDate && (
                                     <div className="admin-contacts__detail-item">
-                                        <strong className="admin-contacts__detail-label">Rental Ends:</strong>
+                                        <strong className="admin-contacts__detail-label">Аренда заканчивается:</strong>
                                         {new Date(selectedContact.rentalEndDate).toLocaleDateString()}
                                         {getDaysRemaining(selectedContact.rentalEndDate) !== null && (
                                             <span className={`ms-2 badge ${getDaysRemaining(selectedContact.rentalEndDate) <= 3 ? 'bg-warning' : 'bg-info'}`}>
-                                                {getDaysRemaining(selectedContact.rentalEndDate)} days remaining
+                                                {getDaysRemaining(selectedContact.rentalEndDate)} дней осталось
                                             </span>
                                         )}
                                     </div>
@@ -459,7 +475,7 @@ const AdminContacts = () => {
 
                                 {selectedContact.totalPaid > 0 && (
                                     <div className="admin-contacts__detail-item">
-                                        <strong className="admin-contacts__detail-label">Total Paid:</strong>
+                                        <strong className="admin-contacts__detail-label">Всего оплачено:</strong>
                                         ${selectedContact.totalPaid}
                                     </div>
                                 )}
@@ -470,14 +486,14 @@ const AdminContacts = () => {
                                         size="sm"
                                         onClick={() => setShowPaymentModal(true)}
                                     >
-                                        Add Payment
+                                        Добавить платеж
                                     </Button>
                                 </div>
                             </div>
 
-                            {/* Payment History Section */}
+                            {/* Раздел истории платежей */}
                             <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Payment History</h6>
+                                <h6 className="admin-contacts__detail-section-title">История платежей</h6>
 
                                 {loadingPayments ? (
                                     <div className="text-center py-3">
@@ -494,7 +510,7 @@ const AdminContacts = () => {
                                                         </div>
                                                         <div className="admin-contacts__payment-date">
                                                             {new Date(payment.paymentDate).toLocaleDateString()} •
-                                                            {payment.periodMonths} month(s) • {payment.paymentMethod}
+                                                            {payment.periodMonths} месяц(а) • {payment.paymentMethod}
                                                         </div>
                                                         {payment.notes && (
                                                             <div className="text-muted small mt-1">
@@ -503,7 +519,7 @@ const AdminContacts = () => {
                                                         )}
                                                     </div>
                                                     <Badge bg="info">
-                                                        ${(payment.amount / payment.periodMonths).toFixed(2)}/month
+                                                        ${(payment.amount / payment.periodMonths).toFixed(2)}/месяц
                                                     </Badge>
                                                 </div>
                                             </div>
@@ -511,7 +527,7 @@ const AdminContacts = () => {
 
                                         <div className="admin-contacts__payment-total mt-3 p-3 bg-dark rounded">
                                             <div className="d-flex justify-content-between">
-                                                <strong>Total Paid:</strong>
+                                                <strong>Всего оплачено:</strong>
                                                 <strong className="text-success">
                                                     ${payments.reduce((sum, payment) => sum + payment.amount, 0)}
                                                 </strong>
@@ -520,13 +536,13 @@ const AdminContacts = () => {
                                     </div>
                                 ) : (
                                     <div className="text-muted text-center py-3">
-                                        No payments recorded yet
+                                        Платежи еще не зарегистрированы
                                     </div>
                                 )}
                             </div>
 
                             <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Message</h6>
+                                <h6 className="admin-contacts__detail-section-title">Сообщение</h6>
                                 <div className="admin-contacts__message-content">
                                     {selectedContact.message}
                                 </div>
@@ -534,7 +550,7 @@ const AdminContacts = () => {
 
                             {selectedContact.notes && (
                                 <div className="admin-contacts__detail-section">
-                                    <h6 className="admin-contacts__detail-section-title">Admin Notes</h6>
+                                    <h6 className="admin-contacts__detail-section-title">Заметки администратора</h6>
                                     <div className="admin-contacts__notes-content">
                                         {selectedContact.notes}
                                     </div>
@@ -542,12 +558,12 @@ const AdminContacts = () => {
                             )}
 
                             <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Add Note</h6>
+                                <h6 className="admin-contacts__detail-section-title">Добавить заметку</h6>
                                 <Form.Group className="admin-contacts__form-group">
                                     <Form.Control
                                         as="textarea"
                                         rows={3}
-                                        placeholder="Add internal notes about this contact..."
+                                        placeholder="Добавьте внутренние заметки об этом контакте..."
                                         onBlur={(e) => addNote(selectedContact._id, e.target.value)}
                                         defaultValue={selectedContact.notes || ''}
                                         className="admin-contacts__notes-textarea"
@@ -561,21 +577,21 @@ const AdminContacts = () => {
                                 onClick={handleCloseModal}
                                 className="admin-contacts__modal-close-btn"
                             >
-                                Close
+                                Закрыть
                             </Button>
                             <Button
                                 variant="danger"
                                 onClick={() => deleteContact(selectedContact._id)}
                                 className="admin-contacts__modal-delete-btn"
                             >
-                                Delete Contact
+                                Удалить контакт
                             </Button>
                         </Modal.Footer>
                     </>
                 )}
             </Modal>
 
-            {/* Payment Modal */}
+            {/* Модальное окно добавления платежа */}
             <Modal
                 show={showPaymentModal}
                 onHide={() => setShowPaymentModal(false)}
@@ -583,13 +599,13 @@ const AdminContacts = () => {
             >
                 <Modal.Header closeButton className="admin-contacts__modal-header">
                     <Modal.Title className="admin-contacts__modal-title">
-                        Add Payment for {selectedContact?.name}
+                        Добавить платеж для {selectedContact?.name}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="admin-contacts__modal-body">
                     <Form>
                         <Form.Group className="mb-3">
-                            <Form.Label>Payment Amount ($)</Form.Label>
+                            <Form.Label>Сумма платежа ($)</Form.Label>
                             <Form.Control
                                 type="number"
                                 min="1"
@@ -599,12 +615,12 @@ const AdminContacts = () => {
                                     ...prev,
                                     amount: parseFloat(e.target.value) || ''
                                 }))}
-                                placeholder="Enter payment amount"
+                                placeholder="Введите сумму платежа"
                             />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Payment Method</Form.Label>
+                            <Form.Label>Способ оплаты</Form.Label>
                             <Form.Select
                                 value={paymentData.paymentMethod}
                                 onChange={(e) => setPaymentData(prev => ({
@@ -612,15 +628,15 @@ const AdminContacts = () => {
                                     paymentMethod: e.target.value
                                 }))}
                             >
-                                <option value="bank_transfer">Bank Transfer</option>
-                                <option value="card">Credit Card</option>
-                                <option value="cash">Cash</option>
-                                <option value="other">Other</option>
+                                <option value="bank_transfer">Банковский перевод</option>
+                                <option value="card">Кредитная карта</option>
+                                <option value="cash">Наличные</option>
+                                <option value="other">Другое</option>
                             </Form.Select>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Months to Extend (optional)</Form.Label>
+                            <Form.Label>Месяцев продления (опционально)</Form.Label>
                             <Form.Control
                                 type="number"
                                 min="1"
@@ -629,15 +645,15 @@ const AdminContacts = () => {
                                     ...prev,
                                     periodMonths: parseInt(e.target.value) || ''
                                 }))}
-                                placeholder="Auto-calculated from amount"
+                                placeholder="Автоматически рассчитывается из суммы"
                             />
                             <Form.Text className="text-muted">
-                                Leave empty to auto-calculate based on monthly price
+                                Оставьте пустым для автоматического расчета на основе ежемесячной цены
                             </Form.Text>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Notes</Form.Label>
+                            <Form.Label>Заметки</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
@@ -646,24 +662,24 @@ const AdminContacts = () => {
                                     ...prev,
                                     notes: e.target.value
                                 }))}
-                                placeholder="Payment notes..."
+                                placeholder="Заметки о платеже..."
                             />
                         </Form.Group>
                     </Form>
 
                     {selectedContact?.monthlyPrice && paymentData.amount && (
                         <div className="alert alert-info">
-                            <strong>Calculation:</strong> ${paymentData.amount} / ${selectedContact.monthlyPrice} =
-                            {Math.floor(paymentData.amount / selectedContact.monthlyPrice)} month(s)
+                            <strong>Расчет:</strong> ${paymentData.amount} / ${selectedContact.monthlyPrice} =
+                            {Math.floor(paymentData.amount / selectedContact.monthlyPrice)} месяц(а)
                         </div>
                     )}
                 </Modal.Body>
                 <Modal.Footer className="admin-contacts__modal-footer">
                     <Button variant="secondary" onClick={() => setShowPaymentModal(false)}>
-                        Cancel
+                        Отмена
                     </Button>
                     <Button variant="primary" onClick={handleAddPayment}>
-                        Add Payment
+                        Добавить платеж
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Button, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
@@ -19,7 +19,7 @@ const FeaturedSites = () => {
             const response = await siteAPI.getFeatured();
             setFeaturedSites(response.data);
         } catch (error) {
-            console.error('Error fetching featured sites:', error);
+            console.error('Ошибка при загрузке рекомендуемых сайтов:', error);
         } finally {
             stopLoading();
         }
@@ -47,10 +47,10 @@ const FeaturedSites = () => {
                 <Row className="text-center mb-5">
                     <Col>
                         <h2 className="section-title">
-                            Featured <span className="text-gradient">Websites</span>
+                            Рекомендуемые <span className="text-gradient">сайты</span>
                         </h2>
                         <p className="section-subtitle">
-                            Explore our handpicked selection of premium websites available for rent
+                            Изучите нашу тщательно подобранную подборку премиальных сайтов, доступных для аренды
                         </p>
                     </Col>
                 </Row>
@@ -79,7 +79,7 @@ const FeaturedSites = () => {
                                 className="btn-view-all"
                                 size="lg"
                             >
-                                View All Websites
+                                Посмотреть все сайты
                                 <span className="btn-arrow">→</span>
                             </Button>
                         </Col>
@@ -124,12 +124,12 @@ const FeaturedSiteCard = ({ site, index }) => {
                                 className="btn-details"
                                 size="sm"
                             >
-                                View Details
+                                Подробнее
                             </Button>
                         </div>
                     </div>
                     <div className="card-badge">
-                        Featured
+                        Рекомендуемый
                     </div>
                 </div>
 
@@ -137,7 +137,7 @@ const FeaturedSiteCard = ({ site, index }) => {
                     <div className="card-header">
                         <h3 className="site-title">{site.title}</h3>
                         <div className="site-price">
-                            ${site.price}<span>/month</span>
+                            ${site.price}<span>/месяц</span>
                         </div>
                     </div>
 
@@ -163,7 +163,7 @@ const FeaturedSiteCard = ({ site, index }) => {
                             className="btn-rent"
                             size="sm"
                         >
-                            Rent Now
+                            Арендовать
                         </Button>
                     </div>
                 </div>

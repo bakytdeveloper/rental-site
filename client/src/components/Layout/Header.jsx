@@ -9,7 +9,7 @@ const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Listen to scroll event
+    // Слушаем событие скролла
     useState(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 20;
@@ -58,7 +58,7 @@ const Header = () => {
                             onClick={closeNavbar}
                             className={`header-nav-link ${location.pathname === '/' ? 'header-active' : ''}`}
                         >
-                            Home
+                            Главная
                         </Nav.Link>
                         <Nav.Link
                             as={Link}
@@ -67,7 +67,7 @@ const Header = () => {
                             onClick={closeNavbar}
                             className={`header-nav-link ${location.pathname === '/catalog' ? 'header-active' : ''}`}
                         >
-                            Catalog
+                            Каталог
                         </Nav.Link>
                         <Nav.Link
                             as={Link}
@@ -76,7 +76,7 @@ const Header = () => {
                             onClick={closeNavbar}
                             className={`header-nav-link ${location.pathname === '/about' ? 'header-active' : ''}`}
                         >
-                            About
+                            О нас
                         </Nav.Link>
                         <Nav.Link
                             as={Link}
@@ -85,7 +85,7 @@ const Header = () => {
                             onClick={closeNavbar}
                             className={`header-nav-link ${location.pathname === '/contact' ? 'header-active' : ''}`}
                         >
-                            Contact
+                            Контакты
                         </Nav.Link>
 
                         {/* Кнопка входа в админ-панель */}
@@ -96,7 +96,7 @@ const Header = () => {
                                 onClick={handleAdminLogin}
                                 className="ms-2 header-btn"
                             >
-                                Admin Login
+                                Вход
                             </Button>
                         </div>
                     </Nav>

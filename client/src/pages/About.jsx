@@ -1,4 +1,4 @@
-import { Container, Row, Col, Card } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import './About.css';
 
 const About = () => {
@@ -8,9 +8,9 @@ const About = () => {
                 <Container>
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
-                            <h1 className="page-title">About RentalSite</h1>
+                            <h1 className="page-title">О RentalSite</h1>
                             <p className="page-subtitle">
-                                Revolutionizing the way businesses establish their online presence
+                                Изменяем способ, которым бизнесы создают свое онлайн-присутствие
                             </p>
                         </Col>
                     </Row>
@@ -20,21 +20,19 @@ const About = () => {
             <Container className="about-content">
                 <Row className="mb-5">
                     <Col lg={6}>
-                        <h2 className="section-title">Our Mission</h2>
+                        <h2 className="section-title">Наша миссия</h2>
                         <p className="section-text">
-                            At RentalSite, we believe every business deserves a professional online
-                            presence without the complexity and cost of traditional web development.
-                            Our mission is to make premium websites accessible to everyone through
-                            our innovative rental model.
+                            В RentalSite мы верим, что каждый бизнес заслуживает профессионального онлайн-присутствия
+                            без сложностей и затрат традиционной веб-разработки. Наша миссия - сделать премиальные
+                            сайты доступными для всех через нашу инновационную модель аренды.
                         </p>
                     </Col>
                     <Col lg={6}>
-                        <h2 className="section-title">What We Offer</h2>
+                        <h2 className="section-title">Что мы предлагаем</h2>
                         <p className="section-text">
-                            We provide a curated collection of high-quality websites across various
-                            industries and categories. From stunning landing pages to comprehensive
-                            e-commerce solutions, our templates are designed to help you launch
-                            quickly and scale efficiently.
+                            Мы предоставляем тщательно подобранную коллекцию высококачественных сайтов в различных
+                            отраслях и категориях. От потрясающих лендингов до комплексных интернет-магазинов,
+                            наши шаблоны разработаны, чтобы помочь вам быстро запуститься и эффективно масштабироваться.
                         </p>
                     </Col>
                 </Row>
@@ -43,25 +41,25 @@ const About = () => {
                     <Col md={3} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">500+</div>
-                            <div className="stat-label">Websites Rented</div>
+                            <div className="stat-label">Арендованных сайтов</div>
                         </div>
                     </Col>
                     <Col md={3} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">99.9%</div>
-                            <div className="stat-label">Uptime</div>
+                            <div className="stat-label">Время работы</div>
                         </div>
                     </Col>
                     <Col md={3} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">24/7</div>
-                            <div className="stat-label">Support</div>
+                            <div className="stat-label">Поддержка</div>
                         </div>
                     </Col>
                     <Col md={3} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">50+</div>
-                            <div className="stat-label">Templates</div>
+                            <div className="stat-label">Шаблонов</div>
                         </div>
                     </Col>
                 </Row>

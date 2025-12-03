@@ -6,7 +6,7 @@ import './Hero.css';
 const Hero = () => {
     const [displayText, setDisplayText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
-    const fullText = "Rent Professional Websites Today";
+    const fullText = "Арендуйте профессиональные сайты сегодня";
 
     useEffect(() => {
         if (currentIndex < fullText.length) {
@@ -34,7 +34,7 @@ const Hero = () => {
                     <Col lg={6}>
                         <div className="hero-content">
                             <div className="hero-badge">
-                                <span>🚀 Future of Web Presence</span>
+                                <span>🚀 Будущее веб-присутствия</span>
                             </div>
 
                             <h1 className="hero-title">
@@ -43,9 +43,9 @@ const Hero = () => {
                             </h1>
 
                             <p className="hero-description">
-                                Access premium websites instantly. No development time,
-                                no technical hassle. Launch your online presence with
-                                our curated collection of high-converting templates.
+                                Получите доступ к премиальным сайтам мгновенно. Никакого времени на разработку,
+                                никаких технических сложностей. Запустите свое онлайн-присутствие с нашей
+                                тщательно подобранной коллекцией высококонверсионных шаблонов.
                             </p>
 
                             <div className="hero-buttons">
@@ -54,29 +54,29 @@ const Hero = () => {
                                     to="/catalog"
                                     className="btn-primary-custom me-3"
                                 >
-                                    Explore Catalog
+                                    Исследовать каталог
                                 </Button>
                                 <Button
                                     as={Link}
                                     to="/about"
                                     className="btn-outline-custom"
                                 >
-                                    Learn More
+                                    Узнать больше
                                 </Button>
                             </div>
 
                             <div className="hero-stats">
                                 <div className="stat-item">
                                     <div className="stat-number">50+</div>
-                                    <div className="stat-label">Premium Sites</div>
+                                    <div className="stat-label">Премиум сайтов</div>
                                 </div>
                                 <div className="stat-item">
                                     <div className="stat-number">24/7</div>
-                                    <div className="stat-label">Support</div>
+                                    <div className="stat-label">Поддержка</div>
                                 </div>
                                 <div className="stat-item">
                                     <div className="stat-number">99.9%</div>
-                                    <div className="stat-label">Uptime</div>
+                                    <div className="stat-label">Доступность</div>
                                 </div>
                             </div>
                         </div>

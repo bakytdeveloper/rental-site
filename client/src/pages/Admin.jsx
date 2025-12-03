@@ -25,7 +25,7 @@ const AdminLayout = ({ children }) => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
         setUser(null);
-        toast.success('Logged out successfully');
+        toast.success('Вы успешно вышли из системы');
         navigate('/admin/login');
     };
 
@@ -33,13 +33,13 @@ const AdminLayout = ({ children }) => {
         <div className="admin-page">
             <Container fluid>
                 <Row>
-                    {/* Sidebar */}
+                    {/* Боковая панель */}
                     <Col lg={2} className="admin-sidebar">
                         <div className="sidebar-header">
-                            <h3>RentalSite Admin</h3>
+                            <h3>RentalSite Админ</h3>
                             {user && (
                                 <div className="user-info">
-                                    <small>Welcome, {user.username}</small>
+                                    <small>Добро пожаловать, {user.username}</small>
                                 </div>
                             )}
                         </div>
@@ -49,21 +49,21 @@ const AdminLayout = ({ children }) => {
                                 to="/admin"
                                 className={location.pathname === '/admin' ? 'active' : ''}
                             >
-                                📊 Dashboard
+                                📊 Панель управления
                             </Nav.Link>
                             <Nav.Link
                                 as={Link}
                                 to="/admin/sites"
                                 className={location.pathname === '/admin/sites' ? 'active' : ''}
                             >
-                                🌐 Websites
+                                🌐 Сайты
                             </Nav.Link>
                             <Nav.Link
                                 as={Link}
                                 to="/admin/contacts"
                                 className={location.pathname === '/admin/contacts' ? 'active' : ''}
                             >
-                                📧 Contacts
+                                📧 Контакты
                             </Nav.Link>
                         </Nav>
 
@@ -75,7 +75,7 @@ const AdminLayout = ({ children }) => {
                                     </Dropdown.Toggle>
                                     <Dropdown.Menu>
                                         <Dropdown.Item as={Button} onClick={handleLogout}>
-                                            🚪 Logout
+                                            🚪 Выйти
                                         </Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
@@ -83,7 +83,7 @@ const AdminLayout = ({ children }) => {
                         )}
                     </Col>
 
-                    {/* Main Content */}
+                    {/* Основной контент */}
                     <Col lg={10} className="admin-main">
                         {children}
                     </Col>
@@ -96,10 +96,10 @@ const AdminLayout = ({ children }) => {
 const Admin = () => {
     return (
         <Routes>
-            {/* Public route - login page */}
+            {/* Публичный маршрут - страница входа */}
             <Route path="/login" element={<AdminLogin />} />
 
-            {/* Protected routes - require authentication */}
+            {/* Защищенные маршруты - требуют аутентификации */}
             <Route
                 path="/*"
                 element={

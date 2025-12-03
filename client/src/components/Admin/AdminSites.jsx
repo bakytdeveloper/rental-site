@@ -18,7 +18,7 @@ const AdminSites = () => {
         description: '',
         shortDescription: '',
         price: '',
-        category: 'Landing Page',
+        category: 'Лендинг',
         technologies: [],
         features: [],
         isFeatured: false,
@@ -28,8 +28,26 @@ const AdminSites = () => {
     const [featureInput, setFeatureInput] = useState('');
     const { loading, startLoading, stopLoading } = useLoading();
 
+    // Функции для преобразования категорий
+    const categoryTranslations = {
+        'Landing Page': 'Лендинг',
+        'Corporate Website': 'Корпоративный сайт',
+        'E-commerce': 'Интернет-магазин',
+        'Portfolio': 'Портфолио',
+        'Web Application': 'Веб-приложение'
+    };
+
+    const reverseCategoryTranslations = {
+        'Лендинг': 'Landing Page',
+        'Корпоративный сайт': 'Corporate Website',
+        'Интернет-магазин': 'E-commerce',
+        'Портфолио': 'Portfolio',
+        'Веб-приложение': 'Web Application'
+    };
+
     useEffect(() => {
         fetchSites();
+        // eslint-disable-next-line
     }, []);
 
     const fetchSites = async () => {
@@ -38,8 +56,8 @@ const AdminSites = () => {
             const response = await siteAPI.getAllAdmin();
             setSites(response.data.sites || []);
         } catch (error) {
-            toast.error('Failed to fetch sites');
-            console.error('Error fetching sites:', error);
+            toast.error('Не удалось загрузить сайты');
+            console.error('Ошибка при загрузке сайтов:', error);
         } finally {
             stopLoading();
         }
@@ -47,37 +65,42 @@ const AdminSites = () => {
 
     const handleShowModal = (site = null) => {
         if (site) {
-            console.log('Editing site:', site);
-            console.log('Site images:', site.images);
+            console.log('Редактирование сайта:', site);
+            console.log('Изображения сайта:', site.images);
             setEditingSite(site);
+
+            // Переводим английскую категорию в русскую для отображения
+            const russianCategory = categoryTranslations[site.category] || site.category;
+
             setFormData({
                 title: site.title,
                 description: site.description,
                 shortDescription: site.shortDescription,
                 price: site.price,
-                category: site.category,
+                category: russianCategory, // Русская версия для отображения
                 technologies: site.technologies || [],
                 features: site.features || [],
                 isFeatured: site.isFeatured,
                 isActive: site.isActive
             });
+
             if (site.images && site.images.length > 0) {
                 const previews = site.images.map(img => `http://localhost:5000${img}`);
-                console.log('Setting image previews:', previews);
+                console.log('Установка превью изображений:', previews);
                 setImagePreviews(previews);
             } else {
-                console.log('No images for site');
+                console.log('Нет изображений для сайта');
                 setImagePreviews([]);
             }
         } else {
-            console.log('Creating new site');
+            console.log('Создание нового сайта');
             setEditingSite(null);
             setFormData({
                 title: '',
                 description: '',
                 shortDescription: '',
                 price: '',
-                category: 'Landing Page',
+                category: 'Лендинг',
                 technologies: [],
                 features: [],
                 isFeatured: false,
@@ -117,7 +140,7 @@ const AdminSites = () => {
         const totalImages = imagePreviews.length + files.length;
 
         if (totalImages > 7) {
-            toast.error(`Maximum 7 images allowed. You have ${imagePreviews.length} images and trying to add ${files.length} more.`);
+            toast.error(`Максимум 7 изображений разрешено. У вас ${imagePreviews.length} изображений и вы пытаетесь добавить ${files.length} еще.`);
             return;
         }
 
@@ -128,17 +151,17 @@ const AdminSites = () => {
     };
 
     const removeImage = async (index) => {
-        console.log('Removing image at index:', index);
-        console.log('Current imagePreviews:', imagePreviews);
+        console.log('Удаление изображения по индексу:', index);
+        console.log('Текущие превью изображений:', imagePreviews);
 
         const imageToRemove = imagePreviews[index];
         const isServerImage = imageToRemove.startsWith('http://localhost:5000/uploads/');
 
         if (isServerImage && editingSite) {
-            if (window.confirm('Are you sure you want to remove this image?')) {
+            if (window.confirm('Вы уверены, что хотите удалить это изображение?')) {
                 const newPreviews = imagePreviews.filter((_, i) => i !== index);
                 setImagePreviews(newPreviews);
-                console.log('Removed server image from previews');
+                console.log('Удалено серверное изображение из превью');
             }
             return;
         }
@@ -198,11 +221,18 @@ const AdminSites = () => {
 
         try {
             const submitData = new FormData();
-            Object.keys(formData).forEach(key => {
+
+            // Копируем formData для модификации
+            const dataToSend = { ...formData };
+
+            // Конвертируем русскую категорию в английскую для сервера
+            dataToSend.category = reverseCategoryTranslations[formData.category] || formData.category;
+
+            Object.keys(dataToSend).forEach(key => {
                 if (key === 'technologies' || key === 'features') {
-                    submitData.append(key, JSON.stringify(formData[key]));
+                    submitData.append(key, JSON.stringify(dataToSend[key]));
                 } else {
-                    submitData.append(key, formData[key]);
+                    submitData.append(key, dataToSend[key]);
                 }
             });
 
@@ -211,7 +241,7 @@ const AdminSites = () => {
                     .filter(preview => preview.startsWith('http://localhost:5000/uploads/'))
                     .map(preview => preview.replace('http://localhost:5000', ''));
 
-                console.log('Remaining server images:', remainingServerImages);
+                console.log('Оставшиеся серверные изображения:', remainingServerImages);
                 submitData.append('existingImages', JSON.stringify(remainingServerImages));
             }
 
@@ -219,43 +249,44 @@ const AdminSites = () => {
                 submitData.append('images', image);
             });
 
-            console.log('Submitting data:');
-            console.log('Selected images count:', selectedImages.length);
-            console.log('Editing site:', editingSite);
+            console.log('Отправка данных:');
+            console.log('Категория для отправки:', dataToSend.category);
+            console.log('Количество выбранных изображений:', selectedImages.length);
+            console.log('Редактируемый сайт:', editingSite);
 
             if (editingSite) {
-                console.log('Updating site with ID:', editingSite._id);
+                console.log('Обновление сайта с ID:', editingSite._id);
                 const response = await siteAPI.update(editingSite._id, submitData);
-                console.log('Update response:', response.data);
-                toast.success('Site updated successfully');
+                console.log('Ответ на обновление:', response.data);
+                toast.success('Сайт успешно обновлен');
             } else {
-                console.log('Creating new site');
+                console.log('Создание нового сайта');
                 const response = await siteAPI.create(submitData);
-                console.log('Create response:', response.data);
-                toast.success('Site created successfully');
+                console.log('Ответ на создание:', response.data);
+                toast.success('Сайт успешно создан');
             }
 
             handleCloseModal();
             fetchSites();
         } catch (error) {
-            console.error('Full error details:', error);
-            console.error('Error response:', error.response?.data);
-            toast.error(`Failed to ${editingSite ? 'update' : 'create'} site: ${error.response?.data?.message || error.message}`);
+            console.error('Полная информация об ошибке:', error);
+            console.error('Ответ об ошибке:', error.response?.data);
+            toast.error(`Не удалось ${editingSite ? 'обновить' : 'создать'} сайт: ${error.response?.data?.message || error.message}`);
         } finally {
             stopLoading();
         }
     };
 
     const handleDelete = async (siteId) => {
-        if (window.confirm('Are you sure you want to delete this site?')) {
+        if (window.confirm('Вы уверены, что хотите удалить этот сайт?')) {
             startLoading();
             try {
                 await siteAPI.delete(siteId);
-                toast.success('Site deleted successfully');
+                toast.success('Сайт успешно удален');
                 fetchSites();
             } catch (error) {
-                toast.error('Failed to delete site');
-                console.error('Error deleting site:', error);
+                toast.error('Не удалось удалить сайт');
+                console.error('Ошибка при удалении сайта:', error);
             } finally {
                 stopLoading();
             }
@@ -265,22 +296,22 @@ const AdminSites = () => {
     const toggleSiteStatus = async (siteId, currentStatus) => {
         try {
             await siteAPI.update(siteId, { isActive: !currentStatus });
-            toast.success(`Site ${!currentStatus ? 'activated' : 'deactivated'}`);
+            toast.success(`Сайт ${!currentStatus ? 'активирован' : 'деактивирован'}`);
             fetchSites();
         } catch (error) {
-            toast.error('Failed to update site status');
-            console.error('Error updating site status:', error);
+            toast.error('Не удалось обновить статус сайта');
+            console.error('Ошибка обновления статуса сайта:', error);
         }
     };
 
     const toggleFeatured = async (siteId, currentFeatured) => {
         try {
             await siteAPI.update(siteId, { isFeatured: !currentFeatured });
-            toast.success(`Site ${!currentFeatured ? 'added to' : 'removed from'} featured`);
+            toast.success(`Сайт ${!currentFeatured ? 'добавлен в' : 'удален из'} рекомендуемых`);
             fetchSites();
         } catch (error) {
-            toast.error('Failed to update featured status');
-            console.error('Error updating featured status:', error);
+            toast.error('Не удалось обновить статус рекомендации');
+            console.error('Ошибка обновления статуса рекомендации:', error);
         }
     };
 
@@ -295,7 +326,7 @@ const AdminSites = () => {
         return (
             <div className="admin-sites-loading">
                 <Spinner animation="border" variant="primary" />
-                <p>Loading websites...</p>
+                <p>Загрузка сайтов...</p>
             </div>
         );
     }
@@ -303,9 +334,9 @@ const AdminSites = () => {
     return (
         <div className="admin-sites">
             <div className="admin-sites-page-header">
-                <h1>Website Management</h1>
+                <h1>Управление сайтами</h1>
                 <Button onClick={() => handleShowModal()} className="admin-sites-btn-add-site">
-                    + Add New Website
+                    + Добавить новый сайт
                 </Button>
             </div>
 
@@ -313,146 +344,146 @@ const AdminSites = () => {
                 <Card.Body className="p-0">
                     {sites.length > 0 ? (
                         <div className="admin-sites-table-container">
-                        <div className="table-responsive">
-                            <Table className="admin-sites-table">
-                                <thead>
-                                <tr>
-                                    <th className="admin-sites-image-cell">Image</th>
-                                    <th className="admin-sites-title-cell">Website</th>
-                                    <th className="admin-sites-category-cell">Category</th>
-                                    <th className="admin-sites-price-cell">Price</th>
-                                    <th className="admin-sites-status-cell">Status</th>
-                                    <th className="admin-sites-featured-cell">Featured</th>
-                                    <th className="admin-sites-technologies-cell">Technologies</th>
-                                    <th className="admin-sites-actions-cell">Actions</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {sites.map(site => (
-                                    <tr key={site._id} className="admin-sites-site-row">
-                                        <td className="admin-sites-image-cell">
-                                            <div className="admin-sites-image-container">
-                                                <img
-                                                    src={getSiteImage(site)}
-                                                    alt={site.title}
-                                                    className="admin-sites-thumbnail"
-                                                    onError={(e) => {
-                                                        e.target.src = '/placeholder-image.jpg';
-                                                    }}
-                                                />
-                                                {site.isFeatured && (
-                                                    <div className="admin-sites-featured-indicator" title="Featured">
-                                                        ⭐
-                                                    </div>
-                                                )}
-                                                {site.images && site.images.length > 1 && (
-                                                    <div className="admin-sites-image-count-badge" title={`${site.images.length} images`}>
-                                                        +{site.images.length - 1}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="admin-sites-title-cell">
-                                            <div className="admin-sites-info">
-                                                <div className="admin-sites-title">{site.title}</div>
-                                                <div className="admin-sites-short-description">
-                                                    {site.shortDescription}
-                                                </div>
-                                                <div className="admin-sites-meta">
-                                                    <span className="admin-sites-created-date">
-                                                        Created: {new Date(site.createdAt).toLocaleDateString()}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="admin-sites-category-cell">
-                                            <Badge bg="outline-primary" className="admin-sites-category-badge">
-                                                {site.category}
-                                            </Badge>
-                                        </td>
-                                        <td className="admin-sites-price-cell">
-                                            <div className="admin-sites-price-amount">${site.price}</div>
-                                            <div className="admin-sites-price-period">/month</div>
-                                        </td>
-                                        <td className="admin-sites-status-cell">
-                                            <Badge
-                                                bg={site.isActive ? 'success' : 'secondary'}
-                                                className="admin-sites-status-badge"
-                                                role="button"
-                                                onClick={() => toggleSiteStatus(site._id, site.isActive)}
-                                            >
-                                                {site.isActive ? 'Active' : 'Inactive'}
-                                            </Badge>
-                                        </td>
-                                        <td className="admin-sites-featured-cell">
-                                            <Badge
-                                                bg={site.isFeatured ? 'warning' : 'outline-warning'}
-                                                className="admin-sites-featured-badge"
-                                                role="button"
-                                                onClick={() => toggleFeatured(site._id, site.isFeatured)}
-                                            >
-                                                {site.isFeatured ? 'Featured' : 'Standard'}
-                                            </Badge>
-                                        </td>
-                                        <td className="admin-sites-technologies-cell">
-                                            <div className="admin-sites-tech-tags">
-                                                {site.technologies?.slice(0, 3).map((tech, index) => (
-                                                    <Badge key={index} bg="outline-info" className="admin-sites-tech-tag">
-                                                        {tech}
-                                                    </Badge>
-                                                ))}
-                                                {site.technologies?.length > 3 && (
-                                                    <Badge bg="outline-secondary" className="admin-sites-tech-tag-more">
-                                                        +{site.technologies.length - 3}
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="admin-sites-actions-cell">
-                                            <div className="admin-sites-action-buttons">
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline-primary"
-                                                    onClick={() => handleShowModal(site)}
-                                                    className="admin-sites-btn-edit"
-                                                    title="Edit site"
-                                                >
-                                                    ✏️
-                                                </Button>
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline-danger"
-                                                    onClick={() => handleDelete(site._id)}
-                                                    className="admin-sites-btn-delete"
-                                                    title="Delete site"
-                                                >
-                                                    🗑️
-                                                </Button>
-                                            </div>
-                                        </td>
+                            <div className="table-responsive">
+                                <Table className="admin-sites-table">
+                                    <thead>
+                                    <tr>
+                                        <th className="admin-sites-image-cell">Изображение</th>
+                                        <th className="admin-sites-title-cell">Сайт</th>
+                                        <th className="admin-sites-category-cell">Категория</th>
+                                        <th className="admin-sites-price-cell">Цена</th>
+                                        <th className="admin-sites-status-cell">Статус</th>
+                                        <th className="admin-sites-featured-cell">Рекомендуемый</th>
+                                        <th className="admin-sites-technologies-cell">Технологии</th>
+                                        <th className="admin-sites-actions-cell">Действия</th>
                                     </tr>
-                                ))}
-                                </tbody>
-                            </Table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                    {sites.map(site => (
+                                        <tr key={site._id} className="admin-sites-site-row">
+                                            <td className="admin-sites-image-cell">
+                                                <div className="admin-sites-image-container">
+                                                    <img
+                                                        src={getSiteImage(site)}
+                                                        alt={site.title}
+                                                        className="admin-sites-thumbnail"
+                                                        onError={(e) => {
+                                                            e.target.src = '/placeholder-image.jpg';
+                                                        }}
+                                                    />
+                                                    {site.isFeatured && (
+                                                        <div className="admin-sites-featured-indicator" title="Рекомендуемый">
+                                                            ⭐
+                                                        </div>
+                                                    )}
+                                                    {site.images && site.images.length > 1 && (
+                                                        <div className="admin-sites-image-count-badge" title={`${site.images.length} изображений`}>
+                                                            +{site.images.length - 1}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="admin-sites-title-cell">
+                                                <div className="admin-sites-info">
+                                                    <div className="admin-sites-title">{site.title}</div>
+                                                    <div className="admin-sites-short-description">
+                                                        {site.shortDescription}
+                                                    </div>
+                                                    <div className="admin-sites-meta">
+                                                    <span className="admin-sites-created-date">
+                                                        Создан: {new Date(site.createdAt).toLocaleDateString('ru-RU')}
+                                                    </span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="admin-sites-category-cell">
+                                                <Badge bg="outline-primary" className="admin-sites-category-badge">
+                                                    {categoryTranslations[site.category] || site.category}
+                                                </Badge>
+                                            </td>
+                                            <td className="admin-sites-price-cell">
+                                                <div className="admin-sites-price-amount">${site.price}</div>
+                                                <div className="admin-sites-price-period">/месяц</div>
+                                            </td>
+                                            <td className="admin-sites-status-cell">
+                                                <Badge
+                                                    bg={site.isActive ? 'success' : 'secondary'}
+                                                    className="admin-sites-status-badge"
+                                                    role="button"
+                                                    onClick={() => toggleSiteStatus(site._id, site.isActive)}
+                                                >
+                                                    {site.isActive ? 'Активен' : 'Неактивен'}
+                                                </Badge>
+                                            </td>
+                                            <td className="admin-sites-featured-cell">
+                                                <Badge
+                                                    bg={site.isFeatured ? 'warning' : 'outline-warning'}
+                                                    className="admin-sites-featured-badge"
+                                                    role="button"
+                                                    onClick={() => toggleFeatured(site._id, site.isFeatured)}
+                                                >
+                                                    {site.isFeatured ? 'Рекомендуемый' : 'Стандартный'}
+                                                </Badge>
+                                            </td>
+                                            <td className="admin-sites-technologies-cell">
+                                                <div className="admin-sites-tech-tags">
+                                                    {site.technologies?.slice(0, 3).map((tech, index) => (
+                                                        <Badge key={index} bg="outline-info" className="admin-sites-tech-tag">
+                                                            {tech}
+                                                        </Badge>
+                                                    ))}
+                                                    {site.technologies?.length > 3 && (
+                                                        <Badge bg="outline-secondary" className="admin-sites-tech-tag-more">
+                                                            +{site.technologies.length - 3}
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            </td>
+                                            <td className="admin-sites-actions-cell">
+                                                <div className="admin-sites-action-buttons">
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline-primary"
+                                                        onClick={() => handleShowModal(site)}
+                                                        className="admin-sites-btn-edit"
+                                                        title="Редактировать сайт"
+                                                    >
+                                                        ✏️
+                                                    </Button>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline-danger"
+                                                        onClick={() => handleDelete(site._id)}
+                                                        className="admin-sites-btn-delete"
+                                                        title="Удалить сайт"
+                                                    >
+                                                        🗑️
+                                                    </Button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </Table>
+                            </div>
                         </div>
                     ) : (
                         <div className="admin-sites-no-data">
                             <div className="admin-sites-no-data-icon">🌐</div>
-                            <p>No websites found. Create your first website to get started.</p>
+                            <p>Сайты не найдены. Создайте первый сайт, чтобы начать.</p>
                             <Button onClick={() => handleShowModal()} className="admin-sites-btn-add-first">
-                                Add First Website
+                                Добавить первый сайт
                             </Button>
                         </div>
                     )}
                 </Card.Body>
             </Card>
 
-            {/* Add/Edit Modal */}
+            {/* Модальное окно добавления/редактирования */}
             <Modal show={showModal} onHide={handleCloseModal} size="lg" className="admin-sites-modal">
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {editingSite ? 'Edit Website' : 'Add New Website'}
+                        {editingSite ? 'Редактировать сайт' : 'Добавить новый сайт'}
                     </Modal.Title>
                 </Modal.Header>
                 <Form onSubmit={handleSubmit}>
@@ -460,38 +491,38 @@ const AdminSites = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Title *</Form.Label>
+                                    <Form.Label>Название *</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="title"
                                         value={formData.title}
                                         onChange={handleInputChange}
                                         required
-                                        placeholder="Enter website title"
+                                        placeholder="Введите название сайта"
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Category *</Form.Label>
+                                    <Form.Label>Категория *</Form.Label>
                                     <Form.Select
                                         name="category"
                                         value={formData.category}
                                         onChange={handleInputChange}
                                         required
                                     >
-                                        <option value="Landing Page">Landing Page</option>
-                                        <option value="Corporate Website">Corporate Website</option>
-                                        <option value="E-commerce">E-commerce</option>
-                                        <option value="Portfolio">Portfolio</option>
-                                        <option value="Web Application">Web Application</option>
+                                        <option value="Лендинг">Лендинг</option>
+                                        <option value="Корпоративный сайт">Корпоративный сайт</option>
+                                        <option value="Интернет-магазин">Интернет-магазин</option>
+                                        <option value="Портфолио">Портфолио</option>
+                                        <option value="Веб-приложение">Веб-приложение</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
                         </Row>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Short Description *</Form.Label>
+                            <Form.Label>Краткое описание *</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={2}
@@ -499,13 +530,13 @@ const AdminSites = () => {
                                 value={formData.shortDescription}
                                 onChange={handleInputChange}
                                 required
-                                placeholder="Brief description (max 200 characters)"
+                                placeholder="Краткое описание (максимум 200 символов)"
                                 maxLength={200}
                             />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Full Description *</Form.Label>
+                            <Form.Label>Полное описание *</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={4}
@@ -513,14 +544,14 @@ const AdminSites = () => {
                                 value={formData.description}
                                 onChange={handleInputChange}
                                 required
-                                placeholder="Detailed description of the website"
+                                placeholder="Подробное описание сайта"
                             />
                         </Form.Group>
 
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Monthly Price ($) *</Form.Label>
+                                    <Form.Label>Месячная цена ($) *</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="price"
@@ -535,17 +566,19 @@ const AdminSites = () => {
                             </Col>
                         </Row>
 
-                        {/* Image Upload Section */}
+                        {/* Раздел загрузки изображений */}
                         <Form.Group className="mb-4">
-                            <Form.Label>Website Images *</Form.Label>
+                            <Form.Label>Изображения сайта *</Form.Label>
                             <Form.Text className="text-muted d-block mb-2">
-                                Upload screenshots of your website. First image will be used as main preview. Maximum 7 images.
+                                <span style={{color:"white"}}>
+                                    Загрузите скриншоты вашего сайта. Первое изображение будет использоваться как основное превью. Максимум 7 изображений.
+                                </span>
                             </Form.Text>
 
                             {editingSite && (
                                 <div className="admin-sites-debug-info mb-2">
                                     <small className="text-info">
-                                        Debug: {imagePreviews.length} total previews ({imagePreviews.filter(p => p.startsWith('http://localhost:5000/uploads/')).length} server, {selectedImages.length} new)
+                                        Отладка: {imagePreviews.length} всего превью ({imagePreviews.filter(p => p.startsWith('http://localhost:5000/uploads/')).length} серверных, {selectedImages.length} новых)
                                     </small>
                                 </div>
                             )}
@@ -560,12 +593,12 @@ const AdminSites = () => {
                                                     <div className="admin-sites-image-preview-container">
                                                         <img
                                                             src={preview}
-                                                            alt={`Preview ${index + 1}`}
+                                                            alt={`Превью ${index + 1}`}
                                                             className="admin-sites-image-preview"
                                                         />
                                                         <div className="admin-sites-image-info">
                                                             <small className={isServerImage ? 'text-success' : 'text-warning'}>
-                                                                {isServerImage ? 'Server' : 'New'}
+                                                                {isServerImage ? 'Серверное' : 'Новое'}
                                                             </small>
                                                         </div>
                                                         <Button
@@ -599,36 +632,38 @@ const AdminSites = () => {
                                     className="w-100"
                                     disabled={imagePreviews.length >= 7}
                                 >
-                                    📷 Choose Images ({imagePreviews.length}/7)
+                                    📷 Выбрать изображения ({imagePreviews.length}/7)
                                     {imagePreviews.length >= 7 && (
-                                        <span className="ms-1 text-warning">• Limit reached</span>
+                                        <span className="ms-1 text-warning">• Лимит достигнут</span>
                                     )}
                                 </Button>
                                 <Form.Text className="text-muted">
-                                    Supported formats: JPG, PNG, WebP. Max 5MB per image. Maximum 7 images total.
+                                    <span style={{color:"white"}}>
+                                    Поддерживаемые форматы: JPG, PNG, WebP. Макс. 5MB на изображение. Максимум 7 изображений всего.
+                                    </span>
                                 </Form.Text>
                             </div>
 
                             {selectedImages.length === 0 && !editingSite && (
                                 <Form.Text className="text-danger">
-                                    At least one image is required
+                                    Требуется хотя бы одно изображение
                                 </Form.Text>
                             )}
                         </Form.Group>
 
-                        {/* Technologies */}
+                        {/* Технологии */}
                         <Form.Group className="mb-3">
-                            <Form.Label>Technologies</Form.Label>
+                            <Form.Label>Технологии</Form.Label>
                             <div className="input-group">
                                 <Form.Control
                                     type="text"
                                     value={techInput}
                                     onChange={(e) => setTechInput(e.target.value)}
-                                    placeholder="Add technology (e.g., React, Node.js)"
+                                    placeholder="Добавить технологию (например, React, Node.js)"
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTechnology())}
                                 />
                                 <Button variant="outline-secondary" onClick={addTechnology}>
-                                    Add
+                                    Добавить
                                 </Button>
                             </div>
                             <div className="admin-sites-tags-container">
@@ -643,19 +678,19 @@ const AdminSites = () => {
                             </div>
                         </Form.Group>
 
-                        {/* Features */}
+                        {/* Особенности */}
                         <Form.Group className="mb-3">
-                            <Form.Label>Features</Form.Label>
+                            <Form.Label>Особенности</Form.Label>
                             <div className="input-group">
                                 <Form.Control
                                     type="text"
                                     value={featureInput}
                                     onChange={(e) => setFeatureInput(e.target.value)}
-                                    placeholder="Add feature (e.g., Responsive Design, SEO Optimized)"
+                                    placeholder="Добавить особенность (например, Адаптивный дизайн, SEO оптимизация)"
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())}
                                 />
                                 <Button variant="outline-secondary" onClick={addFeature}>
-                                    Add
+                                    Добавить
                                 </Button>
                             </div>
                             <div className="admin-sites-tags-container">
@@ -675,7 +710,7 @@ const AdminSites = () => {
                                 <Form.Check
                                     type="checkbox"
                                     name="isFeatured"
-                                    label="Featured Website"
+                                    label="Рекомендуемый сайт"
                                     checked={formData.isFeatured}
                                     onChange={handleInputChange}
                                     className="mb-3"
@@ -685,7 +720,7 @@ const AdminSites = () => {
                                 <Form.Check
                                     type="checkbox"
                                     name="isActive"
-                                    label="Active"
+                                    label="Активен"
                                     checked={formData.isActive}
                                     onChange={handleInputChange}
                                     className="mb-3"
@@ -695,14 +730,14 @@ const AdminSites = () => {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button variant="outline-secondary" onClick={handleCloseModal}>
-                            Cancel
+                            Отмена
                         </Button>
                         <Button
                             type="submit"
                             variant="primary"
                             disabled={loading || (imagePreviews.length === 0 && !editingSite) || imagePreviews.length > 7}
                         >
-                            {loading ? 'Saving...' : (editingSite ? 'Update' : 'Create')}
+                            {loading ? 'Сохранение...' : (editingSite ? 'Обновить' : 'Создать')}
                         </Button>
                     </Modal.Footer>
                 </Form>

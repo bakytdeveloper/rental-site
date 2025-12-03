@@ -30,12 +30,12 @@ const Contact = () => {
             const response = await contactAPI.create(formData);
 
             if (response.data.success) {
-                toast.success('📧 Message sent successfully! We will get back to you within 24 hours.');
+                toast.success('📧 Сообщение успешно отправлено! Мы ответим вам в течение 24 часов.');
                 setFormData({ name: '', email: '', subject: '', message: '' });
             }
         } catch (error) {
-            console.error('Error submitting contact form:', error);
-            toast.error('Failed to send message. Please try again.');
+            console.error('Ошибка при отправке формы:', error);
+            toast.error('Не удалось отправить сообщение. Пожалуйста, попробуйте еще раз.');
         } finally {
             stopLoading();
         }
@@ -47,9 +47,9 @@ const Contact = () => {
                 <Container>
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
-                            <h1 className="page-title">Get In Touch</h1>
+                            <h1 className="page-title">Свяжитесь с нами</h1>
                             <p className="page-subtitle">
-                                Have questions about our website rental service? We're here to help!
+                                Есть вопросы о нашей услуге аренды сайтов? Мы здесь, чтобы помочь!
                             </p>
                         </Col>
                     </Row>
@@ -65,28 +65,28 @@ const Contact = () => {
                                     <Row>
                                         <Col md={6}>
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Full Name *</Form.Label>
+                                                <Form.Label>Полное имя *</Form.Label>
                                                 <Form.Control
                                                     type="text"
                                                     name="name"
                                                     value={formData.name}
                                                     onChange={handleChange}
                                                     required
-                                                    placeholder="Enter your full name"
+                                                    placeholder="Введите ваше полное имя"
                                                     disabled={loading}
                                                 />
                                             </Form.Group>
                                         </Col>
                                         <Col md={6}>
                                             <Form.Group className="mb-3">
-                                                <Form.Label>Email Address *</Form.Label>
+                                                <Form.Label>Email адрес *</Form.Label>
                                                 <Form.Control
                                                     type="email"
                                                     name="email"
                                                     value={formData.email}
                                                     onChange={handleChange}
                                                     required
-                                                    placeholder="Enter your email"
+                                                    placeholder="Введите ваш email"
                                                     disabled={loading}
                                                 />
                                             </Form.Group>
@@ -94,20 +94,20 @@ const Contact = () => {
                                     </Row>
 
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Subject *</Form.Label>
+                                        <Form.Label>Тема *</Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="subject"
                                             value={formData.subject}
                                             onChange={handleChange}
                                             required
-                                            placeholder="What is this regarding?"
+                                            placeholder="По какому вопросу?"
                                             disabled={loading}
                                         />
                                     </Form.Group>
 
                                     <Form.Group className="mb-4">
-                                        <Form.Label>Message *</Form.Label>
+                                        <Form.Label>Сообщение *</Form.Label>
                                         <Form.Control
                                             as="textarea"
                                             rows={5}
@@ -115,7 +115,7 @@ const Contact = () => {
                                             value={formData.message}
                                             onChange={handleChange}
                                             required
-                                            placeholder="Tell us more about your inquiry..."
+                                            placeholder="Расскажите нам больше о вашем вопросе..."
                                             disabled={loading}
                                         />
                                     </Form.Group>
@@ -136,10 +136,10 @@ const Contact = () => {
                                                     aria-hidden="true"
                                                     className="me-2"
                                                 />
-                                                Sending...
+                                                Отправка...
                                             </>
                                         ) : (
-                                            'Send Message'
+                                            'Отправить сообщение'
                                         )}
                                     </Button>
                                 </Form>
@@ -152,22 +152,22 @@ const Contact = () => {
                     <Col md={4} className="text-center">
                         <div className="contact-info-item">
                             <div className="contact-icon">📧</div>
-                            <h4>Email Us</h4>
-                            <p>hello@rentalsite.com</p>
+                            <h4>Напишите нам</h4>
+                            <p>bakytdeveloper@gmail.com</p>
                         </div>
                     </Col>
                     <Col md={4} className="text-center">
                         <div className="contact-info-item">
                             <div className="contact-icon">📞</div>
-                            <h4>Call Us</h4>
-                            <p>+1 (555) 123-4567</p>
+                            <h4>Позвоните нам</h4>
+                            <p>+7 (778) 008-33-14</p>
                         </div>
                     </Col>
                     <Col md={4} className="text-center">
                         <div className="contact-info-item">
                             <div className="contact-icon">📍</div>
-                            <h4>Visit Us</h4>
-                            <p>123 Business Ave, Suite 100</p>
+                            <h4>Посетите нас</h4>
+                            <p>Бизнес Авеню, Офис 100</p>
                         </div>
                     </Col>
                 </Row>

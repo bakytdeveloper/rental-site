@@ -5,26 +5,26 @@ const Features = () => {
     const features = [
         {
             icon: '⚡',
-            title: 'Instant Deployment',
-            description: 'Go live in minutes, not weeks. Our pre-built sites are ready for immediate use.',
+            title: 'Мгновенное развертывание',
+            description: 'Запускайтесь за минуты, а не недели. Наши готовые сайты доступны для немедленного использования.',
             gradient: 'from-purple-500 to-pink-500'
         },
         {
             icon: '🛡️',
-            title: 'Full Support',
-            description: '24/7 technical support and maintenance included with every rental.',
+            title: 'Полная поддержка',
+            description: 'Круглосуточная техническая поддержка и обслуживание включены в каждую аренду.',
             gradient: 'from-green-400 to-blue-500'
         },
         {
             icon: '🎨',
-            title: 'Customizable',
-            description: 'Easily customize colors, content, and branding to match your business.',
+            title: 'Настраиваемость',
+            description: 'Легко настраивайте цвета, контент и брендинг под ваш бизнес.',
             gradient: 'from-orange-400 to-red-500'
         },
         {
             icon: '📈',
-            title: 'SEO Optimized',
-            description: 'All sites come with built-in SEO best practices for better visibility.',
+            title: 'SEO оптимизация',
+            description: 'Все сайты имеют встроенные лучшие практики SEO для лучшей видимости.',
             gradient: 'from-blue-400 to-purple-600'
         }
     ];
@@ -35,10 +35,10 @@ const Features = () => {
                 <Row className="text-center mb-5">
                     <Col>
                         <h2 className="section-title">
-                            Why Choose <span className="text-gradient">RentalSite</span>?
+                            Почему выбирают <span className="text-gradient">RentalSite</span>?
                         </h2>
                         <p className="section-subtitle">
-                            Experience the future of web presence with our innovative rental model
+                            Оцените будущее веб-присутствия с нашей инновационной моделью аренды
                         </p>
                     </Col>
                 </Row>

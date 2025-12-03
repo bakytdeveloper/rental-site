@@ -17,7 +17,7 @@ const SiteDetail = () => {
         email: '',
         phone: '',
         company: '',
-        message: `I'm interested in renting this website and would like to know more about the rental process, pricing details, and setup requirements.`
+        message: `Я заинтересован в аренде этого сайта и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
     });
     const { loading, startLoading, stopLoading } = useLoading();
 
@@ -34,11 +34,11 @@ const SiteDetail = () => {
             setSite(response.data);
             setContactForm(prev => ({
                 ...prev,
-                message: `I'm interested in renting "${response.data.title}" and would like to know more about the rental process, pricing details, and setup requirements.`
+                message: `Я заинтересован в аренде сайта "${response.data.title}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
             }));
         } catch (error) {
-            console.error('Error fetching site details:', error);
-            toast.error('Failed to load site details');
+            console.error('Ошибка при загрузке деталей сайта:', error);
+            toast.error('Не удалось загрузить информацию о сайте');
             navigate('/catalog');
         } finally {
             stopLoading();
@@ -53,34 +53,34 @@ const SiteDetail = () => {
             const contactData = {
                 name: contactForm.name.trim(),
                 email: contactForm.email.trim(),
-                phone: contactForm.phone.trim() || 'Not provided',
+                phone: contactForm.phone.trim() || 'Не указан',
                 company: contactForm.company.trim() || '',
                 message: contactForm.message.trim(),
                 siteId: id,
                 siteTitle: site.title,
-                subject: `Rental Inquiry: ${site.title}`
+                subject: `Запрос на аренду: ${site.title}`
             };
 
-            console.log('📤 Sending contact data:', contactData);
+            console.log('📤 Отправка данных контакта:', contactData);
 
             const response = await contactAPI.create(contactData);
 
             if (response.data.success) {
-                toast.success('🎉 Your rental request has been sent! We will contact you within 24 hours.');
+                toast.success('🎉 Ваш запрос на аренду отправлен! Мы свяжемся с вами в течение 24 часов.');
                 setShowContactModal(false);
                 setContactForm({
                     name: '',
                     email: '',
                     phone: '',
                     company: '',
-                    message: `I'm interested in renting "${site.title}" and would like to know more about the rental process, pricing details, and setup requirements.`
+                    message: `Я заинтересован в аренде сайта "${site.title}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
                 });
             }
         } catch (error) {
-            console.error('❌ Error submitting contact form:', error);
+            console.error('❌ Ошибка при отправке формы:', error);
             const errorMessage = error.response?.data?.message ||
                 error.response?.data?.errors?.join(', ') ||
-                'Failed to send request. Please try again.';
+                'Не удалось отправить запрос. Пожалуйста, попробуйте еще раз.';
 
             toast.error(errorMessage);
         } finally {
@@ -108,7 +108,7 @@ const SiteDetail = () => {
                 <Container>
                     <div className="site-detail-loading-spinner">
                         <Spinner animation="border" variant="primary" />
-                        <p>Loading website details...</p>
+                        <p>Загружаем детали сайта...</p>
                     </div>
                 </Container>
             </div>
@@ -119,10 +119,10 @@ const SiteDetail = () => {
         return (
             <Container>
                 <Alert variant="danger" className="mt-4">
-                    <h4>Website Not Found</h4>
-                    <p>The website you're looking for doesn't exist or has been removed.</p>
+                    <h4>Сайт не найден</h4>
+                    <p>Сайт, который вы ищете, не существует или был удален.</p>
                     <Button as={Link} to="/catalog" variant="primary">
-                        Back to Catalog
+                        Вернуться в каталог
                     </Button>
                 </Alert>
             </Container>
@@ -132,17 +132,17 @@ const SiteDetail = () => {
     return (
         <div className="site-detail-page">
             <Container>
-                {/* Breadcrumb */}
+                {/* Хлебные крошки */}
                 <nav className="site-detail-breadcrumb-nav">
-                    <Link to="/" className="site-detail-breadcrumb-link">Home</Link>
+                    <Link to="/" className="site-detail-breadcrumb-link">Главная</Link>
                     <span className="site-detail-breadcrumb-separator">/</span>
-                    <Link to="/catalog" className="site-detail-breadcrumb-link">Catalog</Link>
+                    <Link to="/catalog" className="site-detail-breadcrumb-link">Каталог</Link>
                     <span className="site-detail-breadcrumb-separator">/</span>
                     <span className="site-detail-breadcrumb-current">{site.title}</span>
                 </nav>
 
                 <Row className="site-detail-content">
-                    {/* Gallery Section */}
+                    {/* Галерея */}
                     <Col lg={7}>
                         <div className="site-detail-gallery-section">
                             <div className="site-detail-main-gallery">
@@ -156,15 +156,15 @@ const SiteDetail = () => {
                                     ) : (
                                         <div className="no-image-placeholder">
                                             <span>🌐</span>
-                                            <p>No preview available</p>
+                                            <p>Предпросмотр недоступен</p>
                                         </div>
                                     )}
                                     {site.isFeatured && (
-                                        <Badge className="site-detail-featured-badge-large">⭐ Featured Website</Badge>
+                                        <Badge className="site-detail-featured-badge-large">⭐ Рекомендуемый сайт</Badge>
                                     )}
                                 </div>
 
-                                {/* Image Navigation */}
+                                {/* Навигация по изображениям */}
                                 {site.images && site.images.length > 1 && (
                                     <div className="site-detail-image-navigation">
                                         <Button
@@ -191,7 +191,7 @@ const SiteDetail = () => {
                                     </div>
                                 )}
 
-                                {/* Thumbnail Gallery */}
+                                {/* Галерея миниатюр */}
                                 {site.images && site.images.length > 1 && (
                                     <div className="site-detail-thumbnail-gallery">
                                         {site.images.map((image, index) => (
@@ -202,7 +202,7 @@ const SiteDetail = () => {
                                             >
                                                 <img
                                                     src={`http://localhost:5000${image}`}
-                                                    alt={`${site.title} view ${index + 1}`}
+                                                    alt={`${site.title} вид ${index + 1}`}
                                                 />
                                             </button>
                                         ))}
@@ -212,7 +212,7 @@ const SiteDetail = () => {
                         </div>
                     </Col>
 
-                    {/* Site Info Section */}
+                    {/* Информация о сайте */}
                     <Col lg={5}>
                         <div className="site-detail-info-section">
                             <div className="site-header">
@@ -222,7 +222,7 @@ const SiteDetail = () => {
                                     </Badge>
                                     {site.isActive && (
                                         <Badge bg="success" className="site-detail-status-badge">
-                                            ✅ Available for Rent
+                                            ✅ Доступен для аренды
                                         </Badge>
                                     )}
                                 </div>
@@ -231,20 +231,20 @@ const SiteDetail = () => {
 
                                 <div className="site-detail-price-section">
                                     <div className="site-detail-price-amount">${site.price}</div>
-                                    <div className="site-detail-price-period">/month</div>
+                                    <div className="site-detail-price-period">/месяц</div>
                                 </div>
 
                                 <p className="site-detail-description">{site.description}</p>
                             </div>
 
-                            {/* Quick Actions */}
+                            {/* Быстрые действия */}
                             <div className="site-detail-quick-actions">
                                 <Button
                                     className="site-detail-btn-rent-now-main"
                                     size="lg"
                                     onClick={scrollToRent}
                                 >
-                                    💳 Rent This Website
+                                    💳 Арендовать этот сайт
                                 </Button>
                                 <Button
                                     variant="outline-light"
@@ -252,14 +252,14 @@ const SiteDetail = () => {
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
-                                    💬 Quick Inquiry
+                                    💬 Быстрый запрос
                                 </Button>
                             </div>
 
-                            {/* Key Features */}
+                            {/* Ключевые особенности */}
                             {site.features && site.features.length > 0 && (
                                 <div className="site-detail-key-features">
-                                    <h4>🚀 Key Features</h4>
+                                    <h4>🚀 Ключевые особенности</h4>
                                     <div className="site-detail-features-grid">
                                         {site.features.map((feature, index) => (
                                             <div key={index} className="site-detail-feature-item">
@@ -271,10 +271,10 @@ const SiteDetail = () => {
                                 </div>
                             )}
 
-                            {/* Technologies */}
+                            {/* Технологии */}
                             {site.technologies && site.technologies.length > 0 && (
                                 <div className="site-detail-technologies-section">
-                                    <h4>🛠️ Built With</h4>
+                                    <h4>🛠️ Создано с использованием</h4>
                                     <div className="site-detail-tech-tags">
                                         {site.technologies.map((tech, index) => (
                                             <Badge key={index} bg="outline-info" className="site-detail-tech-tag">
@@ -285,17 +285,17 @@ const SiteDetail = () => {
                                 </div>
                             )}
 
-                            {/* Demo Link */}
+                            {/* Демо ссылка */}
                             {site.demoUrl && (
                                 <div className="site-detail-demo-section">
-                                    <h4>🌐 Live Demo</h4>
+                                    <h4>🌐 Живая демо-версия</h4>
                                     <a
                                         href={site.demoUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="site-detail-demo-link-btn"
                                     >
-                                        Visit Live Website ↗
+                                        Посетить сайт ↗
                                     </a>
                                 </div>
                             )}
@@ -303,37 +303,37 @@ const SiteDetail = () => {
                     </Col>
                 </Row>
 
-                {/* Rent Section */}
+                {/* Раздел аренды */}
                 <section id="rent-section" className="site-detail-rent-section">
                     <Row>
                         <Col lg={8} className="mx-auto">
                             <div className="site-detail-rent-card">
-                                <h2>Ready to Rent This Website?</h2>
+                                <h2>Готовы арендовать этот сайт?</h2>
                                 <p className="site-detail-rent-description">
-                                    Get started with this premium website today. Complete the form below
-                                    and our team will contact you to discuss the rental process.
+                                    Начните использовать этот премиальный сайт уже сегодня. Заполните форму ниже,
+                                    и наша команда свяжется с вами для обсуждения процесса аренды.
                                 </p>
 
                                 <div className="site-detail-rent-benefits">
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">⚡</span>
                                         <div>
-                                            <h5>Instant Setup</h5>
-                                            <p>Get your website live within 24 hours</p>
+                                            <h5>Мгновенная настройка</h5>
+                                            <p>Ваш сайт будет запущен в течение 24 часов</p>
                                         </div>
                                     </div>
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">🔧</span>
                                         <div>
-                                            <h5>Full Support</h5>
-                                            <p>Technical support and maintenance included</p>
+                                            <h5>Полная поддержка</h5>
+                                            <p>Техническая поддержка и обслуживание включены</p>
                                         </div>
                                     </div>
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">🔄</span>
                                         <div>
-                                            <h5>Flexible Terms</h5>
-                                            <p>Monthly rental with option to cancel anytime</p>
+                                            <h5>Гибкие условия</h5>
+                                            <p>Месячная аренда с возможностью отмены в любое время</p>
                                         </div>
                                     </div>
                                 </div>
@@ -343,18 +343,18 @@ const SiteDetail = () => {
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
-                                    Start Renting - ${site.price}/month
+                                    Начать аренду - ${site.price}/месяц
                                 </Button>
                             </div>
                         </Col>
                     </Row>
                 </section>
 
-                {/* Related Sites Section */}
+                {/* Похожие сайты */}
                 <RelatedSites currentSiteId={site._id} category={site.category} />
             </Container>
 
-            {/* Contact Modal */}
+            {/* Модальное окно контакта */}
             <Modal
                 show={showContactModal}
                 onHide={() => setShowContactModal(false)}
@@ -363,23 +363,23 @@ const SiteDetail = () => {
                 className="site-detail-contact-modal"
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Rent {site.title}</Modal.Title>
+                    <Modal.Title>Арендовать {site.title}</Modal.Title>
                     <div className="site-detail-modal-subtitle">
-                        ${site.price}/month • {site.category}
+                        ${site.price}/месяц • {site.category}
                     </div>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="site-detail-rental-summary">
                         <div className="site-detail-summary-item">
-                            <span>Website:</span>
+                            <span>Сайт:</span>
                             <strong>{site.title}</strong>
                         </div>
                         <div className="site-detail-summary-item">
-                            <span>Monthly Price:</span>
+                            <span>Месячная цена:</span>
                             <strong>${site.price}</strong>
                         </div>
                         <div className="site-detail-summary-item">
-                            <span>Category:</span>
+                            <span>Категория:</span>
                             <strong>{site.category}</strong>
                         </div>
                     </div>
@@ -388,28 +388,28 @@ const SiteDetail = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Full Name *</Form.Label>
+                                    <Form.Label>Полное имя *</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="name"
                                         value={contactForm.name}
                                         onChange={handleInputChange}
                                         required
-                                        placeholder="Enter your full name"
+                                        placeholder="Введите ваше полное имя"
                                         disabled={loading}
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email Address *</Form.Label>
+                                    <Form.Label>Email адрес *</Form.Label>
                                     <Form.Control
                                         type="email"
                                         name="email"
                                         value={contactForm.email}
                                         onChange={handleInputChange}
                                         required
-                                        placeholder="Enter your email"
+                                        placeholder="Введите ваш email"
                                         disabled={loading}
                                     />
                                 </Form.Group>
@@ -419,27 +419,27 @@ const SiteDetail = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Phone Number *</Form.Label>
+                                    <Form.Label>Номер телефона *</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         name="phone"
                                         value={contactForm.phone}
                                         onChange={handleInputChange}
                                         required
-                                        placeholder="Enter your phone number"
+                                        placeholder="Введите ваш номер телефона"
                                         disabled={loading}
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Company</Form.Label>
+                                    <Form.Label>Компания</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="company"
                                         value={contactForm.company}
                                         onChange={handleInputChange}
-                                        placeholder="Your company (optional)"
+                                        placeholder="Ваша компания (необязательно)"
                                         disabled={loading}
                                     />
                                 </Form.Group>
@@ -447,7 +447,7 @@ const SiteDetail = () => {
                         </Row>
 
                         <Form.Group className="mb-4">
-                            <Form.Label>Your Message *</Form.Label>
+                            <Form.Label>Ваше сообщение *</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={5}
@@ -455,7 +455,7 @@ const SiteDetail = () => {
                                 value={contactForm.message}
                                 onChange={handleInputChange}
                                 required
-                                placeholder="Tell us about your rental needs..."
+                                placeholder="Расскажите нам о ваших потребностях в аренде..."
                                 disabled={loading}
                             />
                         </Form.Group>
@@ -467,7 +467,7 @@ const SiteDetail = () => {
                                 className="me-2"
                                 disabled={loading}
                             >
-                                Cancel
+                                Отмена
                             </Button>
                             <Button
                                 type="submit"
@@ -484,10 +484,10 @@ const SiteDetail = () => {
                                             aria-hidden="true"
                                             className="me-2"
                                         />
-                                        Sending...
+                                        Отправка...
                                     </>
                                 ) : (
-                                    '📧 Send Rental Request'
+                                    '📧 Отправить запрос на аренду'
                                 )}
                             </Button>
                         </div>
@@ -498,7 +498,7 @@ const SiteDetail = () => {
     );
 };
 
-// Related Sites Component
+// Компонент похожих сайтов
 const RelatedSites = ({ currentSiteId, category }) => {
     const [relatedSites, setRelatedSites] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -516,7 +516,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
             const filtered = response.data.sites.filter(site => site._id !== currentSiteId);
             setRelatedSites(filtered.slice(0, 3));
         } catch (error) {
-            console.error('Error fetching related sites:', error);
+            console.error('Ошибка при загрузке похожих сайтов:', error);
         } finally {
             setLoading(false);
         }
@@ -526,7 +526,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
 
     return (
         <section className="site-detail-related-sites-section">
-            <h2 className="site-detail-section-title">Similar Websites You Might Like</h2>
+            <h2 className="site-detail-section-title">Похожие сайты, которые могут вам понравиться</h2>
             <Row>
                 {relatedSites.map((site, index) => (
                     <Col lg={4} key={site._id}>
@@ -541,13 +541,13 @@ const RelatedSites = ({ currentSiteId, category }) => {
                                     <div className="no-image">🌐</div>
                                 )}
                                 {site.isFeatured && (
-                                    <Badge className="site-detail-related-featured-badge">Featured</Badge>
+                                    <Badge className="site-detail-related-featured-badge">Рекомендуемый</Badge>
                                 )}
                             </div>
                             <div className="site-detail-related-site-info">
                                 <h4>{site.title}</h4>
                                 <p className="site-detail-related-site-description">{site.shortDescription}</p>
-                                <div className="site-detail-related-site-price">${site.price}/month</div>
+                                <div className="site-detail-related-site-price">${site.price}/месяц</div>
                                 <Button
                                     as={Link}
                                     to={`/catalog/${site._id}`}
@@ -555,7 +555,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
                                     variant="outline"
                                     className="site-detail-btn-view-related"
                                 >
-                                    View Details
+                                    Подробнее
                                 </Button>
                             </div>
                         </div>

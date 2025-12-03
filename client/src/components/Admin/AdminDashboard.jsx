@@ -19,26 +19,27 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         fetchDashboardData();
+        // eslint-disable-next-line
     }, []);
 
     const fetchDashboardData = async () => {
         startLoading();
         try {
-            // Fetch sites data
+            // Получаем данные сайтов
             const sitesResponse = await siteAPI.getAll({ limit: 100 });
             const sites = sitesResponse.data.sites || [];
 
-            // Fetch contacts data
+            // Получаем данные контактов
             const contactsResponse = await contactAPI.getStats();
             const contactsData = contactsResponse.data.stats;
 
-            // Fetch recent contacts
+            // Получаем последние контакты
             const recentContactsResponse = await contactAPI.getAll({
                 limit: 5,
                 page: 1
             });
 
-            // Calculate stats
+            // Вычисляем статистику
             const totalSites = sites.length;
             const activeSites = sites.filter(site => site.isActive).length;
             const featuredSites = sites.filter(site => site.isFeatured).length;
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
             setRecentContacts(recentContactsResponse.data.contacts.slice(0, 5));
             setRecentSites(sites.slice(0, 5));
         } catch (error) {
-            console.error('Error fetching dashboard data:', error);
+            console.error('Ошибка при загрузке данных панели управления:', error);
         } finally {
             stopLoading();
         }
@@ -68,18 +69,24 @@ const AdminDashboard = () => {
             completed: 'success',
             spam: 'secondary'
         };
-        return <Badge bg={variants[status]}>{status}</Badge>;
+        const statusText = {
+            new: 'Новый',
+            contacted: 'На связи',
+            completed: 'Завершен',
+            spam: 'Спам'
+        };
+        return <Badge bg={variants[status]}>{statusText[status]}</Badge>;
     };
 
     if (loading) {
-        return <div className="admin-dashboard-loading">Loading dashboard...</div>;
+        return <div className="admin-dashboard-loading">Загрузка панели управления...</div>;
     }
 
     return (
         <div className="admin-dashboard">
-            <h1 className="admin-dashboard-title">Dashboard Overview</h1>
+            <h1 className="admin-dashboard-title">Обзор панели управления</h1>
 
-            {/* Stats Cards */}
+            {/* Статистические карточки */}
             <Row className="admin-dashboard-stats-row">
                 <Col lg={3} md={6} className="mb-4">
                     <Card className="admin-dashboard-stats-card">
@@ -87,7 +94,7 @@ const AdminDashboard = () => {
                             <div className="admin-dashboard-stats-icon sites">🌐</div>
                             <div className="admin-dashboard-stats-content">
                                 <h3>{stats.totalSites}</h3>
-                                <p>Total Websites</p>
+                                <p>Всего сайтов</p>
                             </div>
                         </Card.Body>
                     </Card>
@@ -99,7 +106,7 @@ const AdminDashboard = () => {
                             <div className="admin-dashboard-stats-icon active">✅</div>
                             <div className="admin-dashboard-stats-content">
                                 <h3>{stats.activeSites}</h3>
-                                <p>Active Websites</p>
+                                <p>Активных сайтов</p>
                             </div>
                         </Card.Body>
                     </Card>
@@ -111,7 +118,7 @@ const AdminDashboard = () => {
                             <div className="admin-dashboard-stats-icon featured">⭐</div>
                             <div className="admin-dashboard-stats-content">
                                 <h3>{stats.featuredSites}</h3>
-                                <p>Featured Websites</p>
+                                <p>Рекомендуемых сайтов</p>
                             </div>
                         </Card.Body>
                     </Card>
@@ -123,7 +130,7 @@ const AdminDashboard = () => {
                             <div className="admin-dashboard-stats-icon contacts">📧</div>
                             <div className="admin-dashboard-stats-content">
                                 <h3>{stats.totalContacts}</h3>
-                                <p>Total Contacts</p>
+                                <p>Всего контактов</p>
                             </div>
                         </Card.Body>
                     </Card>
@@ -131,12 +138,11 @@ const AdminDashboard = () => {
             </Row>
 
             <Row>
-                {/* Recent Contacts */}
-                {/* Recent Contacts */}
+                {/* Последние контакты */}
                 <Col lg={6} className="mb-4">
                     <Card className="admin-dashboard-recent-card">
                         <Card.Header>
-                            <h5>Recent Contact Requests</h5>
+                            <h5>Последние запросы на контакт</h5>
                         </Card.Header>
                         <Card.Body>
                             {recentContacts.length > 0 ? (
@@ -144,9 +150,9 @@ const AdminDashboard = () => {
                                     <Table responsive>
                                         <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
+                                            <th>Имя</th>
+                                            <th>Статус</th>
+                                            <th>Дата</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -158,7 +164,7 @@ const AdminDashboard = () => {
                                                 </td>
                                                 <td>{getStatusBadge(contact.status)}</td>
                                                 <td>
-                                                    {new Date(contact.createdAt).toLocaleDateString()}
+                                                    {new Date(contact.createdAt).toLocaleDateString('ru-RU')}
                                                 </td>
                                             </tr>
                                         ))}
@@ -166,17 +172,17 @@ const AdminDashboard = () => {
                                     </Table>
                                 </div>
                             ) : (
-                                <p className="admin-dashboard-text-muted text-center">No recent contacts</p>
+                                <p className="admin-dashboard-text-muted text-center">Нет последних контактов</p>
                             )}
                         </Card.Body>
                     </Card>
                 </Col>
 
-                {/* Recent Sites */}
+                {/* Недавно добавленные сайты */}
                 <Col lg={6} className="mb-4">
                     <Card className="admin-dashboard-recent-card">
                         <Card.Header>
-                            <h5>Recently Added Websites</h5>
+                            <h5>Недавно добавленные сайты</h5>
                         </Card.Header>
                         <Card.Body>
                             {recentSites.length > 0 ? (
@@ -184,10 +190,10 @@ const AdminDashboard = () => {
                                     <Table responsive>
                                         <thead>
                                         <tr>
-                                            <th>Title</th>
-                                            <th>Category</th>
-                                            <th>Price</th>
-                                            <th>Status</th>
+                                            <th>Название</th>
+                                            <th>Категория</th>
+                                            <th>Цена</th>
+                                            <th>Статус</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -200,10 +206,10 @@ const AdminDashboard = () => {
                                                     </small>
                                                 </td>
                                                 <td>{site.category}</td>
-                                                <td>${site.price}/mo</td>
+                                                <td>${site.price}/мес</td>
                                                 <td>
                                                     <Badge bg={site.isActive ? 'success' : 'secondary'}>
-                                                        {site.isActive ? 'Active' : 'Inactive'}
+                                                        {site.isActive ? 'Активен' : 'Неактивен'}
                                                     </Badge>
                                                 </td>
                                             </tr>
@@ -212,7 +218,7 @@ const AdminDashboard = () => {
                                     </Table>
                                 </div>
                             ) : (
-                                <p className="admin-dashboard-text-muted text-center">No websites added yet</p>
+                                <p className="admin-dashboard-text-muted text-center">Сайты еще не добавлены</p>
                             )}
                         </Card.Body>
                     </Card>
