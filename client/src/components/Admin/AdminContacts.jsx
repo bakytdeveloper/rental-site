@@ -175,18 +175,18 @@ const AdminContacts = () => {
     const getStatusBadge = (status) => {
         const statusTranslations = {
             new: 'новый',
-            contacted: 'на связи',
-            completed: 'завершен',
-            spam: 'спам',
+            // contacted: 'на связи',
+            // completed: 'завершен',
+            // spam: 'спам',
             active_rental: 'активная аренда',
             payment_due: 'ожидает оплаты'
         };
 
         const variants = {
             new: 'danger',
-            contacted: 'warning',
-            completed: 'success',
-            spam: 'secondary',
+            // contacted: 'warning',
+            // completed: 'success',
+            // spam: 'secondary',
             active_rental: 'info',
             payment_due: 'warning'
         };
@@ -237,9 +237,9 @@ const AdminContacts = () => {
                                 >
                                     <option value="all">Все статусы</option>
                                     <option value="new">Новый</option>
-                                    <option value="contacted">На связи</option>
-                                    <option value="completed">Завершен</option>
-                                    <option value="spam">Спам</option>
+                                    {/*<option value="contacted">На связи</option>*/}
+                                    {/*<option value="completed">Завершен</option>*/}
+                                    {/*<option value="spam">Спам</option>*/}
                                     <option value="active_rental">Активная аренда</option>
                                     <option value="payment_due">Ожидает оплаты</option>
                                 </Form.Select>
@@ -419,7 +419,7 @@ const AdminContacts = () => {
                                             <div className="admin-contacts__status-actions">
                                                 {getStatusBadge(selectedContact.status)}
                                                 <div className="admin-contacts__status-buttons">
-                                                    {['new', 'contacted', 'completed', 'spam', 'active_rental', 'payment_due'].map(status => (
+                                                    {['new', 'active_rental', 'payment_due'].map(status => (
                                                         <Button
                                                             key={status}
                                                             size="sm"
@@ -428,9 +428,9 @@ const AdminContacts = () => {
                                                             className="admin-contacts__status-btn"
                                                         >
                                                             {status === 'new' ? 'новый' :
-                                                                status === 'contacted' ? 'на связи' :
-                                                                    status === 'completed' ? 'завершен' :
-                                                                        status === 'spam' ? 'спам' :
+                                                                // status === 'contacted' ? 'на связи' :
+                                                                //     status === 'completed' ? 'завершен' :
+                                                                //         status === 'spam' ? 'спам' :
                                                                             status === 'active_rental' ? 'активная аренда' :
                                                                                 'ожидает оплаты'}
                                                         </Button>
@@ -536,7 +536,10 @@ const AdminContacts = () => {
                                     </div>
                                 ) : (
                                     <div className="text-muted text-center py-3">
-                                        Платежи еще не зарегистрированы
+                                        <span style={{color:"white"}}>
+                                            Платежи еще не зарегистрированы
+                                        </span>
+
                                     </div>
                                 )}
                             </div>
@@ -648,7 +651,9 @@ const AdminContacts = () => {
                                 placeholder="Автоматически рассчитывается из суммы"
                             />
                             <Form.Text className="text-muted">
-                                Оставьте пустым для автоматического расчета на основе ежемесячной цены
+                                <span style={{color:"whitesmoke"}}>
+                                    Оставьте пустым для автоматического расчета на основе ежемесячной цены
+                                </span>
                             </Form.Text>
                         </Form.Group>
 
