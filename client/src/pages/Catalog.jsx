@@ -130,7 +130,6 @@ const Catalog = () => {
             default:
                 filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
-
         setFilteredSites(filtered);
     };
 
