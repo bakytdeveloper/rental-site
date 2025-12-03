@@ -9,6 +9,7 @@ const About = () => {
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
                             <h1 className="page-title">О RentalSite</h1>
+                            
                             <p className="page-subtitle">
                                 Изменяем способ, которым бизнесы создают свое онлайн-присутствие
                             </p>
@@ -29,7 +30,7 @@ const About = () => {
                     </Col>
                     <Col lg={6}>
                         <h2 className="section-title">Что мы предлагаем</h2>
-                        
+
                         <p className="section-text">
                             Мы предоставляем тщательно подобранную коллекцию высококачественных сайтов в различных
                             отраслях и категориях. От потрясающих лендингов до комплексных интернет-магазинов,
