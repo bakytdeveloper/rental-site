@@ -38,7 +38,7 @@ const About = () => {
                 </Row>
 
                 <Row className="stats-section">
-                    
+
                     <Col md={3} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">500+</div>
@@ -63,6 +63,7 @@ const About = () => {
                             <div className="stat-label">Шаблонов</div>
                         </div>
                     </Col>
+                    
                 </Row>
             </Container>
         </div>
