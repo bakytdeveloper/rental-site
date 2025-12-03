@@ -9,7 +9,6 @@ const About = () => {
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
                             <h1 className="page-title">О RentalSite</h1>
-
                             <p className="page-subtitle">
                                 Изменяем способ, которым бизнесы создают свое онлайн-присутствие
                             </p>
