@@ -38,6 +38,7 @@ const About = () => {
                 </Row>
 
                 <Row className="stats-section">
+                    
                     <Col md={3} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">500+</div>

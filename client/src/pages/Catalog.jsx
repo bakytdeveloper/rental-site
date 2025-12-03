@@ -59,7 +59,7 @@ const Catalog = () => {
 
     const fetchSites = async () => {
         startLoading();
-        
+
         try {
             const params = {
                 page: pagination.page,
