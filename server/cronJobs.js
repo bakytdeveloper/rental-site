@@ -79,8 +79,8 @@ export const setupRentalCronJobs = () => {
     });
 
     // Ежедневная проверка истекающих аренд
-    // cron.schedule('0 9 * * *', async () => {
-    cron.schedule('*/5 * * * *', async () => {
+    cron.schedule('0 9 * * *', async () => {
+    // cron.schedule('*/5 * * * *', async () => {
 
         console.log('🕘 Running expiring rentals check...');
 
