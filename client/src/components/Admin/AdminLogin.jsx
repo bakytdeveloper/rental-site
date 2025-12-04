@@ -103,7 +103,7 @@ const AdminLogin = () => {
                                             value={formData.password}
                                             onChange={handleInputChange}
                                             required
-                                            placeholder="Введите пароль администратора"
+                                            placeholder="Введите пароль"
                                             disabled={loading}
                                         />
                                     </Form.Group>
