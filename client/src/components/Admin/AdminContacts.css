@@ -438,6 +438,11 @@
         margin-bottom: 1.5rem;
     }
 
+    .table-responsive {
+        overflow-x: auto!important;
+        -webkit-overflow-scrolling: touch;
+    }
+
     .admin-contacts__title {
         font-size: 1.5rem;
     }

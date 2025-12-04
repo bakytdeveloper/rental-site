@@ -265,7 +265,7 @@ const AdminContacts = () => {
             <Card className="admin-contacts__table-card">
                 <Card.Body className="admin-contacts__table-card-body">
                     {filteredContacts.length > 0 ? (
-                        <>
+                        <div className="table-responsive">
                             <Table responsive className="admin-contacts__table">
                                 <thead>
                                 <tr>
@@ -371,7 +371,7 @@ const AdminContacts = () => {
                                     </Button>
                                 </div>
                             )}
-                        </>
+                        </div>
                     ) : (
                         <div className="admin-contacts__no-data">
                             <p>Контактов, соответствующих критериям, не найдено.</p>
