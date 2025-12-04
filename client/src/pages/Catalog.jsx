@@ -25,7 +25,6 @@ const Catalog = () => {
     const { loading, startLoading, stopLoading } = useLoading();
     const location = useLocation();
 
-
     // Функция для прокрутки наверх
     useEffect(() => {
         window.scrollTo({
@@ -35,11 +34,21 @@ const Catalog = () => {
         });
     }, [location.search]);
 
+    // Загрузка данных при монтировании и изменении страницы
     useEffect(() => {
         fetchSites();
         fetchCategories();
         // eslint-disable-next-line
     }, [pagination.page]);
+
+    // Обработка параметров URL для пагинации
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const pageParam = searchParams.get('page');
+        if (pageParam && pageParam !== pagination.page.toString()) {
+            setPagination(prev => ({ ...prev, page: parseInt(pageParam) }));
+        }
+    }, [location.search]);
 
     useEffect(() => {
         AOS.init({
@@ -59,12 +68,10 @@ const Catalog = () => {
 
     const fetchSites = async () => {
         startLoading();
-
         try {
             const params = {
                 page: pagination.page,
-                limit: 12,
-                ...(filters.category !== 'all' && { category: filters.category })
+                limit: 12
             };
 
             const response = await siteAPI.getAll(params);
@@ -82,8 +89,51 @@ const Catalog = () => {
         }
     };
 
+    const fetchSitesByCategory = async (category) => {
+        startLoading();
+        try {
+            const params = {
+                page: pagination.page,
+                limit: 12,
+                category: category
+            };
+
+            const response = await siteAPI.getAll(params);
+            setSites(response.data.sites);
+            setFilteredSites(response.data.sites);
+            setPagination(prev => ({
+                ...prev,
+                totalPages: response.data.totalPages,
+                total: response.data.total
+            }));
+        } catch (error) {
+            console.error('Ошибка при загрузке сайтов по категории:', error);
+        } finally {
+            stopLoading();
+        }
+    };
+
     const fetchCategories = async () => {
         try {
+            const response = await siteAPI.getAll({ limit: 1000 });
+            const uniqueCategories = [...new Set(response.data.sites.map(site => site.category))];
+
+            const categoriesOrder = [
+                'Лендинг',
+                'Корпоративный сайт',
+                'Интернет-магазин',
+                'Портфолио',
+                'Веб-приложение'
+            ];
+
+            const sortedCategories = uniqueCategories.sort((a, b) => {
+                return categoriesOrder.indexOf(a) - categoriesOrder.indexOf(b);
+            });
+
+            const categoriesList = ['Все', ...sortedCategories];
+            setCategories(categoriesList);
+        } catch (error) {
+            console.error('Ошибка при загрузке категорий:', error);
             const categoriesList = [
                 'Все',
                 'Лендинг',
@@ -93,15 +143,22 @@ const Catalog = () => {
                 'Веб-приложение'
             ];
             setCategories(categoriesList);
-        } catch (error) {
-            console.error('Ошибка при загрузке категорий:', error);
         }
     };
 
     const handleFilterChange = (key, value) => {
         const newFilters = { ...filters, [key]: value };
         setFilters(newFilters);
-        applyFilters(newFilters);
+
+        if (key === 'search' || key === 'sort') {
+            applyFilters(newFilters);
+        } else if (key === 'category') {
+            if (value === 'all') {
+                fetchSites();
+            } else {
+                fetchSitesByCategory(value);
+            }
+        }
     };
 
     const applyFilters = (filterSettings) => {
@@ -114,10 +171,6 @@ const Catalog = () => {
             );
         }
 
-        if (filterSettings.category !== 'all') {
-            filtered = filtered.filter(site => site.category === filterSettings.category);
-        }
-
         switch (filterSettings.sort) {
             case 'price-low':
                 filtered.sort((a, b) => a.price - b.price);
@@ -128,9 +181,11 @@ const Catalog = () => {
             case 'name':
                 filtered.sort((a, b) => a.title.localeCompare(b.title));
                 break;
+            case 'newest':
             default:
                 filtered.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         }
+
         setFilteredSites(filtered);
     };
 
@@ -140,11 +195,12 @@ const Catalog = () => {
             search: '',
             sort: 'newest'
         });
-        setFilteredSites(sites);
+        fetchSites();
     };
 
     return (
         <div className="catalog-page">
+            {/* Остальной JSX остается без изменений */}
             <div className="catalog-hero">
                 <Container>
                     <Row>
@@ -158,10 +214,8 @@ const Catalog = () => {
                 </Container>
             </div>
 
-            {/* Фильтры в навбаре */}
             <Navbar expand="lg" className="catalog-navbar-filters">
                 <Container>
-                    {/* Поле поиска всегда видимое */}
                     <div className="catalog-navbar-filters__search--always-visible">
                         <Form.Control
                             type="text"
@@ -176,7 +230,6 @@ const Catalog = () => {
 
                     <Navbar.Collapse id="catalog-filters-nav">
                         <Nav className="catalog-navbar-filters__nav">
-                            {/* Это поле поиска скрывается в мобильном меню */}
                             <div className="catalog-navbar-filters__search--hidden-mobile">
                                 <Form.Control
                                     type="text"
@@ -187,7 +240,6 @@ const Catalog = () => {
                                 />
                             </div>
 
-                            {/* Категории */}
                             <div className="catalog-navbar-filters__category">
                                 <Form.Select
                                     value={filters.category}
@@ -202,7 +254,6 @@ const Catalog = () => {
                                 </Form.Select>
                             </div>
 
-                            {/* Сортировка */}
                             <div className="catalog-navbar-filters__sort">
                                 <Form.Select
                                     value={filters.sort}
@@ -216,7 +267,6 @@ const Catalog = () => {
                                 </Form.Select>
                             </div>
 
-                            {/* Кнопка сброса */}
                             <div className="catalog-navbar-filters__reset">
                                 <Button
                                     variant="outline"
@@ -231,7 +281,6 @@ const Catalog = () => {
                 </Container>
             </Navbar>
 
-            {/* Основной контент */}
             <Container className="catalog-container">
                 <Row>
                     <Col>

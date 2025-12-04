@@ -26,7 +26,7 @@ const SiteSchema = new mongoose.Schema({
     category: {
         type: String,
         required: true,
-        enum: ['Landing Page', 'Corporate Website', 'E-commerce', 'Portfolio', 'Web Application']
+        enum: ['Лендинг', 'Корпоративный сайт', 'Интернет-магазин', 'Портфолио', 'Веб-приложение']
     },
     technologies: [{
         type: String,
