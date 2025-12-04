@@ -49,7 +49,7 @@ const Contact = () => {
                         <Col lg={8} className="mx-auto text-center">
                             <h1 className="page-title">Свяжитесь с нами</h1>
                             <p className="page-subtitle">
-                                Есть вопросы о нашей услуге аренды сайтов? Мы здесь, чтобы помочь!
+                                Аренда сайтов: есть вопросы? Мы рядом!
                             </p>
                         </Col>
                     </Row>
