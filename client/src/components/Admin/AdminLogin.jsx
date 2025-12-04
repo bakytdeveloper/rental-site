@@ -90,7 +90,7 @@ const AdminLogin = () => {
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             required
-                                            placeholder="Введите email администратора"
+                                            placeholder="Введите email"
                                             disabled={loading}
                                         />
                                     </Form.Group>
