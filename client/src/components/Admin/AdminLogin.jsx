@@ -131,12 +131,6 @@ const AdminLogin = () => {
                                         )}
                                     </Button>
                                 </Form>
-
-                                {/*<div className="text-center mt-3">*/}
-                                {/*    <small className="text-muted">*/}
-                                {/*        Демо-данные: admin@rentalsite.com*/}
-                                {/*    </small>*/}
-                                {/*</div>*/}
                             </Card.Body>
                         </Card>
                     </Col>
