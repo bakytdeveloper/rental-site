@@ -48,6 +48,7 @@ const Catalog = () => {
         if (pageParam && pageParam !== pagination.page.toString()) {
             setPagination(prev => ({ ...prev, page: parseInt(pageParam) }));
         }
+        // eslint-disable-next-line
     }, [location.search]);
 
     useEffect(() => {
