@@ -53,18 +53,18 @@ const Footer = () => {
                 <div className="footer-divider"></div>
 
                 <Row className="footer-bottom align-items-center">
-                    <Col lg={6} md={12} className="mb-3 mb-md-0">
+                    <Col md={12} className="mb-3 mb-md-0">
                         <p className="footer-copyright">
                             © {currentYear} RentalSite. Все права защищены.
                         </p>
                     </Col>
-                    <Col lg={6} md={12} className="text-lg-end">
-                        <div className="footer-social">
-                            <a href="#" className="footer-social-link" aria-label="Twitter">Twitter</a>
-                            <a href="#" className="footer-social-link" aria-label="LinkedIn">LinkedIn</a>
-                            <a href="#" className="footer-social-link" aria-label="GitHub">GitHub</a>
-                        </div>
-                    </Col>
+                    {/*<Col lg={6} md={12} className="text-lg-end">*/}
+                    {/*    <div className="footer-social">*/}
+                    {/*        <a href="#" className="footer-social-link" aria-label="Twitter">Twitter</a>*/}
+                    {/*        <a href="#" className="footer-social-link" aria-label="LinkedIn">LinkedIn</a>*/}
+                    {/*        <a href="#" className="footer-social-link" aria-label="GitHub">GitHub</a>*/}
+                    {/*    </div>*/}
+                    {/*</Col>*/}
                 </Row>
             </Container>
         </footer>
