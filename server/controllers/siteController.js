@@ -231,7 +231,7 @@ export const updateSite = async (req, res) => {
 
                 console.log(`✅ Site updated with ${newImagePaths.length} new images, total: ${updatedSite.images.length}`);
                 console.log(`🗑️ Deleted ${imagesToDelete.length} old images`);
-                
+
                 res.json(updatedSite);
             } catch (parseError) {
                 console.error('Parse error in update:', parseError);
@@ -304,6 +304,7 @@ export const deleteSite = async (req, res) => {
             }
 
             await Site.deleteOne({ _id: req.params.id });
+            
             console.log(`✅ Site deleted: ${site.title}`);
             res.json({ message: 'Site and all images removed successfully' });
         } else {
