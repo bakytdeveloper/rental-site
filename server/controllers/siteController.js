@@ -170,6 +170,7 @@ export const updateSite = async (req, res) => {
 
                 // ВАЖНО: Определяем, какие изображения нужно удалить с сервера
                 const imagesToDelete = site.images.filter(img => !existingImages.includes(img));
+
                 console.log('Images to delete:', imagesToDelete);
 
                 // Удаляем файлы с сервера
@@ -200,7 +201,7 @@ export const updateSite = async (req, res) => {
                 if (typeof req.body.technologies === 'string') {
                     updateData.technologies = JSON.parse(req.body.technologies);
                 }
-                
+
                 if (typeof req.body.features === 'string') {
                     updateData.features = JSON.parse(req.body.features);
                 }
