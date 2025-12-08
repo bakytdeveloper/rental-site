@@ -654,7 +654,7 @@ export const getRentalStats = async (req, res) => {
                 monthlyRevenue: monthlyRevenue[0]?.total || 0
             }
         });
-        
+
     } catch (error) {
         console.error('Get rental stats error:', error);
         res.status(500).json({
@@ -780,6 +780,7 @@ export const checkRentalStatus = async (req, res) => {
                 needsRenewal: daysRemaining !== null && daysRemaining <= 0
             }
         });
+        
     } catch (error) {
         console.error('Check rental status error:', error);
         res.status(500).json({
