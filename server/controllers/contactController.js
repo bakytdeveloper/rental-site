@@ -435,7 +435,7 @@ export const addPayment = async (req, res) => {
                         rentalEndDate: contact.rentalEndDate,
                         siteTitle: contact.siteTitle || (site ? site.title : 'Website')
                     }, site);
-                    
+
                     console.log('✅ Payment confirmation email sent to client');
 
                     // Уведомление админу
@@ -449,6 +449,7 @@ export const addPayment = async (req, res) => {
                         phone: contact.phone,
                         siteTitle: contact.siteTitle || (site ? site.title : 'Website')
                     }, site);
+                    
                     console.log('✅ Payment notification sent to admin');
 
                 } catch (emailError) {
