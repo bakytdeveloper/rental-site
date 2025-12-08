@@ -506,6 +506,7 @@ export const getPayments = async (req, res) => {
             totalPayments: contact.payments.length,
             totalAmount: contact.payments.reduce((sum, payment) => sum + payment.amount, 0)
         });
+        
     } catch (error) {
         console.error('Get payments error:', error);
         res.status(500).json({
