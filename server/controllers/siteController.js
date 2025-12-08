@@ -231,6 +231,7 @@ export const updateSite = async (req, res) => {
 
                 console.log(`✅ Site updated with ${newImagePaths.length} new images, total: ${updatedSite.images.length}`);
                 console.log(`🗑️ Deleted ${imagesToDelete.length} old images`);
+                
                 res.json(updatedSite);
             } catch (parseError) {
                 console.error('Parse error in update:', parseError);
