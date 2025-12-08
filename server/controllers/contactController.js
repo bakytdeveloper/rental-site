@@ -490,6 +490,7 @@ export const addPayment = async (req, res) => {
 // @access  Private
 export const getPayments = async (req, res) => {
     try {
+        
         const contact = await Contact.findById(req.params.id).select('payments monthlyPrice');
 
         if (!contact) {
