@@ -200,6 +200,7 @@ export const updateSite = async (req, res) => {
                 if (typeof req.body.technologies === 'string') {
                     updateData.technologies = JSON.parse(req.body.technologies);
                 }
+                
                 if (typeof req.body.features === 'string') {
                     updateData.features = JSON.parse(req.body.features);
                 }
@@ -208,7 +209,7 @@ export const updateSite = async (req, res) => {
                 if (req.body.isFeatured !== undefined) {
                     updateData.isFeatured = req.body.isFeatured === 'true' || req.body.isFeatured === true;
                 }
-                
+
                 if (req.body.isActive !== undefined) {
                     updateData.isActive = req.body.isActive === 'true' || req.body.isActive === true;
                 }
