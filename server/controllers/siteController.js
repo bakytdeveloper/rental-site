@@ -208,6 +208,7 @@ export const updateSite = async (req, res) => {
                 if (req.body.isFeatured !== undefined) {
                     updateData.isFeatured = req.body.isFeatured === 'true' || req.body.isFeatured === true;
                 }
+                
                 if (req.body.isActive !== undefined) {
                     updateData.isActive = req.body.isActive === 'true' || req.body.isActive === true;
                 }
@@ -306,7 +307,7 @@ export const deleteSite = async (req, res) => {
             await Site.deleteOne({ _id: req.params.id });
 
             console.log(`✅ Site deleted: ${site.title}`);
-            
+
             res.json({ message: 'Site and all images removed successfully' });
         } else {
             res.status(404).json({ message: 'Site not found' });
