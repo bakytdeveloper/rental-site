@@ -541,7 +541,7 @@ export const getExpiringRentals = async (req, res) => {
                 rentalStatus: contact.rentalStatus
             }))
         });
-        
+
     } catch (error) {
         console.error('Get expiring rentals error:', error);
         res.status(500).json({
@@ -654,6 +654,7 @@ export const getRentalStats = async (req, res) => {
                 monthlyRevenue: monthlyRevenue[0]?.total || 0
             }
         });
+        
     } catch (error) {
         console.error('Get rental stats error:', error);
         res.status(500).json({
