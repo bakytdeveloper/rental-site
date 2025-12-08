@@ -138,6 +138,7 @@ export const createSite = async (req, res) => {
 export const updateSite = async (req, res) => {
     try {
         uploadMultiple(req, res, async (err) => {
+            
             if (err) {
                 return res.status(400).json({ message: err.message });
             }
