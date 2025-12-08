@@ -423,6 +423,7 @@ export const addPayment = async (req, res) => {
 // Отправляем уведомление клиенту (если указан email)
         if (contact.email) {
             const site = contact.siteId ? await Site.findById(contact.siteId) : null;
+
             setTimeout(async () => {
                 try {
                     // Уведомление клиенту
