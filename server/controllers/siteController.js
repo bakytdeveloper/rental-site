@@ -304,8 +304,9 @@ export const deleteSite = async (req, res) => {
             }
 
             await Site.deleteOne({ _id: req.params.id });
-            
+
             console.log(`✅ Site deleted: ${site.title}`);
+            
             res.json({ message: 'Site and all images removed successfully' });
         } else {
             res.status(404).json({ message: 'Site not found' });
