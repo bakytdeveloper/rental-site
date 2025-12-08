@@ -449,7 +449,7 @@ export const addPayment = async (req, res) => {
                         phone: contact.phone,
                         siteTitle: contact.siteTitle || (site ? site.title : 'Website')
                     }, site);
-                    
+
                     console.log('✅ Payment notification sent to admin');
 
                 } catch (emailError) {
@@ -484,6 +484,7 @@ export const addPayment = async (req, res) => {
         });
     }
 };
+
 // @desc    Get contact payments
 // @route   GET /api/contacts/:id/payments
 // @access  Private
