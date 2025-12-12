@@ -11,6 +11,7 @@ const FeaturedSites = () => {
 
     useEffect(() => {
         fetchFeaturedSites();
+        // eslint-disable-next-line
     }, []);
 
     const fetchFeaturedSites = async () => {

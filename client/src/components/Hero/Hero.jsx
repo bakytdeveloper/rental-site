@@ -66,15 +66,15 @@ const Hero = () => {
                             </div>
 
                             <div className="hero-stats">
-                                <div className="stat-item">
+                                <div className="stat-item hero-stat-item">
                                     <div className="stat-number">50+</div>
                                     <div className="stat-label">Премиум сайтов</div>
                                 </div>
-                                <div className="stat-item">
+                                <div className="stat-item hero-stat-item">
                                     <div className="stat-number">24/7</div>
                                     <div className="stat-label">Поддержка</div>
                                 </div>
-                                <div className="stat-item">
+                                <div className="stat-item hero-stat-item">
                                     <div className="stat-number">99.9%</div>
                                     <div className="stat-label">Доступность</div>
                                 </div>

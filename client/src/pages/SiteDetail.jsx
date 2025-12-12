@@ -25,6 +25,7 @@ const SiteDetail = () => {
         if (id) {
             fetchSiteDetail();
         }
+        // eslint-disable-next-line
     }, [id]);
 
     const fetchSiteDetail = async () => {
@@ -501,10 +502,12 @@ const SiteDetail = () => {
 // Компонент похожих сайтов
 const RelatedSites = ({ currentSiteId, category }) => {
     const [relatedSites, setRelatedSites] = useState([]);
+    // eslint-disable-next-line
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchRelatedSites();
+        // eslint-disable-next-line
     }, [category, currentSiteId]);
 
     const fetchRelatedSites = async () => {

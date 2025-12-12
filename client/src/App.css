@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+
+/* App.css - добавить в конец файла */
+
+/* WhatsApp кнопка - адаптивность */
+@media (max-width: 768px) {
+  .whatsapp-button-container {
+    bottom: 120px !important;
+    right: 15px !important;
+  }
+
+  .whatsapp-button-container.expanded {
+    bottom: 80px !important;
+  }
+
+  .whatsapp-hide-button {
+    bottom: 70px !important;
+    right: 15px !important;
+  }
+}
+
+/* Для страницы логина скрываем кнопку */
+.login-page .whatsapp-button-container,
+.admin-page .whatsapp-button-container {
+  display: none !important;
+}
