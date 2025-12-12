@@ -21,6 +21,20 @@ const SiteDetail = () => {
     });
     const { loading, startLoading, stopLoading } = useLoading();
 
+    // ДОБАВЛЕННЫЙ ЭФФЕКТ: Скролл вверх при изменении id
+    useEffect(() => {
+        // Прокрутка к верху страницы при каждом изменении id
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+
+        // Альтернативный вариант для лучшей совместимости
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0; // Для Safari
+    }, [id]); // Теперь эффект сработает при каждом изменении id
+
     useEffect(() => {
         if (id) {
             fetchSiteDetail();
@@ -223,7 +237,7 @@ const SiteDetail = () => {
                                     </Badge>
                                     {site.isActive && (
                                         <Badge bg="success" className="site-detail-status-badge">
-                                            ✅ Доступен для аренды
+                                            ✅ Доступен
                                         </Badge>
                                     )}
                                 </div>
