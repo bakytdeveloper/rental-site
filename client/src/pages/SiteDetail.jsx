@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Modal, Form, Badge } from 'react-bootstrap';
 import { siteAPI, contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
@@ -21,20 +21,48 @@ const SiteDetail = () => {
     });
     const { loading, startLoading, stopLoading } = useLoading();
 
-    // ДОБАВЛЕННЫЙ ЭФФЕКТ: Скролл вверх при изменении id
+    const location = useLocation();
+
+    // Эффект для прокрутки вверх при изменении id (переходе между страницами сайтов)
     useEffect(() => {
-        // Прокрутка к верху страницы при каждом изменении id
-        window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        });
+        // Используем setTimeout для гарантии, что прокрутка сработает после рендеринга
+        const timer = setTimeout(() => {
+            window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
 
-        // Альтернативный вариант для лучшей совместимости
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0; // Для Safari
-    }, [id]); // Теперь эффект сработает при каждом изменении id
+            // Дополнительные методы для полной гарантии
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0; // Для Safari
+        }, 100); // Небольшая задержка для гарантии
 
+        return () => clearTimeout(timer);
+    }, [id]);
+
+    // Эффект для прокрутки вверх при перезагрузке страницы или принудительном обновлении
+    useEffect(() => {
+        // Прокручиваем вверх при загрузке компонента
+        const handleLoad = () => {
+            // Используем несколько методов для надежности
+            window.scrollTo(0, 0);
+            document.documentElement.scrollTop = 0;
+            document.body.scrollTop = 0;
+        };
+
+        // Вызываем сразу
+        handleLoad();
+
+        // Также добавляем обработчик для полной загрузки страницы
+        window.addEventListener('load', handleLoad);
+
+        return () => {
+            window.removeEventListener('load', handleLoad);
+        };
+    }, []);
+
+    // Эффект для загрузки данных сайта
     useEffect(() => {
         if (id) {
             fetchSiteDetail();
@@ -333,8 +361,8 @@ const SiteDetail = () => {
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">⚡</span>
                                         <div>
-                                            <h5>Быстрая настройка</h5>
-                                            <p>Ваш сайт будет запущен в считанные дни</p>
+                                            <h5>Мгновенная настройка</h5>
+                                            <p>Ваш сайт будет запущен в течение 24 часов</p>
                                         </div>
                                     </div>
                                     <div className="site-detail-benefit-item">
