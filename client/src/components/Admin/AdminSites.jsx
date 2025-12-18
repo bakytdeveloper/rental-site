@@ -411,7 +411,7 @@ const AdminSites = () => {
                                                 </Badge>
                                             </td>
                                             <td className="admin-sites-price-cell">
-                                                <div className="admin-sites-price-amount">${site.price}</div>
+                                                <div className="admin-sites-price-amount">₸{site.price}</div>
                                                 <div className="admin-sites-price-period">/месяц</div>
                                             </td>
                                             <td className="admin-sites-status-cell">
