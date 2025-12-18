@@ -1,7 +1,26 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import './About.css';
+import {useEffect} from "react";
+import { useLocation } from 'react-router-dom';
 
 const About = () => {
+    const location = useLocation();
+
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+// Прокрутка вверх при монтировании компонента и изменении фильтров
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
+
+
     return (
         <div className="about-page">
             <div className="about-hero">
