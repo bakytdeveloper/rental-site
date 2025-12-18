@@ -157,7 +157,7 @@ const SiteCard = ({ site, index }) => {
                     <div className="site-card__header">
                         <h3 className="site-card__title">{site.title}</h3>
                         <div className="site-card__price">
-                            ${site.price}<span>/месяц</span>
+                            ₸{site.price}<span>/месяц</span>
                         </div>
                     </div>
 
