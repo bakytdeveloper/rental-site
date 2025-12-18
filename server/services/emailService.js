@@ -140,7 +140,7 @@ const emailTemplates = {
 
             <div class="info-card">
               <h3>💬 Содержание сообщения</h3>
-              <p style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 3px solid #ff6b6b; white-space: pre-wrap;">
+              <p style="background: #f8f9fa; padding: 15px; border-radius: 5px; border-left: 3px solid #ff6b6b; white-space: pre-line;">
                 ${contactData.message}
               </p>
             </div>

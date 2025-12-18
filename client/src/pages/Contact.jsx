@@ -9,6 +9,7 @@ const Contact = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
+        phone: '', // Добавлено поле телефона
         subject: '',
         message: ''
     });
@@ -31,7 +32,13 @@ const Contact = () => {
 
             if (response.data.success) {
                 toast.success('📧 Сообщение успешно отправлено! Мы ответим вам в течение 24 часов.');
-                setFormData({ name: '', email: '', subject: '', message: '' });
+                setFormData({
+                    name: '',
+                    email: '',
+                    phone: '', // Добавлено сброс поля телефона
+                    subject: '',
+                    message: ''
+                });
             }
         } catch (error) {
             console.error('Ошибка при отправке формы:', error);
@@ -93,18 +100,41 @@ const Contact = () => {
                                         </Col>
                                     </Row>
 
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Тема *</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="subject"
-                                            value={formData.subject}
-                                            onChange={handleChange}
-                                            required
-                                            placeholder="По какому вопросу?"
-                                            disabled={loading}
-                                        />
-                                    </Form.Group>
+                                    <Row>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Номер телефона *</Form.Label>
+                                                <Form.Control
+                                                    type="tel"
+                                                    name="phone"
+                                                    value={formData.phone}
+                                                    onChange={handleChange}
+                                                    required
+                                                    placeholder="+7 (999) 123-45-67"
+                                                    disabled={loading}
+                                                    pattern="^[\+]?[1-9][\d\s\-\(\)\.]{7,}$"
+                                                    title="Введите корректный номер телефона"
+                                                />
+                                                <Form.Text className="text-muted">
+                                                    Например: +7 (999) 123-45-67 или 89991234567
+                                                </Form.Text>
+                                            </Form.Group>
+                                        </Col>
+                                        <Col md={6}>
+                                            <Form.Group className="mb-3">
+                                                <Form.Label>Тема *</Form.Label>
+                                                <Form.Control
+                                                    type="text"
+                                                    name="subject"
+                                                    value={formData.subject}
+                                                    onChange={handleChange}
+                                                    required
+                                                    placeholder="По какому вопросу?"
+                                                    disabled={loading}
+                                                />
+                                            </Form.Group>
+                                        </Col>
+                                    </Row>
 
                                     <Form.Group className="mb-4">
                                         <Form.Label>Сообщение *</Form.Label>
@@ -153,7 +183,7 @@ const Contact = () => {
                         <div className="contact-info-item">
                             <div className="contact-icon">📧</div>
                             <h4>Напишите нам</h4>
-                            <p>bakytdeveloper@gmail.com</p>
+                            <p>rentalsite@gmail.com</p>
                         </div>
                     </Col>
                     <Col md={4} className="text-center">
