@@ -3,6 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
+import SiteCard from '../SiteCard/SiteCard'; // Импортируем общий компонент
 import './FeaturedSites.css';
 
 const FeaturedSites = () => {
@@ -62,7 +63,7 @@ const FeaturedSites = () => {
                     ) : (
                         featuredSites.map((site, index) => (
                             <Col lg={4} md={6} key={site._id} className="mb-4">
-                                <FeaturedSiteCard
+                                <SiteCard
                                     site={site}
                                     index={index}
                                 />
@@ -88,90 +89,6 @@ const FeaturedSites = () => {
                 )}
             </Container>
         </section>
-    );
-};
-
-const FeaturedSiteCard = ({ site, index }) => {
-    const [imageLoaded, setImageLoaded] = useState(false);
-
-    return (
-        <div
-            className="featured-site-card"
-            data-aos="fade-up"
-            data-aos-delay={index * 100}
-        >
-            <div className="card-inner">
-                <div className="card-image">
-                    {site.images && site.images.length > 0 ? (
-                        <>
-                            <img
-                                src={`http://localhost:5000${site.images[0]}`}
-                                alt={site.title}
-                                onLoad={() => setImageLoaded(true)}
-                                style={{ opacity: imageLoaded ? 1 : 0 }}
-                            />
-                            {!imageLoaded && <div className="image-placeholder"></div>}
-                        </>
-                    ) : (
-                        <div className="image-placeholder">
-                            <span>🚀</span>
-                        </div>
-                    )}
-                    <div className="card-overlay">
-                        <div className="overlay-content">
-                            <Button
-                                as={Link}
-                                to={`/catalog/${site._id}`}
-                                className="btn-details"
-                                size="sm"
-                            >
-                                Подробнее
-                            </Button>
-                        </div>
-                    </div>
-                    <div className="card-badge">
-                        Рекомендуемый
-                    </div>
-                </div>
-
-                <div className="card-content">
-                    <div className="card-header">
-                        <h3 className="site-title">{site.title}</h3>
-                        <div className="site-price">
-                            ${site.price}<span>/месяц</span>
-                        </div>
-                    </div>
-
-                    <p className="site-description">
-                        {site.shortDescription}
-                    </p>
-
-                    <div className="site-features">
-                        {site.technologies && site.technologies.slice(0, 3).map((tech, techIndex) => (
-                            <span key={techIndex} className="tech-tag">
-                {tech}
-              </span>
-                        ))}
-                    </div>
-
-                    <div className="card-footer">
-                        <div className="site-category">
-                            {site.category}
-                        </div>
-                        <Button
-                            as={Link}
-                            to={`/catalog/${site._id}`}
-                            className="btn-rent"
-                            size="sm"
-                        >
-                            Арендовать
-                        </Button>
-                    </div>
-                </div>
-
-                <div className="card-glow"></div>
-            </div>
-        </div>
     );
 };
 
