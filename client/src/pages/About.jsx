@@ -27,7 +27,7 @@ const About = () => {
                 <Container>
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
-                            <h1 className="page-title">О RentalSite</h1>
+                            <h1 className="page-title">RentalSite</h1>
                             <p className="page-subtitle">
                                 Бизнес онлайн — шаг к успеху
                             </p>
