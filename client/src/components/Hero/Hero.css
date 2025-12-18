@@ -79,6 +79,7 @@
 
 .hero-badge {
     margin-bottom: 1.5rem;
+    margin-top: 7rem;
 }
 
 .hero-badge span {
@@ -96,6 +97,7 @@
     font-weight: 700;
     line-height: 1.1;
     margin-bottom: 1.5rem;
+    height: auto;
 }
 
 .text-gradient {
