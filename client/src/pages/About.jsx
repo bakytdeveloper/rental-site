@@ -58,30 +58,30 @@ const About = () => {
 
                 <Row className="stats-section">
 
-                    <Col md={3} className="text-center">
+                    <Col md={4} className="text-center">
                         <div className="stat-item">
-                            <div className="stat-number">500+</div>
-                            <div className="stat-label">Арендованных сайтов</div>
+                            <div className="stat-number">100%</div>
+                            <div className="stat-label">Сопровождение</div>
                         </div>
                     </Col>
-                    <Col md={3} className="text-center">
+                    <Col md={4} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">99.9%</div>
                             <div className="stat-label">Время работы</div>
                         </div>
                     </Col>
-                    <Col md={3} className="text-center">
+                    <Col md={4} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">24/7</div>
                             <div className="stat-label">Поддержка</div>
                         </div>
                     </Col>
-                    <Col md={3} className="text-center">
-                        <div className="stat-item">
-                            <div className="stat-number">50+</div>
-                            <div className="stat-label">Шаблонов</div>
-                        </div>
-                    </Col>
+                    {/*<Col md={3} className="text-center">*/}
+                    {/*    <div className="stat-item">*/}
+                    {/*        <div className="stat-number">50+</div>*/}
+                    {/*        <div className="stat-label">Шаблонов</div>*/}
+                    {/*    </div>*/}
+                    {/*</Col>*/}
 
                 </Row>
             </Container>
