@@ -321,16 +321,19 @@
     .hero-stats {
         justify-content: center;
         gap: 0.5rem;
+        margin-bottom: 2rem;
     }
 
     .hero-stat-item {
         padding: 0.5rem!important;
     }
 
-    .hero-visual {
-        height: 400px;
-        margin-top: 2rem;
-        justify-content: center;
+    .hero-visual, .scroll-arrow {
+        /*height: 400px;*/
+        /*margin-top: 2rem;*/
+        /*justify-content: center;*/
+
+        display: none;
     }
 
     .btn-outline-custom {

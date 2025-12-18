@@ -67,8 +67,8 @@ const Hero = () => {
 
                             <div className="hero-stats">
                                 <div className="stat-item hero-stat-item">
-                                    <div className="stat-number">50+</div>
-                                    <div className="stat-label">Премиум сайтов</div>
+                                    <div className="stat-number">100%</div>
+                                    <div className="stat-label">Сопровождение</div>
                                 </div>
                                 <div className="stat-item hero-stat-item">
                                     <div className="stat-number">24/7</div>
