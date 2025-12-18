@@ -245,7 +245,7 @@ const SiteDetail = () => {
                                 <h1 className="site-detail-title">{site.title}</h1>
 
                                 <div className="site-detail-price-section">
-                                    <div className="site-detail-price-amount">${site.price}</div>
+                                    <div className="site-detail-price-amount">₸{site.price}</div>
                                     <div className="site-detail-price-period">/месяц</div>
                                 </div>
 
@@ -358,7 +358,7 @@ const SiteDetail = () => {
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
-                                    Начать аренду - ${site.price}/месяц
+                                    Начать аренду - ₸{site.price}/месяц
                                 </Button>
                             </div>
                         </Col>
@@ -380,7 +380,7 @@ const SiteDetail = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>Арендовать {site.title}</Modal.Title>
                     <div className="site-detail-modal-subtitle">
-                        ${site.price}/месяц • {site.category}
+                        ₸{site.price}/месяц • {site.category}
                     </div>
                 </Modal.Header>
                 <Modal.Body>
@@ -391,7 +391,7 @@ const SiteDetail = () => {
                         </div>
                         <div className="site-detail-summary-item">
                             <span>Месячная цена:</span>
-                            <strong>${site.price}</strong>
+                            <strong>₸{site.price}</strong>
                         </div>
                         <div className="site-detail-summary-item">
                             <span>Категория:</span>
@@ -564,7 +564,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
                             <div className="site-detail-related-site-info">
                                 <h4>{site.title}</h4>
                                 <p className="site-detail-related-site-description">{site.shortDescription}</p>
-                                <div className="site-detail-related-site-price">${site.price}/месяц</div>
+                                <div className="site-detail-related-site-price">₸{site.price}/месяц</div>
                                 <Button
                                     as={Link}
                                     to={`/catalog/${site._id}`}
