@@ -333,8 +333,8 @@ const SiteDetail = () => {
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">⚡</span>
                                         <div>
-                                            <h5>Мгновенная настройка</h5>
-                                            <p>Ваш сайт будет запущен в течение 24 часов</p>
+                                            <h5>Быстрая настройка</h5>
+                                            <p>Ваш сайт будет запущен в считанные дни</p>
                                         </div>
                                     </div>
                                     <div className="site-detail-benefit-item">
