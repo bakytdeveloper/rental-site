@@ -338,3 +338,25 @@ export const getFeaturedSites = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// @desc    Toggle featured status
+// @route   PATCH /api/sites/:id/featured
+// @access  Private/Admin
+export const toggleFeatured = async (req, res) => {
+    try {
+        const site = await Site.findById(req.params.id);
+        if (!site) {
+            return res.status(404).json({ message: 'Site not found' });
+        }
+
+        site.isFeatured = !site.isFeatured;
+        await site.save();
+
+        res.json({
+            message: `Site ${site.isFeatured ? 'marked as' : 'unmarked from'} featured`,
+            isFeatured: site.isFeatured
+        });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

@@ -8,7 +8,8 @@ import {
     deleteSite,
     getFeaturedSites,
     getAllSitesAdmin,
-    deleteSiteImages  // Добавляем новый метод
+    deleteSiteImages,
+    toggleFeatured  // Добавляем новый метод
 } from '../controllers/siteController.js';
 
 const router = express.Router();
@@ -21,5 +22,6 @@ router.post('/', createSite);
 router.put('/:id', updateSite);
 router.delete('/:id/images', deleteSiteImages); // Новый маршрут для удаления изображений
 router.delete('/:id', deleteSite);
+router.patch('/:id/featured', toggleFeatured);
 
 export default router;

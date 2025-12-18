@@ -60,6 +60,7 @@ export const siteAPI = {
         };
         return api.put(`/sites/${id}`, data, config);
     },
+    toggleFeatured: (id) => api.patch(`/sites/${id}/featured`),
     deleteImages: (id, imageUrls) => api.delete(`/sites/${id}/images`, { data: { imageUrls } }),
     delete: (id) => api.delete(`/sites/${id}`),
 };

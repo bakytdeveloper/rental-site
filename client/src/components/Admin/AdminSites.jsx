@@ -28,22 +28,14 @@ const AdminSites = () => {
     const [featureInput, setFeatureInput] = useState('');
     const { loading, startLoading, stopLoading } = useLoading();
 
-    // Функции для преобразования категорий
-    const categoryTranslations = {
-        'Landing Page': 'Лендинг',
-        'Corporate Website': 'Корпоративный сайт',
-        'E-commerce': 'Интернет-магазин',
-        'Portfolio': 'Портфолио',
-        'Web Application': 'Веб-приложение'
-    };
-
-    const reverseCategoryTranslations = {
-        'Лендинг': 'Landing Page',
-        'Корпоративный сайт': 'Corporate Website',
-        'Интернет-магазин': 'E-commerce',
-        'Портфолио': 'Portfolio',
-        'Веб-приложение': 'Web Application'
-    };
+    // Категории на русском языке (совпадают с enum в модели Site.js)
+    const categoryOptions = [
+        'Лендинг',
+        'Корпоративный сайт',
+        'Интернет-магазин',
+        'Портфолио',
+        'Веб-приложение'
+    ];
 
     useEffect(() => {
         fetchSites();
@@ -69,15 +61,13 @@ const AdminSites = () => {
             console.log('Изображения сайта:', site.images);
             setEditingSite(site);
 
-            // Переводим английскую категорию в русскую для отображения
-            const russianCategory = categoryTranslations[site.category] || site.category;
-
+            // Используем категорию напрямую (она уже на русском)
             setFormData({
                 title: site.title,
                 description: site.description,
                 shortDescription: site.shortDescription,
                 price: site.price,
-                category: russianCategory, // Русская версия для отображения
+                category: site.category, // Без перевода
                 technologies: site.technologies || [],
                 features: site.features || [],
                 isFeatured: site.isFeatured,
@@ -222,11 +212,8 @@ const AdminSites = () => {
         try {
             const submitData = new FormData();
 
-            // Копируем formData для модификации
+            // Копируем formData для отправки
             const dataToSend = { ...formData };
-
-            // Конвертируем русскую категорию в английскую для сервера
-            dataToSend.category = reverseCategoryTranslations[formData.category] || formData.category;
 
             Object.keys(dataToSend).forEach(key => {
                 if (key === 'technologies' || key === 'features') {
@@ -250,7 +237,7 @@ const AdminSites = () => {
             });
 
             console.log('Отправка данных:');
-            console.log('Категория для отправки:', dataToSend.category);
+            console.log('Категория для отправки:', dataToSend.category); // Теперь на русском
             console.log('Количество выбранных изображений:', selectedImages.length);
             console.log('Редактируемый сайт:', editingSite);
 
@@ -295,7 +282,28 @@ const AdminSites = () => {
 
     const toggleSiteStatus = async (siteId, currentStatus) => {
         try {
-            await siteAPI.update(siteId, { isActive: !currentStatus });
+            // Нужно отправить данные сайта, включая категорию на русском
+            const site = sites.find(s => s._id === siteId);
+            if (!site) return;
+
+            const submitData = new FormData();
+            submitData.append('isActive', !currentStatus);
+
+            // Отправляем категорию на русском
+            submitData.append('category', site.category);
+            submitData.append('title', site.title);
+            submitData.append('description', site.description);
+            submitData.append('shortDescription', site.shortDescription);
+            submitData.append('price', site.price.toString());
+            submitData.append('technologies', JSON.stringify(site.technologies || []));
+            submitData.append('features', JSON.stringify(site.features || []));
+
+            // Важно: передаем все существующие изображения
+            if (site.images && site.images.length > 0) {
+                submitData.append('existingImages', JSON.stringify(site.images));
+            }
+
+            await siteAPI.update(siteId, submitData);
             toast.success(`Сайт ${!currentStatus ? 'активирован' : 'деактивирован'}`);
             fetchSites();
         } catch (error) {
@@ -306,7 +314,7 @@ const AdminSites = () => {
 
     const toggleFeatured = async (siteId, currentFeatured) => {
         try {
-            await siteAPI.update(siteId, { isFeatured: !currentFeatured });
+            await siteAPI.toggleFeatured(siteId);
             toast.success(`Сайт ${!currentFeatured ? 'добавлен в' : 'удален из'} рекомендуемых`);
             fetchSites();
         } catch (error) {
@@ -397,8 +405,9 @@ const AdminSites = () => {
                                                 </div>
                                             </td>
                                             <td className="admin-sites-category-cell">
+                                                {/* Исправлено: используем site.category напрямую */}
                                                 <Badge bg="outline-primary" className="admin-sites-category-badge">
-                                                    {categoryTranslations[site.category] || site.category}
+                                                    {site.category}
                                                 </Badge>
                                             </td>
                                             <td className="admin-sites-price-cell">
@@ -511,11 +520,9 @@ const AdminSites = () => {
                                         onChange={handleInputChange}
                                         required
                                     >
-                                        <option value="Лендинг">Лендинг</option>
-                                        <option value="Корпоративный сайт">Корпоративный сайт</option>
-                                        <option value="Интернет-магазин">Интернет-магазин</option>
-                                        <option value="Портфолио">Портфолио</option>
-                                        <option value="Веб-приложение">Веб-приложение</option>
+                                        {categoryOptions.map(cat => (
+                                            <option key={cat} value={cat}>{cat}</option>
+                                        ))}
                                     </Form.Select>
                                 </Form.Group>
                             </Col>
