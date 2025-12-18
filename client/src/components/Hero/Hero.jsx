@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Hero.css';
 
 const Hero = () => {
@@ -8,6 +8,23 @@ const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
     const fullText = "Арендуйте профессиональные сайты сегодня";
+
+    const location = useLocation();
+
+// Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+// Прокрутка вверх при монтировании компонента и изменении фильтров
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
+
 
     useEffect(() => {
         // Функция для проверки размера экрана
