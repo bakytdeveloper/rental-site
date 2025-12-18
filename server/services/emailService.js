@@ -46,7 +46,7 @@ const emailTemplates = {
               <h3>📋 Информация о запросе</h3>
               <p><strong>Сайт:</strong> ${siteData.title}</p>
               <p><strong>Категория:</strong> <span class="badge">${siteData.category}</span></p>
-              <p><strong>Месячная цена:</strong> $${siteData.price}</p>
+              <p><strong>Месячная цена:</strong> ₸${siteData.price}</p>
               <p><strong>Дата запроса:</strong> ${new Date().toLocaleDateString('ru-RU', {
             weekday: 'long',
             year: 'numeric',
@@ -195,7 +195,7 @@ const emailTemplates = {
             <div class="info-card">
               <div class="urgent-badge">⚠️ СРОЧНО</div>
               <h3>📋 Срочный запрос на аренду</h3>
-              <p><strong>Сайт:</strong> ${siteData.title} ($${siteData.price}/месяц)</p>
+              <p><strong>Сайт:</strong> ${siteData.title} (₸${siteData.price}/месяц)</p>
               <p><strong>Клиент:</strong> ${contactData.name} - ${contactData.email}</p>
               <p><strong>Телефон:</strong> ${contactData.phone || 'Не указан'}</p>
               <p><strong>Время:</strong> ${new Date().toLocaleString('ru-RU')}</p>
@@ -250,7 +250,7 @@ const emailTemplates = {
             <div class="info-card">
               <h3>📋 Детали аренды</h3>
               <p><strong>Сайт:</strong> ${siteData.title}</p>
-              <p><strong>Месячная цена:</strong> $${siteData.price}</p>
+              <p><strong>Месячная цена:</strong> ₸${siteData.price}</p>
               <p><strong>Дата окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU', {
             weekday: 'long',
             year: 'numeric',
@@ -263,7 +263,7 @@ const emailTemplates = {
             <div class="info-card">
               <h3>💳 Продлите вашу аренду</h3>
               <p>Чтобы продолжить использование ${siteData.title}, пожалуйста, произведите оплату для продления периода аренды.</p>
-              <p><strong>Сумма следующего платежа:</strong> $${siteData.price}</p>
+              <p><strong>Сумма следующего платежа:</strong> ₸${siteData.price}</p>
               <a href="mailto:support@rentalsite.com?subject=Продление: ${siteData.title}" class="button">
                 📧 Связаться с поддержкой для продления
               </a>
@@ -475,7 +475,7 @@ const emailTemplates = {
                 
                 <div class="info-item">
                   <span class="info-label">Месячная цена:</span>
-                  <div class="info-value">$${siteData.price}/месяц</div>
+                  <div class="info-value">₸${siteData.price}/месяц</div>
                 </div>
                 
                 <div class="info-item">
@@ -634,14 +634,14 @@ const emailTemplates = {
                     <div class="info-card">
                         <h3>📋 Детали аренды</h3>
                         <p><strong>Сайт:</strong> ${siteData.title}</p>
-                        <p><strong>Месячная цена:</strong> $${siteData.price}</p>
+                        <p><strong>Месячная цена:</strong> ₸${siteData.price}</p>
                         <p><strong>Дата окончания:</strong> ${new Date(contactData.rentalEndDate).toLocaleDateString('ru-RU')}</p>
                     </div>
         
                     <div class="info-card">
                         <h3>💳 Продлите вашу аренду</h3>
                         <p>Чтобы продолжить использование ${siteData.title}, пожалуйста, произведите оплату для продления периода аренды.</p>
-                        <p><strong>Сумма следующего платежа:</strong> $${siteData.price}</p>
+                        <p><strong>Сумма следующего платежа:</strong> ₸${siteData.price}</p>
                         <div style="text-align: center; margin: 20px 0;">
                             <a href="mailto:${process.env.SMTP_FROM}?subject=Запрос на продление: ${siteData.title}&body=Здравствуйте,%0D%0A%0D%0AЯ хотел(а) бы продлить аренду для ${siteData.title}.%0D%0A%0D%0AИмя: ${contactData.name}%0D%0AEmail: ${contactData.email}%0D%0A%0D%0АПожалуйста, сообщите детали оплаты." 
                                class="button">
@@ -712,8 +712,8 @@ const emailTemplates = {
                         </div>
                         <div>
                             <strong>Сайт:</strong> ${siteData.title}<br>
-                            <strong>Месячная цена:</strong> $${siteData.price}<br>
-                            <strong>Всего оплачено:</strong> $${contactData.totalPaid || 0}
+                            <strong>Месячная цена:</strong> ₸${siteData.price}<br>
+                            <strong>Всего оплачено:</strong> ₸${contactData.totalPaid || 0}
                         </div>
                     </div>
                 </div>
@@ -788,7 +788,7 @@ const emailTemplates = {
                         
                         <div class="info-card">
                             <h3>📋 Детали платежа</h3>
-                            <p><strong>Сумма:</strong> $${contactData.amount}</p>
+                            <p><strong>Сумма:</strong> ₸${contactData.amount}</p>
                             <p><strong>За сайт:</strong> ${siteData.title}</p>
                             <p><strong>Месяцев продлено:</strong> ${contactData.months || 1}</p>
                             <p><strong>Дата платежа:</strong> ${new Date().toLocaleDateString('ru-RU', {
@@ -870,7 +870,7 @@ const emailTemplates = {
                                 </div>
                                 <div>
                                     <strong>Сайт:</strong> ${siteData.title}<br>
-                                    <strong>Сумма:</strong> $${contactData.amount}<br>
+                                    <strong>Сумма:</strong> ₸${contactData.amount}<br>
                                     <strong>Месяцев:</strong> ${contactData.months || 1}
                                 </div>
                             </div>
