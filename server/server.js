@@ -74,6 +74,17 @@ app.use((req, res) => {
     });
 });
 
+// Middleware для Express
+const usedEndpoints = new Set();
+
+app.use((req, res, next) => {
+    usedEndpoints.add(`${req.method} ${req.route?.path || req.path}`);
+    next();
+});
+
+// Позже выведите результат
+console.log('Используемые эндпоинты:', Array.from(usedEndpoints));
+
 app.listen(PORT, () => {
     console.log(`🚀 Server is running on port ${PORT}`);
     console.log(`📊 Health check: http://localhost:${PORT}/api/health`);

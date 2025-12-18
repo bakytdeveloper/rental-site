@@ -16,6 +16,21 @@ const AdminLogin = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+// Прокрутка вверх при монтировании компонента и изменении фильтров
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
+
+
     // Проверяем, не вошел ли пользователь уже
     useEffect(() => {
         const token = localStorage.getItem('adminToken');
