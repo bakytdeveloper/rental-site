@@ -44,7 +44,7 @@ const Footer = () => {
                             </div>
                             <div className="footer-contact-item">
                                 <span className="footer-contact-icon">📍</span>
-                                <span className="footer-contact-text">123 Бизнес Авеню, Офис 100</span>
+                                <span className="footer-contact-text">Кордай, ул.Аренды, Офис 100</span>
                             </div>
                         </div>
                     </Col>
