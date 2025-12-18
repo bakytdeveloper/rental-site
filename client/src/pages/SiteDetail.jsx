@@ -246,7 +246,7 @@ const SiteDetail = () => {
 
                                 <div className="site-detail-price-section">
                                     <div className="site-detail-price-amount">₸{site.price}</div>
-                                    <div className="site-detail-price-period">/месяц</div>
+                                    <div className="site-detail-price-period">/ месяц</div>
                                 </div>
 
                                 <p className="site-detail-description">{site.description}</p>
