@@ -6,7 +6,24 @@ import './Hero.css';
 const Hero = () => {
     const [displayText, setDisplayText] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
     const fullText = "Арендуйте профессиональные сайты сегодня";
+
+    useEffect(() => {
+        // Функция для проверки размера экрана
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 768); // 768px - breakpoint для мобильных
+        };
+
+        // Проверяем при загрузке
+        checkScreenSize();
+
+        // Добавляем слушатель изменения размера окна
+        window.addEventListener('resize', checkScreenSize);
+
+        // Очищаем слушатель при размонтировании
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     useEffect(() => {
         if (currentIndex < fullText.length) {
@@ -54,7 +71,8 @@ const Hero = () => {
                                     to="/catalog"
                                     className="btn-primary-custom me-3"
                                 >
-                                    Исследовать каталог
+                                    {/* Отображаем разный текст в зависимости от размера экрана */}
+                                    {isMobile ? 'Каталог' : 'Исследовать каталог'}
                                 </Button>
                                 <Button
                                     as={Link}
