@@ -558,7 +558,7 @@ const AdminSites = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Месячная цена ($) *</Form.Label>
+                                    <Form.Label>Месячная цена (₸) *</Form.Label>
                                     <Form.Control
                                         type="number"
                                         name="price"
