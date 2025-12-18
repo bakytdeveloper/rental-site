@@ -321,7 +321,7 @@ const SiteDetail = () => {
                 {/* Раздел аренды */}
                 <section id="rent-section" className="site-detail-rent-section">
                     <Row>
-                        <Col lg={8} className="mx-auto">
+                        <Col lg={12} className="mx-auto">
                             <div className="site-detail-rent-card">
                                 <h2>Готовы арендовать этот сайт?</h2>
                                 <p className="site-detail-rent-description">
