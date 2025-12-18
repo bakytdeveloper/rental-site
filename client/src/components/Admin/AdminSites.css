@@ -106,8 +106,8 @@
 
 .admin-sites-featured-indicator {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: 5px;
+    right: 5px;
     background: #ffd700;
     color: #000;
     border-radius: 50%;
