@@ -35,20 +35,6 @@ const CTA = () => {
                                     Связаться с нами
                                 </Button>
                             </div>
-                            {/*<div className="cta-stats">*/}
-                            {/*    <div className="stat">*/}
-                            {/*        <div className="stat-number">500+</div>*/}
-                            {/*        <div className="stat-label">Арендованных сайтов</div>*/}
-                            {/*    </div>*/}
-                            {/*    <div className="stat">*/}
-                            {/*        <div className="stat-number">98%</div>*/}
-                            {/*        <div className="stat-label">Удовлетворенность клиентов</div>*/}
-                            {/*    </div>*/}
-                            {/*    <div className="stat">*/}
-                            {/*        <div className="stat-number">24ч</div>*/}
-                            {/*        <div className="stat-label">Средняя настройка</div>*/}
-                            {/*    </div>*/}
-                            {/*</div>*/}
                         </div>
                     </Col>
                 </Row>
