@@ -200,7 +200,7 @@
 }
 
 .card-1 {
-    width: 250px;
+    width: 450px;
     height: 300px;
     top: 10%;
     right: 10%;
@@ -208,7 +208,7 @@
 }
 
 .card-2 {
-    width: 220px;
+    width: 380px;
     height: 280px;
     top: 50%;
     right: 30%;
@@ -216,7 +216,7 @@
 }
 
 .card-3 {
-    width: 200px;
+    width: 350px;
     height: 250px;
     bottom: 10%;
     right: 15%;
@@ -260,7 +260,7 @@
     z-index: -1;
     opacity: 0;
     filter: blur(20px);
-    animation: glow-pulse 4s ease-in-out infinite;
+    animation: glow-pulse 2s ease-in-out infinite;
 }
 
 @keyframes float-card {
