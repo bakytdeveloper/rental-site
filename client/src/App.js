@@ -8,7 +8,6 @@
 // import Contact from './pages/Contact';
 // import SiteDetail from './pages/SiteDetail';
 // import Admin from './pages/Admin';
-// import { LoadingProvider } from './context/LoadingContext';
 // function App() {
 //   return (
 //       <LoadingProvider>
