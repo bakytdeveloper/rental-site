@@ -30,7 +30,7 @@
 //           </div>
 //         </Router>
 //       </LoadingProvider>
-//   );
+//   )
 // }
 // export default App;
 
