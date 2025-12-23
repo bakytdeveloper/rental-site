@@ -5,7 +5,6 @@
 // import Home from './pages/Home';
 // import Catalog from './pages/Catalog';
 // import About from './pages/About';
-// import Contact from './pages/Contact';
 // function App() {
 //   return (
 //       <LoadingProvider>
