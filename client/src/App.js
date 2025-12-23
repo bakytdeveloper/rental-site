@@ -59,7 +59,6 @@ import SiteDetail from './pages/SiteDetail';
 import Admin from './pages/Admin';
 import { LoadingProvider } from './context/LoadingContext';
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
-
 import './App.css';
 
 function App() {
