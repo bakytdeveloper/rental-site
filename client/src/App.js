@@ -2,7 +2,6 @@
 // import { ToastContainer } from 'react-toastify';
 // import Header from './components/Layout/Header';
 // import Footer from './components/Layout/Footer';
-// import Home from './pages/Home';
 // function App() {
 //   return (
 //       <LoadingProvider>
