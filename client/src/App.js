@@ -1,38 +1,3 @@
-// function App() {
-//   return (
-//       <LoadingProvider>
-//         <Router>
-//           <div className="App">
-//             <Header />
-//             <main className="main-content">
-//               <Routes>
-//                 <Route path="/" element={<Home />} />
-//                 <Route path="/catalog" element={<Catalog />} />
-//                 <Route path="/catalog/:id" element={<SiteDetail />} />
-//                 <Route path="/about" element={<About />} />
-//                 <Route path="/contact" element={<Contact />} />
-//                 <Route path="/admin/*" element={<Admin />} />
-//               </Routes>
-//             </main>
-//             <Footer />
-//             <ToastContainer
-//                 position="top-right"
-//                 autoClose={5000}
-//                 hideProgressBar={false}
-//                 newestOnTop
-//                 closeOnClick
-//                 rtl={false}
-//                 pauseOnFocusLoss
-//                 draggable
-//                 pauseOnHover
-//                 theme="dark"
-//             />
-//           </div>
-//         </Router>
-//       </LoadingProvider>
-//   )
-// }
-// export default App;
 
 
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
