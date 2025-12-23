@@ -4,7 +4,6 @@
 // import Footer from './components/Layout/Footer';
 // import Home from './pages/Home';
 // import Catalog from './pages/Catalog';
-// import About from './pages/About';
 // function App() {
 //   return (
 //       <LoadingProvider>
