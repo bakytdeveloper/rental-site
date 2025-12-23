@@ -3,7 +3,6 @@
 // import Header from './components/Layout/Header';
 // import Footer from './components/Layout/Footer';
 // import Home from './pages/Home';
-// import Catalog from './pages/Catalog';
 // function App() {
 //   return (
 //       <LoadingProvider>
