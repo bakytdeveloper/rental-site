@@ -669,7 +669,7 @@ const AdminSites = () => {
                                     placeholder="Добавить технологию (например, React, Node.js)"
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addTechnology())}
                                 />
-                                <Button variant="outline-secondary" onClick={addTechnology}>
+                                <Button variant="outline-primary" onClick={addTechnology}>
                                     Добавить
                                 </Button>
                             </div>
@@ -696,7 +696,7 @@ const AdminSites = () => {
                                     placeholder="Добавить особенность (например, Адаптивный дизайн, SEO оптимизация)"
                                     onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addFeature())}
                                 />
-                                <Button variant="outline-secondary" onClick={addFeature}>
+                                <Button variant="outline-primary" onClick={addFeature}>
                                     Добавить
                                 </Button>
                             </div>

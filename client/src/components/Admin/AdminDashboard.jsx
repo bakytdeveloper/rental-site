@@ -202,7 +202,7 @@ const AdminDashboard = () => {
                                                 <td>
                                                     <div className="admin-dashboard-site-title">{site.title}</div>
                                                     <small className="admin-dashboard-text-muted">
-                                                        {site.shortDescription.substring(0, 50)}...
+                                                        {site.shortDescription.substring(0, 10)}...
                                                     </small>
                                                 </td>
                                                 <td>{site.category}</td>

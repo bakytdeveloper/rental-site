@@ -24,13 +24,8 @@ app.use(cors());
 app.use(express.json());
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// // MongoDB connection
-// mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalSite')
-//     .then(() => console.log('✅ MongoDB connected successfully'))
-//     .catch(err => console.log('❌ MongoDB connection error:', err));
-
 // После подключения к MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/rentalSite')
+mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('✅ MongoDB connected successfully');
         // Запускаем cron jobs
