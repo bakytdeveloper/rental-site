@@ -1,6 +1,5 @@
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // import { ToastContainer } from 'react-toastify';
-// import Header from './components/Layout/Header';
 // function App() {
 //   return (
 //       <LoadingProvider>
