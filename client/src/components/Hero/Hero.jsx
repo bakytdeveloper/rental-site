@@ -25,6 +25,12 @@ const Hero = () => {
         scrollToTop();
     }, [location.search]);
 
+    const cardImages = [
+        'url(https://images.unsplash.com/photo-1551650975-87deedd944c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)',
+        'url(https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)',
+        'url(https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80)'
+    ];
+
 
     useEffect(() => {
         // Функция для проверки размера экрана
@@ -126,19 +132,28 @@ const Hero = () => {
                         <div className="hero-visual">
                             <div className="floating-card card-1">
                                 <div className="card-content">
-                                    <div className="card-preview"></div>
+                                    <div
+                                        className="card-preview"
+                                        style={{ backgroundImage: cardImages[0] }}
+                                    ></div>
                                     <div className="card-glow"></div>
                                 </div>
                             </div>
                             <div className="floating-card card-2">
                                 <div className="card-content">
-                                    <div className="card-preview"></div>
+                                    <div
+                                        className="card-preview"
+                                        style={{ backgroundImage: cardImages[1] }}
+                                    ></div>
                                     <div className="card-glow"></div>
                                 </div>
                             </div>
                             <div className="floating-card card-3">
                                 <div className="card-content">
-                                    <div className="card-preview"></div>
+                                    <div
+                                        className="card-preview"
+                                        style={{ backgroundImage: cardImages[2] }}
+                                    ></div>
                                     <div className="card-glow"></div>
                                 </div>
                             </div>
