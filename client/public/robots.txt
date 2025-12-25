@@ -1,3 +1,18 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin/
+Disallow: /admin/*
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /*/private/
+Disallow: /*/secret/
+
+# Карта сайта
+Sitemap: https://rentalsite.kz/sitemap.xml
+
+# Дополнительные директивы
+Crawl-delay: 2
+Clean-param: ref /catalog/
+Clean-param: sessionId /catalog/

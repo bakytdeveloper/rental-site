@@ -62,13 +62,15 @@ const Hero = () => {
                     <div className="shape shape-4"></div>
                 </div>
             </div>
-
+            <div itemScope itemType="https://schema.org/WebPage">
+                <meta itemProp="name" content="Главная страница RentalSite" />
+                <meta itemProp="description" content="Аренда профессиональных сайтов для бизнеса в Казахстане" />
             <Container>
                 <Row className="align-items-center min-vh-100">
                     <Col lg={6}>
                         <div className="hero-content">
                             <div className="hero-badge">
-                                <span>🚀 Будущее веб-присутствия</span>
+                                <span>🚀 Будущее в веб-присутствии</span>
                             </div>
 
                             <h1 className="hero-title">
@@ -145,6 +147,8 @@ const Hero = () => {
 
             <div className="scroll-indicator">
                 <div className="scroll-arrow"></div>
+            </div>
+
             </div>
         </section>
     );

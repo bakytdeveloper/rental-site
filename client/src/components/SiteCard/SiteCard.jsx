@@ -13,6 +13,24 @@ const SiteCard = ({ site, index }) => {
     const images = site.images || [];
     const hasMultipleImages = images.length > 1;
 
+    // Генерация структурированных данных для карточки
+    const generateProductData = () => {
+        return {
+            "@type": "Product",
+            "name": site.title,
+            "description": site.shortDescription,
+            "image": images.length > 0 ? `https://rentalsite.kz${images[0]}` : undefined,
+            "offers": {
+                "@type": "Offer",
+                "price": site.price,
+                "priceCurrency": "KZT",
+                "availability": site.isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"
+            },
+            "url": `https://rentalsite.kz/catalog/${site._id}`
+        };
+    };
+
+
     const handleNextImage = () => {
         if (hasMultipleImages) {
             setCurrentImageIndex((prevIndex) =>
@@ -61,7 +79,24 @@ const SiteCard = ({ site, index }) => {
             className="site-card"
             data-aos="fade-up"
             data-aos-delay={index * 100}
+            itemScope
+            itemType="https://schema.org/Product"
+            itemID={`https://rentalsite.kz/catalog/${site._id}`}
         >
+
+            <meta itemProp="name" content={site.title} />
+            <meta itemProp="description" content={site.shortDescription} />
+            <meta itemProp="category" content={site.category} />
+            {images.length > 0 && (
+                <meta itemProp="image" content={`https://rentalsite.kz${images[0]}`} />
+            )}
+            <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                <meta itemProp="price" content={site.price} />
+                <meta itemProp="priceCurrency" content="KZT" />
+                <meta itemProp="availability" content={site.isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock"} />
+                <meta itemProp="url" content={`https://rentalsite.kz/catalog/${site._id}`} />
+            </div>
+
             <div className="site-card__inner">
                 <div className="site-card__image-container">
                     {images.length > 0 ? (

@@ -2,9 +2,36 @@ import { Container, Row, Col } from 'react-bootstrap';
 import './About.css';
 import {useEffect} from "react";
 import { useLocation } from 'react-router-dom';
+import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
 
 const About = () => {
     const location = useLocation();
+
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "AboutPage",
+        "name": "О компании RentalSite",
+        "description": "RentalSite - сервис аренды готовых сайтов для бизнеса в Казахстане. Инновационная модель аренды сайтов.",
+        "url": "https://rentalsite.kz/about",
+        "mainEntity": {
+            "@type": "Organization",
+            "name": "RentalSite",
+            "description": "Сервис аренды готовых сайтов для бизнеса в Казахстане",
+            "foundingDate": "2024",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "KZ",
+                "addressRegion": "Казахстан"
+            },
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+7-778-008-33-14",
+                "contactType": "customer service",
+                "availableLanguage": ["Russian", "Kazakh"]
+            }
+        }
+    };
+
 
     // Функция для прокрутки наверх
     const scrollToTop = () => {
@@ -23,6 +50,14 @@ const About = () => {
 
     return (
         <div className="about-page">
+            {/* SEO компонент для страницы "О нас" */}
+            <SEO
+                title="О компании RentalSite | Аренда сайтов в Казахстане"
+                description="RentalSite - инновационный сервис аренды готовых сайтов для бизнеса в Казахстане. Наша миссия, ценности и преимущества."
+                keywords="о компании RentalSite, аренда сайтов Казахстан, наша миссия, история компании, преимущества аренды сайтов"
+                canonical="https://rentalsite.kz/about"
+                structuredData={structuredData}
+            />
             <div className="about-hero">
                 <Container>
                     <Row>
@@ -84,12 +119,6 @@ const About = () => {
                             <div className="stat-label">Поддержка</div>
                         </div>
                     </Col>
-                    {/*<Col md={3} className="text-center">*/}
-                    {/*    <div className="stat-item">*/}
-                    {/*        <div className="stat-number">50+</div>*/}
-                    {/*        <div className="stat-label">Шаблонов</div>*/}
-                    {/*    </div>*/}
-                    {/*</Col>*/}
 
                 </Row>
             </Container>

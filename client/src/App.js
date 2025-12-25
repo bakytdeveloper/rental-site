@@ -11,9 +11,11 @@ import Admin from './pages/Admin';
 import { LoadingProvider } from './context/LoadingContext';
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 import './App.css';
+import {HelmetProvider} from "react-helmet-async";
 
 function App() {
   return (
+      <HelmetProvider>
       <LoadingProvider>
         <Router>
           <div className="App">
@@ -48,6 +50,7 @@ function App() {
           </div>
         </Router>
       </LoadingProvider>
+      </HelmetProvider>
   );
 }
 

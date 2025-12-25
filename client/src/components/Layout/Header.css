@@ -3,7 +3,7 @@
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(100, 255, 218, 0.1);
     transition: all 0.3s ease;
-    padding: 1rem 0;
+    padding: 0.8rem 0;
 }
 
 .header-custom-navbar.header-scrolled {
@@ -12,7 +12,7 @@
 }
 
 .header-brand-logo {
-    font-size: 1.8rem !important;
+    font-size: 2.7rem !important;
     font-weight: 700;
     color: #64ffda !important;
     text-decoration: none;
@@ -71,6 +71,9 @@
 
 /* Responsive for admin button */
 @media (max-width: 992px) {
+    .header-brand-logo {
+        font-size: 2rem;
+    }
     .header-admin-login-btn {
         margin-top: 1rem;
         padding: 0 1rem;
@@ -79,5 +82,11 @@
     .header-admin-login-btn .header-btn {
         width: 100%;
         margin-left: 0;
+    }
+}
+/* Responsive for admin button */
+@media (max-width: 768px) {
+    .header-brand-logo {
+        font-size: 1.7rem;
     }
 }

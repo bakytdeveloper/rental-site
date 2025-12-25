@@ -6,6 +6,7 @@ import { Container, Row, Col, Form, Button, Navbar, Nav } from 'react-bootstrap'
 import { siteAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import SiteCard from '../components/SiteCard/SiteCard';
+import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
 import './Catalog.css';
 
 const Catalog = () => {
@@ -25,6 +26,47 @@ const Catalog = () => {
     const { loading, startLoading, stopLoading } = useLoading();
     const location = useLocation();
 
+    // Получаем параметры категории из URL
+    const searchParams = new URLSearchParams(location.search);
+    const categoryParam = searchParams.get('category');
+    const pageParam = searchParams.get('page');
+
+    // SEO: динамическое описание на основе категории
+    const getCategoryDescription = (category) => {
+        const descriptions = {
+            'Лендинг': 'Арендуйте продающие лендинги для бизнеса. Высокая конверсия, адаптивный дизайн, быстрый запуск.',
+            'Корпоративный сайт': 'Профессиональные корпоративные сайты в аренду. Представьте свою компанию онлайн.',
+            'Интернет-магазин': 'Готовые интернет-магазины для e-commerce. Полный функционал, интеграция с платежными системами.',
+            'Портфолио': 'Сайты-портфолио для творческих профессионалов. Современный дизайн, удобное управление.',
+            'Веб-приложение': 'Современные веб-приложения в аренду. React, Vue, Node.js - передовые технологии.'
+        };
+        return descriptions[category] || 'Арендуйте профессиональные сайты для бизнеса. Большой выбор категорий, гибкие условия аренды.';
+    };
+
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Каталог сайтов для аренды",
+        "description": "Каталог готовых сайтов доступных для аренды",
+        "url": "https://rentalsite.kz/catalog",
+        "numberOfItems": pagination.total,
+        "itemListElement": filteredSites.slice(0, 10).map((site, index) => ({
+            "@type": "Product",
+            "position": index + 1,
+            "url": `https://rentalsite.kz/catalog/${site._id}`,
+            "name": site.title,
+            "description": site.shortDescription,
+            "category": site.category,
+            "offers": {
+                "@type": "Offer",
+                "price": site.price,
+                "priceCurrency": "KZT",
+                "availability": site.isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            }
+        }))
+    };
+
     // Функция для прокрутки наверх
     useEffect(() => {
         window.scrollTo({
@@ -39,17 +81,28 @@ const Catalog = () => {
         fetchSites();
         fetchCategories();
         // eslint-disable-next-line
-    }, [pagination.page]);
+    }, [pagination.page, categoryParam]);
 
     // Обработка параметров URL для пагинации
     useEffect(() => {
-        const searchParams = new URLSearchParams(location.search);
-        const pageParam = searchParams.get('page');
         if (pageParam && pageParam !== pagination.page.toString()) {
             setPagination(prev => ({ ...prev, page: parseInt(pageParam) }));
         }
         // eslint-disable-next-line
-    }, [location.search]);
+    }, [pageParam]);
+
+    // Обработка параметров URL для категории
+    useEffect(() => {
+        if (categoryParam && categoryParam !== filters.category) {
+            setFilters(prev => ({ ...prev, category: categoryParam }));
+            if (categoryParam !== 'all') {
+                fetchSitesByCategory(categoryParam);
+            } else {
+                fetchSites();
+            }
+        }
+        // eslint-disable-next-line
+    }, [categoryParam]);
 
     useEffect(() => {
         AOS.init({
@@ -199,8 +252,26 @@ const Catalog = () => {
         fetchSites();
     };
 
+    // SEO: Формируем заголовок страницы
+    const pageTitle = filters.category !== 'all'
+        ? `Аренда ${filters.category.toLowerCase()} в Казахстане`
+        : 'Каталог сайтов для аренды';
+
+    const pageDescription = filters.category !== 'all'
+        ? getCategoryDescription(filters.category)
+        : `Каталог готовых сайтов для аренды. ${pagination.total} профессиональных решений для бизнеса. Лендинги, интернет-магазины, корпоративные сайты.`;
+
+
     return (
         <div className="catalog-page">
+            {/* SEO компонент для каталога */}
+            <SEO
+                title={pageTitle}
+                description={pageDescription}
+                keywords={`аренда ${filters.category !== 'all' ? filters.category.toLowerCase() : 'сайтов'}, каталог сайтов, ${filters.category !== 'all' ? filters.category : 'готовые сайты'} аренда Казахстан`}
+                canonical={`https://rentalsite.kz/catalog${categoryParam ? `?category=${categoryParam}` : ''}`}
+                structuredData={structuredData}
+            />
             {/* Остальной JSX остается без изменений */}
             <div className="catalog-hero">
                 <Container>

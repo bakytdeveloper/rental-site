@@ -27,6 +27,34 @@ const FeaturedSites = () => {
         }
     };
 
+    // Структурированные данные для коллекции
+    const collectionStructuredData = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Рекомендуемые сайты для аренды",
+        "description": "Коллекция премиальных сайтов, доступных для аренды",
+        "url": "https://rentalsite.kz/",
+        "numberOfItems": featuredSites.length,
+        "itemListElement": featuredSites.map((site, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+                "@type": "Product",
+                "name": site.title,
+                "url": `https://rentalsite.kz/catalog/${site._id}`,
+                "image": site.images && site.images.length > 0
+                    ? `https://rentalsite.kz${site.images[0]}`
+                    : undefined,
+                "offers": {
+                    "@type": "Offer",
+                    "price": site.price,
+                    "priceCurrency": "KZT"
+                }
+            }
+        }))
+    };
+
+
     const renderSkeleton = () => {
         return Array.from({ length: 3 }).map((_, index) => (
             <Col lg={4} md={6} key={index} className="mb-4">
@@ -44,7 +72,13 @@ const FeaturedSites = () => {
     };
 
     return (
-        <section className="featured-sites-section">
+        <section className="featured-sites-section" itemScope itemType="https://schema.org/ItemList">
+            <script type="application/ld+json">
+                {JSON.stringify(collectionStructuredData)}
+            </script>
+
+            <meta itemProp="name" content="Рекомендуемые сайты" />
+            <meta itemProp="description" content="Коллекция премиальных сайтов, доступных для аренды" />
             <Container>
                 <Row className="text-center mb-5">
                     <Col>

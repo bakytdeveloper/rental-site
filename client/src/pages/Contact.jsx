@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button, Card, Spinner } from 'react-bootstra
 import { contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
+import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
 import './Contact.css';
 
 const Contact = () => {
@@ -15,6 +16,28 @@ const Contact = () => {
     });
 
     const { loading, startLoading, stopLoading } = useLoading();
+
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "ContactPage",
+        "name": "Контакты RentalSite",
+        "description": "Свяжитесь с нами для аренды сайта или получения консультации",
+        "url": "https://rentalsite.kz/contact",
+        "mainEntity": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "telephone": "+7-778-008-33-14",
+            "email": "v.a080584s@gmail.com",
+            "availableLanguage": ["Russian", "Kazakh"],
+            "hoursAvailable": {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+                "opens": "00:00",
+                "closes": "23:59"
+            }
+        }
+    };
+
 
     const handleChange = (e) => {
         setFormData({
@@ -50,6 +73,15 @@ const Contact = () => {
 
     return (
         <div className="contact-page">
+            {/* SEO компонент для страницы контактов */}
+            <SEO
+                title="Контакты RentalSite | Свяжитесь с нами"
+                description="Свяжитесь с RentalSite для аренды сайта или получения консультации. Телефон: +7 (778) 008-33-14, Email: v.a080584s@gmail.com"
+                keywords="контакты RentalSite, связаться с нами, аренда сайтов контакты, телефон для аренды сайта, email поддержки"
+                canonical="https://rentalsite.kz/contact"
+                structuredData={structuredData}
+            />
+
             <div className="contact-hero">
                 <Container>
                     <Row>

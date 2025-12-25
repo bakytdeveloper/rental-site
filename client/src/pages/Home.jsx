@@ -3,6 +3,7 @@ import Hero from '../components/Hero/Hero';
 import Features from '../components/Features/Features';
 import FeaturedSites from '../components/FeaturedSites/FeaturedSites';
 import CTA from '../components/CTA/CTA';
+import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './Home.css';
@@ -16,8 +17,39 @@ const Home = () => {
         });
     }, []);
 
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "RentalSite",
+        "url": "https://rentalsite.kz",
+        "description": "Сервис аренды готовых сайтов для бизнеса в Казахстане",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://rentalsite.kz/catalog?search={search_term_string}",
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "RentalSite",
+            "contactPoint": {
+                "@type": "ContactPoint",
+                "telephone": "+7-778-008-33-14",
+                "contactType": "customer service"
+            }
+        }
+    };
+
     return (
         <div className="home-page">
+            {/* SEO компонент для главной страницы */}
+            <SEO
+                title="Аренда готовых сайтов для бизнеса | Лендинги, интернет-магазины"
+                description="Арендуйте профессиональные сайты для бизнеса в Казахстане. Быстрый запуск за 24 часа, техподдержка 24/7, гибкие условия аренды. Лендинги, интернет-магазины, корпоративные сайты."
+                keywords="аренда сайтов Казахстан, готовые сайты аренда, лендинг в аренду, интернет-магазин аренда, сайт под ключ, веб-сайт аренда"
+                canonical="https://rentalsite.kz/"
+                structuredData={structuredData}
+            />
+
             <Hero />
             <Features />
             <FeaturedSites />

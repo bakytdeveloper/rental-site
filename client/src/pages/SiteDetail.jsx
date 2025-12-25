@@ -4,6 +4,7 @@ import { Container, Row, Col, Button, Spinner, Alert, Modal, Form, Badge } from 
 import { siteAPI, contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
+import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
 import './SiteDetail.css';
 
 const SiteDetail = () => {
@@ -22,6 +23,56 @@ const SiteDetail = () => {
     const { loading, startLoading, stopLoading } = useLoading();
 
     const location = useLocation();
+
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+// Прокрутка вверх при монтировании компонента и изменении фильтров
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
+
+
+    // Генерация структурированных данных для сайта
+    const generateStructuredData = (siteData) => {
+        if (!siteData) return null;
+
+        return {
+            "@context": "https://schema.org",
+            "@type": "Product",
+            "name": siteData.title,
+            "description": siteData.description,
+            "image": siteData.images && siteData.images.length > 0
+                ? `https://rentalsite.kz${siteData.images[0]}`
+                : "https://rentalsite.kz/images/default-site.jpg",
+            "category": siteData.category,
+            "sku": siteData._id,
+            "offers": {
+                "@type": "Offer",
+                "price": siteData.price,
+                "priceCurrency": "KZT",
+                "availability": siteData.isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                "url": `https://rentalsite.kz/catalog/${siteData._id}`,
+                "description": `Аренда сайта "${siteData.title}" за ${siteData.price} тг/месяц`
+            },
+            "brand": {
+                "@type": "Brand",
+                "name": "RentalSite"
+            },
+            "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "reviewCount": "24"
+            }
+        };
+    };
 
     // Эффект для прокрутки вверх при изменении id (переходе между страницами сайтов)
     useEffect(() => {
@@ -174,6 +225,16 @@ const SiteDetail = () => {
 
     return (
         <div className="site-detail-page">
+            {/* SEO компонент для детальной страницы сайта */}
+            <SEO
+                title={`Аренда ${site.title} - ${site.category} за ${site.price} тг/месяц`}
+                description={`Арендуйте ${site.title} - профессиональный ${site.category.toLowerCase()}. ${site.description.substring(0, 150)}... ${site.price} тг/месяц, техподдержка 24/7.`}
+                keywords={`аренда ${site.category.toLowerCase()} ${site.title}, сайт ${site.category.toLowerCase()} аренда, ${site.technologies ? site.technologies.join(', ') : ''}, аренда сайта Казахстан`}
+                canonical={`https://rentalsite.kz/catalog/${site._id}`}
+                ogType="product"
+                ogImage={site.images && site.images.length > 0 ? `https://rentalsite.kz${site.images[0]}` : undefined}
+                structuredData={generateStructuredData(site)}
+            />
             <Container>
                 {/* Хлебные крошки */}
                 <nav className="site-detail-breadcrumb-nav">
