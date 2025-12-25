@@ -66,7 +66,7 @@ const Hero = () => {
                 <meta itemProp="name" content="Главная страница RentalSite" />
                 <meta itemProp="description" content="Аренда профессиональных сайтов для бизнеса в Казахстане" />
             <Container>
-                <Row className="align-items-center min-vh-100">
+                <Row className="align-items-center min-vh-100 hero-align-items-center">
                     <Col lg={6}>
                         <div className="hero-content">
                             <div className="hero-badge">
@@ -89,7 +89,7 @@ const Hero = () => {
                                 <Button
                                     as={Link}
                                     to="/catalog"
-                                    className="btn-primary-custom me-3"
+                                    className="btn-primary-custom me-3 hero-btn-primary-custom"
                                 >
                                     {/* Отображаем разный текст в зависимости от размера экрана */}
                                     {isMobile ? 'Каталог' : 'Исследовать каталог'}
@@ -97,7 +97,7 @@ const Hero = () => {
                                 <Button
                                     as={Link}
                                     to="/about"
-                                    className="btn-outline-custom"
+                                    className="btn-outline-custom hero-btn-outline-custom"
                                 >
                                     Узнать больше
                                 </Button>
@@ -105,13 +105,15 @@ const Hero = () => {
 
                             <div className="hero-stats">
                                 <div className="stat-item hero-stat-item">
-                                    <div className="stat-number">100%</div>
-                                    <div className="stat-label">Сопровождение</div>
-                                </div>
-                                <div className="stat-item hero-stat-item">
                                     <div className="stat-number">24/7</div>
                                     <div className="stat-label">Поддержка</div>
                                 </div>
+
+                                <div className="stat-item hero-stat-item">
+                                    <div className="stat-number">100%</div>
+                                    <div className="stat-label">Сопровождение</div>
+                                </div>
+
                                 <div className="stat-item hero-stat-item">
                                     <div className="stat-number">99.9%</div>
                                     <div className="stat-label">Доступность</div>
