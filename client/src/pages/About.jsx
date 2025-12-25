@@ -17,7 +17,7 @@ const About = () => {
             "@type": "Organization",
             "name": "RentalSite",
             "description": "Сервис аренды готовых сайтов для бизнеса в Казахстане",
-            "foundingDate": "2024",
+            "foundingDate": "2025",
             "address": {
                 "@type": "PostalAddress",
                 "addressCountry": "KZ",
