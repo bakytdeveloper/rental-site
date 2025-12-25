@@ -16,3 +16,22 @@ Sitemap: https://rentalsite.kz/sitemap.xml
 Crawl-delay: 2
 Clean-param: ref /catalog/
 Clean-param: sessionId /catalog/
+
+# Добавить User-agent для конкретных поисковиков
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+
+User-agent: Yandex
+Allow: /
+Disallow: /admin/
+Crawl-delay: 3
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/*
+Disallow: /*.json$
+Disallow: /*.js$
+Disallow: /*.css$
+Crawl-delay: 2
