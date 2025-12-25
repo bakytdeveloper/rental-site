@@ -386,15 +386,16 @@
 @media (max-width: 480px) {
 
     .hero-section {
-        min-height: 70% !important;
+
     }
 
     .features-section {
-        padding-top: 0;
+        /*padding-top: 0;*/
     }
 
     .hero-align-items-center {
-
+        padding: 0;
+       
     }
     .hero-title {
         padding: 0 5px;
@@ -419,7 +420,11 @@
     }
 
     .hero-stats {
-        margin-bottom: 0;
-        padding-bottom: 0;
+        /*margin-bottom: 0;*/
+        /*padding-bottom: 0;*/
+    }
+
+    .col-hero-visual {
+        display: none!important;
     }
 }

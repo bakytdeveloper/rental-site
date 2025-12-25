@@ -122,7 +122,7 @@ const Hero = () => {
                         </div>
                     </Col>
 
-                    <Col lg={6}>
+                    <Col lg={6} className="col-hero-visual">
                         <div className="hero-visual">
                             <div className="floating-card card-1">
                                 <div className="card-content">
