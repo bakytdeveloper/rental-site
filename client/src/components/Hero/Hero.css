@@ -159,24 +159,24 @@
 }
 
 .card-1 {
-    width: 450px;
-    height: 300px;
+    width: 29rem;
+    height: 24rem;
     top: 10%;
     right: 10%;
     animation-delay: 0s;
 }
 
 .card-2 {
-    width: 380px;
-    height: 280px;
+    width: 27rem;
+    height: 22rem;
     top: 50%;
     right: 30%;
     animation-delay: 2s;
 }
 
 .card-3 {
-    width: 350px;
-    height: 250px;
+    width: 26rem;
+    height: 20rem;
     bottom: 10%;
     right: 15%;
     animation-delay: 4s;
