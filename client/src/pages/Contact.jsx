@@ -3,7 +3,7 @@ import { Container, Row, Col, Form, Button, Card, Spinner } from 'react-bootstra
 import { contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
-import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
+import SEO from '../components/SEO/SEO';
 import './Contact.css';
 
 const Contact = () => {
@@ -37,7 +37,6 @@ const Contact = () => {
             }
         }
     };
-
 
     const handleChange = (e) => {
         setFormData({
@@ -83,7 +82,7 @@ const Contact = () => {
             />
 
             <div className="contact-hero">
-                <Container>
+                <Container className="container-custom">
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
                             <h1 className="page-title">Свяжитесь с нами</h1>
@@ -95,7 +94,7 @@ const Contact = () => {
                 </Container>
             </div>
 
-            <Container className="contact-content">
+            <Container className="contact-content container-custom">
                 <Row>
                     <Col lg={8} className="mx-auto">
                         <Card className="contact-form-card">

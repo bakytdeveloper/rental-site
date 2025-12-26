@@ -26,7 +26,6 @@ const Hero = () => {
     }, [location.search]);
 
     const cardImages = [
-        // 'url(https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80)', // Интерфейс магазина
         'url(https://images.unsplash.com/photo-1545235617-9465d2a55698?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80)', // UI/UX дизайн
         'url(https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80)',  // Бизнес-лендинг
         'url(https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80)', // Интерфейс магазина

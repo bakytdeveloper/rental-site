@@ -1,7 +1,9 @@
+/* Contact.css */
+
 .contact-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
-    color: #ffffff;
+    background: var(--gradient-bg-light);
+    color: var(--text-light);
 }
 
 .contact-hero {
@@ -18,7 +20,7 @@
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: var(--border-radius-xl);
     margin-bottom: 4rem;
 }
 
@@ -27,7 +29,7 @@
 }
 
 .form-label {
-    color: #ccd6f6;
+    color: var(--text-dark);
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
@@ -35,37 +37,37 @@
 .form-control {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-radius: 10px;
+    color: var(--text-light);
+    border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
 }
 
 .form-control:focus {
     background: rgba(255, 255, 255, 0.08);
-    border-color: #64ffda;
-    color: #ffffff;
+    border-color: var(--primary-color);
+    color: var(--text-light);
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
 }
 
 .form-control::placeholder {
-    color: #8892b0;
+    color: var(--text-muted);
 }
 
 .btn-submit-message {
-    background: linear-gradient(135deg, #64ffda, #3bd6d4);
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     border: none;
-    color: #0a192f;
+    color: var(--primary-bg);
     padding: 0.75rem 2rem;
-    border-radius: 50px;
+    border-radius: var(--border-radius-full);
     font-weight: 600;
     width: 100%;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 .btn-submit-message:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
-    color: #0a192f;
+    box-shadow: var(--shadow-medium);
+    color: var(--primary-bg);
 }
 
 .contact-info-section {
@@ -82,12 +84,12 @@
 }
 
 .contact-info-item h4 {
-    color: #64ffda;
+    color: var(--primary-color);
     margin-bottom: 1rem;
 }
 
 .contact-info-item p {
-    color: #ccd6f6;
+    color: var(--text-dark);
     margin: 0;
 }
 

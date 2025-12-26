@@ -1,7 +1,9 @@
+/* Hero.css */
+
 .hero-section {
     position: relative;
-    background: linear-gradient(135deg, #0a192f 0%, #112240 50%, #1a365d 100%);
-    color: #ffffff;
+    background: var(--gradient-bg);
+    color: var(--text-light);
     overflow: hidden;
     min-height: 100vh;
     display: flex;
@@ -30,7 +32,7 @@
 .shape {
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(45deg, #64ffda, #3bd6d4);
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
     opacity: 0.1;
     animation: float 6s ease-in-out infinite;
 }
@@ -85,9 +87,9 @@
 
 .hero-badge span {
     background: rgba(100, 255, 218, 0.1);
-    color: #64ffda;
+    color: var(--primary-color);
     padding: 0.5rem 1rem;
-    border-radius: 25px;
+    border-radius: var(--border-radius-full);
     font-size: 0.9rem;
     font-weight: 500;
     border: 1px solid rgba(100, 255, 218, 0.2);
@@ -101,16 +103,9 @@
     height: auto;
 }
 
-.text-gradient {
-    background: linear-gradient(135deg, #64ffda 0%, #3bd6d4 50%, #2979ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    /*background-clip: text;*/
-}
-
 .cursor {
     animation: blink 1s infinite;
-    color: #64ffda;
+    color: var(--primary-color);
 }
 
 @keyframes blink {
@@ -120,47 +115,47 @@
 
 .hero-description {
     font-size: 1.2rem;
-    color: #8892b0;
+    color: var(--text-muted);
     margin-bottom: 2rem;
     line-height: 1.6;
-    /*max-width: 500px;*/
 }
 
 .hero-buttons {
     margin-bottom: 3rem;
 }
 
+/* Эти стили теперь определены в global.css, можно удалить или оставить как fallback */
 .btn-primary-custom {
-    background: linear-gradient(135deg, #64ffda 0%, #3bd6d4 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
     border: none;
-    color: #0a192f;
+    color: var(--primary-bg);
     padding: 0.75rem 2rem;
-    border-radius: 50px;
+    border-radius: var(--border-radius-full);
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-light);
 }
 
 .btn-primary-custom:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.4);
-    color: #0a192f;
+    box-shadow: var(--shadow-medium);
+    color: var(--primary-bg);
 }
 
 .btn-outline-custom {
     background: transparent;
-    border: 2px solid #64ffda;
-    color: #64ffda;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
     padding: 0.75rem 2rem;
-    border-radius: 50px;
+    border-radius: var(--border-radius-full);
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 .btn-outline-custom:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-2px);
-    color: #64ffda;
+    color: var(--primary-color);
 }
 
 .hero-stats {
@@ -175,13 +170,13 @@
 .stat-number {
     font-size: 2rem;
     font-weight: 700;
-    color: #64ffda;
+    color: var(--primary-color);
     margin-bottom: 0.25rem;
 }
 
 .stat-label {
     font-size: 0.9rem;
-    color: #8892b0;
+    color: var(--text-muted);
 }
 
 .hero-visual {
@@ -193,10 +188,10 @@
     position: absolute;
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    border-radius: 15px;
+    border-radius: var(--border-radius-lg);
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-dark);
     animation: float-card 8s ease-in-out infinite;
 }
 
@@ -237,7 +232,7 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    border-radius: 8px;
+    border-radius: var(--border-radius-md);
     position: relative;
     overflow: hidden;
 }
@@ -259,7 +254,7 @@
     left: -10px;
     right: -10px;
     bottom: -10px;
-    background: linear-gradient(45deg, #64ffda, #3bd6d4, #2979ff);
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));
     border-radius: 20px;
     z-index: -1;
     opacity: 0;
@@ -292,8 +287,8 @@
 .scroll-arrow {
     width: 30px;
     height: 50px;
-    border: 2px solid #64ffda;
-    border-radius: 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius-lg);
     position: relative;
 }
 
@@ -305,8 +300,8 @@
     transform: translateX(-50%);
     width: 4px;
     height: 10px;
-    background: #64ffda;
-    border-radius: 2px;
+    background: var(--primary-color);
+    border-radius: var(--border-radius-sm);
     animation: scroll-bounce 2s infinite;
 }
 
@@ -317,25 +312,21 @@
 
 /* Responsive */
 @media (max-width: 768px) {
-
     .hero-content {
-        /*width: 95%;*/
+        text-align: center;
     }
 
     .hero-title {
         font-size: 2rem;
         margin-top: 2rem;
-        /*padding-top: 1rem;*/
         padding-left: 0.3rem;
         padding-right: 0.3rem;
     }
 
-
     .hero-description {
         font-size: 1rem;
-        color: #8892b0;
+        color: var(--text-muted);
     }
-
 
     .hero-stats {
         justify-content: center;
@@ -344,7 +335,7 @@
     }
 
     .hero-stat-item {
-        padding: 0.5rem!important;
+        padding: 0.5rem !important;
     }
 
     .hero-visual, .scroll-arrow {
@@ -371,37 +362,30 @@
     .hero-btn-outline-custom {
         margin-top: 0;
         padding: 6px 10px;
-
     }
 
     .stat-label {
-        font-size: 0.7rem!important;
+        font-size: 0.7rem !important;
     }
 
     .stat-number {
-        font-size: 1.2rem!important;
+        font-size: 1.2rem !important;
     }
 }
 
-
-
 /* Extra small screens */
 @media (max-width: 480px) {
-
     .hero-section {
-        min-height: 85vh; /* Изменено с 100vh на 90vh */
-        height: 85vh; /* Добавлено для надежности */
-        max-height: 85vh; /* Ограничиваем максимальную высоту */
-    }
-
-    .features-section {
-        /*padding-top: 0;*/
+        min-height: 85vh;
+        height: 85vh;
+        max-height: 85vh;
     }
 
     .hero-align-items-center {
         padding: 0;
-        min-height: 85vh; /* Наследуем высоту родителя */
+        min-height: 85vh;
     }
+
     .hero-title {
         padding: 0 5px;
     }
@@ -416,20 +400,11 @@
         padding-right: 10px;
     }
 
-    .floating-shapes {
-        /*height: 70%;*/
-    }
-
     .hero-badge {
         margin-top: 8rem;
     }
 
-    .hero-stats {
-        /*margin-bottom: 0;*/
-        /*padding-bottom: 0;*/
-    }
-
     .col-hero-visual {
-        display: none!important;
+        display: none !important;
     }
 }

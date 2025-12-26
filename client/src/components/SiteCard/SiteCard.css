@@ -1,3 +1,5 @@
+/* SiteCard.css */
+
 .site-card {
     position: relative;
     height: 100%;
@@ -11,9 +13,9 @@
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: var(--border-radius-xl);
     overflow: hidden;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
     transform-style: preserve-3d;
 }
 
@@ -28,7 +30,7 @@
     position: relative;
     height: 200px;
     overflow: hidden;
-    background: linear-gradient(45deg, #1a365d, #2d3748);
+    background: linear-gradient(45deg, var(--accent-bg), #2d3748);
 }
 
 .site-card__image-slider {
@@ -71,7 +73,7 @@
     align-items: center;
     justify-content: center;
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 /* Убираем появление оверлея при наведении */
@@ -83,17 +85,17 @@
 .site-card__btn-quick-view {
     background: rgba(100, 255, 218, 0.9);
     border: none;
-    color: #0a192f;
+    color: var(--primary-bg);
     font-weight: 600;
     padding: 0.6rem 1.5rem;
-    border-radius: 25px;
-    transition: all 0.3s ease;
+    border-radius: var(--border-radius-full);
+    transition: all var(--transition-normal);
 }
 
 .site-card__btn-quick-view:hover {
-    background: #64ffda!important;
+    background: var(--primary-color) !important;
     transform: scale(1.05);
-    color: #0a192f;
+    color: var(--primary-bg);
 }
 
 .site-card__badge {
@@ -104,12 +106,12 @@
     border-radius: 15px;
     font-size: 0.75rem;
     font-weight: 600;
-    box-shadow: 0 4px 15px rgba(100, 255, 218, 0.3);
+    box-shadow: var(--shadow-light);
 }
 
 .site-card__badge--featured {
-    background: linear-gradient(135deg, #64ffda, #3bd6d4);
-    color: #0a192f;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    color: var(--primary-bg);
 }
 
 .site-card__content {
@@ -129,14 +131,14 @@
 .site-card__title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #ffffff;
+    color: var(--text-light);
     margin: 0;
     line-height: 1.3;
 }
 
 .site-card__price {
     text-align: right;
-    color: #64ffda;
+    color: var(--primary-color);
     font-weight: 700;
     font-size: 1.2rem;
     white-space: nowrap;
@@ -144,12 +146,12 @@
 
 .site-card__price span {
     font-size: 0.7rem;
-    color: #8892b0;
+    color: var(--text-muted);
     font-weight: 400;
 }
 
 .site-card__description {
-    color: #8892b0;
+    color: var(--text-muted);
     font-size: 0.85rem;
     line-height: 1.4;
     margin-bottom: 1rem;
@@ -170,7 +172,7 @@
 
 .site-card__tech-tag {
     background: rgba(100, 255, 218, 0.1);
-    color: #64ffda;
+    color: var(--primary-color);
     padding: 0.2rem 0.6rem;
     border-radius: 12px;
     font-size: 0.7rem;
@@ -179,7 +181,7 @@
 
 .site-card__tech-tag--more {
     background: rgba(136, 146, 176, 0.1);
-    color: #8892b0;
+    color: var(--text-muted);
     border-color: rgba(136, 146, 176, 0.2);
 }
 
@@ -197,7 +199,7 @@
 }
 
 .site-card__category {
-    color: #8892b0;
+    color: var(--text-muted);
     font-size: 0.8rem;
     font-weight: 500;
     background: rgba(136, 146, 176, 0.1);
@@ -208,21 +210,21 @@
 
 .site-card__btn-rent-now {
     background: transparent;
-    border: 2px solid #64ffda;
-    color: #64ffda;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
     padding: 0.4rem 1rem;
-    border-radius: 20px;
+    border-radius: var(--border-radius-xl);
     font-weight: 600;
     font-size: 0.8rem;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
     white-space: nowrap;
 }
 
 .site-card__btn-rent-now:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-2px);
-    color: #64ffda;
-    border-color: #64ffda;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .site-card__glow {
@@ -231,11 +233,11 @@
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, #64ffda, #3bd6d4, #2979ff);
-    border-radius: 22px;
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));
+    border-radius: calc(var(--border-radius-xl) + 2px);
     z-index: -1;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--transition-normal);
     filter: blur(12px);
 }
 
@@ -251,7 +253,7 @@
     transform: translateY(-50%);
     background: rgba(10, 25, 47, 0.8);
     border: none;
-    color: #64ffda;
+    color: var(--primary-color);
     width: 36px;
     height: 36px;
     border-radius: 50%;
@@ -260,7 +262,7 @@
     justify-content: center;
     cursor: pointer;
     opacity: 0.7;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
     z-index: 10;
 }
 
@@ -271,7 +273,7 @@
 
 .site-card__slider-btn:hover {
     background: rgba(10, 25, 47, 0.95);
-    color: #64ffda;
+    color: var(--primary-color);
     transform: translateY(-50%) scale(1.1);
 }
 
@@ -303,7 +305,7 @@
     background: rgba(255, 255, 255, 0.4);
     cursor: pointer;
     padding: 0;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 .site-card__slider-dot:hover {
@@ -312,7 +314,7 @@
 }
 
 .site-card__slider-dot--active {
-    background: #64ffda;
+    background: var(--primary-color);
     transform: scale(1.2);
 }
 
@@ -321,7 +323,7 @@
     top: 10px;
     right: 10px;
     background: rgba(10, 25, 47, 0.8);
-    color: #64ffda;
+    color: var(--primary-color);
     font-size: 0.7rem;
     font-weight: 600;
     padding: 4px 8px;

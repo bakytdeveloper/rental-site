@@ -6,7 +6,7 @@ import { Container, Row, Col, Form, Button, Navbar, Nav } from 'react-bootstrap'
 import { siteAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import SiteCard from '../components/SiteCard/SiteCard';
-import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
+import SEO from '../components/SEO/SEO';
 import './Catalog.css';
 
 const Catalog = () => {
@@ -272,13 +272,13 @@ const Catalog = () => {
                 canonical={`https://rentalsite.kz/catalog${categoryParam ? `?category=${categoryParam}` : ''}`}
                 structuredData={structuredData}
             />
-            {/* Остальной JSX остается без изменений */}
+
             <div className="catalog-hero">
-                <Container>
+                <Container className="container-custom">
                     <Row>
                         <Col>
-                            <h1 className="page-title">Каталог сайтов</h1>
-                            <p className="page-subtitle">
+                            <h1 className="catalog-page-title">Каталог сайтов</h1>
+                            <p className="catalog-page-subtitle">
                                 Доступных для мгновенной аренды
                             </p>
                         </Col>
@@ -287,7 +287,7 @@ const Catalog = () => {
             </div>
 
             <Navbar expand="lg" className="catalog-navbar-filters">
-                <Container>
+                <Container className="container-custom">
                     <div className="catalog-navbar-filters__search--always-visible">
                         <Form.Control
                             type="text"
@@ -353,7 +353,7 @@ const Catalog = () => {
                 </Container>
             </Navbar>
 
-            <Container className="catalog-container">
+            <Container className="catalog-container container-custom">
                 <Row>
                     <Col>
                         <div className="catalog-results-header">

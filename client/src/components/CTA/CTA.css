@@ -1,6 +1,8 @@
+/* CTA.css */
+
 .cta-section {
-    padding: 6rem 0;
-    background: linear-gradient(135deg, #112240 0%, #0a192f 100%);
+    padding: var(--section-padding);
+    background: var(--gradient-bg-light);
     position: relative;
     overflow: hidden;
 }
@@ -25,14 +27,14 @@
 .cta-title {
     font-size: 3rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-light);
     margin-bottom: 1.5rem;
     line-height: 1.2;
 }
 
 .cta-description {
     font-size: 1.2rem;
-    color: #8892b0;
+    color: var(--text-muted);
     margin-bottom: 2.5rem;
     line-height: 1.6;
     max-width: 600px;
@@ -49,36 +51,36 @@
 }
 
 .btn-cta-primary {
-    background: linear-gradient(135deg, #64ffda 0%, #3bd6d4 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
     border: none;
-    color: #0a192f;
+    color: var(--primary-bg);
     padding: 1rem 2.5rem;
-    border-radius: 50px;
+    border-radius: var(--border-radius-full);
     font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(100, 255, 218, 0.3);
+    transition: all var(--transition-normal);
+    box-shadow: var(--shadow-medium);
 }
 
 .btn-cta-primary:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 35px rgba(100, 255, 218, 0.4);
-    color: #0a192f;
+    color: var(--primary-bg);
 }
 
 .btn-cta-secondary {
     background: transparent;
-    border: 2px solid #64ffda;
-    color: #64ffda;
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
     padding: 1rem 2.5rem;
-    border-radius: 50px;
+    border-radius: var(--border-radius-full);
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
 }
 
 .btn-cta-secondary:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-3px);
-    color: #64ffda;
+    color: var(--primary-color);
 }
 
 .cta-stats {
@@ -95,12 +97,12 @@
 .stat-number {
     font-size: 2.5rem;
     font-weight: 700;
-    color: #64ffda;
+    color: var(--primary-color);
     margin-bottom: 0.5rem;
 }
 
 .stat-label {
-    color: #8892b0;
+    color: var(--text-muted);
     font-size: 0.9rem;
     font-weight: 500;
 }

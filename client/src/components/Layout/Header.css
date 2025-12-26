@@ -1,8 +1,9 @@
+/* Header.css */
 .header-custom-navbar {
     background: rgba(10, 25, 47, 0.95) !important;
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(100, 255, 218, 0.1);
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
     padding: 0.8rem 0;
 }
 
@@ -14,35 +15,35 @@
 .header-brand-logo {
     font-size: 2.7rem !important;
     font-weight: 700;
-    color: #64ffda !important;
+    color: var(--primary-color) !important;
     text-decoration: none;
     letter-spacing: -0.5px;
 }
 
 .header-brand-accent {
-    color: #ffffff;
+    color: var(--text-light);
 }
 
 .header-navbar-nav .header-nav-link {
-    color: #ccd6f6 !important;
+    color: var(--text-dark) !important;
     font-weight: 500;
     margin: 0 0.5rem;
     padding: 0.5rem 1rem !important;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-normal);
     position: relative;
 }
 
 .header-navbar-nav .header-nav-link:hover,
 .header-navbar-nav .header-nav-link.header-active {
-    color: #64ffda !important;
+    color: var(--primary-color) !important;
     background: rgba(100, 255, 218, 0.1);
 }
 
 .header-navbar-toggler {
     border: 1px solid #363737 !important;
     padding: 0.25rem 0.5rem;
-    background-color: #64ffda;
+    background-color: var(--primary-color);
 }
 
 .header-navbar-toggler-icon {
@@ -51,22 +52,22 @@
 
 /* Admin Login Button Styles */
 .header-admin-login-btn .header-btn {
-    border: 1px solid #64ffda;
-    color: #64ffda;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
     background: transparent;
     padding: 0.4rem 1rem;
     border-radius: 20px;
     font-size: 0.8rem;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: all var(--transition-normal);
     margin-left: 0.5rem;
 }
 
 .header-admin-login-btn .header-btn:hover {
     background: rgba(100, 255, 218, 0.1);
     transform: translateY(-2px);
-    color: #64ffda;
-    border-color: #64ffda;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 /* Responsive for admin button */
@@ -74,6 +75,7 @@
     .header-brand-logo {
         font-size: 2rem;
     }
+
     .header-admin-login-btn {
         margin-top: 1rem;
         padding: 0 1rem;
@@ -84,7 +86,7 @@
         margin-left: 0;
     }
 }
-/* Responsive for admin button */
+
 @media (max-width: 768px) {
     .header-brand-logo {
         font-size: 1.7rem;

@@ -12,7 +12,9 @@ const SEO = ({
                  publishedTime,
                  modifiedTime,
                  author,
-                 section = 'business'
+                 section = 'business',
+                 productData, // Добавляем проп для данных продукта
+                 isProduct = false // Флаг для страниц продукта
              }) => {
     const siteTitle = 'RentalSite - Аренда готовых сайтов в Казахстане';
     const siteDescription = description || 'Арендуйте готовые сайты для бизнеса в Казахстане. Лендинги, интернет-магазины, корпоративные сайты. Быстрый запуск за 24 часа, техническая поддержка 24/7, гибкие условия аренды.';
@@ -22,6 +24,9 @@ const SEO = ({
 
     const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
     const fullCanonical = canonical || siteUrl;
+
+    // Для страниц продукта меняем Open Graph тип
+    const ogTypeToUse = isProduct ? 'product' : ogType;
 
     return (
         <Helmet>
@@ -35,7 +40,7 @@ const SEO = ({
             {!noindex && <meta name="robots" content="index, follow, max-image-preview:large" />}
 
             {/* Open Graph / Facebook */}
-            <meta property="og:type" content={ogType} />
+            <meta property="og:type" content={ogTypeToUse} />
             <meta property="og:url" content={fullCanonical} />
             <meta property="og:title" content={title || siteTitle} />
             <meta property="og:description" content={siteDescription} />
@@ -44,6 +49,20 @@ const SEO = ({
             <meta property="og:image:height" content="630" />
             <meta property="og:site_name" content="RentalSite" />
             <meta property="og:locale" content="ru_KZ" />
+
+            {/* Для продуктов добавляем дополнительные OG теги */}
+            {isProduct && productData && (
+                <>
+                    <meta property="og:price:amount" content={productData.price} />
+                    <meta property="og:price:currency" content="KZT" />
+                    <meta property="product:availability" content={productData.isActive ? "in stock" : "out of stock"} />
+                    <meta property="product:condition" content="new" />
+                    <meta property="product:brand" content="RentalSite" />
+                    {productData.category && (
+                        <meta property="product:category" content={productData.category} />
+                    )}
+                </>
+            )}
 
             {/* Для статей */}
             {publishedTime && <meta property="article:published_time" content={publishedTime} />}

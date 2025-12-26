@@ -2,7 +2,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import './About.css';
 import {useEffect} from "react";
 import { useLocation } from 'react-router-dom';
-import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
+import SEO from '../components/SEO/SEO';
 
 const About = () => {
     const location = useLocation();
@@ -32,7 +32,6 @@ const About = () => {
         }
     };
 
-
     // Функция для прокрутки наверх
     const scrollToTop = () => {
         window.scrollTo({
@@ -42,11 +41,10 @@ const About = () => {
         });
     };
 
-// Прокрутка вверх при монтировании компонента и изменении фильтров
+    // Прокрутка вверх при монтировании компонента и изменении фильтров
     useEffect(() => {
         scrollToTop();
     }, [location.search]);
-
 
     return (
         <div className="about-page">
@@ -59,7 +57,7 @@ const About = () => {
                 structuredData={structuredData}
             />
             <div className="about-hero">
-                <Container>
+                <Container className="container-custom">
                     <Row>
                         <Col lg={8} className="mx-auto text-center">
                             <h1 className="page-title">RentalSite</h1>
@@ -71,7 +69,7 @@ const About = () => {
                 </Container>
             </div>
 
-            <Container className="about-content">
+            <Container className="about-content container-custom">
                 <Row className="mb-5">
                     <Col lg={6}>
                         <h2 className="section-title">Наша миссия</h2>
@@ -79,9 +77,9 @@ const About = () => {
                             В RentalSite мы верим, что каждый бизнес заслуживает профессионального онлайн-присутствия
                             без сложностей и излишних затрат традиционной веб-разработки. Наша миссия - сделать ваш бизнес заметным,
                             наши сайты доступными для всех через
-                            <b style={{color:"white", marginLeft:"5px", marginRight: "5px"}}>
+                            <span className="highlight-text">
                                 нашу инновационную модель аренды.
-                            </b>
+                            </span>
                             Даже не понимая принципа создания и запуска сайта, вы сможете запустить арендованный сайт, за считанные дни.
                         </p>
                     </Col>
@@ -91,16 +89,15 @@ const About = () => {
                             Мы предоставляем подобранную коллекцию высококачественных сайтов в различных
                             отраслях и категориях. От потрясающих лендингов до комплексных интернет-магазинов,
                             наши шаблоны разработаны, чтобы помочь вам быстро и эффективно запуститься сайт,
-                            <b style={{color:"white", marginLeft:"5px", marginRight: "5px"}}>
+                            <span className="highlight-text">
                             с Вашей информацией на ней.
-                            </b>
+                            </span>
                             Мало того, мы готовы обсудить, индивидуально, об создании отдельного сайта, под ваш бизнес.
                         </p>
                     </Col>
                 </Row>
 
                 <Row className="stats-section">
-
                     <Col md={4} className="text-center">
                         <div className="stat-item">
                             <div className="stat-number">100%</div>
@@ -119,7 +116,6 @@ const About = () => {
                             <div className="stat-label">Поддержка</div>
                         </div>
                     </Col>
-
                 </Row>
             </Container>
         </div>

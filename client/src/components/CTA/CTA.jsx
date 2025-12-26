@@ -5,7 +5,7 @@ import './CTA.css';
 const CTA = () => {
     return (
         <section className="cta-section">
-            <Container>
+            <Container className="container-custom">
                 <Row className="text-center">
                     <Col lg={8} className="mx-auto">
                         <div className="cta-content">

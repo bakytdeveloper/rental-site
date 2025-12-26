@@ -3,7 +3,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
-import SiteCard from '../SiteCard/SiteCard'; // Импортируем общий компонент
+import SiteCard from '../SiteCard/SiteCard';
 import './FeaturedSites.css';
 
 const FeaturedSites = () => {
@@ -54,7 +54,6 @@ const FeaturedSites = () => {
         }))
     };
 
-
     const renderSkeleton = () => {
         return Array.from({ length: 3 }).map((_, index) => (
             <Col lg={4} md={6} key={index} className="mb-4">
@@ -79,7 +78,7 @@ const FeaturedSites = () => {
 
             <meta itemProp="name" content="Рекомендуемые сайты" />
             <meta itemProp="description" content="Коллекция премиальных сайтов, доступных для аренды" />
-            <Container>
+            <Container className="container-custom">
                 <Row className="text-center mb-5">
                     <Col>
                         <h2 className="section-title">
