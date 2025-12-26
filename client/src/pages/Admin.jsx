@@ -31,15 +31,15 @@ const AdminLayout = ({ children }) => {
 
     return (
         <div className="admin-page">
-            <Container fluid>
-                <Row>
+            <Container fluid className="p-0">
+                <Row className="g-0">
                     {/* Боковая панель */}
                     <Col lg={2} className="admin-sidebar">
                         <div className="sidebar-header">
-                            <h3>RentalSite Админ</h3>
+                            <h3 className="text-gradient mb-3">RentalSite Админ</h3>
                             {user && (
-                                <div className="user-info">
-                                    <small>Добро пожаловать, {user.username}</small>
+                                <div className="user-info text-muted small">
+                                    Добро пожаловать, {user.username}
                                 </div>
                             )}
                         </div>
@@ -47,34 +47,34 @@ const AdminLayout = ({ children }) => {
                             <Nav.Link
                                 as={Link}
                                 to="/admin"
-                                className={location.pathname === '/admin' ? 'active' : ''}
+                                className={`admin-nav-link ${location.pathname === '/admin' ? 'active' : ''}`}
                             >
                                 📊 Панель управления
                             </Nav.Link>
                             <Nav.Link
                                 as={Link}
                                 to="/admin/sites"
-                                className={location.pathname === '/admin/sites' ? 'active' : ''}
+                                className={`admin-nav-link ${location.pathname === '/admin/sites' ? 'active' : ''}`}
                             >
                                 🌐 Сайты
                             </Nav.Link>
                             <Nav.Link
                                 as={Link}
                                 to="/admin/contacts"
-                                className={location.pathname === '/admin/contacts' ? 'active' : ''}
+                                className={`admin-nav-link ${location.pathname === '/admin/contacts' ? 'active' : ''}`}
                             >
                                 📧 Контакты
                             </Nav.Link>
                         </Nav>
 
                         {user && (
-                            <div className="sidebar-footer">
+                            <div className="sidebar-footer mt-auto">
                                 <Dropdown>
-                                    <Dropdown.Toggle variant="outline" className="user-dropdown">
+                                    <Dropdown.Toggle variant="outline" className="user-dropdown btn-outline-custom w-100">
                                         👤 {user.username}
                                     </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item as={Button} onClick={handleLogout}>
+                                    <Dropdown.Menu className="admin-dropdown-menu">
+                                        <Dropdown.Item as={Button} onClick={handleLogout} className="admin-dropdown-item">
                                             🚪 Выйти
                                         </Dropdown.Item>
                                     </Dropdown.Menu>

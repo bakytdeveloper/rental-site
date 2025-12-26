@@ -125,7 +125,7 @@ const AdminContacts = () => {
     const handleCloseModal = () => {
         setShowDetailModal(false);
         setSelectedContact(null);
-        setPayments([]); // Очищаем платежи при закрытии
+        setPayments([]);
     };
 
     const updateContactStatus = async (contactId, newStatus) => {
@@ -175,23 +175,24 @@ const AdminContacts = () => {
     const getStatusBadge = (status) => {
         const statusTranslations = {
             new: 'новый',
-            // contacted: 'на связи',
-            // completed: 'завершен',
-            // spam: 'спам',
             active_rental: 'активная аренда',
             payment_due: 'ожидает оплаты'
         };
 
         const variants = {
             new: 'danger',
-            // contacted: 'warning',
-            // completed: 'success',
-            // spam: 'secondary',
             active_rental: 'info',
             payment_due: 'warning'
         };
 
-        return <Badge bg={variants[status] || 'secondary'}>{statusTranslations[status] || status}</Badge>;
+        return (
+            <Badge
+                bg={variants[status] || 'secondary'}
+                className="admin-contacts__status-badge"
+            >
+                {statusTranslations[status] || status}
+            </Badge>
+        );
     };
 
     // Функция для расчета оставшихся дней
@@ -205,17 +206,17 @@ const AdminContacts = () => {
 
     if (loading && contacts.length === 0) {
         return (
-            <div className="admin-contacts__loading">
-                <Spinner animation="border" variant="primary" />
-                <p>Загрузка контактов...</p>
+            <div className="admin-contacts__loading text-center py-5">
+                <Spinner animation="border" variant="primary" className="mb-3" />
+                <p className="text-muted">Загрузка контактов...</p>
             </div>
         );
     }
 
     return (
-        <div className="admin-contacts">
-            <div className="admin-contacts__header">
-                <h1 className="admin-contacts__title">Управление контактами</h1>
+        <div className="admin-contacts container-custom py-4">
+            <div className="admin-contacts__header mb-4">
+                <h1 className="admin-contacts__title section-title mb-0">Управление контактами</h1>
                 <div className="admin-contacts__stats">
                     <Badge bg="outline-info" className="admin-contacts__stat-badge">
                         Всего: {pagination.total}
@@ -224,12 +225,12 @@ const AdminContacts = () => {
             </div>
 
             {/* Фильтры */}
-            <Card className="admin-contacts__filters-card">
-                <Card.Body className="admin-contacts__filters-card-body">
-                    <Row>
+            <Card className="admin-contacts__filters-card card-custom mb-4">
+                <Card.Body className="admin-contacts__filters-card-body p-4">
+                    <Row className="g-3">
                         <Col md={6}>
                             <Form.Group className="admin-contacts__form-group">
-                                <Form.Label className="admin-contacts__form-label">Статус</Form.Label>
+                                <Form.Label className="admin-contacts__form-label text-light mb-2">Статус</Form.Label>
                                 <Form.Select
                                     value={filters.status}
                                     onChange={(e) => handleFilterChange('status', e.target.value)}
@@ -237,9 +238,6 @@ const AdminContacts = () => {
                                 >
                                     <option value="all">Все статусы</option>
                                     <option value="new">Новый</option>
-                                    {/*<option value="contacted">На связи</option>*/}
-                                    {/*<option value="completed">Завершен</option>*/}
-                                    {/*<option value="spam">Спам</option>*/}
                                     <option value="active_rental">Активная аренда</option>
                                     <option value="payment_due">Ожидает оплаты</option>
                                 </Form.Select>
@@ -247,7 +245,7 @@ const AdminContacts = () => {
                         </Col>
                         <Col md={6}>
                             <Form.Group className="admin-contacts__form-group">
-                                <Form.Label className="admin-contacts__form-label">Поиск</Form.Label>
+                                <Form.Label className="admin-contacts__form-label text-light mb-2">Поиск</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Поиск по имени, email или сообщению..."
@@ -262,11 +260,11 @@ const AdminContacts = () => {
             </Card>
 
             {/* Таблица контактов */}
-            <Card className="admin-contacts__table-card">
-                <Card.Body className="admin-contacts__table-card-body">
+            <Card className="admin-contacts__table-card card-custom">
+                <Card.Body className="admin-contacts__table-card-body p-0">
                     {filteredContacts.length > 0 ? (
                         <div className="table-responsive">
-                            <Table responsive className="admin-contacts__table">
+                            <Table responsive className="admin-contacts__table mb-0">
                                 <thead>
                                 <tr>
                                     <th className="admin-contacts__table-header">Контактная информация</th>
@@ -281,10 +279,10 @@ const AdminContacts = () => {
                                     <tr key={contact._id} className="admin-contacts__table-row">
                                         <td className="admin-contacts__table-cell">
                                             <div className="admin-contacts__contact-info">
-                                                <div className="admin-contacts__contact-name">{contact.name}</div>
-                                                <div className="admin-contacts__contact-email">{contact.email}</div>
+                                                <div className="admin-contacts__contact-name text-light mb-1">{contact.name}</div>
+                                                <div className="admin-contacts__contact-email text-primary mb-1">{contact.email}</div>
                                                 {contact.phone && (
-                                                    <div className="admin-contacts__contact-phone">{contact.phone}</div>
+                                                    <div className="admin-contacts__contact-phone text-muted">{contact.phone}</div>
                                                 )}
                                             </div>
                                         </td>
@@ -296,37 +294,37 @@ const AdminContacts = () => {
                                                     </Badge>
                                                 </div>
                                             ) : (
-                                                <span className="admin-contacts__no-website">Общий запрос</span>
+                                                <span className="admin-contacts__no-website text-muted">Общий запрос</span>
                                             )}
                                         </td>
                                         <td className="admin-contacts__table-cell">
-                                            {getStatusBadge(contact.status)}
-                                            {contact.rentalEndDate && (
-                                                <div className="small mt-1">
-                                                    {getDaysRemaining(contact.rentalEndDate) !== null &&
-                                                    getDaysRemaining(contact.rentalEndDate) > 0 && (
-                                                        <Badge bg={getDaysRemaining(contact.rentalEndDate) <= 3 ? 'warning' : 'info'} className="ms-1">
-                                                            {getDaysRemaining(contact.rentalEndDate)}д
-                                                        </Badge>
-                                                    )}
-                                                </div>
-                                            )}
+                                            <div className="d-flex flex-column gap-1">
+                                                {getStatusBadge(contact.status)}
+                                                {contact.rentalEndDate && getDaysRemaining(contact.rentalEndDate) !== null && (
+                                                    <Badge
+                                                        bg={getDaysRemaining(contact.rentalEndDate) <= 3 ? 'warning' : 'info'}
+                                                        className="admin-contacts__days-badge"
+                                                    >
+                                                        {getDaysRemaining(contact.rentalEndDate)} дн.
+                                                    </Badge>
+                                                )}
+                                            </div>
                                         </td>
                                         <td className="admin-contacts__table-cell">
                                             <div className="admin-contacts__date-info">
-                                                <div>{new Date(contact.createdAt).toLocaleDateString()}</div>
-                                                <small className="admin-contacts__date-time">
+                                                <div className="text-light">{new Date(contact.createdAt).toLocaleDateString()}</div>
+                                                <small className="admin-contacts__date-time text-muted">
                                                     {new Date(contact.createdAt).toLocaleTimeString()}
                                                 </small>
                                             </div>
                                         </td>
                                         <td className="admin-contacts__table-cell">
-                                            <div className="admin-contacts__action-buttons">
+                                            <div className="admin-contacts__action-buttons d-flex gap-2">
                                                 <Button
                                                     size="sm"
                                                     variant="outline-primary"
                                                     onClick={() => handleViewDetails(contact)}
-                                                    className="admin-contacts__view-btn"
+                                                    className="admin-contacts__view-btn btn-outline-custom"
                                                 >
                                                     Просмотр
                                                 </Button>
@@ -334,7 +332,7 @@ const AdminContacts = () => {
                                                     size="sm"
                                                     variant="outline-danger"
                                                     onClick={() => deleteContact(contact._id)}
-                                                    className="admin-contacts__delete-btn"
+                                                    className="admin-contacts__delete-btn btn-outline-custom"
                                                 >
                                                     Удалить
                                                 </Button>
@@ -347,17 +345,17 @@ const AdminContacts = () => {
 
                             {/* Пагинация */}
                             {pagination.totalPages > 1 && (
-                                <div className="admin-contacts__pagination-container">
+                                <div className="admin-contacts__pagination-container d-flex justify-content-center align-items-center gap-3 mt-3 p-3 border-top">
                                     <Button
                                         variant="outline-secondary"
                                         size="sm"
                                         disabled={pagination.page === 1}
                                         onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
-                                        className="admin-contacts__pagination-btn"
+                                        className="admin-contacts__pagination-btn btn-outline-custom"
                                     >
                                         Назад
                                     </Button>
-                                    <span className="admin-contacts__pagination-info">
+                                    <span className="admin-contacts__pagination-info text-muted">
                                         Страница {pagination.page} из {pagination.totalPages}
                                     </span>
                                     <Button
@@ -365,7 +363,7 @@ const AdminContacts = () => {
                                         size="sm"
                                         disabled={pagination.page === pagination.totalPages}
                                         onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
-                                        className="admin-contacts__pagination-btn"
+                                        className="admin-contacts__pagination-btn btn-outline-custom"
                                     >
                                         Вперед
                                     </Button>
@@ -373,8 +371,8 @@ const AdminContacts = () => {
                             )}
                         </div>
                     ) : (
-                        <div className="admin-contacts__no-data">
-                            <p>Контактов, соответствующих критериям, не найдено.</p>
+                        <div className="admin-contacts__no-data text-center py-5">
+                            <p className="text-muted">Контактов, соответствующих критериям, не найдено.</p>
                         </div>
                     )}
                 </Card.Body>
@@ -385,54 +383,56 @@ const AdminContacts = () => {
                 show={showDetailModal}
                 onHide={handleCloseModal}
                 size="lg"
+                centered
                 className="admin-contacts__modal"
-                dialogClassName="admin-contacts__modal-dialog"
             >
-                <Modal.Header closeButton className="admin-contacts__modal-header">
-                    <Modal.Title className="admin-contacts__modal-title">Детали контакта</Modal.Title>
+                <Modal.Header closeButton className="admin-contacts__modal-header border-bottom">
+                    <Modal.Title className="admin-contacts__modal-title text-gradient">
+                        Детали контакта
+                    </Modal.Title>
                 </Modal.Header>
                 {selectedContact && (
                     <>
                         <Modal.Body className="admin-contacts__modal-body">
-                            <Row>
+                            <Row className="g-3 mb-4">
                                 <Col md={6}>
                                     <div className="admin-contacts__detail-section">
-                                        <h6 className="admin-contacts__detail-section-title">Личная информация</h6>
+                                        <h6 className="admin-contacts__detail-section-title highlight-text">Личная информация</h6>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Имя:</strong> {selectedContact.name}
+                                            <strong className="admin-contacts__detail-label text-light">Имя:</strong>
+                                            <span className="text-light ms-2">{selectedContact.name}</span>
                                         </div>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Email:</strong> {selectedContact.email}
+                                            <strong className="admin-contacts__detail-label text-light">Email:</strong>
+                                            <span className="text-primary ms-2">{selectedContact.email}</span>
                                         </div>
                                         {selectedContact.phone && (
                                             <div className="admin-contacts__detail-item">
-                                                <strong className="admin-contacts__detail-label">Телефон:</strong> {selectedContact.phone}
+                                                <strong className="admin-contacts__detail-label text-light">Телефон:</strong>
+                                                <span className="text-light ms-2">{selectedContact.phone}</span>
                                             </div>
                                         )}
                                     </div>
                                 </Col>
                                 <Col md={6}>
                                     <div className="admin-contacts__detail-section">
-                                        <h6 className="admin-contacts__detail-section-title">Информация о запросе</h6>
+                                        <h6 className="admin-contacts__detail-section-title highlight-text">Информация о запросе</h6>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Статус:</strong>
-                                            <div className="admin-contacts__status-actions">
+                                            <strong className="admin-contacts__detail-label text-light">Статус:</strong>
+                                            <div className="admin-contacts__status-actions mt-2">
                                                 {getStatusBadge(selectedContact.status)}
-                                                <div className="admin-contacts__status-buttons">
+                                                <div className="admin-contacts__status-buttons d-flex flex-wrap gap-1 mt-2">
                                                     {['new', 'active_rental', 'payment_due'].map(status => (
                                                         <Button
                                                             key={status}
                                                             size="sm"
                                                             variant={selectedContact.status === status ? 'primary' : 'outline-primary'}
                                                             onClick={() => updateContactStatus(selectedContact._id, status)}
-                                                            className="admin-contacts__status-btn"
+                                                            className="admin-contacts__status-btn btn-primary-custom btn-sm"
                                                         >
                                                             {status === 'new' ? 'новый' :
-                                                                // status === 'contacted' ? 'на связи' :
-                                                                //     status === 'completed' ? 'завершен' :
-                                                                //         status === 'spam' ? 'спам' :
-                                                                            status === 'active_rental' ? 'активная аренда' :
-                                                                                'ожидает оплаты'}
+                                                                status === 'active_rental' ? 'активная аренда' :
+                                                                    'ожидает оплаты'}
                                                         </Button>
                                                     ))}
                                                 </div>
@@ -440,51 +440,67 @@ const AdminContacts = () => {
                                         </div>
                                         {selectedContact.siteTitle && (
                                             <div className="admin-contacts__detail-item">
-                                                <strong className="admin-contacts__detail-label">Сайт:</strong> {selectedContact.siteTitle}
+                                                <strong className="admin-contacts__detail-label text-light">Сайт:</strong>
+                                                <span className="text-light ms-2">{selectedContact.siteTitle}</span>
                                             </div>
                                         )}
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label">Отправлено:</strong> {new Date(selectedContact.createdAt).toLocaleString()}
+                                            <strong className="admin-contacts__detail-label text-light">Отправлено:</strong>
+                                            <span className="text-light ms-2">{new Date(selectedContact.createdAt).toLocaleString()}</span>
                                         </div>
                                     </div>
                                 </Col>
                             </Row>
 
                             {/* Раздел информации об аренде */}
-                            <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Информация об аренде</h6>
+                            <div className="admin-contacts__detail-section mb-4">
+                                <h6 className="admin-contacts__detail-section-title highlight-text mb-3">Информация об аренде</h6>
 
-                                {selectedContact.monthlyPrice > 0 && (
-                                    <div className="admin-contacts__detail-item">
-                                        <strong className="admin-contacts__detail-label">Ежемесячная цена:</strong>
-                                        ${selectedContact.monthlyPrice}
-                                    </div>
-                                )}
-
-                                {selectedContact.rentalEndDate && (
-                                    <div className="admin-contacts__detail-item">
-                                        <strong className="admin-contacts__detail-label">Аренда заканчивается:</strong>
-                                        {new Date(selectedContact.rentalEndDate).toLocaleDateString()}
-                                        {getDaysRemaining(selectedContact.rentalEndDate) !== null && (
-                                            <span className={`ms-2 badge ${getDaysRemaining(selectedContact.rentalEndDate) <= 3 ? 'bg-warning' : 'bg-info'}`}>
-                                                {getDaysRemaining(selectedContact.rentalEndDate)} дней осталось
-                                            </span>
+                                <div className="admin-contacts__rental-info card-custom p-3 mb-3">
+                                    <Row className="g-3">
+                                        {selectedContact.monthlyPrice > 0 && (
+                                            <Col md={6}>
+                                                <div className="admin-contacts__rental-date-item">
+                                                    <div className="admin-contacts__rental-label text-muted">Ежемесячная цена:</div>
+                                                    <div className="admin-contacts__rental-value text-primary">₸{selectedContact.monthlyPrice}</div>
+                                                </div>
+                                            </Col>
                                         )}
-                                    </div>
-                                )}
+                                        {selectedContact.rentalEndDate && (
+                                            <Col md={6}>
+                                                <div className="admin-contacts__rental-date-item">
+                                                    <div className="admin-contacts__rental-label text-muted">Аренда заканчивается:</div>
+                                                    <div className="admin-contacts__rental-value text-light">
+                                                        {new Date(selectedContact.rentalEndDate).toLocaleDateString()}
+                                                        {getDaysRemaining(selectedContact.rentalEndDate) !== null && (
+                                                            <Badge
+                                                                bg={getDaysRemaining(selectedContact.rentalEndDate) <= 3 ? 'warning' : 'info'}
+                                                                className="ms-2"
+                                                            >
+                                                                {getDaysRemaining(selectedContact.rentalEndDate)} дней осталось
+                                                            </Badge>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        )}
+                                        {selectedContact.totalPaid > 0 && (
+                                            <Col md={6}>
+                                                <div className="admin-contacts__rental-date-item">
+                                                    <div className="admin-contacts__rental-label text-muted">Всего оплачено:</div>
+                                                    <div className="admin-contacts__rental-value text-success">₸{selectedContact.totalPaid}</div>
+                                                </div>
+                                            </Col>
+                                        )}
+                                    </Row>
+                                </div>
 
-                                {selectedContact.totalPaid > 0 && (
-                                    <div className="admin-contacts__detail-item">
-                                        <strong className="admin-contacts__detail-label">Всего оплачено:</strong>
-                                        ${selectedContact.totalPaid}
-                                    </div>
-                                )}
-
-                                <div className="admin-contacts__detail-item">
+                                <div className="d-flex justify-content-end">
                                     <Button
                                         variant="success"
                                         size="sm"
                                         onClick={() => setShowPaymentModal(true)}
+                                        className="btn-primary-custom"
                                     >
                                         Добавить платеж
                                     </Button>
@@ -492,76 +508,73 @@ const AdminContacts = () => {
                             </div>
 
                             {/* Раздел истории платежей */}
-                            <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">История платежей</h6>
+                            <div className="admin-contacts__detail-section mb-4">
+                                <h6 className="admin-contacts__detail-section-title highlight-text mb-3">История платежей</h6>
 
                                 {loadingPayments ? (
                                     <div className="text-center py-3">
-                                        <Spinner animation="border" size="sm" />
+                                        <Spinner animation="border" size="sm" variant="primary" />
                                     </div>
                                 ) : payments.length > 0 ? (
                                     <div className="admin-contacts__payment-history">
                                         {payments.map((payment, index) => (
-                                            <div key={index} className="admin-contacts__payment-item">
+                                            <div key={index} className="admin-contacts__payment-item card-custom p-3 mb-2">
                                                 <div className="d-flex justify-content-between align-items-center">
                                                     <div>
-                                                        <div className="admin-contacts__payment-amount">
-                                                            ${payment.amount}
+                                                        <div className="admin-contacts__payment-amount text-primary mb-1">
+                                                            ₸{payment.amount}
                                                         </div>
-                                                        <div className="admin-contacts__payment-date">
+                                                        <div className="admin-contacts__payment-date text-muted small small-admin-contacts__payment-date">
                                                             {new Date(payment.paymentDate).toLocaleDateString()} •
                                                             {payment.periodMonths} месяц(а) • {payment.paymentMethod}
                                                         </div>
                                                         {payment.notes && (
-                                                            <div className="text-muted small mt-1">
+                                                            <div className="text-muted small mt-1 small-admin-notes__payment-date">
                                                                 {payment.notes}
                                                             </div>
                                                         )}
                                                     </div>
-                                                    <Badge bg="info">
-                                                        ${(payment.amount / payment.periodMonths).toFixed(2)}/месяц
+                                                    <Badge bg="info" className="admin-contacts__payment-rate">
+                                                        ₸{(payment.amount / payment.periodMonths).toFixed(2)}/месяц
                                                     </Badge>
                                                 </div>
                                             </div>
                                         ))}
 
-                                        <div className="admin-contacts__payment-total mt-3 p-3 bg-dark rounded">
+                                        <div className="admin-contacts__payment-total mt-3 p-3 card-custom">
                                             <div className="d-flex justify-content-between">
-                                                <strong>Всего оплачено:</strong>
+                                                <strong className="text-light">Всего оплачено:</strong>
                                                 <strong className="text-success">
-                                                    ${payments.reduce((sum, payment) => sum + payment.amount, 0)}
+                                                    ₸{payments.reduce((sum, payment) => sum + payment.amount, 0)}
                                                 </strong>
                                             </div>
                                         </div>
                                     </div>
                                 ) : (
-                                    <div className="text-muted text-center py-3">
-                                        <span style={{color:"white"}}>
-                                            Платежи еще не зарегистрированы
-                                        </span>
-
+                                    <div className="text-center py-3 card-custom">
+                                        <p className="text-muted mb-0">Платежи еще не зарегистрированы</p>
                                     </div>
                                 )}
                             </div>
 
-                            <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Сообщение</h6>
-                                <div className="admin-contacts__message-content">
+                            <div className="admin-contacts__detail-section mb-4">
+                                <h6 className="admin-contacts__detail-section-title highlight-text mb-3">Сообщение</h6>
+                                <div className="admin-contacts__message-content card-custom p-3">
                                     {selectedContact.message}
                                 </div>
                             </div>
 
                             {selectedContact.notes && (
-                                <div className="admin-contacts__detail-section">
-                                    <h6 className="admin-contacts__detail-section-title">Заметки администратора</h6>
-                                    <div className="admin-contacts__notes-content">
+                                <div className="admin-contacts__detail-section mb-4">
+                                    <h6 className="admin-contacts__detail-section-title highlight-text mb-3">Заметки администратора</h6>
+                                    <div className="admin-contacts__notes-content card-custom p-3">
                                         {selectedContact.notes}
                                     </div>
                                 </div>
                             )}
 
                             <div className="admin-contacts__detail-section">
-                                <h6 className="admin-contacts__detail-section-title">Добавить заметку</h6>
+                                <h6 className="admin-contacts__detail-section-title highlight-text mb-3">Добавить заметку</h6>
                                 <Form.Group className="admin-contacts__form-group">
                                     <Form.Control
                                         as="textarea"
@@ -569,23 +582,23 @@ const AdminContacts = () => {
                                         placeholder="Добавьте внутренние заметки об этом контакте..."
                                         onBlur={(e) => addNote(selectedContact._id, e.target.value)}
                                         defaultValue={selectedContact.notes || ''}
-                                        className="admin-contacts__notes-textarea"
+                                        className="admin-contacts__notes-textarea card-custom"
                                     />
                                 </Form.Group>
                             </div>
                         </Modal.Body>
-                        <Modal.Footer className="admin-contacts__modal-footer">
+                        <Modal.Footer className="admin-contacts__modal-footer border-top">
                             <Button
                                 variant="outline-secondary"
                                 onClick={handleCloseModal}
-                                className="admin-contacts__modal-close-btn"
+                                className="admin-contacts__modal-close-btn btn-outline-custom"
                             >
                                 Закрыть
                             </Button>
                             <Button
                                 variant="danger"
                                 onClick={() => deleteContact(selectedContact._id)}
-                                className="admin-contacts__modal-delete-btn"
+                                className="admin-contacts__modal-delete-btn btn-primary-custom"
                             >
                                 Удалить контакт
                             </Button>
@@ -598,17 +611,18 @@ const AdminContacts = () => {
             <Modal
                 show={showPaymentModal}
                 onHide={() => setShowPaymentModal(false)}
+                centered
                 className="admin-contacts__modal"
             >
-                <Modal.Header closeButton className="admin-contacts__modal-header">
-                    <Modal.Title className="admin-contacts__modal-title">
+                <Modal.Header closeButton className="admin-contacts__modal-header border-bottom">
+                    <Modal.Title className="admin-contacts__modal-title text-gradient">
                         Добавить платеж для {selectedContact?.name}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="admin-contacts__modal-body">
                     <Form>
                         <Form.Group className="mb-3">
-                            <Form.Label>Сумма платежа ($)</Form.Label>
+                            <Form.Label className="text-light mb-2">Сумма платежа (₸)</Form.Label>
                             <Form.Control
                                 type="number"
                                 min="1"
@@ -619,17 +633,19 @@ const AdminContacts = () => {
                                     amount: parseFloat(e.target.value) || ''
                                 }))}
                                 placeholder="Введите сумму платежа"
+                                className="card-custom"
                             />
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Способ оплаты</Form.Label>
+                            <Form.Label className="text-light mb-2">Способ оплаты</Form.Label>
                             <Form.Select
                                 value={paymentData.paymentMethod}
                                 onChange={(e) => setPaymentData(prev => ({
                                     ...prev,
                                     paymentMethod: e.target.value
                                 }))}
+                                className="card-custom"
                             >
                                 <option value="bank_transfer">Банковский перевод</option>
                                 <option value="card">Кредитная карта</option>
@@ -639,7 +655,7 @@ const AdminContacts = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Месяцев продления (опционально)</Form.Label>
+                            <Form.Label className="text-light mb-2">Месяцев продления (опционально)</Form.Label>
                             <Form.Control
                                 type="number"
                                 min="1"
@@ -649,16 +665,15 @@ const AdminContacts = () => {
                                     periodMonths: parseInt(e.target.value) || ''
                                 }))}
                                 placeholder="Автоматически рассчитывается из суммы"
+                                className="card-custom"
                             />
-                            <Form.Text className="text-muted">
-                                <span style={{color:"whitesmoke"}}>
-                                    Оставьте пустым для автоматического расчета на основе ежемесячной цены
-                                </span>
+                            <Form.Text className="text-muted small d-block mt-1 small-form-text">
+                                Оставьте пустым для автоматического расчета на основе ежемесячной цены
                             </Form.Text>
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label>Заметки</Form.Label>
+                            <Form.Label className="text-light mb-2">Заметки</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
@@ -668,22 +683,23 @@ const AdminContacts = () => {
                                     notes: e.target.value
                                 }))}
                                 placeholder="Заметки о платеже..."
+                                className="card-custom"
                             />
                         </Form.Group>
                     </Form>
 
                     {selectedContact?.monthlyPrice && paymentData.amount && (
-                        <div className="alert alert-info">
-                            <strong>Расчет:</strong> ${paymentData.amount} / ${selectedContact.monthlyPrice} =
+                        <div className="alert alert-info card-custom mt-3">
+                            <strong>Расчет:</strong> ₸{paymentData.amount} / ₸{selectedContact.monthlyPrice} =
                             {Math.floor(paymentData.amount / selectedContact.monthlyPrice)} месяц(а)
                         </div>
                     )}
                 </Modal.Body>
-                <Modal.Footer className="admin-contacts__modal-footer">
-                    <Button variant="secondary" onClick={() => setShowPaymentModal(false)}>
+                <Modal.Footer className="admin-contacts__modal-footer border-top">
+                    <Button variant="secondary" onClick={() => setShowPaymentModal(false)} className="btn-outline-custom">
                         Отмена
                     </Button>
-                    <Button variant="primary" onClick={handleAddPayment}>
+                    <Button variant="primary" onClick={handleAddPayment} className="btn-primary-custom">
                         Добавить платеж
                     </Button>
                 </Modal.Footer>

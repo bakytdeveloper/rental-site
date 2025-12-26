@@ -1,7 +1,6 @@
 .admin-contacts {
-    padding: 4rem 0 1rem;
-    background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
     min-height: 100vh;
+    background: var(--gradient-bg);
 }
 
 .admin-contacts__header {
@@ -15,7 +14,7 @@
 .admin-contacts__title {
     font-size: 2rem;
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-light);
     margin: 0;
 }
 
@@ -27,29 +26,19 @@
 .admin-contacts__stat-badge {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
-    border: 1px solid #64ffda;
-    color: #64ffda;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
     background: transparent;
+    border-radius: var(--border-radius-full);
 }
 
 /* Filters Card */
-.admin-contacts__filters-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    margin-bottom: 2rem;
-}
-
 .admin-contacts__filters-card-body {
-    padding: 1.5rem;
-}
-
-.admin-contacts__form-group {
-    margin-bottom: 0;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .admin-contacts__form-label {
-    color: #ccd6f6;
+    color: var(--text-light);
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
@@ -58,157 +47,131 @@
 .admin-contacts__form-select {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-radius: 8px;
+    color: var(--text-light);
+    border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
     width: 100%;
+    transition: all var(--transition-normal);
+}
+
+.small-admin-contacts__payment-date,
+.small-admin-notes__payment-date {
+    color: var(--text-muted) !important;
 }
 
 .admin-contacts__form-control:focus,
 .admin-contacts__form-select:focus {
     background: rgba(255, 255, 255, 0.08);
-    border-color: #64ffda;
-    color: #ffffff;
+    border-color: var(--primary-color);
+    color: var(--text-light);
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
 }
 
+.small-form-text {
+    color: var(--primary-color) !important;
+}
+
+.card-custom {
+    color: var(--text-light);
+}
+
 .admin-contacts__form-control::placeholder {
-    color: #8892b0;
+    color: var(--text-muted);
 }
 
-/* Contacts Table */.admin-contacts__table-card {
-                        background: rgba(255, 255, 255, 0.05) !important;
-                        border: 1px solid rgba(255, 255, 255, 0.1);
-                        border-radius: 15px;
-                        overflow: hidden;
-                    }
-
-.admin-contacts__table-card-body {
-    padding: 0;
-}
-
+/* Contacts Table */
 .admin-contacts__table {
-    color: #ccd6f6;
+    color: var(--text-dark);
     margin: 0;
     width: 100%;
-    /* Основной фон для таблицы */
-    background: rgba(0, 123, 255, 0.1) !important;
-}
-
-/* Убедимся, что этот селектор также имеет нужный фон */
-.admin-contacts__table.table {
-    color: #ccd6f6;
-    margin: 0;
-    width: 100%;
-    background: rgba(0, 123, 255, 0.1) !important; /* Изменено с background-color на background */
 }
 
 .admin-contacts__table-header {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    color: #bec1c0 !important;
+    color: var(--text-light) !important;
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 1rem 0.75rem;
-    background: rgba(255, 255, 255, 0.02) !important; /* Фон для заголовков */
+    background: rgba(255, 255, 255, 0.02) !important;
 }
 
 .admin-contacts__table-cell {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
     vertical-align: middle;
     padding: 1rem 0.75rem;
-    background: rgba(0, 123, 255, 0.1) !important; /* Фон для заголовков */
-
+    background: transparent !important;
 }
 
-.admin-contacts__table-row:last-child .admin-contacts__table-cell {
-    /*border-bottom: none;*/
-}
-
-.admin-contacts__contact-info {
-    padding: 0.5rem 0;
+.admin-contacts__table-row:hover .admin-contacts__table-cell {
+    background: rgba(255, 255, 255, 0.02) !important;
 }
 
 .admin-contacts__contact-name {
     font-weight: 600;
-    color: #ffffff;
+    color: var(--text-light);
     margin-bottom: 0.25rem;
     font-size: 0.95rem;
 }
 
 .admin-contacts__contact-email {
-    color: #64ffda;
+    color: var(--primary-color);
     font-size: 0.85rem;
     margin-bottom: 0.25rem;
     word-break: break-all;
 }
 
 .admin-contacts__contact-phone {
-    color: #8892b0;
+    color: var(--text-muted) !important;
     font-size: 0.85rem;
-}
-
-.admin-contacts__site-info {
-    display: flex;
-    align-items: center;
 }
 
 .admin-contacts__site-badge {
     font-size: 0.75rem;
     padding: 0.35rem 0.75rem;
-    border-radius: 15px;
+    border-radius: var(--border-radius-full);
     border: 1px solid rgba(100, 255, 218, 0.3);
     background: rgba(100, 255, 218, 0.1);
-    color: #64ffda;
+    color: var(--primary-color);
 }
 
 .admin-contacts__no-website {
-    color: #8892b0;
+    color: var(--text-muted);
     font-style: italic;
     font-size: 0.85rem;
 }
 
 .admin-contacts__date-info {
     font-size: 0.85rem;
-    color: white;
+    color: var(--text-light);
 }
 
 .admin-contacts__date-time {
-    color: #8892b0;
+    color: var(--text-muted) !important;
     font-size: 0.8rem;
     display: block;
     margin-top: 0.25rem;
 }
 
-.admin-contacts__action-buttons {
-    display: flex;
-    justify-content: space-around;
-}
-
-.admin-contacts__view-btn,
-.admin-contacts__delete-btn {
-    font-size: 0.85rem;
-    padding: 0.3rem 0.8rem;
-    border-radius: 6px;
-}
-
 .admin-contacts__view-btn {
-    border: 1px solid #64ffda;
-    color: #64ffda;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
     background: transparent;
+    transition: all var(--transition-normal);
 }
 
 .admin-contacts__view-btn:hover {
     background: rgba(100, 255, 218, 0.1);
-    color: #64ffda;
-    border-color: #64ffda;
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .admin-contacts__delete-btn {
     border: 1px solid #ff6b6b;
     color: #ff6b6b;
     background: transparent;
+    transition: all var(--transition-normal);
 }
 
 .admin-contacts__delete-btn:hover {
@@ -229,17 +192,18 @@
 }
 
 .admin-contacts__pagination-info {
-    color: #8892b0;
+    color: var(--text-muted);
     font-size: 0.9rem;
 }
 
 .admin-contacts__pagination-btn {
-    border: 1px solid #64ffda;
-    color: #64ffda;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
     background: transparent;
     padding: 0.5rem 1rem;
-    border-radius: 6px;
+    border-radius: var(--border-radius-md);
     font-size: 0.85rem;
+    transition: all var(--transition-normal);
 }
 
 .admin-contacts__pagination-btn:disabled {
@@ -249,14 +213,14 @@
 
 .admin-contacts__pagination-btn:hover:not(:disabled) {
     background: rgba(100, 255, 218, 0.1);
-    color: #64ffda;
+    color: var(--primary-color);
 }
 
 /* No Data */
 .admin-contacts__no-data {
     text-align: center;
     padding: 3rem;
-    color: #8892b0;
+    color: var(--text-muted);
     font-size: 1.1rem;
 }
 
@@ -264,7 +228,7 @@
 .admin-contacts__loading {
     text-align: center;
     padding: 3rem;
-    color: #8892b0;
+    color: var(--text-muted);
 }
 
 .admin-contacts__loading p {
@@ -274,10 +238,10 @@
 
 /* Contact Detail Modal */
 .admin-contacts__modal .modal-content {
-    background: #0a192f;
+    background: var(--primary-bg);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 15px;
-    color: #ffffff;
+    border-radius: var(--border-radius-lg);
+    color: var(--text-light);
 }
 
 .admin-contacts__modal-header {
@@ -286,7 +250,6 @@
 }
 
 .admin-contacts__modal-title {
-    color: #64ffda;
     font-weight: 600;
     font-size: 1.5rem;
 }
@@ -310,7 +273,7 @@
 }
 
 .admin-contacts__detail-section-title {
-    color: #64ffda;
+    color: var(--primary-color);
     font-weight: 600;
     margin-bottom: 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -330,7 +293,7 @@
 }
 
 .admin-contacts__detail-label {
-    color: #ccd6f6;
+    color: var(--text-light);
     min-width: 100px;
     margin-right: 1rem;
     font-weight: 600;
@@ -356,16 +319,17 @@
 .admin-contacts__priority-btn {
     font-size: 0.75rem;
     padding: 0.2rem 0.5rem;
-    border-radius: 4px;
+    border-radius: var(--border-radius-sm);
+    transition: all var(--transition-fast);
 }
 
 .admin-contacts__message-content,
 .admin-contacts__notes-content {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
+    border-radius: var(--border-radius-md);
     padding: 1rem;
-    color: #ccd6f6;
+    color: var(--text-dark);
     line-height: 1.5;
     font-size: 0.95rem;
     white-space: pre-wrap;
@@ -380,35 +344,37 @@
 .admin-contacts__notes-textarea {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    border-radius: 8px;
+    color: var(--text-light);
+    border-radius: var(--border-radius-md);
     width: 100%;
     font-size: 0.95rem;
+    transition: all var(--transition-normal);
 }
 
 .admin-contacts__notes-textarea:focus {
     background: rgba(255, 255, 255, 0.08);
-    border-color: #64ffda;
-    color: #ffffff;
+    border-color: var(--primary-color);
+    color: var(--text-light);
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
 }
 
 .admin-contacts__notes-textarea::placeholder {
-    color: #8892b0;
+    color: var(--text-muted);
 }
 
 .admin-contacts__modal-close-btn {
-    border: 1px solid #8892b0;
-    color: #8892b0;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted);
     background: transparent;
     padding: 0.5rem 1.5rem;
-    border-radius: 6px;
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-normal);
 }
 
 .admin-contacts__modal-close-btn:hover {
     background: rgba(136, 146, 176, 0.1);
-    color: #8892b0;
-    border-color: #8892b0;
+    color: var(--text-muted);
+    border-color: var(--text-muted);
 }
 
 .admin-contacts__modal-delete-btn {
@@ -416,13 +382,79 @@
     color: #ff6b6b;
     background: transparent;
     padding: 0.5rem 1.5rem;
-    border-radius: 6px;
+    border-radius: var(--border-radius-md);
+    transition: all var(--transition-normal);
 }
 
 .admin-contacts__modal-delete-btn:hover {
     background: rgba(255, 107, 107, 0.1);
     color: #ff6b6b;
     border-color: #ff6b6b;
+}
+
+/* Rental Info Section */
+.admin-contacts__rental-info {
+    background: rgba(100, 255, 218, 0.05);
+    border: 1px solid rgba(100, 255, 218, 0.2);
+    border-radius: var(--border-radius-md);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.admin-contacts__rental-dates {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-contacts__rental-date-item {
+    flex: 1;
+}
+
+.admin-contacts__rental-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.admin-contacts__rental-value {
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.admin-contacts__payment-history {
+    margin-top: 1rem;
+}
+
+.admin-contacts__payment-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius-md);
+    padding: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-contacts__payment-amount {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.admin-contacts__payment-date {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+}
+
+.admin-contacts__payment-rate {
+    background: rgba(100, 255, 218, 0.1) !important;
+    border: 1px solid rgba(100, 255, 218, 0.3) !important;
+    color: var(--primary-color) !important;
+}
+
+.admin-contacts__days-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius-sm);
 }
 
 /* Responsive */
@@ -439,7 +471,7 @@
     }
 
     .table-responsive {
-        overflow-x: auto!important;
+        overflow-x: auto !important;
         -webkit-overflow-scrolling: touch;
     }
 
@@ -513,69 +545,4 @@
         width: 100%;
         text-align: center;
     }
-}
-
-/* Добавьте в конец файла */
-.admin-contacts__rental-info {
-    background: rgba(100, 255, 218, 0.05);
-    border: 1px solid rgba(100, 255, 218, 0.2);
-    border-radius: 8px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-}
-
-.admin-contacts__rental-dates {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 0.5rem;
-}
-
-.admin-contacts__rental-date-item {
-    flex: 1;
-}
-
-.admin-contacts__rental-label {
-    color: #8892b0;
-    font-size: 0.85rem;
-    margin-bottom: 0.25rem;
-}
-
-.admin-contacts__rental-value {
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.admin-contacts__payment-history {
-    margin-top: 1rem;
-}
-
-.admin-contacts__payment-item {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 6px;
-    padding: 0.75rem;
-    margin-bottom: 0.5rem;
-}
-
-.admin-contacts__payment-amount {
-    color: #64ffda;
-    font-weight: 600;
-    font-size: 1.1rem;
-}
-
-.admin-contacts__payment-date {
-    color: #8892b0;
-    font-size: 0.85rem;
-}
-
-.admin-contacts__expiring-badge {
-    background: rgba(255, 159, 67, 0.1);
-    border: 1px solid rgba(255, 159, 67, 0.3);
-    color: #ff9f43;
-}
-
-.admin-contacts__active-badge {
-    background: rgba(40, 167, 69, 0.1);
-    border: 1px solid rgba(40, 167, 69, 0.3);
-    color: #28a745;
 }
