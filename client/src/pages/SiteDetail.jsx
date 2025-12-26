@@ -4,7 +4,7 @@ import { Container, Row, Col, Button, Spinner, Alert, Modal, Form, Badge } from 
 import { siteAPI, contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
-import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
+import SEO from '../components/SEO/SEO';
 import './SiteDetail.css';
 
 const SiteDetail = () => {
@@ -33,11 +33,9 @@ const SiteDetail = () => {
         });
     };
 
-// Прокрутка вверх при монтировании компонента и изменении фильтров
     useEffect(() => {
         scrollToTop();
     }, [location.search]);
-
 
     // Генерация структурированных данных для сайта
     const generateStructuredData = (siteData) => {
@@ -74,40 +72,28 @@ const SiteDetail = () => {
         };
     };
 
-    // Эффект для прокрутки вверх при изменении id (переходе между страницами сайтов)
+    // Эффекты для прокрутки...
     useEffect(() => {
-        // Используем setTimeout для гарантии, что прокрутка сработает после рендеринга
         const timer = setTimeout(() => {
             window.scrollTo({
                 top: 0,
                 left: 0,
                 behavior: 'smooth'
             });
-
-            // Дополнительные методы для полной гарантии
             document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0; // Для Safari
-        }, 100); // Небольшая задержка для гарантии
-
+            document.body.scrollTop = 0;
+        }, 100);
         return () => clearTimeout(timer);
     }, [id]);
 
-    // Эффект для прокрутки вверх при перезагрузке страницы или принудительном обновлении
     useEffect(() => {
-        // Прокручиваем вверх при загрузке компонента
         const handleLoad = () => {
-            // Используем несколько методов для надежности
             window.scrollTo(0, 0);
             document.documentElement.scrollTop = 0;
             document.body.scrollTop = 0;
         };
-
-        // Вызываем сразу
         handleLoad();
-
-        // Также добавляем обработчик для полной загрузки страницы
         window.addEventListener('load', handleLoad);
-
         return () => {
             window.removeEventListener('load', handleLoad);
         };
@@ -198,11 +184,11 @@ const SiteDetail = () => {
 
     if (loading && !site) {
         return (
-            <div className="site-detail-loading">
+            <div className="site-detail-loading text-center mt-5">
                 <Container>
-                    <div className="site-detail-loading-spinner">
-                        <Spinner animation="border" variant="primary" />
-                        <p>Загружаем детали сайта...</p>
+                    <div className="d-flex flex-column align-items-center justify-content-center py-5">
+                        <Spinner animation="border" variant="primary" className="mb-3" />
+                        <p className="text-muted">Загружаем детали сайта...</p>
                     </div>
                 </Container>
             </div>
@@ -211,11 +197,11 @@ const SiteDetail = () => {
 
     if (!site) {
         return (
-            <Container>
+            <Container className="mt-4">
                 <Alert variant="danger" className="mt-4">
                     <h4>Сайт не найден</h4>
                     <p>Сайт, который вы ищете, не существует или был удален.</p>
-                    <Button as={Link} to="/catalog" variant="primary">
+                    <Button as={Link} to="/catalog" variant="primary" className="btn-primary-custom">
                         Вернуться в каталог
                     </Button>
                 </Alert>
@@ -235,21 +221,22 @@ const SiteDetail = () => {
                 ogImage={site.images && site.images.length > 0 ? `https://rentalsite.kz${site.images[0]}` : undefined}
                 structuredData={generateStructuredData(site)}
             />
-            <Container>
+
+            <Container className="container-custom">
                 {/* Хлебные крошки */}
-                <nav className="site-detail-breadcrumb-nav">
+                <nav className="site-detail-breadcrumb-nav mb-4">
                     <Link to="/" className="site-detail-breadcrumb-link">Главная</Link>
-                    <span className="site-detail-breadcrumb-separator">/</span>
+                    <span className="site-detail-breadcrumb-separator mx-1">/</span>
                     <Link to="/catalog" className="site-detail-breadcrumb-link">Каталог</Link>
-                    <span className="site-detail-breadcrumb-separator">/</span>
+                    <span className="site-detail-breadcrumb-separator mx-1">/</span>
                     <span className="site-detail-breadcrumb-current">{site.title}</span>
                 </nav>
 
-                <Row className="site-detail-content">
+                <Row className="site-detail-content g-4">
                     {/* Галерея */}
                     <Col lg={7}>
                         <div className="site-detail-gallery-section">
-                            <div className="site-detail-main-gallery">
+                            <div className="site-detail-main-gallery card-custom">
                                 <div className="site-detail-main-image-container">
                                     {site.images && site.images.length > 0 ? (
                                         <img
@@ -258,9 +245,9 @@ const SiteDetail = () => {
                                             className="site-detail-gallery-main-img"
                                         />
                                     ) : (
-                                        <div className="no-image-placeholder">
-                                            <span>🌐</span>
-                                            <p>Предпросмотр недоступен</p>
+                                        <div className="no-image-placeholder d-flex flex-column align-items-center justify-content-center h-100">
+                                            <span className="display-4 mb-2">🌐</span>
+                                            <p className="text-muted">Предпросмотр недоступен</p>
                                         </div>
                                     )}
                                     {site.isFeatured && (
@@ -273,7 +260,7 @@ const SiteDetail = () => {
                                     <div className="site-detail-image-navigation">
                                         <Button
                                             variant="outline-light"
-                                            className="site-detail-nav-btn prev-btn"
+                                            className="site-detail-nav-btn prev-btn btn-outline-custom"
                                             onClick={() => setSelectedImage(prev =>
                                                 prev === 0 ? site.images.length - 1 : prev - 1
                                             )}
@@ -285,7 +272,7 @@ const SiteDetail = () => {
                                         </span>
                                         <Button
                                             variant="outline-light"
-                                            className="site-detail-nav-btn next-btn"
+                                            className="site-detail-nav-btn next-btn btn-outline-custom"
                                             onClick={() => setSelectedImage(prev =>
                                                 prev === site.images.length - 1 ? 0 : prev + 1
                                             )}
@@ -318,9 +305,9 @@ const SiteDetail = () => {
 
                     {/* Информация о сайте */}
                     <Col lg={5}>
-                        <div className="site-detail-info-section">
+                        <div className="site-detail-info-section card-custom">
                             <div className="site-header">
-                                <div className="site-detail-meta-badges">
+                                <div className="site-detail-meta-badges mb-3">
                                     <Badge bg="primary" className="site-detail-category-badge">
                                         {site.category}
                                     </Badge>
@@ -331,20 +318,20 @@ const SiteDetail = () => {
                                     )}
                                 </div>
 
-                                <h1 className="site-detail-title">{site.title}</h1>
+                                <h1 className="site-detail-title text-gradient mb-3">{site.title}</h1>
 
-                                <div className="site-detail-price-section">
+                                <div className="site-detail-price-section mb-4">
                                     <div className="site-detail-price-amount">₸{site.price}</div>
                                     <div className="site-detail-price-period">/ месяц</div>
                                 </div>
 
-                                <p className="site-detail-description">{site.description}</p>
+                                <p className="site-detail-description text-dark mb-4">{site.description}</p>
                             </div>
 
                             {/* Быстрые действия */}
-                            <div className="site-detail-quick-actions">
+                            <div className="site-detail-quick-actions mb-4">
                                 <Button
-                                    className="site-detail-btn-rent-now-main"
+                                    className="site-detail-btn-rent-now-main btn-primary-custom mb-2 mb-md-0"
                                     size="lg"
                                     onClick={scrollToRent}
                                 >
@@ -352,7 +339,7 @@ const SiteDetail = () => {
                                 </Button>
                                 <Button
                                     variant="outline-light"
-                                    className="btn-rent-now"
+                                    className="btn-rent-now btn-outline-custom"
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
@@ -362,12 +349,12 @@ const SiteDetail = () => {
 
                             {/* Ключевые особенности */}
                             {site.features && site.features.length > 0 && (
-                                <div className="site-detail-key-features">
-                                    <h4>🚀 Ключевые особенности</h4>
+                                <div className="site-detail-key-features mb-4">
+                                    <h4 className="highlight-text mb-3">🚀 Ключевые особенности</h4>
                                     <div className="site-detail-features-grid">
                                         {site.features.map((feature, index) => (
                                             <div key={index} className="site-detail-feature-item">
-                                                <span className="site-detail-feature-icon">✓</span>
+                                                <span className="site-detail-feature-icon text-primary">✓</span>
                                                 <span className="site-detail-feature-text">{feature}</span>
                                             </div>
                                         ))}
@@ -377,11 +364,11 @@ const SiteDetail = () => {
 
                             {/* Технологии */}
                             {site.technologies && site.technologies.length > 0 && (
-                                <div className="site-detail-technologies-section">
-                                    <h4>🛠️ Создано с использованием</h4>
+                                <div className="site-detail-technologies-section mb-4">
+                                    <h4 className="highlight-text mb-3">🛠️ Создано с использованием</h4>
                                     <div className="site-detail-tech-tags">
                                         {site.technologies.map((tech, index) => (
-                                            <Badge key={index} bg="outline-info" className="site-detail-tech-tag">
+                                            <Badge key={index} bg="outline-info" className="site-detail-tech-tag me-2 mb-2">
                                                 {tech}
                                             </Badge>
                                         ))}
@@ -392,12 +379,12 @@ const SiteDetail = () => {
                             {/* Демо ссылка */}
                             {site.demoUrl && (
                                 <div className="site-detail-demo-section">
-                                    <h4>🌐 Живая демо-версия</h4>
+                                    <h4 className="highlight-text mb-3">🌐 Живая демо-версия</h4>
                                     <a
                                         href={site.demoUrl}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="site-detail-demo-link-btn"
+                                        className="site-detail-demo-link-btn btn-primary-custom d-inline-block"
                                     >
                                         Посетить сайт ↗
                                     </a>
@@ -408,42 +395,42 @@ const SiteDetail = () => {
                 </Row>
 
                 {/* Раздел аренды */}
-                <section id="rent-section" className="site-detail-rent-section">
+                <section id="rent-section" className="site-detail-rent-section section-padding">
                     <Row>
                         <Col lg={12} className="mx-auto">
-                            <div className="site-detail-rent-card">
-                                <h2>Готовы арендовать этот сайт?</h2>
-                                <p className="site-detail-rent-description">
+                            <div className="site-detail-rent-card card-custom">
+                                <h2 className="section-title mb-3">Готовы арендовать этот сайт?</h2>
+                                <p className="site-detail-rent-description section-subtitle mb-4">
                                     Начните использовать этот премиальный сайт уже сегодня. Заполните форму ниже,
                                     и наша команда свяжется с вами для обсуждения процесса аренды.
                                 </p>
 
-                                <div className="site-detail-rent-benefits">
+                                <div className="site-detail-rent-benefits mb-5">
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">⚡</span>
                                         <div>
                                             <h5>Мгновенная настройка</h5>
-                                            <p>Ваш сайт будет запущен в течение 24 часов</p>
+                                            <p className="text-muted">Ваш сайт будет запущен в течение 24 часов</p>
                                         </div>
                                     </div>
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">🔧</span>
                                         <div>
                                             <h5>Полная поддержка</h5>
-                                            <p>Техническая поддержка и обслуживание включены</p>
+                                            <p className="text-muted">Техническая поддержка и обслуживание включены</p>
                                         </div>
                                     </div>
                                     <div className="site-detail-benefit-item">
                                         <span className="site-detail-benefit-icon">🔄</span>
                                         <div>
                                             <h5>Гибкие условия</h5>
-                                            <p>Месячная аренда с возможностью отмены в любое время</p>
+                                            <p className="text-muted">Месячная аренда с возможностью отмены в любое время</p>
                                         </div>
                                     </div>
                                 </div>
 
                                 <Button
-                                    className="site-detail-btn-rent-now-large"
+                                    className="site-detail-btn-rent-now-large btn-primary-custom"
                                     size="lg"
                                     onClick={() => setShowContactModal(true)}
                                 >
@@ -466,25 +453,27 @@ const SiteDetail = () => {
                 size="lg"
                 className="site-detail-contact-modal"
             >
-                <Modal.Header closeButton>
-                    <Modal.Title>Арендовать {site.title}</Modal.Title>
-                    <div className="site-detail-modal-subtitle">
-                        ₸{site.price}/месяц • {site.category}
+                <Modal.Header closeButton className="border-bottom">
+                    <div>
+                        <Modal.Title className="text-light">Арендовать {site.title}</Modal.Title>
+                        <div className="site-detail-modal-subtitle text-muted">
+                            ₸{site.price}/месяц • {site.category}
+                        </div>
                     </div>
                 </Modal.Header>
                 <Modal.Body>
-                    <div className="site-detail-rental-summary">
+                    <div className="site-detail-rental-summary mb-4">
                         <div className="site-detail-summary-item">
-                            <span>Сайт:</span>
-                            <strong>{site.title}</strong>
+                            <span className="text-muted">Сайт:</span>
+                            <strong className="text-primary">{site.title}</strong>
                         </div>
                         <div className="site-detail-summary-item">
-                            <span>Месячная цена:</span>
-                            <strong>₸{site.price}</strong>
+                            <span className="text-muted">Месячная цена:</span>
+                            <strong className="text-primary">₸{site.price}</strong>
                         </div>
                         <div className="site-detail-summary-item">
-                            <span>Категория:</span>
-                            <strong>{site.category}</strong>
+                            <span className="text-muted">Категория:</span>
+                            <strong className="text-primary">{site.category}</strong>
                         </div>
                     </div>
 
@@ -492,7 +481,7 @@ const SiteDetail = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Полное имя *</Form.Label>
+                                    <Form.Label className="text-light">Полное имя *</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="name"
@@ -501,12 +490,13 @@ const SiteDetail = () => {
                                         required
                                         placeholder="Введите ваше полное имя"
                                         disabled={loading}
+                                        className="bg-secondary-bg text-light border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Email адрес *</Form.Label>
+                                    <Form.Label className="text-light">Email адрес *</Form.Label>
                                     <Form.Control
                                         type="email"
                                         name="email"
@@ -515,6 +505,7 @@ const SiteDetail = () => {
                                         required
                                         placeholder="Введите ваш email"
                                         disabled={loading}
+                                        className="bg-secondary-bg text-light border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
@@ -523,7 +514,7 @@ const SiteDetail = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Номер телефона *</Form.Label>
+                                    <Form.Label className="text-light">Номер телефона *</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         name="phone"
@@ -532,12 +523,13 @@ const SiteDetail = () => {
                                         required
                                         placeholder="Введите ваш номер телефона"
                                         disabled={loading}
+                                        className="bg-secondary-bg text-light border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label>Компания</Form.Label>
+                                    <Form.Label className="text-light">Компания</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="company"
@@ -545,13 +537,14 @@ const SiteDetail = () => {
                                         onChange={handleInputChange}
                                         placeholder="Ваша компания (необязательно)"
                                         disabled={loading}
+                                        className="bg-secondary-bg text-light border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
                         </Row>
 
                         <Form.Group className="mb-4">
-                            <Form.Label>Ваше сообщение *</Form.Label>
+                            <Form.Label className="text-light">Ваше сообщение *</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={5}
@@ -561,21 +554,22 @@ const SiteDetail = () => {
                                 required
                                 placeholder="Расскажите нам о ваших потребностях в аренде..."
                                 disabled={loading}
+                                className="bg-secondary-bg text-light border-secondary"
                             />
                         </Form.Group>
 
                         <div className="site-detail-modal-actions">
                             <Button
-                                variant="outline"
+                                variant="outline-light"
                                 onClick={() => setShowContactModal(false)}
-                                className="me-2"
+                                className="me-2 btn-outline-custom"
                                 disabled={loading}
                             >
                                 Отмена
                             </Button>
                             <Button
                                 type="submit"
-                                className="site-detail-btn-submit-request"
+                                className="site-detail-btn-submit-request btn-primary-custom"
                                 disabled={loading}
                             >
                                 {loading ? (
@@ -631,35 +625,38 @@ const RelatedSites = ({ currentSiteId, category }) => {
     if (relatedSites.length === 0) return null;
 
     return (
-        <section className="site-detail-related-sites-section">
-            <h2 className="site-detail-section-title">Похожие сайты, которые могут вам понравиться</h2>
-            <Row>
-                {relatedSites.map((site, index) => (
+        <section className="site-detail-related-sites-section mt-5">
+            <h2 className="site-detail-section-title section-title text-center mb-4">Похожие сайты, которые могут вам понравиться</h2>
+            <Row className="g-4">
+                {relatedSites.map((site) => (
                     <Col lg={4} key={site._id}>
-                        <div className="site-detail-related-site-card">
+                        <div className="site-detail-related-site-card card-custom h-100">
                             <div className="site-detail-related-site-image">
                                 {site.images && site.images.length > 0 ? (
                                     <img
                                         src={`http://localhost:5000${site.images[0]}`}
                                         alt={site.title}
+                                        className="w-100 h-100 object-fit-cover"
                                     />
                                 ) : (
-                                    <div className="no-image">🌐</div>
+                                    <div className="no-image d-flex align-items-center justify-content-center h-100 bg-accent-bg">
+                                        <span className="display-4">🌐</span>
+                                    </div>
                                 )}
                                 {site.isFeatured && (
                                     <Badge className="site-detail-related-featured-badge">Рекомендуемый</Badge>
                                 )}
                             </div>
-                            <div className="site-detail-related-site-info">
-                                <h4>{site.title}</h4>
-                                <p className="site-detail-related-site-description">{site.shortDescription}</p>
-                                <div className="site-detail-related-site-price">₸{site.price}/месяц</div>
+                            <div className="site-detail-related-site-info p-3">
+                                <h4 className="text-light mb-2">{site.title}</h4>
+                                <p className="site-detail-related-site-description text-muted mb-2">{site.shortDescription}</p>
+                                <div className="site-detail-related-site-price text-primary mb-3">₸{site.price}/месяц</div>
                                 <Button
                                     as={Link}
                                     to={`/catalog/${site._id}`}
                                     size="sm"
                                     variant="outline"
-                                    className="site-detail-btn-view-related"
+                                    className="site-detail-btn-view-related btn-outline-custom w-100"
                                 >
                                     Подробнее
                                 </Button>
