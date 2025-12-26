@@ -75,95 +75,110 @@ const AdminDashboard = () => {
             completed: 'Завершен',
             spam: 'Спам'
         };
-        return <Badge bg={variants[status]}>{statusText[status]}</Badge>;
+        return <Badge bg={variants[status]} className="admin-dashboard-badge">{statusText[status]}</Badge>;
     };
 
     if (loading) {
-        return <div className="admin-dashboard-loading">Загрузка панели управления...</div>;
+        return (
+            <div className="admin-dashboard-loading text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Загрузка...</span>
+                </div>
+                <p className="text-muted mt-3">Загрузка панели управления...</p>
+            </div>
+        );
     }
 
     return (
-        <div className="admin-dashboard">
-            <h1 className="admin-dashboard-title">Обзор панели управления</h1>
+        <div className="admin-dashboard container-custom py-4">
+            <h1 className="admin-dashboard-title section-title mb-4">Обзор панели управления</h1>
 
             {/* Статистические карточки */}
-            <Row className="admin-dashboard-stats-row">
-                <Col lg={3} md={6} className="mb-4">
-                    <Card className="admin-dashboard-stats-card">
-                        <Card.Body>
-                            <div className="admin-dashboard-stats-icon sites">🌐</div>
-                            <div className="admin-dashboard-stats-content">
-                                <h3>{stats.totalSites}</h3>
-                                <p>Всего сайтов</p>
+            <Row className="admin-dashboard-stats-row g-4 mb-5">
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon sites d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">🌐</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-light mb-2">{stats.totalSites}</h3>
+                                <p className="text-muted mb-0">Всего сайтов</p>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <Col lg={3} md={6} className="mb-4">
-                    <Card className="admin-dashboard-stats-card">
-                        <Card.Body>
-                            <div className="admin-dashboard-stats-icon active">✅</div>
-                            <div className="admin-dashboard-stats-content">
-                                <h3>{stats.activeSites}</h3>
-                                <p>Активных сайтов</p>
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon active d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">✅</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-light mb-2">{stats.activeSites}</h3>
+                                <p className="text-muted mb-0">Активных сайтов</p>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <Col lg={3} md={6} className="mb-4">
-                    <Card className="admin-dashboard-stats-card">
-                        <Card.Body>
-                            <div className="admin-dashboard-stats-icon featured">⭐</div>
-                            <div className="admin-dashboard-stats-content">
-                                <h3>{stats.featuredSites}</h3>
-                                <p>Рекомендуемых сайтов</p>
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon featured d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">⭐</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-light mb-2">{stats.featuredSites}</h3>
+                                <p className="text-muted mb-0">Рекомендуемых сайтов</p>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
 
-                <Col lg={3} md={6} className="mb-4">
-                    <Card className="admin-dashboard-stats-card">
-                        <Card.Body>
-                            <div className="admin-dashboard-stats-icon contacts">📧</div>
-                            <div className="admin-dashboard-stats-content">
-                                <h3>{stats.totalContacts}</h3>
-                                <p>Всего контактов</p>
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon contacts d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">📧</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-light mb-2">{stats.totalContacts}</h3>
+                                <p className="text-muted mb-0">Всего контактов</p>
                             </div>
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
 
-            <Row>
+            <Row className="g-4">
                 {/* Последние контакты */}
-                <Col lg={6} className="mb-4">
-                    <Card className="admin-dashboard-recent-card">
-                        <Card.Header>
-                            <h5>Последние запросы на контакт</h5>
+                <Col lg={6}>
+                    <Card className="admin-dashboard-recent-card card-custom h-100">
+                        <Card.Header className="border-bottom p-4">
+                            <h5 className="admin-dashboard-card-title text-gradient mb-0">Последние запросы на контакт</h5>
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body className="p-4">
                             {recentContacts.length > 0 ? (
                                 <div className="table-responsive">
-                                    <Table responsive>
+                                    <Table responsive className="admin-dashboard-table mb-0">
                                         <thead>
                                         <tr>
-                                            <th>Имя</th>
-                                            <th>Статус</th>
-                                            <th>Дата</th>
+                                            <th className="admin-dashboard-table-header text-light">Имя</th>
+                                            <th className="admin-dashboard-table-header text-light">Статус</th>
+                                            <th className="admin-dashboard-table-header text-light">Дата</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {recentContacts.map(contact => (
-                                            <tr key={contact._id}>
-                                                <td>
-                                                    <div className="admin-dashboard-contact-name">{contact.name}</div>
+                                            <tr key={contact._id} className="admin-dashboard-table-row">
+                                                <td className="admin-dashboard-table-cell">
+                                                    <div className="admin-dashboard-contact-name text-light">{contact.name}</div>
                                                     <small className="admin-dashboard-text-muted">{contact.email}</small>
                                                 </td>
-                                                <td>{getStatusBadge(contact.status)}</td>
-                                                <td>
+                                                <td className="admin-dashboard-table-cell">{getStatusBadge(contact.status)}</td>
+                                                <td className="admin-dashboard-table-cell text-light">
                                                     {new Date(contact.createdAt).toLocaleDateString('ru-RU')}
                                                 </td>
                                             </tr>
@@ -172,43 +187,43 @@ const AdminDashboard = () => {
                                     </Table>
                                 </div>
                             ) : (
-                                <p className="admin-dashboard-text-muted text-center">Нет последних контактов</p>
+                                <p className="admin-dashboard-text-muted text-center mb-0">Нет последних контактов</p>
                             )}
                         </Card.Body>
                     </Card>
                 </Col>
 
                 {/* Недавно добавленные сайты */}
-                <Col lg={6} className="mb-4">
-                    <Card className="admin-dashboard-recent-card">
-                        <Card.Header>
-                            <h5>Недавно добавленные сайты</h5>
+                <Col lg={6}>
+                    <Card className="admin-dashboard-recent-card card-custom h-100">
+                        <Card.Header className="border-bottom p-4">
+                            <h5 className="admin-dashboard-card-title text-gradient mb-0">Недавно добавленные сайты</h5>
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body className="p-4">
                             {recentSites.length > 0 ? (
                                 <div className="table-responsive">
-                                    <Table responsive>
+                                    <Table responsive className="admin-dashboard-table mb-0">
                                         <thead>
                                         <tr>
-                                            <th>Название</th>
-                                            <th>Категория</th>
-                                            <th>Цена</th>
-                                            <th>Статус</th>
+                                            <th className="admin-dashboard-table-header text-light">Название</th>
+                                            <th className="admin-dashboard-table-header text-light">Категория</th>
+                                            <th className="admin-dashboard-table-header text-light">Цена</th>
+                                            <th className="admin-dashboard-table-header text-light">Статус</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {recentSites.map(site => (
-                                            <tr key={site._id}>
-                                                <td>
-                                                    <div className="admin-dashboard-site-title">{site.title}</div>
+                                            <tr key={site._id} className="admin-dashboard-table-row">
+                                                <td className="admin-dashboard-table-cell">
+                                                    <div className="admin-dashboard-site-title text-light">{site.title}</div>
                                                     <small className="admin-dashboard-text-muted">
-                                                        {site.shortDescription.substring(0, 10)}...
+                                                        {site.shortDescription.substring(0, 50)}...
                                                     </small>
                                                 </td>
-                                                <td>{site.category}</td>
-                                                <td>${site.price}/мес</td>
-                                                <td>
-                                                    <Badge bg={site.isActive ? 'success' : 'secondary'}>
+                                                <td className="admin-dashboard-table-cell text-light">{site.category}</td>
+                                                <td className="admin-dashboard-table-cell text-primary">₸{site.price}/мес</td>
+                                                <td className="admin-dashboard-table-cell">
+                                                    <Badge bg={site.isActive ? 'success' : 'secondary'} className="admin-dashboard-site-badge">
                                                         {site.isActive ? 'Активен' : 'Неактивен'}
                                                     </Badge>
                                                 </td>
@@ -218,7 +233,7 @@ const AdminDashboard = () => {
                                     </Table>
                                 </div>
                             ) : (
-                                <p className="admin-dashboard-text-muted text-center">Сайты еще не добавлены</p>
+                                <p className="admin-dashboard-text-muted text-center mb-0">Сайты еще не добавлены</p>
                             )}
                         </Card.Body>
                     </Card>

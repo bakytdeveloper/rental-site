@@ -25,11 +25,10 @@ const AdminLogin = () => {
         });
     };
 
-// Прокрутка вверх при монтировании компонента и изменении фильтров
+    // Прокрутка вверх при монтировании компонента
     useEffect(() => {
         scrollToTop();
-    }, [location.search]);
-
+    }, []);
 
     // Проверяем, не вошел ли пользователь уже
     useEffect(() => {
@@ -77,28 +76,28 @@ const AdminLogin = () => {
 
     return (
         <div className="admin-login-page">
-            <Container>
+            <Container className="container-custom">
                 <Row className="justify-content-center align-items-center min-vh-100">
-                    <Col lg={6} md={6} sm={8}>
-                        <Card className="login-card">
-                            <Card.Body className="p-4">
+                    <Col lg={5} md={6} sm={8}>
+                        <Card className="login-card card-custom">
+                            <Card.Body className="p-4 p-md-5">
                                 <div className="text-center mb-4">
-                                    <div className="login-logo">
+                                    <div className="login-logo text-gradient mb-3">
                                         <span className="brand-accent">Rental</span>Site
                                     </div>
-                                    <h3 className="login-title">Панель авторизации</h3>
-                                    {/*<p className="login-subtitle">Войдите для управления вашими сайтами</p>*/}
+                                    <h3 className="login-title section-title mb-2">Панель авторизации</h3>
+                                    <p className="login-subtitle text-muted">Войдите для управления контентом</p>
                                 </div>
 
                                 {error && (
-                                    <Alert variant="danger" className="mb-3">
+                                    <Alert variant="danger" className="mb-4">
                                         {error}
                                     </Alert>
                                 )}
 
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label>Email адрес</Form.Label>
+                                        <Form.Label className="text-light mb-2">Email адрес</Form.Label>
                                         <Form.Control
                                             type="email"
                                             name="email"
@@ -107,11 +106,12 @@ const AdminLogin = () => {
                                             required
                                             placeholder="Введите email"
                                             disabled={loading}
+                                            className="login-form-control card-custom"
                                         />
                                     </Form.Group>
 
                                     <Form.Group className="mb-4">
-                                        <Form.Label>Пароль</Form.Label>
+                                        <Form.Label className="text-light mb-2">Пароль</Form.Label>
                                         <Form.Control
                                             type="password"
                                             name="password"
@@ -120,13 +120,13 @@ const AdminLogin = () => {
                                             required
                                             placeholder="Введите пароль"
                                             disabled={loading}
+                                            className="login-form-control card-custom"
                                         />
                                     </Form.Group>
 
                                     <Button
                                         type="submit"
-                                        variant="primary"
-                                        className="w-100 login-btn"
+                                        className="w-100 login-btn btn-primary-custom py-3"
                                         disabled={loading}
                                     >
                                         {loading ? (
@@ -146,6 +146,12 @@ const AdminLogin = () => {
                                         )}
                                     </Button>
                                 </Form>
+
+                                <div className="login-footer mt-4 pt-3 border-top">
+                                    <p className="text-center text-muted small mb-0">
+                                        Используйте учетные данные администратора для доступа
+                                    </p>
+                                </div>
                             </Card.Body>
                         </Card>
                     </Col>

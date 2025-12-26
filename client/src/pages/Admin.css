@@ -2,6 +2,7 @@
     min-height: 100vh;
     background: var(--gradient-bg);
     color: var(--text-light);
+    padding: var(--section-padding);
 }
 
 .admin-sidebar {
@@ -20,7 +21,7 @@
 }
 
 .sidebar-header {
-    padding: 1.5rem;
+    padding: 2rem 1.5rem 1rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     text-align: center;
 }
@@ -31,8 +32,8 @@
 }
 
 .user-info {
-    color: var(--text-muted);
-    font-size: 0.8rem;
+    color: var(--text-muted) !important;
+    font-size: 0.9rem;
 }
 
 .admin-sidebar .nav {
