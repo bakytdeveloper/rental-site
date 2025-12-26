@@ -213,6 +213,17 @@ const AdminContacts = () => {
         );
     }
 
+    const getPaymentMethodText = (method) => {
+        const translations = {
+            'bank_transfer': 'банковский перевод',
+            'card': 'кредитная карта',
+            'cash': 'наличные',
+            'other': 'другое'
+        };
+
+        return translations[method] || method;
+    };
+
     return (
         <div className="admin-contacts container-custom py-4">
             <div className="admin-contacts__header mb-4">
@@ -526,7 +537,7 @@ const AdminContacts = () => {
                                                         </div>
                                                         <div className="admin-contacts__payment-date text-muted small small-admin-contacts__payment-date">
                                                             {new Date(payment.paymentDate).toLocaleDateString()} •
-                                                            {payment.periodMonths} месяц(а) • {payment.paymentMethod}
+                                                            {payment.periodMonths} месяц(а) • {getPaymentMethodText(payment.paymentMethod)}
                                                         </div>
                                                         {payment.notes && (
                                                             <div className="text-muted small mt-1 small-admin-notes__payment-date">
