@@ -3,6 +3,7 @@
     background: var(--gradient-bg);
     display: flex;
     align-items: center;
+    /*padding: var(--section-padding);*/
 }
 
 .login-card {
@@ -12,6 +13,7 @@
     border-radius: var(--border-radius-xl);
     box-shadow: var(--shadow-card);
     transition: all var(--transition-normal);
+
 }
 
 .login-card:hover {
@@ -36,7 +38,7 @@
 }
 
 .login-subtitle {
-    color: var(--text-muted);
+    color: var(--text-muted) !important;
     margin-bottom: 0;
     font-size: 1rem;
 }
@@ -97,6 +99,10 @@
     border-radius: var(--border-radius-md);
 }
 
+.login-footer-text-center {
+    color: var(--text-muted) !important;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .login-logo {
@@ -107,14 +113,14 @@
         font-size: 1.5rem;
     }
 
-    .login-card .card-body {
-        padding: 2rem;
+    .card-body {
+        padding: 1rem!important;
     }
 }
 
 @media (max-width: 576px) {
-    .login-card .card-body {
-        padding: 1.5rem;
+    .card-body {
+        padding: 1rem;
     }
 
     .login-logo {

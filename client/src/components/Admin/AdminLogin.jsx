@@ -80,7 +80,7 @@ const AdminLogin = () => {
                 <Row className="justify-content-center align-items-center min-vh-100">
                     <Col lg={5} md={6} sm={8}>
                         <Card className="login-card card-custom">
-                            <Card.Body className="p-4 p-md-5">
+                            <Card.Body className="p-4 p-md-2">
                                 <div className="text-center mb-4">
                                     <div className="login-logo text-gradient mb-3">
                                         <span className="brand-accent">Rental</span>Site
@@ -148,7 +148,7 @@ const AdminLogin = () => {
                                 </Form>
 
                                 <div className="login-footer mt-4 pt-3 border-top">
-                                    <p className="text-center text-muted small mb-0">
+                                    <p className="text-center text-muted small mb-0 login-footer-text-center">
                                         Используйте учетные данные администратора для доступа
                                     </p>
                                 </div>
