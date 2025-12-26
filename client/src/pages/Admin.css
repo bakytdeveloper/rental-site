@@ -1,3 +1,5 @@
+/* Admin.css - ОБНОВЛЕННЫЙ */
+
 .admin-page {
     min-height: 100vh;
     background: var(--gradient-bg);
@@ -9,7 +11,7 @@
     background: var(--secondary-bg);
     min-height: 100vh;
     padding: 5rem 0 0 0;
-    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: var(--border-width-thin) solid var(--glass-border);
     display: flex;
     flex-direction: column;
     position: fixed;
@@ -22,7 +24,7 @@
 
 .sidebar-header {
     padding: 2rem 1.5rem 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     text-align: center;
 }
 
@@ -53,13 +55,13 @@
 .admin-nav-link:hover,
 .admin-nav-link.active {
     color: var(--primary-color) !important;
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     border-left-color: var(--primary-color);
 }
 
 .sidebar-footer {
     padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: var(--border-width-thin) solid var(--glass-border);
 }
 
 .user-dropdown {
@@ -76,7 +78,7 @@
 
 .admin-dropdown-menu {
     background: var(--secondary-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: var(--border-width-thin) solid var(--glass-border);
     border-radius: var(--border-radius-md);
 }
 
@@ -87,7 +89,7 @@
 }
 
 .admin-dropdown-item:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     color: var(--primary-color) !important;
 }
 
@@ -105,7 +107,7 @@
         width: 100%;
         min-height: auto;
         border-right: none;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: var(--border-width-thin) solid var(--glass-border);
     }
 
     .admin-main {

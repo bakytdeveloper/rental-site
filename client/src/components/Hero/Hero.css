@@ -1,4 +1,4 @@
-/* Hero.css */
+/* Hero.css - ОБНОВЛЕННЫЙ */
 
 .hero-section {
     position: relative;
@@ -17,10 +17,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background:
-            radial-gradient(circle at 20% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(30, 136, 229, 0.05) 0%, transparent 50%);
+    background: var(--radial-bg-hero);
 }
 
 .floating-shapes {
@@ -32,7 +29,7 @@
 .shape {
     position: absolute;
     border-radius: 50%;
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    background: var(--gradient-primary-short);
     opacity: 0.1;
     animation: float 6s ease-in-out infinite;
 }
@@ -86,13 +83,13 @@
 }
 
 .hero-badge span {
-    background: rgba(100, 255, 218, 0.1);
-    color: var(--primary-color);
+    background: var(--badge-primary-bg);
+    color: var(--badge-primary-text);
     padding: 0.5rem 1rem;
     border-radius: var(--border-radius-full);
     font-size: 0.9rem;
     font-weight: 500;
-    border: 1px solid rgba(100, 255, 218, 0.2);
+    border: 1px solid var(--badge-primary-border);
 }
 
 .hero-title {
@@ -124,40 +121,6 @@
     margin-bottom: 3rem;
 }
 
-/* Эти стили теперь определены в global.css, можно удалить или оставить как fallback */
-.btn-primary-custom {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
-    border: none;
-    color: var(--primary-bg);
-    padding: 0.75rem 2rem;
-    border-radius: var(--border-radius-full);
-    font-weight: 600;
-    transition: all var(--transition-normal);
-    box-shadow: var(--shadow-light);
-}
-
-.btn-primary-custom:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
-    color: var(--primary-bg);
-}
-
-.btn-outline-custom {
-    background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
-    padding: 0.75rem 2rem;
-    border-radius: var(--border-radius-full);
-    font-weight: 600;
-    transition: all var(--transition-normal);
-}
-
-.btn-outline-custom:hover {
-    background: rgba(100, 255, 218, 0.1);
-    transform: translateY(-2px);
-    color: var(--primary-color);
-}
-
 .hero-stats {
     display: flex;
     gap: 2rem;
@@ -186,10 +149,10 @@
 
 .floating-card {
     position: absolute;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
     border-radius: var(--border-radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--card-border);
     padding: 1rem;
     box-shadow: var(--shadow-dark);
     animation: float-card 8s ease-in-out infinite;
@@ -228,7 +191,7 @@
 .card-preview {
     width: 100%;
     height: 100%;
-    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    background: var(--gradient-accent);
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -254,7 +217,7 @@
     left: -10px;
     right: -10px;
     bottom: -10px;
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));
+    background: var(--gradient-glow);
     border-radius: 20px;
     z-index: -1;
     opacity: 0;

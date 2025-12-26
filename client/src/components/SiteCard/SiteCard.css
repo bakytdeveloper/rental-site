@@ -1,4 +1,4 @@
-/* SiteCard.css */
+/* SiteCard.css - ОБНОВЛЕННЫЙ */
 
 .site-card {
     position: relative;
@@ -10,19 +10,18 @@
     position: relative;
     width: 100%;
     height: 100%;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--card-border);
     border-radius: var(--border-radius-xl);
     overflow: hidden;
     transition: all var(--transition-normal);
     transform-style: preserve-3d;
 }
 
-/* Убираем эффект наведения на карточку */
 .site-card:hover .site-card__inner {
     transform: none;
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--card-border);
     box-shadow: none;
 }
 
@@ -30,7 +29,7 @@
     position: relative;
     height: 200px;
     overflow: hidden;
-    background: linear-gradient(45deg, var(--accent-bg), #2d3748);
+    background: var(--gradient-accent);
 }
 
 .site-card__image-slider {
@@ -44,10 +43,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: opacity 0.4s ease;
+    transition: opacity var(--transition-normal);
 }
 
-/* Убираем увеличение изображения при наведении */
 .site-card:hover .site-card__slider-image {
     transform: none;
 }
@@ -58,7 +56,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(45deg, #1e3c72, #2a5298);
+    background: var(--gradient-accent);
     font-size: 2.5rem;
 }
 
@@ -68,7 +66,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 25, 47, 0.9);
+    background: var(--overlay-bg);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -76,14 +74,13 @@
     transition: all var(--transition-normal);
 }
 
-/* Убираем появление оверлея при наведении */
 .site-card:hover .site-card__overlay {
     opacity: 1;
     background: none;
 }
 
 .site-card__btn-quick-view {
-    background: rgba(100, 255, 218, 0.9);
+    background: var(--primary-transparent-90);
     border: none;
     color: var(--primary-bg);
     font-weight: 600;
@@ -110,7 +107,7 @@
 }
 
 .site-card__badge--featured {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    background: var(--gradient-primary-short);
     color: var(--primary-bg);
 }
 
@@ -171,18 +168,18 @@
 }
 
 .site-card__tech-tag {
-    background: rgba(100, 255, 218, 0.1);
-    color: var(--primary-color);
+    background: var(--badge-primary-bg);
+    color: var(--badge-primary-text);
     padding: 0.2rem 0.6rem;
     border-radius: 12px;
     font-size: 0.7rem;
-    border: 1px solid rgba(100, 255, 218, 0.2);
+    border: 1px solid var(--badge-primary-border);
 }
 
 .site-card__tech-tag--more {
-    background: rgba(136, 146, 176, 0.1);
-    color: var(--text-muted);
-    border-color: rgba(136, 146, 176, 0.2);
+    background: var(--badge-muted-bg);
+    color: var(--badge-muted-text);
+    border-color: var(--badge-muted-border);
 }
 
 .site-card__footer {
@@ -202,16 +199,16 @@
     color: var(--text-muted);
     font-size: 0.8rem;
     font-weight: 500;
-    background: rgba(136, 146, 176, 0.1);
+    background: var(--badge-muted-bg);
     padding: 0.3rem 0.7rem;
     border-radius: 12px;
-    border: 1px solid rgba(136, 146, 176, 0.2);
+    border: 1px solid var(--badge-muted-border);
 }
 
 .site-card__btn-rent-now {
     background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
+    border: var(--border-width-medium) solid var(--btn-outline-border);
+    color: var(--btn-outline-text);
     padding: 0.4rem 1rem;
     border-radius: var(--border-radius-xl);
     font-weight: 600;
@@ -221,7 +218,7 @@
 }
 
 .site-card__btn-rent-now:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--btn-outline-hover-bg);
     transform: translateY(-2px);
     color: var(--primary-color);
     border-color: var(--primary-color);
@@ -233,7 +230,7 @@
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));
+    background: var(--gradient-glow);
     border-radius: calc(var(--border-radius-xl) + 2px);
     z-index: -1;
     opacity: 0;
@@ -241,7 +238,6 @@
     filter: blur(12px);
 }
 
-/* Убираем свечение при наведении */
 .site-card:hover .site-card__glow {
     opacity: 0;
 }
@@ -251,7 +247,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(10, 25, 47, 0.8);
+    background: var(--overlay-light);
     border: none;
     color: var(--primary-color);
     width: 36px;
@@ -266,13 +262,8 @@
     z-index: 10;
 }
 
-/* Кнопки слайдера всегда видны */
-.site-card__slider-btn {
-    opacity: 0.7;
-}
-
 .site-card__slider-btn:hover {
-    background: rgba(10, 25, 47, 0.95);
+    background: var(--overlay-bg);
     color: var(--primary-color);
     transform: translateY(-50%) scale(1.1);
 }
@@ -322,7 +313,7 @@
     position: absolute;
     top: 10px;
     right: 10px;
-    background: rgba(10, 25, 47, 0.8);
+    background: var(--overlay-light);
     color: var(--primary-color);
     font-size: 0.7rem;
     font-weight: 600;

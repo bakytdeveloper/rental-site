@@ -1,11 +1,11 @@
-/* Footer.css */
+/* Footer.css - ОБНОВЛЕННЫЙ */
 
 /* Основной контейнер футера */
 .footer {
     background: var(--gradient-bg-light);
     color: var(--text-light);
     padding: 3rem 0 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: var(--border-width-thin) solid var(--glass-border);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
 }
 
@@ -94,7 +94,6 @@
     line-height: 1.4;
     text-align: left;
     transition: color var(--transition-normal);
-
 }
 
 .footer-contact-item:hover {
@@ -122,10 +121,10 @@
 
 /* Разделитель */
 .footer-divider {
-    height: 1px;
+    height: var(--border-width-thin);
     background: linear-gradient(90deg,
     rgba(255, 255, 255, 0) 0%,
-    rgba(100, 255, 218, 0.3) 50%,
+    var(--primary-transparent-30) 50%,
     rgba(255, 255, 255, 0) 100%);
     margin: 2rem 0 1.5rem;
     border: none;
@@ -175,7 +174,7 @@
     bottom: 0;
     left: 0;
     width: 0;
-    height: 1px;
+    height: var(--border-width-thin);
     background: var(--primary-color);
     transition: width var(--transition-normal);
 }
@@ -193,7 +192,7 @@
 
 /* Эффекты при наведении */
 .footer-link:hover {
-    text-shadow: 0 0 8px rgba(100, 255, 218, 0.4);
+    text-shadow: 0 0 8px var(--primary-transparent-40);
 }
 
 /* Адаптивность для больших мониторов (1440px+) */
@@ -282,7 +281,6 @@
     .footer-contact-item,
     .footer-description {
         font-size: 0.9rem;
-
     }
 
     .footer-contact {
@@ -393,12 +391,5 @@
     .footer-social-link,
     .footer-contact-item {
         transition: all var(--transition-normal);
-    }
-}
-
-/* Поддержка темной темы (дополнительно) */
-@media (prefers-color-scheme: dark) {
-    .footer {
-        background: var(--gradient-bg-light);
     }
 }

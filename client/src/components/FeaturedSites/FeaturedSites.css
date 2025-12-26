@@ -1,4 +1,4 @@
-/* FeaturedSites.css */
+/* FeaturedSites.css - ОБНОВЛЕННЫЙ */
 
 .featured-sites-section {
     padding: var(--section-padding);
@@ -17,11 +17,9 @@
     background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
 }
 
-/* Стили для карточек теперь в SiteCard.css */
-
 /* Skeleton Loading */
 .site-card-skeleton {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     border-radius: var(--border-radius-xl);
     overflow: hidden;
     animation: pulse 2s infinite;
@@ -71,8 +69,8 @@
 
 .btn-view-all {
     background: transparent;
-    border: 2px solid var(--primary-color);
-    color: var(--primary-color);
+    border: var(--border-width-medium) solid var(--btn-outline-border);
+    color: var(--btn-outline-text);
     padding: 0.75rem 2rem;
     border-radius: var(--border-radius-full);
     font-weight: 600;
@@ -82,7 +80,7 @@
 }
 
 .btn-view-all:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--btn-outline-hover-bg);
     transform: translateY(-2px);
     color: var(--primary-color);
     border-color: var(--primary-color);

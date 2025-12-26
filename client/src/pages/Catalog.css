@@ -1,4 +1,4 @@
-/* Catalog.css */
+/* Catalog.css - ОБНОВЛЕННЫЙ */
 
 .catalog-page {
     min-height: 100vh;
@@ -6,9 +6,9 @@
 }
 
 .catalog-hero {
-    background: linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(45, 212, 191, 0.1) 100%);
+    background: linear-gradient(135deg, var(--primary-transparent-10) 0%, rgba(45, 212, 191, 0.1) 100%);
     padding: 6rem 0 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
 }
 
 .catalog-page-title {
@@ -31,7 +31,7 @@
 .catalog-navbar-filters {
     background: rgba(18, 28, 76, 0.2);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     padding: 0.2rem 0;
     position: sticky;
     top: 70px; /* высота основного хедера */
@@ -46,7 +46,7 @@
 }
 
 .catalog-navbar-filters__toggle {
-    border: 1px solid var(--primary-color) !important;
+    border: var(--border-width-thin) solid var(--primary-color) !important;
     padding: 0.25rem 0.5rem;
 }
 
@@ -74,8 +74,8 @@
 }
 
 .catalog-navbar-filters__search-input--always-visible {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
@@ -106,8 +106,8 @@
 }
 
 .catalog-navbar-filters__search-input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
@@ -131,8 +131,8 @@
 }
 
 .catalog-navbar-filters__select {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
@@ -152,7 +152,7 @@
 
 .catalog-navbar-filters__reset-btn {
     background: transparent;
-    border: 2px solid var(--primary-color);
+    border: var(--border-width-medium) solid var(--primary-color);
     color: var(--primary-color);
     width: 100%;
     padding: 0.75rem;
@@ -162,7 +162,7 @@
 }
 
 .catalog-navbar-filters__reset-btn:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     transform: translateY(-2px);
 }
 
@@ -187,7 +187,7 @@
 }
 
 .catalog-site-card-skeleton {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
     border-radius: var(--border-radius-xl);
     overflow: hidden;
     height: 400px;
@@ -252,7 +252,7 @@
     padding: 4rem 2rem;
     background: rgba(255, 255, 255, 0.02);
     border-radius: var(--border-radius-xl);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.05);
 }
 
 .catalog-no-results-icon {
@@ -274,7 +274,7 @@
 
 .catalog-no-results-btn {
     background: transparent;
-    border: 2px solid var(--primary-color);
+    border: var(--border-width-medium) solid var(--primary-color);
     color: var(--primary-color);
     padding: 0.75rem 2rem;
     border-radius: var(--border-radius-xl);
@@ -283,7 +283,7 @@
 }
 
 .catalog-no-results-btn:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     transform: translateY(-2px);
     color: var(--primary-color);
     border-color: var(--primary-color);

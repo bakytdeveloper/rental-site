@@ -1,4 +1,5 @@
-/* Features.css */
+/* Features.css - ОБНОВЛЕННЫЙ */
+
 .features-section {
     padding: var(--section-padding);
     background: var(--gradient-bg-light);
@@ -17,9 +18,9 @@
 }
 
 .feature-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--card-border);
     border-radius: var(--border-radius-xl);
     padding: 2rem 1.5rem;
     text-align: center;
@@ -31,7 +32,7 @@
 
 .feature-card:hover {
     transform: translateY(-10px);
-    border-color: rgba(100, 255, 218, 0.3);
+    border-color: var(--card-hover-border);
     box-shadow: var(--shadow-card);
 }
 
@@ -43,6 +44,7 @@
     font-size: 3rem;
     margin-bottom: 1.5rem;
     display: inline-block;
+    color: var(--icon-primary);
     transition: transform var(--transition-normal);
 }
 
@@ -68,7 +70,7 @@
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));
+    background: var(--gradient-glow);
     border-radius: calc(var(--border-radius-xl) + 2px);
     z-index: -1;
     opacity: 0;

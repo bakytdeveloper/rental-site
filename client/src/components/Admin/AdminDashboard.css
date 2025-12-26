@@ -1,3 +1,5 @@
+/* AdminDashboard.css - ОБНОВЛЕННЫЙ */
+
 .admin-dashboard {
     min-height: 100vh;
     background: var(--gradient-bg);
@@ -10,8 +12,8 @@
 
 /* Stats Cards */
 .admin-dashboard-stats-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: var(--border-width-thin) solid var(--card-border);
     border-radius: var(--border-radius-lg);
     transition: all var(--transition-normal);
     height: 100%;
@@ -19,7 +21,7 @@
 
 .admin-dashboard-stats-card:hover {
     transform: translateY(-5px);
-    border-color: rgba(100, 255, 218, 0.3);
+    border-color: var(--card-hover-border);
     box-shadow: var(--shadow-card);
 }
 
@@ -35,7 +37,7 @@
 }
 
 .admin-dashboard-stats-icon.sites {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     color: var(--primary-color);
 }
 
@@ -70,8 +72,8 @@
 
 /* Recent Cards */
 .admin-dashboard-recent-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: var(--border-width-thin) solid var(--card-border);
     border-radius: var(--border-radius-lg);
     height: 100%;
 }
@@ -79,6 +81,7 @@
 .admin-dashboard-card-title {
     font-weight: 600;
     margin: 0;
+    color: var(--text-light);
 }
 
 .admin-dashboard-table {
@@ -88,7 +91,7 @@
 }
 
 .admin-dashboard-table-header {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-medium) solid var(--glass-border);
     color: var(--text-light) !important;
     font-weight: 600;
     font-size: 0.9rem;
@@ -99,7 +102,7 @@
 }
 
 .admin-dashboard-table-cell {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: var(--border-width-thin) solid rgba(255, 255, 255, 0.05) !important;
     vertical-align: middle;
     padding: 1rem;
     background: transparent !important;
@@ -107,7 +110,7 @@
 }
 
 .admin-dashboard-table-row:hover .admin-dashboard-table-cell {
-    background: rgba(100, 255, 218, 0.05) !important;
+    background: var(--primary-transparent-05) !important;
 }
 
 .admin-dashboard-contact-name {
@@ -130,7 +133,7 @@
 
 .admin-dashboard-site-badge {
     background: rgba(40, 167, 69, 0.1) !important;
-    border: 1px solid rgba(40, 167, 69, 0.3) !important;
+    border: var(--border-width-thin) solid rgba(40, 167, 69, 0.3) !important;
     color: #28a745 !important;
 }
 

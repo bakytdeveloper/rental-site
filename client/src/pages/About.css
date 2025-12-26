@@ -1,4 +1,4 @@
-/* About.css */
+/* About.css - ОБНОВЛЕННЫЙ */
 
 .about-page {
     min-height: 100vh;
@@ -7,9 +7,9 @@
 }
 
 .about-hero {
-    background: linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(45, 212, 191, 0.1) 100%);
+    background: linear-gradient(135deg, var(--primary-transparent-10) 0%, rgba(45, 212, 191, 0.1) 100%);
     padding: 6rem 0 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
 }
 
 .page-title {
@@ -47,8 +47,8 @@
 .stats-section {
     margin-top: 4rem;
     padding: 3rem 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: var(--border-width-thin) solid var(--glass-border);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
 }
 
 .stat-item {

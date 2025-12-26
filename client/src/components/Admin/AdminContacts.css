@@ -1,7 +1,8 @@
+/* AdminContacts.css - ОБНОВЛЕННЫЙ */
+
 .admin-contacts {
     min-height: 100vh;
     background: var(--gradient-bg);
-
 }
 
 .admin-contacts__header {
@@ -27,7 +28,7 @@
 .admin-contacts__stat-badge {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
-    border: 1px solid var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-color);
     color: var(--primary-color);
     background: transparent;
     border-radius: var(--border-radius-full);
@@ -35,7 +36,7 @@
 
 /* Filters Card */
 .admin-contacts__filters-card-body {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
 }
 
 .admin-contacts__form-label {
@@ -46,8 +47,8 @@
 
 .admin-contacts__form-control,
 .admin-contacts__form-select {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
@@ -72,10 +73,6 @@
     color: var(--primary-color) !important;
 }
 
-.card-custom {
-    color: var(--text-light);
-}
-
 .admin-contacts__form-control::placeholder {
     color: var(--text-muted);
 }
@@ -88,7 +85,7 @@
 }
 
 .admin-contacts__table-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light) !important;
     font-weight: 600;
     font-size: 0.85rem;
@@ -99,7 +96,7 @@
 }
 
 .admin-contacts__table-cell {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: var(--border-width-thin) solid rgba(255, 255, 255, 0.05) !important;
     vertical-align: middle;
     padding: 1rem 0.75rem;
     background: transparent !important;
@@ -132,9 +129,9 @@
     font-size: 0.75rem;
     padding: 0.35rem 0.75rem;
     border-radius: var(--border-radius-full);
-    border: 1px solid rgba(100, 255, 218, 0.3);
-    background: rgba(100, 255, 218, 0.1);
-    color: var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-transparent-30);
+    background: var(--badge-primary-bg);
+    color: var(--badge-primary-text);
 }
 
 .admin-contacts__no-website {
@@ -156,20 +153,20 @@
 }
 
 .admin-contacts__view-btn {
-    border: 1px solid var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-color);
     color: var(--primary-color);
     background: transparent;
     transition: all var(--transition-normal);
 }
 
 .admin-contacts__view-btn:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     color: var(--primary-color);
     border-color: var(--primary-color);
 }
 
 .admin-contacts__delete-btn {
-    border: 1px solid #ff6b6b;
+    border: var(--border-width-thin) solid #ff6b6b;
     color: #ff6b6b;
     background: transparent;
     transition: all var(--transition-normal);
@@ -189,7 +186,7 @@
     gap: 1rem;
     margin-top: 2rem;
     padding: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: var(--border-width-thin) solid var(--glass-border);
 }
 
 .admin-contacts__pagination-info {
@@ -198,7 +195,7 @@
 }
 
 .admin-contacts__pagination-btn {
-    border: 1px solid var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-color);
     color: var(--primary-color);
     background: transparent;
     padding: 0.5rem 1rem;
@@ -213,7 +210,7 @@
 }
 
 .admin-contacts__pagination-btn:hover:not(:disabled) {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     color: var(--primary-color);
 }
 
@@ -239,14 +236,14 @@
 
 /* Contact Detail Modal */
 .admin-contacts__modal .modal-content {
-    background: var(--primary-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--gradient-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     border-radius: var(--border-radius-lg);
     color: var(--text-light);
 }
 
 .admin-contacts__modal-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     padding: 1.5rem;
 }
 
@@ -260,7 +257,7 @@
 }
 
 .admin-contacts__modal-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: var(--border-width-thin) solid var(--glass-border);
     padding: 1rem 1.5rem;
     background: rgba(255, 255, 255, 0.02);
 }
@@ -277,7 +274,7 @@
     color: var(--primary-color);
     font-weight: 600;
     margin-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     padding-bottom: 0.5rem;
     font-size: 1.1rem;
 }
@@ -326,8 +323,8 @@
 
 .admin-contacts__message-content,
 .admin-contacts__notes-content {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     border-radius: var(--border-radius-md);
     padding: 1rem;
     color: var(--text-dark);
@@ -338,13 +335,13 @@
 }
 
 .admin-contacts__notes-content {
-    background: rgba(100, 255, 218, 0.05);
-    border-color: rgba(100, 255, 218, 0.2);
+    background: var(--primary-transparent-05);
+    border-color: var(--primary-transparent-20);
 }
 
 .admin-contacts__notes-textarea {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     width: 100%;
@@ -364,7 +361,7 @@
 }
 
 .admin-contacts__modal-close-btn {
-    border: 1px solid var(--text-muted);
+    border: var(--border-width-thin) solid var(--text-muted);
     color: var(--text-muted);
     background: transparent;
     padding: 0.5rem 1.5rem;
@@ -373,13 +370,13 @@
 }
 
 .admin-contacts__modal-close-btn:hover {
-    background: rgba(136, 146, 176, 0.1);
+    background: var(--text-muted-transparent-10);
     color: var(--text-muted);
     border-color: var(--text-muted);
 }
 
 .admin-contacts__modal-delete-btn {
-    border: 1px solid #ff6b6b;
+    border: var(--border-width-thin) solid #ff6b6b;
     color: #ff6b6b;
     background: transparent;
     padding: 0.5rem 1.5rem;
@@ -395,8 +392,8 @@
 
 /* Rental Info Section */
 .admin-contacts__rental-info {
-    background: rgba(100, 255, 218, 0.05);
-    border: 1px solid rgba(100, 255, 218, 0.2);
+    background: var(--primary-transparent-05);
+    border: var(--border-width-thin) solid var(--primary-transparent-20);
     border-radius: var(--border-radius-md);
     padding: 1rem;
     margin-bottom: 1rem;
@@ -429,7 +426,7 @@
 
 .admin-contacts__payment-item {
     background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.05);
     border-radius: var(--border-radius-md);
     padding: 0.75rem;
     margin-bottom: 0.5rem;
@@ -447,9 +444,9 @@
 }
 
 .admin-contacts__payment-rate {
-    background: rgba(100, 255, 218, 0.1) !important;
-    border: 1px solid rgba(100, 255, 218, 0.3) !important;
-    color: var(--primary-color) !important;
+    background: var(--badge-primary-bg) !important;
+    border: var(--border-width-thin) solid var(--badge-primary-border) !important;
+    color: var(--badge-primary-text) !important;
 }
 
 .admin-contacts__days-badge {

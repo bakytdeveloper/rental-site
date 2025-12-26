@@ -13,18 +13,56 @@
     --text-muted: #8892b0;
     --text-dark: #ccd6f6;
 
+    /* Дополнительные цвета для прозрачных эффектов */
+    --overlay-bg: rgba(10, 25, 47, 0.9);
+    --overlay-light: rgba(10, 25, 47, 0.8);
+    --overlay-semi: rgba(10, 25, 47, 0.6);
+    --glass-bg: rgba(255, 255, 255, 0.05);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --primary-transparent-10: rgba(100, 255, 218, 0.1);
+    --primary-transparent-20: rgba(100, 255, 218, 0.2);
+    --primary-transparent-30: rgba(100, 255, 218, 0.3);
+    --primary-transparent-90: rgba(100, 255, 218, 0.9);
+    --text-muted-transparent-10: rgba(136, 146, 176, 0.1);
+    --text-muted-transparent-20: rgba(136, 146, 176, 0.2);
+    /* Дополнительные прозрачности */
+    --primary-transparent-50: rgba(100, 255, 218, 0.5);
+    --primary-transparent-05: rgba(100, 255, 218, 0.05);
+    --primary-transparent-40: rgba(100, 255, 218, 0.4);
+
+
     /* Градиенты */
     --gradient-primary: linear-gradient(135deg, #64ffda 0%, #3bd6d4 50%, #2979ff 100%);
+    --gradient-primary-short: linear-gradient(135deg, #64ffda 0%, #3bd6d4 100%);
     --gradient-bg: linear-gradient(135deg, #0a192f 0%, #112240 50%, #1a365d 100%);
     --gradient-bg-light: linear-gradient(135deg, #112240 0%, #0a192f 100%);
+    --gradient-accent: linear-gradient(45deg, #1e3c72, #2a5298);
+    --gradient-glow: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));
 
-    /*Цвет фона*/
+    /* Радиальные градиенты для фонов */
+    --radial-bg-hero:
+            radial-gradient(circle at 20% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(30, 136, 229, 0.05) 0%, transparent 50%);
 
     /* Тени */
     --shadow-light: 0 4px 15px rgba(100, 255, 218, 0.3);
     --shadow-medium: 0 8px 25px rgba(100, 255, 218, 0.4);
     --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.3);
     --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.3);
+    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    /* Статусные цвета */
+    --status-success: #28a745;
+    --status-warning: #ffc107;
+    --status-info: #007bff;
+    --status-success-bg: rgba(40, 167, 69, 0.1);
+    --status-warning-bg: rgba(255, 193, 7, 0.1);
+    --status-info-bg: rgba(0, 123, 255, 0.1);
+    --status-success-border: rgba(40, 167, 69, 0.3);
+
+    /* Дополнительные цвета UI */
+    --border-dark: #363737;
 
     /* Границы */
     --border-radius-sm: 4px;
@@ -32,14 +70,62 @@
     --border-radius-lg: 15px;
     --border-radius-xl: 20px;
     --border-radius-full: 50px;
+    --border-width-thin: 1px;
+    --border-width-medium: 2px;
 
-    /*Padding*/
-    --section-padding: 5rem 0;
+    /* Стили карточек */
+    --card-bg: var(--glass-bg);
+    --card-border: var(--glass-border);
+    --card-hover-border: var(--primary-transparent-30);
+
+    /* Стили кнопок */
+    --btn-primary-bg: var(--gradient-primary-short);
+    --btn-primary-text: var(--primary-bg);
+    --btn-outline-border: var(--primary-color);
+    --btn-outline-text: var(--primary-color);
+    --btn-outline-hover-bg: var(--primary-transparent-10);
+
+    /* Дополнительные цвета для кнопок */
+    --btn-danger-bg: linear-gradient(135deg, #ff6b6b, #ff5252);
+    --btn-danger-hover-bg: linear-gradient(135deg, #ff5252, #ff7b7b);
+    --btn-success-bg: linear-gradient(135deg, #4CAF50, #45a049);
+
+    /* Опасные цвета для кнопок удаления */
+    --danger-color: #dc3545;
+    --danger-hover-bg: rgba(220, 53, 69, 0.9);
+    --danger-shadow: rgba(220, 53, 69, 0.3);
+
+    /* Цвета для акцентных элементов */
+    --gold-color: #ffd700;
+    --gold-shadow: rgba(255, 215, 0, 0.4);
+
+
+    /* Стили бейджей/тегов */
+    --badge-primary-bg: var(--primary-transparent-10);
+    --badge-primary-text: var(--primary-color);
+    --badge-primary-border: var(--primary-transparent-20);
+    --badge-muted-bg: var(--text-muted-transparent-10);
+    --badge-muted-text: var(--text-muted);
+    --badge-muted-border: var(--text-muted-transparent-20);
+
+    /* Стили иконок */
+    --icon-primary: var(--primary-color);
+    --icon-muted: var(--text-muted);
+
+    /* Цвета для статусов */
+    --status-available: #4CAF50;
+    --status-unavailable: #ff5252;
+    --status-pending: #ff9800;
+
     /* Анимации */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
+
+    /*Пэдинги*/
+    --section-padding: 5rem 0;
 }
+
 
 /* Базовые стили */
 * {
@@ -148,6 +234,49 @@ h1, h2, h3, h4, h5, h6 {
     margin-right: auto;
     margin-left: auto;
 }
+
+/* Дополнительные глобальные классы для часто используемых стилей */
+.glass-effect {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+}
+
+.primary-gradient-text {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /*background-clip: text;*/
+}
+
+.primary-glow {
+    background: var(--gradient-glow);
+    border-radius: inherit;
+    z-index: -1;
+    filter: blur(12px);
+}
+
+.badge-primary {
+    background: var(--badge-primary-bg);
+    color: var(--badge-primary-text);
+    border: 1px solid var(--badge-primary-border);
+    border-radius: var(--border-radius-full);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-muted {
+    background: var(--badge-muted-bg);
+    color: var(--badge-muted-text);
+    border: 1px solid var(--badge-muted-border);
+    border-radius: var(--border-radius-full);
+    padding: 0.3rem 0.8rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+
 
 @media (min-width: 576px) {
     .container-custom {

@@ -1,8 +1,9 @@
-/* Header.css */
+/* Header.css - ОБНОВЛЕННЫЙ */
+
 .header-custom-navbar {
-    background: rgba(10, 25, 47, 0.95) !important;
+    background: var(--gradient-bg-light) !important;
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--primary-transparent-10);
     transition: all var(--transition-normal);
     padding: 0.8rem 0;
 }
@@ -37,11 +38,11 @@
 .header-navbar-nav .header-nav-link:hover,
 .header-navbar-nav .header-nav-link.header-active {
     color: var(--primary-color) !important;
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
 }
 
 .header-navbar-toggler {
-    border: 1px solid #363737 !important;
+    border: var(--border-width-thin) solid #363737 !important;
     padding: 0.25rem 0.5rem;
     background-color: var(--primary-color);
 }
@@ -52,7 +53,7 @@
 
 /* Admin Login Button Styles */
 .header-admin-login-btn .header-btn {
-    border: 1px solid var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-color);
     color: var(--primary-color);
     background: transparent;
     padding: 0.4rem 1rem;
@@ -64,7 +65,7 @@
 }
 
 .header-admin-login-btn .header-btn:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     transform: translateY(-2px);
     color: var(--primary-color);
     border-color: var(--primary-color);

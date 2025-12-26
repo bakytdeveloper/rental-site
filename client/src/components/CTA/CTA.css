@@ -1,4 +1,4 @@
-/* CTA.css */
+/* CTA.css - ОБНОВЛЕННЫЙ */
 
 .cta-section {
     padding: var(--section-padding);
@@ -14,9 +14,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background:
-            radial-gradient(circle at 20% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.1) 0%, transparent 50%);
+    background: var(--radial-bg-hero);
 }
 
 .cta-content {
@@ -51,7 +49,7 @@
 }
 
 .btn-cta-primary {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+    background: var(--gradient-primary-short);
     border: none;
     color: var(--primary-bg);
     padding: 1rem 2.5rem;
@@ -69,7 +67,7 @@
 
 .btn-cta-secondary {
     background: transparent;
-    border: 2px solid var(--primary-color);
+    border: var(--border-width-medium) solid var(--primary-color);
     color: var(--primary-color);
     padding: 1rem 2.5rem;
     border-radius: var(--border-radius-full);
@@ -78,7 +76,7 @@
 }
 
 .btn-cta-secondary:hover {
-    background: rgba(100, 255, 218, 0.1);
+    background: var(--primary-transparent-10);
     transform: translateY(-3px);
     color: var(--primary-color);
 }

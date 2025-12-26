@@ -1,4 +1,4 @@
-/* AdminSites.css */
+/* AdminSites.css - ОБНОВЛЕННЫЙ */
 
 .admin-sites {
     /*padding: var(--section-padding);*/
@@ -38,8 +38,8 @@
 }
 
 .admin-sites-table-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--card-bg);
+    border: var(--border-width-thin) solid var(--card-border);
     border-radius: var(--border-radius-lg);
     backdrop-filter: blur(10px);
     box-shadow: var(--shadow-dark);
@@ -52,12 +52,8 @@
     border-spacing: 0;
 }
 
-.btn-close {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
 .admin-sites-table th {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     color: var(--primary-color);
     font-weight: 600;
     font-size: 0.8rem;
@@ -68,7 +64,7 @@
 }
 
 .admin-sites-table td {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: var(--border-width-thin) solid rgba(255, 255, 255, 0.05);
     vertical-align: middle;
     padding: 1rem 0.75rem;
     transition: background-color var(--transition-normal);
@@ -79,7 +75,7 @@
 }
 
 .admin-sites-site-row:hover td {
-    background: rgba(100, 255, 218, 0.05);
+    background: var(--primary-transparent-05);
 }
 
 /* Image Column */
@@ -164,7 +160,7 @@
     font-weight: 500;
     padding: 0.4rem 0.8rem;
     border-radius: var(--border-radius-full);
-    border: 1px solid var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-color);
     color: var(--primary-color);
     background: transparent;
 }
@@ -245,7 +241,7 @@
     font-size: 0.7rem;
     padding: 0.3rem 0.6rem;
     border-radius: var(--border-radius-full);
-    border: 1px solid var(--primary-light);
+    border: var(--border-width-thin) solid var(--primary-light);
     color: var(--primary-light);
     background: transparent;
 }
@@ -254,7 +250,7 @@
     font-size: 0.7rem;
     padding: 0.3rem 0.6rem;
     border-radius: var(--border-radius-full);
-    border: 1px solid var(--text-muted);
+    border: var(--border-width-thin) solid var(--text-muted);
     color: var(--text-muted);
     background: transparent;
 }
@@ -275,7 +271,7 @@
     font-size: 0.9rem;
     padding: 0.4rem 0.6rem;
     border-radius: var(--border-radius-md);
-    border: 1px solid;
+    border: var(--border-width-thin) solid;
     background: transparent;
     transition: all var(--transition-normal);
 }
@@ -348,15 +344,15 @@
 
 /* Modal Styles */
 .admin-sites-modal .modal-content {
-    background: var(--primary-bg);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--gradient-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     border-radius: var(--border-radius-lg);
     color: var(--text-light);
     box-shadow: var(--shadow-card);
 }
 
 .admin-sites-modal .modal-header {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
     padding: 1.5rem;
 }
 
@@ -370,7 +366,7 @@
 }
 
 .admin-sites-modal .modal-footer {
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: var(--border-width-thin) solid var(--glass-border);
     padding: 1rem 1.5rem;
 }
 
@@ -382,8 +378,8 @@
 
 .admin-sites-modal .form-control,
 .admin-sites-modal .form-select {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem;
@@ -395,10 +391,6 @@
     border-color: var(--primary-color);
     color: var(--text-light);
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
-}
-
-.admin-sites-modal .input-group {
-    margin-bottom: 0.5rem;
 }
 
 .admin-sites-tags-container {
@@ -472,7 +464,7 @@
 }
 
 .admin-sites-image-upload-area {
-    border: 2px dashed rgba(100, 255, 218, 0.3);
+    border: var(--border-width-medium) dashed var(--primary-transparent-30);
     border-radius: var(--border-radius-md);
     padding: 20px;
     text-align: center;
@@ -482,7 +474,7 @@
 
 .admin-sites-image-upload-area:hover {
     border-color: var(--primary-color);
-    background: rgba(100, 255, 218, 0.05);
+    background: var(--primary-transparent-05);
     box-shadow: var(--shadow-light);
 }
 
@@ -496,10 +488,6 @@
     padding: 2px 6px;
     font-size: 0.7rem;
     font-weight: 600;
-}
-
-.admin-sites-debug-info {
-    margin-bottom: 0.5rem;
 }
 
 .admin-sites-image-info {

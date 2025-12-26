@@ -1,4 +1,4 @@
-/* Contact.css */
+/* Contact.css - ОБНОВЛЕННЫЙ */
 
 .contact-page {
     min-height: 100vh;
@@ -7,9 +7,9 @@
 }
 
 .contact-hero {
-    background: linear-gradient(135deg, rgba(100, 255, 218, 0.1) 0%, rgba(45, 212, 191, 0.1) 100%);
+    background: linear-gradient(135deg, var(--primary-transparent-10) 0%, rgba(45, 212, 191, 0.1) 100%);
     padding: 6rem 0 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: var(--border-width-thin) solid var(--glass-border);
 }
 
 .contact-content {
@@ -17,9 +17,9 @@
 }
 
 .contact-form-card {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--card-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: var(--border-width-thin) solid var(--card-border);
     border-radius: var(--border-radius-xl);
     margin-bottom: 4rem;
 }
@@ -35,8 +35,8 @@
 }
 
 .form-control {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--glass-bg);
+    border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
@@ -54,7 +54,7 @@
 }
 
 .btn-submit-message {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    background: var(--gradient-primary-short);
     border: none;
     color: var(--primary-bg);
     padding: 0.75rem 2rem;
@@ -80,6 +80,7 @@
 
 .contact-icon {
     font-size: 3rem;
+    color: var(--primary-color);
     margin-bottom: 1rem;
 }
 
