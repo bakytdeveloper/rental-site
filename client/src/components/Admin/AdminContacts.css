@@ -48,12 +48,14 @@
 .admin-contacts__form-control,
 .admin-contacts__form-select {
     background: var(--glass-bg);
-    border: var(--border-width-thin) solid var(--glass-border);
+    border: 1px solid #4a4a4a;
+    /*border: var(--border-width-thin) solid var(--glass-border);*/
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
     width: 100%;
     transition: all var(--transition-normal);
+    cursor: pointer;
 }
 
 .small-admin-contacts__payment-date,
@@ -102,8 +104,11 @@
     background: transparent !important;
 }
 
+.admin-contacts__table-row .admin-contacts__table-cell {
+    background: rgb(227, 243, 250) !important;
+}
 .admin-contacts__table-row:hover .admin-contacts__table-cell {
-    background: rgba(255, 255, 255, 0.02) !important;
+    background: rgb(198, 236, 252) !important;
 }
 
 .admin-contacts__contact-name {

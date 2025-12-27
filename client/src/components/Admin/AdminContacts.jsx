@@ -241,7 +241,7 @@ const AdminContacts = () => {
                     <Row className="g-3">
                         <Col md={6}>
                             <Form.Group className="admin-contacts__form-group">
-                                <Form.Label className="admin-contacts__form-label text-light mb-2">Статус</Form.Label>
+                                <Form.Label className="admin-contacts__form-label text-muted mb-2">Статус</Form.Label>
                                 <Form.Select
                                     value={filters.status}
                                     onChange={(e) => handleFilterChange('status', e.target.value)}
@@ -256,7 +256,7 @@ const AdminContacts = () => {
                         </Col>
                         <Col md={6}>
                             <Form.Group className="admin-contacts__form-group">
-                                <Form.Label className="admin-contacts__form-label text-light mb-2">Поиск</Form.Label>
+                                <Form.Label className="admin-contacts__form-label text-muted mb-2">Поиск</Form.Label>
                                 <Form.Control
                                     type="text"
                                     placeholder="Поиск по имени, email или сообщению..."
@@ -290,7 +290,7 @@ const AdminContacts = () => {
                                     <tr key={contact._id} className="admin-contacts__table-row">
                                         <td className="admin-contacts__table-cell">
                                             <div className="admin-contacts__contact-info">
-                                                <div className="admin-contacts__contact-name text-light mb-1">{contact.name}</div>
+                                                <div className="admin-contacts__contact-name text-muted mb-1">{contact.name}</div>
                                                 <div className="admin-contacts__contact-email text-primary mb-1">{contact.email}</div>
                                                 {contact.phone && (
                                                     <div className="admin-contacts__contact-phone text-muted">{contact.phone}</div>
@@ -323,7 +323,7 @@ const AdminContacts = () => {
                                         </td>
                                         <td className="admin-contacts__table-cell">
                                             <div className="admin-contacts__date-info">
-                                                <div className="text-light">{new Date(contact.createdAt).toLocaleDateString()}</div>
+                                                <div className="text-muted">{new Date(contact.createdAt).toLocaleDateString()}</div>
                                                 <small className="admin-contacts__date-time text-muted">
                                                     {new Date(contact.createdAt).toLocaleTimeString()}
                                                 </small>
