@@ -20,6 +20,10 @@
     background: var(--radial-bg-hero);
 }
 
+.hero-btn-primary-custom {
+    color: var(--overlay-light);
+}
+
 .floating-shapes {
     position: absolute;
     width: 100%;
@@ -369,5 +373,36 @@
 
     .col-hero-visual {
         display: none !important;
+    }
+}
+
+/* Добавьте в конец Hero.css */
+
+/* Для больших экранов (LG и выше) */
+@media (min-width: 992px) {
+    .col-hero-visual {
+        /*display: flex !important;*/
+        /*justify-content: flex-end !important;*/
+    }
+
+    .hero-visual {
+        margin-right: -20px; /* Сдвигаем вправо */
+        transform: translateX(5%); /* Дополнительный сдвиг в процентах */
+    }
+}
+
+/* Для очень больших экранов (XL и выше) */
+@media (min-width: 1200px) {
+    .hero-visual {
+        margin-right: -70px; /* Больше сдвига на огромных экранах */
+        transform: translateX(10%);
+    }
+}
+
+/* Для экстремально больших экранов (XXL) */
+@media (min-width: 1400px) {
+    .hero-visual {
+        margin-right: -100px;
+        transform: translateX(15%);
     }
 }

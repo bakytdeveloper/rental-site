@@ -5,16 +5,16 @@
     backdrop-filter: blur(10px);
     border-bottom: var(--border-width-thin) solid var(--primary-transparent-10);
     transition: all var(--transition-normal);
-    padding: 0.8rem 0;
+    padding: 0.5rem 0;
 }
 
 .header-custom-navbar.header-scrolled {
     padding: 0.5rem 0;
-    background: rgba(10, 25, 47, 0.98) !important;
+    background: var(--gradient-bg-light) !important;
 }
 
 .header-brand-logo {
-    font-size: 2.7rem !important;
+    font-size: 3.7rem !important;
     font-weight: 700;
     color: var(--primary-color) !important;
     text-decoration: none;
@@ -74,7 +74,7 @@
 /* Responsive for admin button */
 @media (max-width: 992px) {
     .header-brand-logo {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
     .header-admin-login-btn {
@@ -90,6 +90,6 @@
 
 @media (max-width: 768px) {
     .header-brand-logo {
-        font-size: 1.7rem;
+        font-size: 2rem!important;
     }
 }
