@@ -9,15 +9,15 @@
 
 .admin-sidebar {
     background: var(--secondary-bg);
-    min-height: 100vh;
-    padding: 5rem 0 0 0;
+    min-height: 50vh;
+    padding: 7rem 0 0 0;
     border-right: var(--border-width-thin) solid var(--glass-border);
     display: flex;
     flex-direction: column;
     position: fixed;
     left: 0;
     top: 0;
-    bottom: 0;
+    bottom: 50vh;
     width: 250px;
     z-index: 1000;
 }
