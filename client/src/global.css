@@ -54,6 +54,10 @@
     --gradient-accent: linear-gradient(45deg, #1e40af, #2563eb);
     --gradient-glow: linear-gradient(45deg, #1d4ed8, #2563eb, #3b82f6);
 
+    --gradient-hero-bg: linear-gradient(135deg, #8fc3fa 0%, #e8ecff 50%, #99c0f5 100%);
+
+
+
     /* Радиальные градиенты для фонов */
     --radial-bg-hero:
             radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
