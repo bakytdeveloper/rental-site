@@ -62,21 +62,21 @@ const AdminDashboard = () => {
         }
     };
 
-    const getStatusBadge = (status) => {
-        const variants = {
-            new: 'danger',
-            contacted: 'warning',
-            completed: 'success',
-            spam: 'secondary'
-        };
-        const statusText = {
-            new: 'Новый',
-            contacted: 'На связи',
-            completed: 'Завершен',
-            spam: 'Спам'
-        };
-        return <Badge bg={variants[status]} className="admin-dashboard-badge">{statusText[status]}</Badge>;
-    };
+    // const getStatusBadge = (status) => {
+    //     const variants = {
+    //         new: 'danger',
+    //         contacted: 'warning',
+    //         completed: 'success',
+    //         spam: 'secondary'
+    //     };
+    //     const statusText = {
+    //         new: 'Новый',
+    //         contacted: 'На связи',
+    //         completed: 'Завершен',
+    //         spam: 'Спам'
+    //     };
+    //     return <Badge bg={variants[status]} className="admin-dashboard-badge">{statusText[status]}</Badge>;
+    // };
 
     if (loading) {
         return (
@@ -102,7 +102,7 @@ const AdminDashboard = () => {
                                 <span className="display-5">🌐</span>
                             </div>
                             <div className="admin-dashboard-stats-content text-center">
-                                <h3 className="text-light mb-2">{stats.totalSites}</h3>
+                                <h3 className="text-muted mb-2">{stats.totalSites}</h3>
                                 <p className="text-muted mb-0">Всего сайтов</p>
                             </div>
                         </Card.Body>
@@ -116,7 +116,7 @@ const AdminDashboard = () => {
                                 <span className="display-5">✅</span>
                             </div>
                             <div className="admin-dashboard-stats-content text-center">
-                                <h3 className="text-light mb-2">{stats.activeSites}</h3>
+                                <h3 className="text-muted mb-2">{stats.activeSites}</h3>
                                 <p className="text-muted mb-0">Активных сайтов</p>
                             </div>
                         </Card.Body>
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
                                 <span className="display-5">⭐</span>
                             </div>
                             <div className="admin-dashboard-stats-content text-center">
-                                <h3 className="text-light mb-2">{stats.featuredSites}</h3>
+                                <h3 className="text-muted mb-2">{stats.featuredSites}</h3>
                                 <p className="text-muted mb-0">Рекомендуемых сайтов</p>
                             </div>
                         </Card.Body>
@@ -144,7 +144,7 @@ const AdminDashboard = () => {
                                 <span className="display-5">📧</span>
                             </div>
                             <div className="admin-dashboard-stats-content text-center">
-                                <h3 className="text-light mb-2">{stats.totalContacts}</h3>
+                                <h3 className="text-muted mb-2">{stats.totalContacts}</h3>
                                 <p className="text-muted mb-0">Всего контактов</p>
                             </div>
                         </Card.Body>
@@ -174,11 +174,15 @@ const AdminDashboard = () => {
                                         {recentContacts.map(contact => (
                                             <tr key={contact._id} className="admin-dashboard-table-row">
                                                 <td className="admin-dashboard-table-cell">
-                                                    <div className="admin-dashboard-contact-name text-light">{contact.name}</div>
+                                                    <div className="admin-dashboard-contact-name">{contact.name}</div>
                                                     <small className="admin-dashboard-text-muted">{contact.email}</small>
                                                 </td>
-                                                <td className="admin-dashboard-table-cell">{getStatusBadge(contact.status)}</td>
-                                                <td className="admin-dashboard-table-cell text-light">
+                                                <td className="admin-dashboard-table-cell">
+                                                    <Badge bg={contact.rentalStatus ? 'success' : 'secondary'} className="admin-dashboard-site-badge">
+                                                        {contact.rentalStatus ? 'Активен' : 'Неактивен'}
+                                                    </Badge>
+                                                </td>
+                                                <td className="admin-dashboard-table-cell">
                                                     {new Date(contact.createdAt).toLocaleDateString('ru-RU')}
                                                 </td>
                                             </tr>
@@ -204,7 +208,7 @@ const AdminDashboard = () => {
                                 <div className="table-responsive">
                                     <Table responsive className="admin-dashboard-table mb-0">
                                         <thead>
-                                        <tr>
+                                        <tr className="header-text-light" >
                                             <th className="admin-dashboard-table-header text-light">Название</th>
                                             <th className="admin-dashboard-table-header text-light">Категория</th>
                                             <th className="admin-dashboard-table-header text-light">Цена</th>
@@ -215,12 +219,12 @@ const AdminDashboard = () => {
                                         {recentSites.map(site => (
                                             <tr key={site._id} className="admin-dashboard-table-row">
                                                 <td className="admin-dashboard-table-cell">
-                                                    <div className="admin-dashboard-site-title text-light">{site.title}</div>
+                                                    <div className="admin-dashboard-site-title">{site.title}</div>
                                                     <small className="admin-dashboard-text-muted">
                                                         {site.shortDescription.substring(0, 50)}...
                                                     </small>
                                                 </td>
-                                                <td className="admin-dashboard-table-cell text-light">{site.category}</td>
+                                                <td className="admin-dashboard-table-cell">{site.category}</td>
                                                 <td className="admin-dashboard-table-cell text-primary">₸{site.price}/мес</td>
                                                 <td className="admin-dashboard-table-cell">
                                                     <Badge bg={site.isActive ? 'success' : 'secondary'} className="admin-dashboard-site-badge">

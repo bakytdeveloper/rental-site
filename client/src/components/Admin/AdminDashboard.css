@@ -98,15 +98,20 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--gradient-bg);
 }
 
+
 .admin-dashboard-table-cell {
-    border-bottom: var(--border-width-thin) solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: var(--border-width-thin) solid rgba(255, 255, 255, 0.25) !important;
     vertical-align: middle;
     padding: 1rem;
     background: transparent !important;
     transition: all var(--transition-fast);
+}
+
+.admin-dashboard-table-row .admin-dashboard-table-cell {
+    background: var(--gradient-bg) !important;
 }
 
 .admin-dashboard-table-row:hover .admin-dashboard-table-cell {
