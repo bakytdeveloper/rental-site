@@ -1,461 +1,101 @@
-/*!* global.css *!*/
-
-/*!* Общие переменные и сброс стилей *!*/
-/*:root {*/
-/*    !* Цветовая палитра *!*/
-/*    --primary-bg: #0a192f;*/
-/*    --secondary-bg: #112240;*/
-/*    --accent-bg: #1a365d;*/
-/*    --primary-color: #64ffda;*/
-/*    --primary-light: #3bd6d4;*/
-/*    --primary-dark: #2979ff;*/
-/*    --text-light: #ffffff;*/
-/*    --text-muted: #8892b0;*/
-/*    --text-dark: #ccd6f6;*/
-
-/*    !* Дополнительные цвета для прозрачных эффектов *!*/
-/*    --overlay-bg: rgba(10, 25, 47, 0.9);*/
-/*    --overlay-light: rgba(10, 25, 47, 0.8);*/
-/*    --overlay-semi: rgba(10, 25, 47, 0.6);*/
-/*    --glass-bg: rgba(255, 255, 255, 0.05);*/
-/*    --glass-border: rgba(255, 255, 255, 0.1);*/
-/*    --primary-transparent-10: rgba(100, 255, 218, 0.1);*/
-/*    --primary-transparent-20: rgba(100, 255, 218, 0.2);*/
-/*    --primary-transparent-30: rgba(100, 255, 218, 0.3);*/
-/*    --primary-transparent-90: rgba(100, 255, 218, 0.9);*/
-/*    --text-muted-transparent-10: rgba(136, 146, 176, 0.1);*/
-/*    --text-muted-transparent-20: rgba(136, 146, 176, 0.2);*/
-/*    !* Дополнительные прозрачности *!*/
-/*    --primary-transparent-50: rgba(100, 255, 218, 0.5);*/
-/*    --primary-transparent-05: rgba(100, 255, 218, 0.05);*/
-/*    --primary-transparent-40: rgba(100, 255, 218, 0.4);*/
-
-
-/*    !* Градиенты *!*/
-/*    --gradient-primary: linear-gradient(135deg, #64ffda 0%, #3bd6d4 50%, #2979ff 100%);*/
-/*    --gradient-primary-short: linear-gradient(135deg, #64ffda 0%, #3bd6d4 100%);*/
-/*    --gradient-bg: linear-gradient(135deg, #0a192f 0%, #112240 50%, #1a365d 100%);*/
-/*    --gradient-bg-light: linear-gradient(135deg, #112240 0%, #0a192f 100%);*/
-/*    --gradient-accent: linear-gradient(45deg, #1e3c72, #2a5298);*/
-/*    --gradient-glow: linear-gradient(45deg, var(--primary-color), var(--primary-light), var(--primary-dark));*/
-
-/*    !* Радиальные градиенты для фонов *!*/
-/*    --radial-bg-hero:*/
-/*            radial-gradient(circle at 20% 80%, rgba(100, 255, 218, 0.1) 0%, transparent 50%),*/
-/*            radial-gradient(circle at 80% 20%, rgba(45, 212, 191, 0.1) 0%, transparent 50%),*/
-/*            radial-gradient(circle at 40% 40%, rgba(30, 136, 229, 0.05) 0%, transparent 50%);*/
-
-/*    !* Тени *!*/
-/*    --shadow-light: 0 4px 15px rgba(100, 255, 218, 0.3);*/
-/*    --shadow-medium: 0 8px 25px rgba(100, 255, 218, 0.4);*/
-/*    --shadow-dark: 0 8px 32px rgba(0, 0, 0, 0.3);*/
-/*    --shadow-card: 0 20px 40px rgba(0, 0, 0, 0.3);*/
-/*    --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.1);*/
-
-/*    !* Статусные цвета *!*/
-/*    --status-success: #28a745;*/
-/*    --status-warning: #ffc107;*/
-/*    --status-info: #007bff;*/
-/*    --status-success-bg: rgba(40, 167, 69, 0.1);*/
-/*    --status-warning-bg: rgba(255, 193, 7, 0.1);*/
-/*    --status-info-bg: rgba(0, 123, 255, 0.1);*/
-/*    --status-success-border: rgba(40, 167, 69, 0.3);*/
-
-/*    !* Дополнительные цвета UI *!*/
-/*    --border-dark: #363737;*/
-
-/*    !* Границы *!*/
-/*    --border-radius-sm: 4px;*/
-/*    --border-radius-md: 8px;*/
-/*    --border-radius-lg: 15px;*/
-/*    --border-radius-xl: 20px;*/
-/*    --border-radius-full: 50px;*/
-/*    --border-width-thin: 1px;*/
-/*    --border-width-medium: 2px;*/
-
-/*    !* Стили карточек *!*/
-/*    --card-bg: var(--glass-bg);*/
-/*    --card-border: var(--glass-border);*/
-/*    --card-hover-border: var(--primary-transparent-30);*/
-
-/*    !* Стили кнопок *!*/
-/*    --btn-primary-bg: var(--gradient-primary-short);*/
-/*    --btn-primary-text: var(--primary-bg);*/
-/*    --btn-outline-border: var(--primary-color);*/
-/*    --btn-outline-text: var(--primary-color);*/
-/*    --btn-outline-hover-bg: var(--primary-transparent-10);*/
-
-/*    !* Дополнительные цвета для кнопок *!*/
-/*    --btn-danger-bg: linear-gradient(135deg, #ff6b6b, #ff5252);*/
-/*    --btn-danger-hover-bg: linear-gradient(135deg, #ff5252, #ff7b7b);*/
-/*    --btn-success-bg: linear-gradient(135deg, #4CAF50, #45a049);*/
-
-/*    !* Опасные цвета для кнопок удаления *!*/
-/*    --danger-color: #dc3545;*/
-/*    --danger-hover-bg: rgba(220, 53, 69, 0.9);*/
-/*    --danger-shadow: rgba(220, 53, 69, 0.3);*/
-
-/*    !* Цвета для акцентных элементов *!*/
-/*    --gold-color: #ffd700;*/
-/*    --gold-shadow: rgba(255, 215, 0, 0.4);*/
-
-
-/*    !* Стили бейджей/тегов *!*/
-/*    --badge-primary-bg: var(--primary-transparent-10);*/
-/*    --badge-primary-text: var(--primary-color);*/
-/*    --badge-primary-border: var(--primary-transparent-20);*/
-/*    --badge-muted-bg: var(--text-muted-transparent-10);*/
-/*    --badge-muted-text: var(--text-muted);*/
-/*    --badge-muted-border: var(--text-muted-transparent-20);*/
-
-/*    !* Стили иконок *!*/
-/*    --icon-primary: var(--primary-color);*/
-/*    --icon-muted: var(--text-muted);*/
-
-/*    !* Цвета для статусов *!*/
-/*    --status-available: #4CAF50;*/
-/*    --status-unavailable: #ff5252;*/
-/*    --status-pending: #ff9800;*/
-
-/*    !* Анимации *!*/
-/*    --transition-fast: 0.2s ease;*/
-/*    --transition-normal: 0.3s ease;*/
-/*    --transition-slow: 0.5s ease;*/
-
-/*    !*Пэдинги*!*/
-/*    --section-padding: 5rem 0;*/
-/*}*/
-
-
-/*!* Базовые стили *!*/
-/** {*/
-/*    margin: 0;*/
-/*    padding: 0;*/
-/*    box-sizing: border-box;*/
-/*}*/
-
-/*body {*/
-/*    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',*/
-/*    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',*/
-/*    sans-serif;*/
-/*    -webkit-font-smoothing: antialiased;*/
-/*    -moz-osx-font-smoothing: grayscale;*/
-/*    background: var(--gradient-bg);*/
-/*    color: var(--text-light);*/
-/*    min-height: 100vh;*/
-/*    overflow-x: hidden;*/
-/*}*/
-
-/*!* Типография *!*/
-/*h1, h2, h3, h4, h5, h6 {*/
-/*    font-weight: 700;*/
-/*    line-height: 1.1;*/
-/*    color: var(--text-light);*/
-/*}*/
-
-/*.text-gradient {*/
-/*    background: var(--gradient-primary);*/
-/*    -webkit-background-clip: text;*/
-/*    -webkit-text-fill-color: transparent;*/
-/*    !*background-clip: text;*!*/
-/*}*/
-
-/*!* Кнопки *!*/
-/*.btn-primary-custom {*/
-/*    background: linear-gradient(135deg, #64ffda 0%, #3bd6d4 100%);*/
-/*    border: none;*/
-/*    color: var(--primary-bg);*/
-/*    padding: 0.75rem 2rem;*/
-/*    border-radius: var(--border-radius-full);*/
-/*    font-weight: 600;*/
-/*    transition: all var(--transition-normal);*/
-/*    box-shadow: var(--shadow-light);*/
-/*}*/
-
-/*.btn-primary-custom:hover {*/
-/*    transform: translateY(-2px);*/
-/*    box-shadow: var(--shadow-medium);*/
-/*    color: var(--primary-bg);*/
-/*}*/
-
-/*.btn-outline-custom {*/
-/*    background: transparent;*/
-/*    border: 2px solid var(--primary-color);*/
-/*    color: var(--primary-color);*/
-/*    padding: 0.75rem 2rem;*/
-/*    border-radius: var(--border-radius-full);*/
-/*    font-weight: 600;*/
-/*    transition: all var(--transition-normal);*/
-/*}*/
-
-/*.btn-outline-custom:hover {*/
-/*    background: rgba(100, 255, 218, 0.1);*/
-/*    transform: translateY(-2px);*/
-/*    color: var(--primary-color);*/
-/*}*/
-
-/*!* Карточки *!*/
-/*.card-custom {*/
-/*    background: rgba(255, 255, 255, 0.05);*/
-/*    backdrop-filter: blur(10px);*/
-/*    border: 1px solid rgba(255, 255, 255, 0.1);*/
-/*    border-radius: var(--border-radius-lg);*/
-/*    transition: all var(--transition-normal);*/
-/*}*/
-
-/*.card-custom:hover {*/
-/*    transform: translateY(-10px);*/
-/*    border-color: rgba(100, 255, 218, 0.3);*/
-/*    box-shadow: var(--shadow-card);*/
-/*}*/
-
-/*!* Секции *!*/
-/*.section-padding {*/
-/*    padding: 5rem 0;*/
-/*}*/
-
-/*.section-title {*/
-/*    font-size: 2.5rem;*/
-/*    margin-bottom: 1rem;*/
-/*}*/
-
-/*.section-subtitle {*/
-/*    font-size: 1.1rem;*/
-/*    color: var(--text-muted);*/
-/*    max-width: 600px;*/
-/*    margin: 0 auto;*/
-/*}*/
-
-/*!* Контейнеры *!*/
-/*.container-custom {*/
-/*    width: 100%;*/
-/*    padding-right: 15px;*/
-/*    padding-left: 15px;*/
-/*    margin-right: auto;*/
-/*    margin-left: auto;*/
-/*}*/
-
-/*!* Дополнительные глобальные классы для часто используемых стилей *!*/
-/*.glass-effect {*/
-/*    background: var(--glass-bg);*/
-/*    backdrop-filter: blur(10px);*/
-/*    border: 1px solid var(--glass-border);*/
-/*}*/
-
-/*.primary-gradient-text {*/
-/*    background: var(--gradient-primary);*/
-/*    -webkit-background-clip: text;*/
-/*    -webkit-text-fill-color: transparent;*/
-/*    !*background-clip: text;*!*/
-/*}*/
-
-/*.primary-glow {*/
-/*    background: var(--gradient-glow);*/
-/*    border-radius: inherit;*/
-/*    z-index: -1;*/
-/*    filter: blur(12px);*/
-/*}*/
-
-/*.badge-primary {*/
-/*    background: var(--badge-primary-bg);*/
-/*    color: var(--badge-primary-text);*/
-/*    border: 1px solid var(--badge-primary-border);*/
-/*    border-radius: var(--border-radius-full);*/
-/*    padding: 0.3rem 0.8rem;*/
-/*    font-size: 0.75rem;*/
-/*    font-weight: 600;*/
-/*}*/
-
-/*.badge-muted {*/
-/*    background: var(--badge-muted-bg);*/
-/*    color: var(--badge-muted-text);*/
-/*    border: 1px solid var(--badge-muted-border);*/
-/*    border-radius: var(--border-radius-full);*/
-/*    padding: 0.3rem 0.8rem;*/
-/*    font-size: 0.75rem;*/
-/*    font-weight: 600;*/
-/*}*/
-
-
-
-/*@media (min-width: 576px) {*/
-/*    .container-custom {*/
-/*        max-width: 540px;*/
-/*    }*/
-/*}*/
-
-/*@media (min-width: 768px) {*/
-/*    .container-custom {*/
-/*        max-width: 720px;*/
-/*    }*/
-/*}*/
-
-/*@media (min-width: 992px) {*/
-/*    .container-custom {*/
-/*        max-width: 960px;*/
-/*    }*/
-/*}*/
-
-/*@media (min-width: 1200px) {*/
-/*    .container-custom {*/
-/*        max-width: 1140px;*/
-/*    }*/
-/*}*/
-
-/*!* Утилиты *!*/
-/*.text-center {*/
-/*    text-align: center;*/
-/*}*/
-
-/*.mb-1 { margin-bottom: 0.25rem; }*/
-/*.mb-2 { margin-bottom: 0.5rem; }*/
-/*.mb-3 { margin-bottom: 1rem; }*/
-/*.mb-4 { margin-bottom: 1.5rem; }*/
-/*.mb-5 { margin-bottom: 3rem; }*/
-
-/*.mt-1 { margin-top: 0.25rem; }*/
-/*.mt-2 { margin-top: 0.5rem; }*/
-/*.mt-3 { margin-top: 1rem; }*/
-/*.mt-4 { margin-top: 1.5rem; }*/
-/*.mt-5 { margin-top: 3rem; }*/
-
-/*!* Анимации *!*/
-/*@keyframes float {*/
-/*    0%, 100% { transform: translateY(0px) rotate(0deg); }*/
-/*    50% { transform: translateY(-20px) rotate(180deg); }*/
-/*}*/
-
-/*@keyframes float-card {*/
-/*    0%, 100% { transform: translateY(0px) rotate(0deg); }*/
-/*    50% { transform: translateY(-20px) rotate(5deg); }*/
-/*}*/
-
-/*@keyframes blink {*/
-/*    0%, 50% { opacity: 1; }*/
-/*    51%, 100% { opacity: 0; }*/
-/*}*/
-
-/*!* Медиа-запросы *!*/
-/*@media (max-width: 768px) {*/
-/*    .section-title {*/
-/*        font-size: 2rem;*/
-/*    }*/
-
-/*    .section-padding {*/
-/*        padding: 3rem 0;*/
-/*    }*/
-
-/*    .btn-primary-custom,*/
-/*    .btn-outline-custom {*/
-/*        padding: 0.6rem 1.5rem;*/
-/*    }*/
-/*}*/
-
-/*@media (max-width: 480px) {*/
-/*    .section-title {*/
-/*        font-size: 1.75rem;*/
-/*    }*/
-/*}*/
-
-/*!* В global.css добавьте: *!*/
-/*.highlight-text {*/
-/*    color: var(--primary-color);*/
-/*    margin-left: 5px;*/
-/*    margin-right: 5px;*/
-/*    font-weight: 600;*/
-/*}*/
-
-
-
-/* global.css - ОБНОВЛЕННАЯ СВЕТЛАЯ КРАСОЧНАЯ ПАЛИТРА */
+/* global.css - СТРОГАЯ СИНЯЯ ПАЛИТРА ДЛЯ ПРОФЕССИОНАЛЬНОГО ВИДА */
 
 /* Общие переменные и сброс стилей */
 :root {
-    /* ОБНОВЛЕННАЯ ЦВЕТОВАЯ ПАЛИТРА - СВЕТЛАЯ И КРАСОЧНАЯ */
-    --primary-bg: #ffffff;
-    --secondary-bg: #f8f9ff;
-    --accent-bg: #eef2ff;
-    --primary-color: #7c3aed; /* Яркий фиолетовый */
-    --primary-light: #a78bfa;
-    --primary-dark: #5b21b6;
-    --text-light: #062def;
-    --text-muted: #64748b;
-    --text-dark: #1e293b;
+    /* ПРОФЕССИОНАЛЬНАЯ СИНЯЯ ПАЛИТРА */
+    --primary-bg: #f8fafc;              /* Светло-серый с синим оттенком */
+    --secondary-bg: #f1f5f9;           /* Чуть темнее для контраста */
+    --accent-bg: #e2e8f0;              /* Акцентный светлый синий */
+    --primary-color: #2563eb;          /* Яркий корпоративный синий */
+    --primary-light: #60a5fa;          /* Светло-синий */
+    --primary-dark: #1e40af;           /* Темно-синий */
+    --text-light-btn: #ffffff;             /* Белый для текста на темном фоне */
+    --text-light: #370086;             /* Белый для текста на темном фоне */
+    --text-muted: #64748b;             /* Серо-синий для второстепенного текста */
+    --text-dark: #1e293b;              /* Темно-синий для основного текста */
 
-    /* Дополнительные красочные акцентные цвета */
-    --accent-pink: #ec4899;
-    --accent-blue: #3b82f6;
-    --accent-teal: #14b8a6;
-    --accent-orange: #f97316;
-    --accent-cyan: #06b6d4;
+    /* Дополнительные оттенки синего */
+    --accent-blue-light: #93c5fd;
+    --accent-blue-medium: #3b82f6;
+    --accent-blue-dark: #1d4ed8;
+    --accent-cyan: #06b6d4;            /* Циановый для акцентов */
+    --accent-teal: #0d9488;            /* Бирюзовый для свежести */
 
-    /* Дополнительные цвета для прозрачных эффектов */
+    /* Цвета для состояний */
+    --success-color: #10b981;          /* Зеленый для успеха */
+    --warning-color: #f59e0b;          /* Оранжевый для предупреждений */
+    --info-color: #3b82f6;             /* Синий для информации */
+
+    /* Прозрачные версии цветов */
     --overlay-bg: rgba(255, 255, 255, 0.95);
     --overlay-light: rgba(255, 255, 255, 0.9);
     --overlay-semi: rgba(255, 255, 255, 0.7);
-    --glass-bg: rgba(255, 255, 255, 0.15);
+    --glass-bg: rgba(255, 255, 255, 0.2);
     --glass-border: rgba(255, 255, 255, 0.3);
-    --primary-transparent-10: rgba(124, 58, 237, 0.1);
-    --primary-transparent-20: rgba(124, 58, 237, 0.2);
-    --primary-transparent-30: rgba(124, 58, 237, 0.3);
-    --primary-transparent-90: rgba(124, 58, 237, 0.9);
+
+    /* Прозрачные версии синего */
+    --primary-transparent-05: rgba(37, 99, 235, 0.05);
+    --primary-transparent-10: rgba(37, 99, 235, 0.1);
+    --primary-transparent-20: rgba(37, 99, 235, 0.2);
+    --primary-transparent-30: rgba(37, 99, 235, 0.3);
+    --primary-transparent-40: rgba(37, 99, 235, 0.4);
+    --primary-transparent-50: rgba(37, 99, 235, 0.5);
+    --primary-transparent-90: rgba(37, 99, 235, 0.9);
+
+    /* Прозрачные версии серого текста */
     --text-muted-transparent-10: rgba(100, 116, 139, 0.1);
     --text-muted-transparent-20: rgba(100, 116, 139, 0.2);
-    /* Дополнительные прозрачности */
-    --primary-transparent-50: rgba(124, 58, 237, 0.5);
-    --primary-transparent-05: rgba(124, 58, 237, 0.05);
-    --primary-transparent-40: rgba(124, 58, 237, 0.4);
 
-    /* ЯРКИЕ ГРАДИЕНТЫ */
-    --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #ec4899 50%, #3b82f6 100%);
-    --gradient-primary-short: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
-    --gradient-bg: linear-gradient(135deg, #ffffff 0%, #f8f9ff 50%, #eef2ff 100%);
-    --gradient-bg-light: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
-    --gradient-accent: linear-gradient(45deg, #7c3aed, #ec4899);
-    --gradient-glow: linear-gradient(45deg, var(--accent-pink), var(--primary-color), var(--accent-blue));
+    /* ПРОФЕССИОНАЛЬНЫЕ ГРАДИЕНТЫ - синие оттенки */
+    --gradient-primary: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%);
+    --gradient-primary-short: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+    --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+    --gradient-bg-light: linear-gradient(135deg, #f1f5f9 0%, #f8fafc 100%);
+    --gradient-accent: linear-gradient(45deg, #1e40af, #2563eb);
+    --gradient-glow: linear-gradient(45deg, #1d4ed8, #2563eb, #3b82f6);
 
     /* Радиальные градиенты для фонов */
     --radial-bg-hero:
-            radial-gradient(circle at 20% 80%, rgba(124, 58, 237, 0.2) 0%, transparent 50%),
-            radial-gradient(circle at 80% 20%, rgba(236, 72, 153, 0.2) 0%, transparent 50%),
-            radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.15) 0%, transparent 50%);
+            radial-gradient(circle at 20% 80%, rgba(37, 99, 235, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(96, 165, 250, 0.1) 0%, transparent 50%);
 
-    /* ЯРКИЕ ТЕНИ */
-    --shadow-light: 0 4px 20px rgba(124, 58, 237, 0.2);
-    --shadow-medium: 0 8px 30px rgba(124, 58, 237, 0.3);
-    --shadow-dark: 0 10px 40px rgba(124, 58, 237, 0.15);
-    --shadow-card: 0 20px 50px rgba(124, 58, 237, 0.2);
+    /* СТРОГИЕ ТЕНИ - синие оттенки */
+    --shadow-light: 0 4px 15px rgba(37, 99, 235, 0.15);
+    --shadow-medium: 0 8px 25px rgba(37, 99, 235, 0.2);
+    --shadow-dark: 0 8px 32px rgba(30, 41, 59, 0.1);
+    --shadow-card: 0 20px 40px rgba(37, 99, 235, 0.15);
     --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 
     /* Статусные цвета */
-    --status-success: #10b981;
-    --status-warning: #f59e0b;
-    --status-info: #3b82f6;
+    --status-success: var(--success-color);
+    --status-warning: var(--warning-color);
+    --status-info: var(--info-color);
     --status-success-bg: rgba(16, 185, 129, 0.1);
     --status-warning-bg: rgba(245, 158, 11, 0.1);
     --status-info-bg: rgba(59, 130, 246, 0.1);
     --status-success-border: rgba(16, 185, 129, 0.3);
 
     /* Дополнительные цвета UI */
-    --border-dark: #e2e8f0;
+    --border-dark: #cbd5e1;
 
     /* Границы */
-    --border-radius-sm: 8px;
-    --border-radius-md: 12px;
-    --border-radius-lg: 20px;
-    --border-radius-xl: 24px;
+    --border-radius-sm: 6px;
+    --border-radius-md: 10px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
     --border-radius-full: 9999px;
     --border-width-thin: 1px;
     --border-width-medium: 2px;
 
     /* Стили карточек */
-    --card-bg: rgba(255, 255, 255, 0.8);
-    --card-border: rgba(124, 58, 237, 0.15);
-    --card-hover-border: rgba(124, 58, 237, 0.4);
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-border: rgba(37, 99, 235, 0.1);
+    --card-hover-border: rgba(37, 99, 235, 0.3);
 
     /* Стили кнопок */
     --btn-primary-bg: var(--gradient-primary-short);
-    --btn-primary-text: var(--text-light);
+    --btn-primary-text: var(--text-light-btn);
     --btn-outline-border: var(--primary-color);
     --btn-outline-text: var(--primary-color);
     --btn-outline-hover-bg: var(--primary-transparent-10);
@@ -471,9 +111,8 @@
     --danger-shadow: rgba(239, 68, 68, 0.3);
 
     /* Цвета для акцентных элементов */
-    --gold-color: #fbbf24;
-    --gold-shadow: rgba(251, 191, 36, 0.4);
-
+    --gold-color: #eab308;
+    --gold-shadow: rgba(234, 179, 8, 0.3);
 
     /* Стили бейджей/тегов */
     --badge-primary-bg: var(--primary-transparent-10);
@@ -488,19 +127,18 @@
     --icon-muted: var(--text-muted);
 
     /* Цвета для статусов */
-    --status-available: #10b981;
+    --status-available: var(--success-color);
     --status-unavailable: #ef4444;
-    --status-pending: #f59e0b;
+    --status-pending: var(--warning-color);
 
     /* Анимации */
     --transition-fast: 0.2s ease;
     --transition-normal: 0.3s ease;
     --transition-slow: 0.5s ease;
 
-    /*Пэдинги*/
+    /* Отступы */
     --section-padding: 5rem 0;
 }
-
 
 /* Базовые стили */
 * {
@@ -519,12 +157,29 @@ body {
     color: var(--text-dark);
     min-height: 100vh;
     overflow-x: hidden;
+    line-height: 1.6;
 }
 
 /* Типография */
 h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.2;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--primary-dark);
+}
+
+h2 {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+h3 {
+    font-size: 1.5rem;
     color: var(--text-dark);
 }
 
@@ -532,25 +187,28 @@ h1, h2, h3, h4, h5, h6 {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /*background-clip: text;*/
 }
 
 /* Кнопки */
 .btn-primary-custom {
     background: var(--gradient-primary);
     border: none;
-    color: var(--text-light);
+    color: var(--text-light-btn);
     padding: 0.75rem 2rem;
     border-radius: var(--border-radius-full);
     font-weight: 600;
     transition: all var(--transition-normal);
     box-shadow: var(--shadow-light);
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
 }
 
 .btn-primary-custom:hover {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     box-shadow: var(--shadow-medium);
-    color: var(--text-light);
+    color: var(--text-light-btn);
 }
 
 .btn-outline-custom {
@@ -561,26 +219,31 @@ h1, h2, h3, h4, h5, h6 {
     border-radius: var(--border-radius-full);
     font-weight: 600;
     transition: all var(--transition-normal);
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
 }
 
 .btn-outline-custom:hover {
     background: var(--primary-transparent-10);
-    transform: translateY(-3px);
+    transform: translateY(-2px);
     color: var(--primary-color);
 }
 
 /* Карточки */
 .card-custom {
     background: var(--card-bg);
-    backdrop-filter: blur(12px);
+    backdrop-filter: blur(10px);
     border: 1px solid var(--card-border);
     border-radius: var(--border-radius-lg);
     transition: all var(--transition-normal);
     box-shadow: var(--shadow-light);
+    overflow: hidden;
 }
 
 .card-custom:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px);
     border-color: var(--card-hover-border);
     box-shadow: var(--shadow-card);
 }
@@ -592,14 +255,28 @@ h1, h2, h3, h4, h5, h6 {
 
 .section-title {
     font-size: 2.5rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
 }
 
 .section-subtitle {
     font-size: 1.1rem;
     color: var(--text-muted);
     max-width: 600px;
-    margin: 0 auto;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
 }
 
 /* Контейнеры */
@@ -611,26 +288,26 @@ h1, h2, h3, h4, h5, h6 {
     margin-left: auto;
 }
 
-/* Дополнительные глобальные классы для часто используемых стилей */
+/* Дополнительные глобальные классы */
 .glass-effect {
     background: var(--glass-bg);
     backdrop-filter: blur(12px);
     border: 1px solid var(--glass-border);
+    border-radius: var(--border-radius-lg);
 }
 
 .primary-gradient-text {
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    /*background-clip: text;*/
 }
 
 .primary-glow {
     background: var(--gradient-glow);
     border-radius: inherit;
     z-index: -1;
-    filter: blur(15px);
-    opacity: 0.7;
+    filter: blur(12px);
+    opacity: 0.6;
 }
 
 .badge-primary {
@@ -641,6 +318,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.3rem 0.8rem;
     font-size: 0.75rem;
     font-weight: 600;
+    display: inline-block;
 }
 
 .badge-muted {
@@ -651,8 +329,32 @@ h1, h2, h3, h4, h5, h6 {
     padding: 0.3rem 0.8rem;
     font-size: 0.75rem;
     font-weight: 600;
+    display: inline-block;
 }
 
+/* Цветовые классы для фонов */
+.bg-primary-light {
+    background-color: var(--primary-light) !important;
+}
+
+.bg-primary-transparent {
+    background-color: var(--primary-transparent-10) !important;
+}
+
+.bg-accent {
+    background-color: var(--accent-bg) !important;
+}
+
+/* Границы */
+.border-primary {
+    border-color: var(--primary-color) !important;
+}
+
+.border-accent {
+    border-color: var(--accent-bg) !important;
+}
+
+/* Адаптивность контейнеров */
 @media (min-width: 576px) {
     .container-custom {
         max-width: 540px;
@@ -694,26 +396,37 @@ h1, h2, h3, h4, h5, h6 {
 .mt-4 { margin-top: 1.5rem; }
 .mt-5 { margin-top: 3rem; }
 
+.p-1 { padding: 0.25rem; }
+.p-2 { padding: 0.5rem; }
+.p-3 { padding: 1rem; }
+.p-4 { padding: 1.5rem; }
+.p-5 { padding: 3rem; }
+
 /* Анимации */
 @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
 }
 
-@keyframes float-card {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(5deg); }
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes blink {
-    0%, 50% { opacity: 1; }
-    51%, 100% { opacity: 0; }
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
 }
 
 /* Медиа-запросы */
 @media (max-width: 768px) {
     .section-title {
         font-size: 2rem;
+    }
+
+    .section-title::after {
+        width: 50px;
+        height: 3px;
     }
 
     .section-padding {
@@ -723,6 +436,19 @@ h1, h2, h3, h4, h5, h6 {
     .btn-primary-custom,
     .btn-outline-custom {
         padding: 0.6rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.75rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
     }
 }
 
@@ -730,12 +456,53 @@ h1, h2, h3, h4, h5, h6 {
     .section-title {
         font-size: 1.75rem;
     }
+
+    .container-custom {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
 }
 
-/* В global.css добавьте: */
+/* Специальные классы */
 .highlight-text {
     color: var(--primary-color);
-    margin-left: 5px;
-    margin-right: 5px;
     font-weight: 600;
+}
+
+.text-accent {
+    color: var(--accent-cyan) !important;
+}
+
+.shadow-sm {
+    box-shadow: var(--shadow-light) !important;
+}
+
+.shadow-md {
+    box-shadow: var(--shadow-medium) !important;
+}
+
+.shadow-lg {
+    box-shadow: var(--shadow-card) !important;
+}
+
+/* Эффекты при наведении */
+.hover-lift {
+    transition: transform var(--transition-normal);
+}
+
+.hover-lift:hover {
+    transform: translateY(-5px);
+}
+
+.hover-glow {
+    transition: box-shadow var(--transition-normal);
+}
+
+.hover-glow:hover {
+    box-shadow: var(--shadow-medium);
+}
+
+/* Плавное появление */
+.fade-in {
+    animation: fadeIn 0.8s ease forwards;
 }
