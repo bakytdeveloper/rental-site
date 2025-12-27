@@ -5,11 +5,11 @@
     backdrop-filter: blur(10px);
     border-bottom: var(--border-width-thin) solid var(--primary-transparent-10);
     transition: all var(--transition-normal);
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
 }
 
 .header-custom-navbar.header-scrolled {
-    padding: 0.5rem 0;
+    padding: 0.3rem 0;
     background: var(--gradient-bg-light) !important;
 }
 
