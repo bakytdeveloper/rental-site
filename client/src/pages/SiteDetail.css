@@ -3,7 +3,7 @@
 .site-detail-page {
     min-height: 100vh;
     background: var(--gradient-bg);
-    padding: 2rem 0;
+    padding: 5rem 0;
 }
 
 /* Breadcrumb */
