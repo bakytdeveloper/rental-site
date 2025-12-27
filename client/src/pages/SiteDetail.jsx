@@ -305,7 +305,7 @@ const SiteDetail = () => {
 
                     {/* Информация о сайте */}
                     <Col lg={5}>
-                        <div className="site-detail-info-section card-custom">
+                        <div className="site-detail-info-section card-custom card-custom-padding">
                             <div className="site-header">
                                 <div className="site-detail-meta-badges mb-3">
                                     <Badge bg="primary" className="site-detail-category-badge">

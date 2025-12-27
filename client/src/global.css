@@ -89,7 +89,7 @@
     --border-width-medium: 2px;
 
     /* Стили карточек */
-    --card-bg: rgba(255, 255, 255, 0.9);
+    --card-bg: rgba(0, 92, 255, 0.1);
     --card-border: rgba(37, 99, 235, 0.1);
     --card-hover-border: rgba(37, 99, 235, 0.3);
 
