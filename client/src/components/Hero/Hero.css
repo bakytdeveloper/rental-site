@@ -343,7 +343,7 @@
     }
 }
 
-/* Extra small screens */
+/* Extra small  */
 @media (max-width: 480px) {
     .hero-section {
         min-height: 85vh;
