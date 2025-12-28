@@ -1,4 +1,4 @@
-/* Hero.css - ОБНОВЛЕННЫЙ */
+/* Hero.css */
 
 .hero-section {
     position: relative;
@@ -282,7 +282,7 @@
     .shape {
         opacity: 0.3;
     }
-    
+
     .hero-content {
         text-align: center;
     }
