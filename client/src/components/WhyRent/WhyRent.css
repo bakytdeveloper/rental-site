@@ -1,0 +1,167 @@
+/* WhyRent.css */
+
+.why-rent-section {
+    padding: var(--section-padding);
+    background: var(--gradient-bg-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.why-rent-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+}
+
+.why-rent-content {
+    padding-right: 2rem;
+}
+
+.why-rent-description {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+}
+
+.advantages-list {
+    margin-top: 2rem;
+}
+
+.advantage-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: var(--primary-transparent-05);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--card-border);
+    transition: all var(--transition-normal);
+}
+
+.advantage-item:hover {
+    background: var(--primary-transparent-10);
+    border-color: var(--primary-transparent-20);
+    transform: translateX(5px);
+}
+
+.advantage-icon {
+    font-size: 1.5rem;
+    min-width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-transparent-10);
+    border-radius: var(--border-radius-md);
+    color: var(--primary-color);
+    transition: all var(--transition-normal);
+}
+
+.advantage-item:hover .advantage-icon {
+    background: var(--primary-transparent-20);
+    transform: scale(1.1);
+}
+
+.advantage-text {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-dark);
+    line-height: 1.5;
+}
+
+/* Стили для изображения */
+.why-rent-image-container {
+    position: relative;
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+}
+
+.why-rent-image {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    display: block;
+    transition: transform var(--transition-slow);
+}
+
+.why-rent-image:hover {
+    transform: scale(1.02);
+}
+
+.image-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius-lg);
+    z-index: -1;
+    opacity: 0.3;
+    filter: blur(20px);
+    transform: scale(0.95);
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .why-rent-content {
+        padding-right: 0;
+        margin-bottom: 3rem;
+    }
+
+    .advantage-item {
+        padding: 0.75rem;
+    }
+
+    .advantage-icon {
+        min-width: 40px;
+        height: 40px;
+        font-size: 1.25rem;
+    }
+
+    .advantage-text {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .why-rent-description {
+        font-size: 1rem;
+    }
+
+    .advantage-item {
+        margin-bottom: 1rem;
+    }
+
+    .advantages-list {
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .why-rent-content {
+        padding: 0 1rem;
+    }
+
+    .advantage-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+        padding: 1rem;
+    }
+
+    .advantage-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .advantage-text {
+        font-size: 0.9rem;
+    }
+}

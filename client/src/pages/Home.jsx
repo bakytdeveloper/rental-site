@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import Hero from '../components/Hero/Hero';
 import Features from '../components/Features/Features';
-import TargetAudience from '../components/TargetAudience/TargetAudience'; // Добавляем новый компонент
+import TargetAudience from '../components/TargetAudience/TargetAudience';
+import WhyRent from '../components/WhyRent/WhyRent'; // Добавляем новый компонент
 import FeaturedSites from '../components/FeaturedSites/FeaturedSites';
 import CTA from '../components/CTA/CTA';
-import SEO from '../components/SEO/SEO'; // Добавляем SEO компонент
+import SEO from '../components/SEO/SEO';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './Home.css';
@@ -53,7 +54,8 @@ const Home = () => {
 
             <Hero />
             <Features />
-            <TargetAudience /> {/* Добавляем новый компонент */}
+            <TargetAudience />
+            <WhyRent /> {/* Добавляем новый компонент */}
             <FeaturedSites />
             <CTA />
         </div>
