@@ -33,6 +33,7 @@
     transform: translateY(-10px);
     border-color: var(--card-hover-border);
     box-shadow: var(--shadow-card);
+
 }
 
 .format-card:hover .format-glow {
@@ -85,6 +86,10 @@
     padding: 2rem 1.5rem;
 }
 
+/*.format-content:hover {*/
+/*    */
+/*}*/
+
 .format-description {
     color: var(--text-muted);
     line-height: 1.6;
@@ -118,7 +123,8 @@
 .feature-text {
     color: var(--text-dark);
     font-size: 0.95rem;
-    /*flex: 1;*/
+    text-align: left; /* Выравнивание по левому краю */
+    flex: 1; /* Занимает всё доступное пространство */
 }
 
 /* Градиентное свечение */
