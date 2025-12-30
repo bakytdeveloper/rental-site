@@ -37,7 +37,9 @@
 }
 
 .feature-card:hover .feature-glow {
-    opacity: 1;
+    opacity: 0.1;
+    border-color: var(--card-hover-border);
+    background: var(--gradient-hero-bg);
 }
 
 .feature-icon {
