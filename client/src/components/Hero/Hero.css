@@ -381,9 +381,6 @@
 
 /* Для больших экранов (LG и выше) */
 @media (min-width: 992px) {
-    .col-hero-visual {
-        
-    }
 
     .hero-visual {
         margin-right: -20px; /* Сдвигаем вправо */
