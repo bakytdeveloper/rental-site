@@ -45,7 +45,9 @@
 .header-navbar-toggler {
     border: var(--border-width-thin) solid #363737 !important;
     padding: 0.25rem 0.5rem;
-    background-color: var(--primary-color);
+    background-color: #3b82f6;
+    box-shadow: 4px 8px 12px grey;
+    /*background-color: var(--primary-color);*/
 }
 
 .header-navbar-toggler-icon {
