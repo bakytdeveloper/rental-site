@@ -20,6 +20,7 @@
     color: var(--primary-color) !important;
     text-decoration: none;
     letter-spacing: -0.5px;
+    text-shadow: 2px 5px 7px grey;
 }
 
 .header-brand-accent {
