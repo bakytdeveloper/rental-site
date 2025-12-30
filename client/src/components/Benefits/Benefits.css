@@ -1,0 +1,201 @@
+
+/* Benefits.css */
+
+.benefits-section {
+    padding: var(--section-padding);
+    background: var(--gradient-bg-light);
+    position: relative;
+    overflow: hidden;
+}
+
+.benefits-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+}
+
+.benefit-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(10px);
+    border: 2px solid var(--primary-color);
+    border-top: 7px solid var(--primary-color);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem 1.5rem;
+    position: relative;
+    transition: all var(--transition-normal);
+    height: 100%;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    overflow: visible; /* Изменено с hidden на visible */
+}
+
+.benefit-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-dark);
+    box-shadow: var(--shadow-card);
+}
+
+.benefit-card:hover .benefit-number {
+    background: var(--primary-dark);
+    transform: scale(1.1) translateX(-50%); /* Добавлен translateX для фиксации */
+}
+
+.benefit-card:hover .benefit-glow {
+    opacity: 0.6;
+}
+
+/* Номер карточки */
+.benefit-number {
+    position: absolute;
+    top: -20px; /* Увеличено для полного отображения круга */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px; /* Увеличено */
+    height: 40px; /* Увеличено */
+    background: var(--primary-color);
+    color: var(--text-light-btn);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem; /* Увеличено */
+    z-index: 2;
+    transition: all var(--transition-normal);
+    border: 3px solid var(--primary-bg); /* Увеличено */
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+}
+
+/* Контент карточки */
+.benefit-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 10px; /* Добавлено для компенсации круга */
+}
+
+.benefit-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+}
+
+.benefit-description {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* Градиентное свечение */
+.benefit-glow {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: var(--gradient-glow);
+    border-radius: calc(var(--border-radius-lg) + 2px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+    filter: blur(10px);
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .benefit-card {
+        padding: 1.75rem 1.25rem;
+        min-height: 180px;
+    }
+
+    .benefit-title {
+        font-size: 1.1rem;
+    }
+
+    .benefit-number {
+        width: 36px;
+        height: 36px;
+        top: -18px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .benefit-card {
+        padding: 1.5rem 1rem;
+        min-height: 160px;
+    }
+
+    .benefit-title {
+        font-size: 1rem;
+    }
+
+    .benefit-description {
+        font-size: 0.9rem;
+    }
+
+    .benefit-number {
+        width: 34px;
+        height: 34px;
+        top: -17px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .benefit-card {
+        padding: 1.5rem;
+        min-height: auto;
+    }
+
+    .benefit-number {
+        width: 32px;
+        height: 32px;
+        top: -16px;
+        font-size: 0.95rem;
+        border-width: 2px;
+    }
+
+    .benefit-content {
+        margin-top: 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .benefit-card {
+        padding: 1.75rem;
+        min-height: auto;
+    }
+
+    .benefit-content {
+        padding-top: 0.5rem;
+        margin-top: 10px;
+    }
+
+    .benefit-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .benefit-description {
+        font-size: 0.9rem;
+    }
+
+    .benefit-number {
+        width: 36px;
+        height: 36px;
+        top: -18px;
+        font-size: 1rem;
+        border-width: 3px;
+    }
+}
