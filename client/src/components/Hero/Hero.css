@@ -382,8 +382,8 @@
 /* Для больших экранов (LG и выше) */
 @media (min-width: 992px) {
     .col-hero-visual {
-        
-        /*justify-content: flex-end !important;*/
+
+        /*justify-content: flex-end !;*/
     }
 
     .hero-visual {
