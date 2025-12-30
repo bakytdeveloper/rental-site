@@ -37,7 +37,9 @@
 }
 
 .format-card:hover .format-glow {
-    opacity: 0.5;
+    opacity: 0.1;
+    border-color: var(--card-hover-border);
+    /*background: var(--gradient-hero-bg);*/
 }
 
 /* Изображение и заголовок */
