@@ -214,11 +214,11 @@
     border: none;
     color: white;
     font-weight: 700;
-    padding: 0.3rem 0.7rem;
+    padding: 0.3rem;
     border-radius: var(--border-radius-lg);
     transition: all var(--transition-normal);
     flex: 1;
-    min-width: 200px;
+    /*min-width: 200px;*/
     font-size: 1rem;
 }
 
@@ -606,6 +606,7 @@
 
 .btn-outline-light-order {
     padding: 0.5rem;
+    font-size: 1rem;
 }
 
 /* Responsive Design */
