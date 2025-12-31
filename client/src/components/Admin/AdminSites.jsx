@@ -3,6 +3,7 @@ import { Row, Col, Card, Table, Button, Badge, Form, Modal, Spinner } from 'reac
 import { siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'; // Добавляем новый компонент
 import './AdminSites.css';
 
 const AdminSites = () => {
@@ -12,6 +13,11 @@ const AdminSites = () => {
     const [selectedImages, setSelectedImages] = useState([]);
     const [imagePreviews, setImagePreviews] = useState([]);
     const fileInputRef = useRef(null);
+
+    // Состояния для модальных окон подтверждения
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [confirmAction, setConfirmAction] = useState(null);
+    const [confirmData, setConfirmData] = useState(null);
 
     const [formData, setFormData] = useState({
         title: '',
@@ -117,6 +123,51 @@ const AdminSites = () => {
         setImagePreviews([]);
     };
 
+    // Функция для показа модального окна подтверждения
+    const showConfirmation = (action, data = null, customMessage = null) => {
+        setConfirmAction(() => action);
+        setConfirmData(data);
+
+        let message = "Вы уверены, что хотите выполнить это действие?";
+        let title = "Подтверждение действия";
+        let variant = "danger";
+
+        // Кастомизация сообщений для разных действий
+        if (action === handleDelete) {
+            const site = sites.find(s => s._id === data);
+            message = `Вы уверены, что хотите удалить сайт "${site?.title || 'этот сайт'}"?`;
+            title = "Удаление сайта";
+        } else if (action === removeImage) {
+            const siteTitle = editingSite?.title || 'этот сайт';
+            message = customMessage || "Вы уверены, что хотите удалить это изображение?";
+            title = "Удаление изображения";
+            variant = "warning";
+        }
+
+        setConfirmData({...data, message, title, variant});
+        setShowConfirmModal(true);
+    };
+
+    // Функция для подтверждения действия
+    const handleConfirm = async () => {
+        setShowConfirmModal(false);
+        if (confirmAction) {
+            try {
+                await confirmAction(confirmData?.id || confirmData);
+            } catch (error) {
+                console.error('Ошибка при выполнении действия:', error);
+            }
+        }
+        setConfirmAction(null);
+        setConfirmData(null);
+    };
+
+    const handleCancelConfirm = () => {
+        setShowConfirmModal(false);
+        setConfirmAction(null);
+        setConfirmData(null);
+    };
+
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -148,11 +199,8 @@ const AdminSites = () => {
         const isServerImage = imageToRemove.startsWith('http://localhost:5000/uploads/');
 
         if (isServerImage && editingSite) {
-            if (window.confirm('Вы уверены, что хотите удалить это изображение?')) {
-                const newPreviews = imagePreviews.filter((_, i) => i !== index);
-                setImagePreviews(newPreviews);
-                console.log('Удалено серверное изображение из превью');
-            }
+            const message = `Вы уверены, что хотите удалить это изображение с сервера? Это действие нельзя отменить.`;
+            showConfirmation(removeImage, { index, isServerImage: true, image: imageToRemove }, message);
             return;
         }
 
@@ -169,6 +217,33 @@ const AdminSites = () => {
         }
 
         setImagePreviews(newPreviews);
+    };
+
+    // Фактическая функция удаления изображения (вызывается после подтверждения)
+    const executeRemoveImage = async (data) => {
+        const { index, isServerImage, image } = data;
+
+        if (isServerImage) {
+            // Удаляем серверное изображение из превью
+            const newPreviews = imagePreviews.filter((_, i) => i !== index);
+            setImagePreviews(newPreviews);
+            console.log('Удалено серверное изображение из превью');
+        } else {
+            // Удаляем локальное изображение
+            const newPreviews = [...imagePreviews];
+            const newSelectedImages = [...selectedImages];
+            const selectedImagesIndex = index - (imagePreviews.length - selectedImages.length);
+
+            newPreviews.splice(index, 1);
+            URL.revokeObjectURL(image);
+
+            if (selectedImagesIndex >= 0 && selectedImagesIndex < selectedImages.length) {
+                newSelectedImages.splice(selectedImagesIndex, 1);
+                setSelectedImages(newSelectedImages);
+            }
+
+            setImagePreviews(newPreviews);
+        }
     };
 
     const addTechnology = () => {
@@ -265,18 +340,16 @@ const AdminSites = () => {
     };
 
     const handleDelete = async (siteId) => {
-        if (window.confirm('Вы уверены, что хотите удалить этот сайт?')) {
-            startLoading();
-            try {
-                await siteAPI.delete(siteId);
-                toast.success('Сайт успешно удален');
-                fetchSites();
-            } catch (error) {
-                toast.error('Не удалось удалить сайт');
-                console.error('Ошибка при удалении сайта:', error);
-            } finally {
-                stopLoading();
-            }
+        startLoading();
+        try {
+            await siteAPI.delete(siteId);
+            toast.success('Сайт успешно удален');
+            fetchSites();
+        } catch (error) {
+            toast.error('Не удалось удалить сайт');
+            console.error('Ошибка при удалении сайта:', error);
+        } finally {
+            stopLoading();
         }
     };
 
@@ -462,7 +535,7 @@ const AdminSites = () => {
                                                     <Button
                                                         size="sm"
                                                         variant="outline-danger"
-                                                        onClick={() => handleDelete(site._id)}
+                                                        onClick={() => showConfirmation(handleDelete, site._id)}
                                                         className="admin-sites-btn-delete"
                                                         title="Удалить сайт"
                                                     >
@@ -577,7 +650,7 @@ const AdminSites = () => {
                         <Form.Group className="mb-4">
                             <Form.Label>Изображения сайта *</Form.Label>
                             <Form.Text className="text-muted d-block mb-2">
-                                <span style={{color:"white"}}>
+                                <span>
                                     Загрузите скриншоты вашего сайта. Первое изображение будет использоваться как основное превью. Максимум 7 изображений.
                                 </span>
                             </Form.Text>
@@ -612,7 +685,11 @@ const AdminSites = () => {
                                                             variant="danger"
                                                             size="sm"
                                                             className="admin-sites-remove-image-btn"
-                                                            onClick={() => removeImage(index)}
+                                                            onClick={() => showConfirmation(executeRemoveImage, {
+                                                                index,
+                                                                isServerImage,
+                                                                image: preview
+                                                            })}
                                                         >
                                                             ×
                                                         </Button>
@@ -645,7 +722,7 @@ const AdminSites = () => {
                                     )}
                                 </Button>
                                 <Form.Text className="text-muted">
-                                    <span style={{color:"white"}}>
+                                    <span>
                                     Поддерживаемые форматы: JPG, PNG, WebP. Макс. 5MB на изображение. Максимум 7 изображений всего.
                                     </span>
                                 </Form.Text>
@@ -749,6 +826,19 @@ const AdminSites = () => {
                     </Modal.Footer>
                 </Form>
             </Modal>
+
+            {/* Модальное окно подтверждения действий */}
+            <ConfirmationModal
+                show={showConfirmModal}
+                onHide={handleCancelConfirm}
+                onConfirm={handleConfirm}
+                title={confirmData?.title || "Подтверждение действия"}
+                message={confirmData?.message || "Вы уверены, что хотите выполнить это действие?"}
+                confirmText="Подтвердить"
+                cancelText="Отмена"
+                variant={confirmData?.variant || "danger"}
+                loading={loading}
+            />
         </div>
     );
 };

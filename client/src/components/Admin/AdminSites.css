@@ -344,7 +344,7 @@
 
 /* Modal Styles */
 .admin-sites-modal .modal-content {
-    background: var(--gradient-bg);
+    background: var(--gradient-bg-modals);
     border: var(--border-width-thin) solid var(--glass-border);
     border-radius: var(--border-radius-lg);
     color: var(--text-light);
@@ -378,7 +378,8 @@
 
 .admin-sites-modal .form-control,
 .admin-sites-modal .form-select {
-    background: var(--glass-bg);
+    background: white!important;
+    /*background: var(--glass-bg)!important;*/
     border: var(--border-width-thin) solid var(--glass-border);
     color: var(--text-light);
     border-radius: var(--border-radius-md);
@@ -387,7 +388,7 @@
 
 .admin-sites-modal .form-control:focus,
 .admin-sites-modal .form-select:focus {
-    background: rgba(255, 255, 255, 0.08);
+    /*background: rgba(255, 255, 255, 0.08);*/
     border-color: var(--primary-color);
     color: var(--text-light);
     box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
