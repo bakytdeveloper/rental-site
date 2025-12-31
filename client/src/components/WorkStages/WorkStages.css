@@ -1,4 +1,3 @@
-
 /* WorkStages.css */
 
 .work-stages-section {
@@ -18,122 +17,150 @@
     background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
 }
 
-.work-stages-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
+/* Вертикальная временная линия */
+.timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 0;
 }
 
+.timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 4px;
+    background: var(--gradient-primary);
+    transform: translateX(-50%);
+    border-radius: 2px;
+}
+
+/* Элементы временной линии */
+.timeline-item {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 60px;
+    position: relative;
+}
+
+.timeline-item:last-child {
+    margin-bottom: 0;
+}
+
+/* Маркер (кружок с номером) */
+.timeline-marker {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+}
+
+.timeline-number {
+    width: 60px;
+    height: 60px;
+    background: var(--gradient-primary);
+    color: var(--text-light-btn);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: 4px solid var(--primary-bg);
+    box-shadow: var(--shadow-medium);
+    transition: all var(--transition-normal);
+}
+
+.timeline-item:hover .timeline-number {
+    transform: scale(1.1);
+    box-shadow: var(--shadow-card);
+}
+
+/* Контент карточки */
+.timeline-content {
+    width: 45%;
+    position: relative;
+}
+
+/* Расположение карточек по сторонам */
+.timeline-item.left .timeline-content {
+    margin-right: auto;
+    padding-right: 80px;
+    text-align: right;
+}
+
+.timeline-item.right .timeline-content {
+    margin-left: auto;
+    padding-left: 80px;
+    text-align: left;
+}
+
+/* Карточка этапа */
 .stage-card {
     background: var(--card-bg);
     backdrop-filter: blur(10px);
     border: 1px solid var(--card-border);
-    border-radius: var(--border-radius-xl);
-    padding: 2rem;
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
     position: relative;
     transition: all var(--transition-normal);
-    overflow: hidden;
     box-shadow: var(--shadow-light);
-    display: flex;
-    flex-direction: column;
 }
 
-.stage-card:hover {
-    transform: translateY(-10px);
+.timeline-item:hover .stage-card {
+    transform: translateY(-5px);
     border-color: var(--card-hover-border);
     box-shadow: var(--shadow-card);
 }
 
-.stage-card:hover .stage-glow {
-    opacity: 0.1;
-    border-color: var(--card-hover-border);
-    background: var(--gradient-hero-bg);
-}
-
-/* Номер этапа */
-.stage-number {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    font-size: 2.5rem;
-    font-weight: 800;
-    color: var(--primary-transparent-20);
-    line-height: 1;
-    transition: color var(--transition-normal);
-    z-index: 1;
-}
-
-.stage-card:hover .stage-number {
-    color: var(--primary-transparent-30);
-}
-
-/* Контент карточки */
-.stage-content {
-    position: relative;
-    z-index: 2;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
 .stage-header {
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid var(--primary-transparent-10);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--primary-transparent-20);
+    padding-bottom: 0.75rem;
 }
 
 .stage-title {
-    font-size: 1.4rem;
-    font-weight: 700;
-    color: var(--primary-dark);
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0 0 0.5rem 0;
 }
 
 .stage-subtitle {
-    font-size: 0.9rem;
-    font-weight: 600;
+    display: block;
     color: var(--primary-color);
-    background: var(--primary-transparent-10);
-    padding: 0.3rem 0.8rem;
-    border-radius: var(--border-radius-full);
-    display: inline-block;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .stage-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    text-align: left;
 }
 
 .stage-description {
     color: var(--text-muted);
     line-height: 1.6;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 0.95rem;
-    flex: 1;
 }
 
 .stage-result {
     background: var(--primary-transparent-05);
-    border-radius: var(--border-radius-md);
-    padding: 1rem;
-    border: 1px solid var(--primary-transparent-10);
-}
-
-.result-label {
+    border-left: 3px solid var(--primary-color);
+    padding: 0.75rem;
+    border-radius: var(--border-radius-sm);
     font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--primary-color);
-    margin-bottom: 0.25rem;
-}
-
-.result-text {
-    font-size: 0.95rem;
     color: var(--text-dark);
-    line-height: 1.5;
 }
 
-/* Градиентное свечение */
+.stage-result strong {
+    color: var(--primary-color);
+}
+
 .stage-glow {
     position: absolute;
     top: -2px;
@@ -141,63 +168,73 @@
     right: -2px;
     bottom: -2px;
     background: var(--gradient-glow);
-    border-radius: calc(var(--border-radius-xl) + 2px);
+    border-radius: calc(var(--border-radius-lg) + 2px);
     z-index: -1;
     opacity: 0;
     transition: opacity var(--transition-normal);
     filter: blur(10px);
 }
 
-/* Декоративная линия для визуализации процесса */
-.stage-card::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: -2rem;
-    width: 2rem;
-    height: 2px;
-    background: var(--primary-transparent-20);
-    display: none;
+.timeline-item:hover .stage-glow {
+    opacity: 0.1;
 }
 
-.stage-card:not(:first-child)::after {
-    content: '';
-    position: absolute;
-    top: -2rem;
-    left: 50%;
-    width: 2px;
-    height: 2rem;
-    background: var(--primary-transparent-20);
-    display: none;
-}
-
-/* Адаптивность */
-@media (min-width: 992px) {
-    .work-stages-container {
-        grid-template-columns: repeat(2, 1fr);
+/* Адаптивность для мобильных */
+@media (max-width: 992px) {
+    .timeline::before {
+        left: 30px;
     }
-}
 
-@media (min-width: 1200px) {
-    .work-stages-container {
-        grid-template-columns: repeat(3, 1fr);
+    .timeline-marker {
+        left: 30px;
+    }
+
+    .timeline-content {
+        width: calc(100% - 100px);
+        margin-left: 100px !important;
+        padding: 0 !important;
+        text-align: left !important;
+    }
+
+    .timeline-item.left .timeline-content,
+    .timeline-item.right .timeline-content {
+        margin-right: 0;
+        margin-left: 100px;
+        padding: 0;
+        text-align: left;
     }
 }
 
 @media (max-width: 768px) {
-    .work-stages-container {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+    .timeline {
+        padding: 20px 0;
+    }
+
+    .timeline::before {
+        left: 20px;
+    }
+
+    .timeline-marker {
+        left: 20px;
+    }
+
+    .timeline-content {
+        width: calc(100% - 70px);
+        margin-left: 70px !important;
+    }
+
+    .timeline-item {
+        margin-bottom: 40px;
+    }
+
+    .timeline-number {
+        width: 50px;
+        height: 50px;
+        font-size: 1.25rem;
     }
 
     .stage-card {
-        padding: 1.5rem;
-    }
-
-    .stage-number {
-        font-size: 2rem;
-        top: 1rem;
-        right: 1rem;
+        padding: 1.25rem;
     }
 
     .stage-title {
@@ -206,16 +243,36 @@
 }
 
 @media (max-width: 576px) {
-    .stage-card {
-        padding: 1.25rem;
+    .timeline::before {
+        left: 15px;
     }
 
-    .stage-number {
-        font-size: 1.75rem;
+    .timeline-marker {
+        left: 15px;
+    }
+
+    .timeline-content {
+        width: calc(100% - 55px);
+        margin-left: 55px !important;
+    }
+
+    .timeline-number {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        border-width: 3px;
+    }
+
+    .stage-card {
+        padding: 1rem;
     }
 
     .stage-title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+    }
+
+    .stage-subtitle {
+        font-size: 0.8rem;
     }
 
     .stage-description {
@@ -223,10 +280,7 @@
     }
 
     .stage-result {
-        padding: 0.75rem;
-    }
-
-    .result-text {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        padding: 0.5rem;
     }
 }
