@@ -648,7 +648,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
                                 )}
                             </div>
                             <div className="site-detail-related-site-info p-3">
-                                <h4 className="text-light mb-2">{site.title}</h4>
+                                <h4 className="mb-2">{site.title}</h4>
                                 <p className="site-detail-related-site-description text-muted mb-2">{site.shortDescription}</p>
                                 <div className="site-detail-related-site-price text-primary mb-3">₸{site.price}/месяц</div>
                                 <Button
