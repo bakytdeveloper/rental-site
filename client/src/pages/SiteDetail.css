@@ -600,8 +600,12 @@
 }
 
 .btn-outline-light {
-    border-radius: 50%;
+    /*border-radius: 50%;*/
     padding: 1.3rem;
+}
+
+.btn-outline-light-order {
+    padding: 0.5rem;
 }
 
 /* Responsive Design */
