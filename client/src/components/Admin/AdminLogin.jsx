@@ -97,7 +97,7 @@ const AdminLogin = () => {
 
                                 <Form onSubmit={handleSubmit}>
                                     <Form.Group className="mb-3">
-                                        <Form.Label className="text-light mb-2">Email адрес</Form.Label>
+                                        <Form.Label className="mb-2">Email адрес</Form.Label>
                                         <Form.Control
                                             type="email"
                                             name="email"
@@ -106,12 +106,12 @@ const AdminLogin = () => {
                                             required
                                             placeholder="Введите email"
                                             disabled={loading}
-                                            className="login-form-control card-custom"
+                                            className="login-form-control glass-effect"
                                         />
                                     </Form.Group>
 
                                     <Form.Group className="mb-4">
-                                        <Form.Label className="text-light mb-2">Пароль</Form.Label>
+                                        <Form.Label className="mb-2">Пароль</Form.Label>
                                         <Form.Control
                                             type="password"
                                             name="password"
@@ -120,7 +120,7 @@ const AdminLogin = () => {
                                             required
                                             placeholder="Введите пароль"
                                             disabled={loading}
-                                            className="login-form-control card-custom"
+                                            className="login-form-control glass-effect"
                                         />
                                     </Form.Group>
 
