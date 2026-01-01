@@ -529,7 +529,7 @@ const SiteDetail = () => {
                                     />
                                 </Form.Group>
                             </Col>
-                            
+
                             <Col md={6}>
                                 <Form.Group className="mb-3">
                                     <Form.Label className="text-light">Компания</Form.Label>
@@ -570,6 +570,7 @@ const SiteDetail = () => {
                             >
                                 Отмена
                             </Button>
+                            
                             <Button
                                 type="submit"
                                 className="site-detail-btn-submit-request btn-primary-custom"
