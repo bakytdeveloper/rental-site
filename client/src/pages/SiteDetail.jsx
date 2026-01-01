@@ -495,7 +495,7 @@ const SiteDetail = () => {
                                     />
                                 </Form.Group>
                             </Col>
-                            
+
                             <Col md={6}>
                                 <Form.Group className="mb-3">
                                     <Form.Label className="text-light">Email адрес *</Form.Label>
@@ -529,6 +529,7 @@ const SiteDetail = () => {
                                     />
                                 </Form.Group>
                             </Col>
+                            
                             <Col md={6}>
                                 <Form.Group className="mb-3">
                                     <Form.Label className="text-light">Компания</Form.Label>
