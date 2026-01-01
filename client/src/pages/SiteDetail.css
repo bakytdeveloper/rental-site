@@ -684,4 +684,13 @@
         height: 30px;
         padding: 3px;
     }
+
+    .site-detail-quick-actions {
+        gap: 0.1rem;
+    }
+
+    .site-detail-btn-rent-now-main {
+        padding: 0.7rem;
+        border-radius: 27px;
+    }
 }
