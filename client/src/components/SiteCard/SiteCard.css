@@ -127,7 +127,7 @@
 }
 
 .site-card__content {
-    padding: 1.5rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     height: calc(100% - 200px);
@@ -208,8 +208,8 @@
 }
 
 .site-card__footer {
-    display: flex;
-    justify-content: space-between;
+    /*display: flex;*/
+    /*justify-content: space-between;*/
     align-items: center;
     margin-top: auto;
 }
@@ -237,11 +237,13 @@
 
 .site-card__btn-rent-now {
     background: transparent;
+    margin-top: 0.8rem;
     border: var(--border-width-medium) solid var(--btn-outline-border);
     color: var(--btn-outline-text);
     padding: 0.4rem 1rem;
     border-radius: var(--border-radius-xl);
     font-weight: 600;
+    width: 100%;
     font-size: 0.8rem;
     transition: all var(--transition-normal);
     white-space: nowrap;
