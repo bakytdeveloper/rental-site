@@ -216,6 +216,12 @@ const SiteCard = ({ site, index }) => {
                                 Рекомендуемый
                             </div>
                         )}
+
+                        {site.isActive && (
+                            <div className="site-card__badge site-card__badge--available">
+                                ✓ Доступен
+                            </div>
+                        )}
                     </div>
 
                     <div className="site-card__content">
@@ -251,11 +257,11 @@ const SiteCard = ({ site, index }) => {
                         <div className="site-card__footer">
                             <div className="site-card__meta">
                                 <span className="site-card__category">{site.category}</span>
-                                {site.isActive && (
-                                    <span className="site-card__status" aria-label="Сайт доступен для аренды">
-                                        ✓ Доступен
-                                    </span>
-                                )}
+                                {/*{site.isActive && (*/}
+                                {/*    <span className="site-card__status" aria-label="Сайт доступен для аренды">*/}
+                                {/*        ✓ Доступен*/}
+                                {/*    </span>*/}
+                                {/*)}*/}
                             </div>
                             <Button
                                 as={Link}

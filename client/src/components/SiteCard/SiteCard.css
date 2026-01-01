@@ -95,20 +95,35 @@
     color: var(--primary-bg);
 }
 
+/* Бейджи для карточки */
 .site-card__badge {
     position: absolute;
     top: 1rem;
-    right: 1rem;
     padding: 0.3rem 0.8rem;
     border-radius: 15px;
     font-size: 0.75rem;
     font-weight: 600;
     box-shadow: var(--shadow-light);
+    z-index: 10;
 }
 
 .site-card__badge--featured {
+    right: 1rem;
     background: var(--gradient-primary-short);
     color: var(--primary-bg);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.site-card__badge--available {
+    left: 1rem;
+    background: var(--gradient-success);
+    color: var(--primary-bg);
+    border: 1px solid var(--btn-success-bg);
+}
+
+/* Если есть оба бейджа, смещаем доступный ниже */
+.site-card__badge--featured + .site-card__badge--available {
+    top: 1rem;
 }
 
 .site-card__content {
@@ -131,6 +146,16 @@
     color: var(--text-light);
     margin: 0;
     line-height: 1.3;
+}
+
+.site-card__title-link {
+    text-decoration: none;
+    color: inherit;
+    transition: color var(--transition-normal);
+}
+
+.site-card__title-link:hover {
+    color: var(--primary-color);
 }
 
 .site-card__price {
@@ -203,6 +228,11 @@
     padding: 0.3rem 0.7rem;
     border-radius: 12px;
     border: 1px solid var(--badge-muted-border);
+}
+
+/* Удаляем старый статус из footer */
+.site-card__status {
+    /*display: none;*/
 }
 
 .site-card__btn-rent-now {
@@ -343,7 +373,20 @@
     }
 }
 
-/* Оптимизация для очень маленьких экранов */
+/* Адаптивность для бейджей */
+@media (max-width: 767.98px) {
+    .site-card__badge {
+        padding: 0.2rem 0.6rem;
+        font-size: 0.7rem;
+        top: 0.8rem;
+    }
+
+    .site-card__badge--featured + .site-card__badge--available {
+        top: 0.5rem;
+    }
+}
+
+/* Для очень маленьких экранов */
 @media (max-width: 400px) {
     .site-card__title {
         font-size: 1rem;
@@ -361,5 +404,39 @@
     .site-card__slider-dot {
         width: 5px;
         height: 5px;
+    }
+
+    /* Оптимизация бейджей на маленьких экранах */
+    .site-card__badge {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.4rem;
+        top: 0.5rem;
+    }
+
+    .site-card__badge--featured {
+        right: 0.5rem;
+    }
+
+    .site-card__badge--available {
+        left: 0.5rem;
+    }
+
+    .site-card__badge--featured + .site-card__badge--available {
+        top: 0.5rem;
+    }
+}
+
+/* Для средних экранов - альтернативное расположение бейджей */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Можно разместить оба бейджа справа вертикально */
+    .site-card__badge--featured {
+        right: 1rem;
+        left: auto;
+    }
+
+    .site-card__badge--available {
+        right: 1rem;
+        left: auto;
+        top: 3rem;
     }
 }

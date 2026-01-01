@@ -54,6 +54,8 @@
     --gradient-accent: linear-gradient(45deg, #1e40af, #2563eb);
     --gradient-glow: linear-gradient(45deg, #1d4ed8, #2563eb, #3b82f6);
 
+    --gradient-success: linear-gradient(45deg, #227302, #0bae05, #4bf502);
+
     --gradient-hero-bg: linear-gradient(135deg, #8fc3fa 0%, #e8ecff 50%, #99c0f5 100%);
 
     --gradient-bg-modals: linear-gradient(135deg, #f8fafc 0%, #c0d2e3 50%, #8aa5ca 100%);
