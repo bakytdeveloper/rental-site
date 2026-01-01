@@ -602,7 +602,6 @@ const SiteDetail = () => {
 };
 
 
-
 // Компонент похожих сайтов
 const RelatedSites = ({ currentSiteId, category }) => {
     const [relatedSites, setRelatedSites] = useState([]);
