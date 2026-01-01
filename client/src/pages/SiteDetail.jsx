@@ -461,7 +461,7 @@ const SiteDetail = () => {
                         </div>
                     </div>
                 </Modal.Header>
-                
+
                 <Modal.Body>
                     <div className="site-detail-rental-summary mb-4">
                         <div className="site-detail-summary-item">
@@ -495,6 +495,7 @@ const SiteDetail = () => {
                                     />
                                 </Form.Group>
                             </Col>
+                            
                             <Col md={6}>
                                 <Form.Group className="mb-3">
                                     <Form.Label className="text-light">Email адрес *</Form.Label>
