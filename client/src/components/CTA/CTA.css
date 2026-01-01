@@ -119,7 +119,7 @@
     .btn-cta-primary,
     .btn-cta-secondary {
         width: 100%;
-        max-width: 250px;
+        /*max-width: 250px;*/
     }
 
     .cta-stats {

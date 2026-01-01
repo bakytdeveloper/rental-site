@@ -11,7 +11,7 @@ const CTA = () => {
                         <div className="cta-content">
                             <h2 className="cta-title">
                                 Готовы запустить свое
-                                <span className="text-gradient"> онлайн-присутствие</span>?
+                                <span className="text-gradient"> онлайн-присутствие?</span>
                             </h2>
                             <p className="cta-description">
                                 Присоединяйтесь к сотням бизнесов, которые ускорили свой рост
