@@ -461,6 +461,7 @@ const SiteDetail = () => {
                         </div>
                     </div>
                 </Modal.Header>
+                
                 <Modal.Body>
                     <div className="site-detail-rental-summary mb-4">
                         <div className="site-detail-summary-item">
