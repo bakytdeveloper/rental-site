@@ -570,7 +570,7 @@ const SiteDetail = () => {
                             >
                                 Отмена
                             </Button>
-                            
+
                             <Button
                                 type="submit"
                                 className="site-detail-btn-submit-request btn-primary-custom"
@@ -591,6 +591,7 @@ const SiteDetail = () => {
                                 ) : (
                                     '📧 Отправить запрос на аренду'
                                 )}
+                                
                             </Button>
                         </div>
                     </Form>
