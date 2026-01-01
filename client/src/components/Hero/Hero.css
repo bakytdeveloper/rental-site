@@ -403,3 +403,57 @@
         transform: translateX(15%);
     }
 }
+
+/* Оптимизации для производительности */
+
+/* Пауза анимаций когда не в видимой области */
+.floating-shapes.paused .shape,
+.hero-visual.paused .floating-card,
+.hero-visual.paused .card-glow,
+.scroll-indicator.paused .scroll-arrow::before {
+    animation-play-state: paused;
+}
+
+.floating-shapes.active .shape,
+.hero-visual.active .floating-card,
+.hero-visual.active .card-glow,
+.scroll-indicator.active .scroll-arrow::before {
+    animation-play-state: running;
+}
+
+/* Оптимизация анимаций для GPU */
+.shape, .floating-card {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Отключаем анимации при сниженной производительности */
+@media (prefers-reduced-motion: reduce) {
+    .shape,
+    .floating-card,
+    .cursor,
+    .card-preview::before,
+    .card-glow,
+    .scroll-arrow::before {
+        animation: none !important;
+    }
+
+    .card-preview::before {
+        display: none;
+    }
+}
+
+/* Пауза анимаций когда страница не активна */
+@media (prefers-reduced-motion: no-preference) {
+    @media (scripting: none) {
+        .shape,
+        .floating-card,
+        .cursor,
+        .card-preview::before,
+        .card-glow,
+        .scroll-arrow::before {
+            animation-play-state: paused;
+        }
+    }
+}
