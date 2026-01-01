@@ -591,7 +591,7 @@ const SiteDetail = () => {
                                 ) : (
                                     '📧 Отправить запрос на аренду'
                                 )}
-                                
+
                             </Button>
                         </div>
                     </Form>
@@ -652,6 +652,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
                                     <Badge className="site-detail-related-featured-badge">Рекомендуемый</Badge>
                                 )}
                             </div>
+                            
                             <div className="site-detail-related-site-info p-3">
                                 <h4 className="mb-2">{site.title}</h4>
                                 <p className="site-detail-related-site-description text-muted mb-2">{site.shortDescription}</p>
