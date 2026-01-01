@@ -265,7 +265,8 @@ const SiteDetail = () => {
                                                 prev === 0 ? site.images.length - 1 : prev - 1
                                             )}
                                         >
-                                            ‹
+
+                                            <span className="site-detail-nav-btn-span"> ‹ </span>
                                         </Button>
                                         <span className="site-detail-image-counter">
                                             {selectedImage + 1} / {site.images.length}
@@ -277,7 +278,7 @@ const SiteDetail = () => {
                                                 prev === site.images.length - 1 ? 0 : prev + 1
                                             )}
                                         >
-                                            ›
+                                           <span className="site-detail-nav-btn-span"> › </span>
                                         </Button>
                                     </div>
                                 )}

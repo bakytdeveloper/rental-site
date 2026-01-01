@@ -96,6 +96,10 @@
     transform: scale(1.1);
 }
 
+.site-detail-nav-btn-span {
+    margin-bottom: 5px !important;
+}
+
 .site-detail-image-counter {
     color: var(--text-dark);
     font-weight: 600;
