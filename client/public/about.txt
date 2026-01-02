@@ -1,6 +1,6 @@
 This favicon was generated using the following font:
 
-- Font Title: Keania One
+- Font Title: Jua
 - Font Author: undefined
-- Font Source: https://fonts.gstatic.com/s/keaniaone/v25/zOL54pXJk65E8pXardnuycRuv-hHkOs.ttf
+- Font Source: https://fonts.gstatic.com/s/jua/v17/co3KmW9ljjAjc-DZCsKgsg.ttf
 - Font License: undefined)
