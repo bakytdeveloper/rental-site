@@ -104,7 +104,7 @@
 }
 
 .cursor {
-    animation: blink 1s infinite;
+    animation: blink 0.5s infinite;
     color: var(--primary-color);
 }
 
