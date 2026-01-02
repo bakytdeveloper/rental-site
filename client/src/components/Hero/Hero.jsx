@@ -8,7 +8,7 @@ const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
     const [isInView, setIsInView] = useState(false);
-    const fullText = "Арендуйте профессиональные сайты сегодня";
+    const fullText = "Аренда сайта, запуск от 8 дней без лишних трат";
     const heroRef = useRef(null);
 
     const location = useLocation();
@@ -120,10 +120,7 @@ const Hero = () => {
                                 </h1>
 
                                 <p className="hero-description">
-                                    Получите доступ к Своему сайту за короткое время и за минимальные расходы.
-                                    Мы предоставляем сайты в Аренду, для начинающих организаций и частных предпринимателей.
-                                    Мы можем не только сдавать в Аренду сайты, но и создать ваш индивидуальный сайт,
-                                    как на продажу, так и в Аренду.
+                                    Экономия до 70% бюджета, для малого и среднего бизнеса. Аренда с возможностью выкупа. Бизнес планирование, Seo оптимизация - внутренняя и внешняя перелинковка страниц, Покупка готового интернет - магазина
                                 </p>
 
                                 <div className="hero-buttons">
