@@ -12,6 +12,7 @@ import SEO from '../components/SEO/SEO';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './Home.css';
+import Tariffs from "../components/Tariffs/Tariffs";
 
 const Home = () => {
     useEffect(() => {
@@ -61,7 +62,8 @@ const Home = () => {
             <WhyRent />
             <Benefits />
             <CooperationFormats />
-            <WorkStages /> {/* Добавляем новый компонент */}
+            <WorkStages />
+            <Tariffs />
             <FeaturedSites />
             <CTA />
         </div>
