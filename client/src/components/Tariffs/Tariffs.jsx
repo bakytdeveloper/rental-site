@@ -179,9 +179,10 @@ const Tariffs = () => {
                 <div className="tariff-details-container" data-aos="fade-up" data-aos-delay="200">
                     <div className="tariff-details-card">
                         {/* Заголовок детальной информации */}
+                        {/* Заголовок детальной информации */}
                         <div className="tariff-details-header">
                             <div className="tariff-details-icon">{getIcon(activeTariff)}</div>
-                            <div>
+                            <div className="tariff-details-header-content">
                                 <h3 className="tariff-details-title">{activeTariffData.title}</h3>
                                 <p className="tariff-details-subtitle">{activeTariffData.subtitle}</p>
                                 <div className="tariff-details-price">
@@ -212,7 +213,7 @@ const Tariffs = () => {
                                 {activeTariffData.features.map((feature, index) => (
                                     <div key={index} className="feature-item">
                                         <span className="feature-check">✓</span>
-                                        <span>{feature}</span>
+                                        <span className="feature-item-span">{feature}</span>
                                     </div>
                                 ))}
                             </div>
