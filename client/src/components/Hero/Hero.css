@@ -1,4 +1,4 @@
-/* Hero.css */
+/* Hero.css - Обновленная версия */
 .hero-section {
     position: relative;
     background: var(--gradient-bg);
@@ -7,6 +7,7 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
+    justify-content: center; /* Добавляем центрирование */
 }
 
 .hero-background {
@@ -74,10 +75,18 @@
     50% { transform: translateY(-20px) rotate(180deg); }
 }
 
+/* ОБНОВЛЕННЫЕ СТИЛИ ДЛЯ КОНТЕЙНЕРА */
+.hero-section > div > .container {
+    max-width: 1200px; /* Ограничиваем максимальную ширину */
+    margin: 0 auto; /* Центрируем контейнер */
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
 .hero-content {
     position: relative;
     z-index: 2;
-    text-align: center;
+    text-align: left; /* Меняем на left для десктопа */
 }
 
 .hero-badge {
@@ -101,6 +110,7 @@
     line-height: 1.1;
     margin-bottom: 1.5rem;
     height: auto;
+    text-align: left; /* Добавляем выравнивание */
 }
 
 .cursor {
@@ -118,15 +128,18 @@
     color: var(--text-muted);
     margin-bottom: 2rem;
     line-height: 1.6;
+    text-align: left; /* Добавляем выравнивание */
 }
 
 .hero-buttons {
     margin-bottom: 3rem;
+    text-align: left; /* Добавляем выравнивание */
 }
 
 .hero-stats {
     display: flex;
     gap: 2rem;
+    justify-content: flex-start; /* Меняем на flex-start */
 }
 
 .stat-item {
@@ -148,6 +161,7 @@
 .hero-visual {
     position: relative;
     height: 600px;
+    width: 100%;
 }
 
 .floating-card {
@@ -276,14 +290,32 @@
     50% { transform: translateX(-50%) translateY(10px); }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .shape {
-        opacity: 0.3;
-    }
+/* Responsive - МОБИЛЬНЫЕ УСТРОЙСТВА */
+@media (max-width: 991px) {
+    /* Стили для планшетов и мобильных */
 
     .hero-content {
+        text-align: center; /* Центрируем на мобильных */
+    }
+
+    .hero-title {
         text-align: center;
+    }
+
+    .hero-description {
+        text-align: center;
+    }
+
+    .hero-buttons {
+        text-align: center;
+    }
+
+    .hero-stats {
+        justify-content: center;
+    }
+
+    .shape {
+        opacity: 0.3;
     }
 
     .hero-title {
@@ -343,7 +375,95 @@
     }
 }
 
+/* Для планшетов (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .hero-visual {
+        display: block;
+        height: 500px;
+        margin-top: 3rem;
+    }
 
+    .floating-card {
+        position: relative !important;
+        width: 80% !important;
+        height: 300px !important;
+        margin: 2rem auto !important;
+        float: none !important;
+    }
+}
+
+/* УДАЛЯЕМ все старые медиазапросы для больших экранов которые сдвигали вправо */
+/* Вместо них используем следующий медиазапрос */
+
+/* Для десктопов (992px и выше) */
+@media (min-width: 992px) {
+    .hero-section > div > .container {
+        max-width: 1400px; /* Увеличиваем максимальную ширину */
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .hero-visual {
+        position: relative;
+        height: 600px;
+        transform: none !important; /* Убираем трансформации */
+        margin-right: 0 !important; /* Убираем отрицательные отступы */
+    }
+
+    /* Корректируем позиции карточек для лучшего отображения */
+    .card-1 {
+        right: 5%;
+        top: 15%;
+        width: 26rem;
+        height: 21rem;
+    }
+
+    .card-2 {
+        right: 25%;
+        top: 45%;
+        width: 24rem;
+        height: 19rem;
+    }
+
+    .card-3 {
+        right: 10%;
+        bottom: 15%;
+        width: 22rem;
+        height: 18rem;
+    }
+
+    /* Оптимизация для очень широких экранов */
+    @media (min-width: 1400px) {
+        .hero-section > div > .container {
+            max-width: 1600px;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+        }
+
+        .hero-visual {
+            height: 700px;
+        }
+
+        .card-1 {
+            width: 28rem;
+            height: 23rem;
+        }
+
+        .card-2 {
+            width: 26rem;
+            height: 21rem;
+        }
+
+        .card-3 {
+            width: 24rem;
+            height: 19rem;
+        }
+    }
+}
+
+/* Очень маленькие устройства */
 @media (max-width: 480px) {
     .hero-section {
         min-height: 85vh;
@@ -376,31 +496,6 @@
 
     .col-hero-visual {
         display: none !important;
-    }
-}
-
-/* Для больших экранов (LG и выше) */
-@media (min-width: 992px) {
-
-    .hero-visual {
-        margin-right: -20px; /* Сдвигаем вправо */
-        transform: translateX(5%); /* Дополнительный сдвиг в процентах */
-    }
-}
-
-/* Для очень больших экранов (XL и выше) */
-@media (min-width: 1200px) {
-    .hero-visual {
-        margin-right: -70px; /* Больше сдвига на огромных экранах */
-        transform: translateX(10%);
-    }
-}
-
-/* Для экстремально больших экранов (XXL) */
-@media (min-width: 1400px) {
-    .hero-visual {
-        margin-right: -100px;
-        transform: translateX(15%);
     }
 }
 
