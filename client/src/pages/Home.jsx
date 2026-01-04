@@ -13,6 +13,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import './Home.css';
 import Tariffs from "../components/Tariffs/Tariffs";
+import Reviews from "../components/Reviews/Reviews";
 
 const Home = () => {
     useEffect(() => {
@@ -65,6 +66,7 @@ const Home = () => {
             <WorkStages />
             <Tariffs />
             <FeaturedSites />
+            <Reviews /> {/* Добавляем новый компонент отзывов */}
             <CTA />
         </div>
     );
