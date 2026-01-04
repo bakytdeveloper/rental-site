@@ -82,7 +82,7 @@
 /* Текст отзыва */
 .review-text {
     flex-grow: 1;
-    margin-bottom: 1.5rem;
+    /*margin-bottom: 0.2rem;*/
 }
 
 .review-text p {
