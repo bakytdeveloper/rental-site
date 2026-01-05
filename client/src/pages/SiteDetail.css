@@ -572,7 +572,7 @@
     box-shadow: var(--shadow-light);
 }
 
-/* Loading States */
+
 .site-detail-loading {
     min-height: 50vh;
     display: flex;
