@@ -39,7 +39,7 @@ const Hero = () => {
             ([entry]) => {
                 setIsInView(entry.isIntersecting);
             },
-            { threshold: 0.1 } 
+            { threshold: 0.1 }
         );
 
         if (heroRef.current) {
@@ -108,6 +108,7 @@ const Hero = () => {
                     <Row className="align-items-center min-vh-100 hero-align-items-center">
                         <Col lg={6}>
                             <div className="hero-content">
+                                
                                 <div className="hero-badge">
                                     <span>🚀 Бустущее в веб-присутствии</span>
                                 </div>
