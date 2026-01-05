@@ -39,7 +39,7 @@ const Hero = () => {
             ([entry]) => {
                 setIsInView(entry.isIntersecting);
             },
-            { threshold: 0.1 } // 10% видимости
+            { threshold: 0.1 } 
         );
 
         if (heroRef.current) {
