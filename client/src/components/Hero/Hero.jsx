@@ -132,7 +132,7 @@ const Hero = () => {
                                     >
                                         {isMobile ? 'Каталог' : 'Исследовать каталог'}
                                     </Button>
-                                    
+
                                     <Button
                                         as={Link}
                                         to="/about"
