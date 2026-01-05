@@ -97,4 +97,28 @@ export const handleApiError = (error, defaultMessage = 'Something went wrong') =
     return message;
 };
 
+// Client API
+export const clientAPI = {
+    register: (data) => api.post('/client/register', data),
+    login: (data) => api.post('/client/login', data),
+    getProfile: () => api.get('/client/profile'),
+    updateProfile: (data) => api.put('/client/profile', data),
+    updatePassword: (data) => api.put('/client/password', data),
+    getRentalDetails: (contactId) => api.get(`/client/rental/${contactId}`),
+    linkContact: (contactId) => api.post('/client/link-contact', { contactId }),
+    getNotifications: () => api.get('/client/notifications'),
+    markNotificationsRead: (notificationIds) => api.put('/client/notifications/read', { notificationIds }),
+};
+
+// Auth check functions
+export const checkClientAuth = () => {
+    const token = localStorage.getItem('clientToken');
+    return !!token;
+};
+
+export const checkAdminAuth = () => {
+    const token = localStorage.getItem('adminToken');
+    return !!token;
+};
+
 export default api;

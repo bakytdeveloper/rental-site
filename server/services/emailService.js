@@ -906,6 +906,319 @@ const emailTemplates = {
             </body>
             </html>
             `
+    }),
+    // НОВЫЕ ШАБЛОНЫ - добавлены здесь
+    clientWelcome: (userData) => ({
+        subject: `👋 Добро пожаловать в RentalSite, ${userData.profile?.firstName || userData.username}!`,
+        html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 15px 15px 0 0; }
+          .content { background: #f8fafc; padding: 35px; border-radius: 0 0 15px 15px; }
+          .info-card { background: white; padding: 25px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #4f46e5; }
+          .welcome-icon { font-size: 60px; text-align: center; margin: 20px 0; color: #4f46e5; }
+          .button { background: #4f46e5; color: white; padding: 14px 35px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; transition: all 0.3s; }
+          .button:hover { background: #4338ca; transform: translateY(-2px); }
+          .footer { text-align: center; margin-top: 40px; padding: 25px; color: #64748b; font-size: 14px; }
+          .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+          .feature-item { background: #f1f5f9; padding: 15px; border-radius: 8px; text-align: center; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="welcome-icon">🎉</div>
+            <h1 style="margin: 10px 0; font-size: 32px;">Добро пожаловать в RentalSite!</h1>
+            <p style="font-size: 18px; opacity: 0.9;">Мы рады видеть вас в нашем сообществе</p>
+          </div>
+          
+          <div class="content">
+            <div class="info-card">
+              <h3 style="color: #4f46e5; margin-top: 0;">Приветствуем, ${userData.profile?.firstName || userData.username}! 👋</h3>
+              <p>Благодарим вас за регистрацию на RentalSite — платформе для аренды профессиональных сайтов и веб-приложений.</p>
+              <p>Ваш аккаунт успешно создан и готов к использованию.</p>
+              
+              <div style="text-align: center; margin: 25px 0;">
+                <a href="${process.env.CLIENT_PORTAL_URL || 'https://rentalsite.com/login'}" class="button">
+                  🚀 Перейти в личный кабинет
+                </a>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #4f46e5;">📋 Ваши данные аккаунта</h3>
+              <p><strong>Имя пользователя:</strong> ${userData.username}</p>
+              ${userData.email ? `<p><strong>Email:</strong> ${userData.email}</p>` : ''}
+              ${userData.profile?.phone ? `<p><strong>Телефон:</strong> ${userData.profile.phone}</p>` : ''}
+              <p><strong>Дата регистрации:</strong> ${new Date().toLocaleDateString('ru-RU', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}</p>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #4f46e5;">✨ Что вы можете сделать сейчас?</h3>
+              <div class="features">
+                <div class="feature-item">
+                  <strong>🔍 Найти сайт</strong>
+                  <p>Выберите из каталога готовых решений</p>
+                </div>
+                <div class="feature-item">
+                  <strong>📊 Управлять арендой</strong>
+                  <p>Контролируйте свои активные аренды</p>
+                </div>
+                <div class="feature-item">
+                  <strong>💳 Оплатить онлайн</strong>
+                  <p>Безопасные платежи через систему</p>
+                </div>
+                <div class="feature-item">
+                  <strong>📞 Получить поддержку</strong>
+                  <p>24/7 помощь от нашей команды</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #4f46e5;">📞 Нужна помощь?</h3>
+              <p>Мы всегда готовы помочь вам начать работу:</p>
+              <ul>
+                <li><strong>Email поддержки:</strong> support@rentalsite.com</li>
+                <li><strong>Телефон:</strong> +7 (XXX) XXX-XXXX</li>
+                <li><strong>Документация:</strong> <a href="https://docs.rentalsite.com">docs.rentalsite.com</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>Это автоматическое приветственное письмо от RentalSite</p>
+            <p>💼 <strong>RentalSite Business</strong> | Профессиональная аренда сайтов</p>
+            <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `
+    }),
+
+    clientRentalStarted: (userData, siteData) => ({
+        subject: `🚀 Вы начали аренду сайта "${siteData.title}"`,
+        html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 15px 15px 0 0; }
+          .content { background: #f0fdf4; padding: 35px; border-radius: 0 0 15px 15px; }
+          .info-card { background: white; padding: 25px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #10b981; }
+          .success-icon { font-size: 60px; text-align: center; margin: 20px 0; color: #10b981; }
+          .button { background: #10b981; color: white; padding: 14px 35px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; }
+          .footer { text-align: center; margin-top: 40px; padding: 25px; color: #64748b; font-size: 14px; }
+          .site-details { background: #f1f5f9; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="success-icon">🎯</div>
+            <h1 style="margin: 10px 0; font-size: 32px;">Аренда успешно начата!</h1>
+            <p style="font-size: 18px; opacity: 0.9;">Вы стали арендатором сайта "${siteData.title}"</p>
+          </div>
+          
+          <div class="content">
+            <div class="info-card">
+              <h3 style="color: #10b981; margin-top: 0;">Поздравляем, ${userData.profile?.firstName || userData.username}! 🎉</h3>
+              <p>Вы успешно начали аренду сайта <strong>"${siteData.title}"</strong>. Теперь вы можете использовать все его функции и возможности.</p>
+              
+              <div style="text-align: center; margin: 25px 0;">
+                <a href="${siteData.demoUrl || siteData.accessUrl || '#'}" class="button" target="_blank">
+                  🔗 Перейти к сайту
+                </a>
+                <a href="${process.env.CLIENT_PORTAL_URL || 'https://rentalsite.com/dashboard'}" class="button" style="background: #4f46e5; margin-left: 15px;">
+                  📊 Личный кабинет
+                </a>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #10b981;">📋 Детали аренды</h3>
+              <div class="site-details">
+                <p><strong>Название сайта:</strong> ${siteData.title}</p>
+                <p><strong>Категория:</strong> ${siteData.category}</p>
+                <p><strong>Месячная цена:</strong> ₸${siteData.price}</p>
+                <p><strong>Дата начала:</strong> ${new Date().toLocaleDateString('ru-RU', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}</p>
+                ${siteData.rentalPeriod ? `<p><strong>Период аренды:</strong> ${siteData.rentalPeriod}</p>` : ''}
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #10b981;">🔧 Доступные функции</h3>
+              <ul>
+                ${siteData.features?.map(feature => `<li>${feature}</li>`).join('') || '<li>Полный доступ ко всем функциям сайта</li>'}
+              </ul>
+              ${siteData.technologies?.length ? `
+              <p><strong>Используемые технологии:</strong> ${siteData.technologies.join(', ')}</p>
+              ` : ''}
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #10b981;">📅 Что дальше?</h3>
+              <p><strong>1. Изучите сайт:</strong> Войдите и ознакомьтесь со всеми возможностями</p>
+              <p><strong>2. Настройте под себя:</strong> Персонализируйте контент под ваш бизнес</p>
+              <p><strong>3. Получите поддержку:</strong> Наша команда готова помочь с настройкой</p>
+              <p><strong>4. Следите за оплатой:</strong> Вы получите уведомление перед окончанием периода</p>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #10b981;">📞 Техническая поддержка</h3>
+              <p>Если у вас возникнут вопросы или проблемы с доступом:</p>
+              <ul>
+                <li><strong>Техподдержка:</strong> tech@rentalsite.com</li>
+                <li><strong>Телефон:</strong> +7 (XXX) XXX-XXXX (тех. вопросы)</li>
+                <li><strong>Документация:</strong> <a href="${siteData.docsUrl || 'https://docs.rentalsite.com'}">Руководство пользователя</a></li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>Это автоматическое уведомление о начале аренды от RentalSite</p>
+            <p>💼 <strong>RentalSite Business</strong> | Профессиональная аренда сайтов</p>
+            <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `
+    }),
+
+    clientPaymentReminder: (userData, rentalData) => ({
+        subject: `⏰ Напоминание об оплате аренды: ${rentalData.siteTitle}`,
+        html: `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Arial', sans-serif; line-height: 1.6; color: #333; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 40px 30px; text-align: center; border-radius: 15px 15px 0 0; }
+          .content { background: #fffbeb; padding: 35px; border-radius: 0 0 15px 15px; }
+          .info-card { background: white; padding: 25px; margin: 20px 0; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-left: 5px solid #f59e0b; }
+          .reminder-icon { font-size: 60px; text-align: center; margin: 20px 0; color: #f59e0b; }
+          .button { background: #f59e0b; color: white; padding: 14px 35px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: 600; }
+          .urgent-badge { background: #dc2626; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; display: inline-block; margin-left: 10px; }
+          .footer { text-align: center; margin-top: 40px; padding: 25px; color: #64748b; font-size: 14px; }
+          .payment-details { background: #fef3c7; padding: 20px; border-radius: 10px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <div class="reminder-icon">⏰</div>
+            <h1 style="margin: 10px 0; font-size: 32px;">Напоминание об оплате</h1>
+            <p style="font-size: 18px; opacity: 0.9;">Срок аренды "${rentalData.siteTitle}" скоро истекает</p>
+          </div>
+          
+          <div class="content">
+            <div class="info-card">
+              <h3 style="color: #f59e0b; margin-top: 0;">
+                Уважаемый(ая) ${userData.profile?.firstName || userData.username}!
+                ${rentalData.daysUntilExpiry <= 3 ? '<span class="urgent-badge">СРОЧНО</span>' : ''}
+              </h3>
+              <p>Напоминаем, что срок аренды сайта <strong>"${rentalData.siteTitle}"</strong> истекает через <strong>${rentalData.daysUntilExpiry} ${rentalData.daysUntilExpiry === 1 ? 'день' : rentalData.daysUntilExpiry < 5 ? 'дня' : 'дней'}</strong>.</p>
+              <p>Пожалуйста, произведите оплату, чтобы продолжить использование сайта без перерывов.</p>
+              
+              <div style="text-align: center; margin: 25px 0;">
+                <a href="${process.env.PAYMENT_URL || 'https://rentalsite.com/payment'}" class="button">
+                  💳 Оплатить сейчас
+                </a>
+                <a href="${process.env.CLIENT_PORTAL_URL || 'https://rentalsite.com/invoices'}" class="button" style="background: #4f46e5; margin-left: 15px;">
+                  📄 Мои счета
+                </a>
+              </div>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #f59e0b;">💰 Детали платежа</h3>
+              <div class="payment-details">
+                <p><strong>Сумма к оплате:</strong> ₸${rentalData.amountDue}</p>
+                <p><strong>За сайт:</strong> ${rentalData.siteTitle}</p>
+                <p><strong>Срок оплаты до:</strong> ${new Date(rentalData.dueDate).toLocaleDateString('ru-RU', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        })}</p>
+                <p><strong>Текущий статус:</strong> 
+                  <span style="color: ${rentalData.daysUntilExpiry <= 3 ? '#dc2626' : '#f59e0b'}; font-weight: bold;">
+                    ${rentalData.daysUntilExpiry <= 0 ? 'Просрочено' : 'Ожидает оплаты'}
+                  </span>
+                </p>
+              </div>
+              
+              ${rentalData.invoiceNumber ? `
+              <p><strong>Номер счета:</strong> ${rentalData.invoiceNumber}</p>
+              ` : ''}
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #f59e0b;">📅 Что произойдет, если не оплатить?</h3>
+              <p>Если оплата не будет получена до ${new Date(rentalData.dueDate).toLocaleDateString('ru-RU')}:</p>
+              <ol>
+                <li>Доступ к сайту будет временно приостановлен</li>
+                <li>Вы получите дополнительные напоминания</li>
+                <li>После 7 дней просрочки аренда будет автоматически отменена</li>
+              </ol>
+              <p><em>Мы рекомендуем оплатить вовремя, чтобы избежать перерывов в работе.</em></p>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #f59e0b;">💡 Способы оплаты</h3>
+              <p>Вы можете оплатить аренду следующими способами:</p>
+              <ul>
+                <li><strong>💳 Банковская карта</strong> (Visa, MasterCard, Мир)</li>
+                <li><strong>🏦 Банковский перевод</strong></li>
+                <li><strong>📱 Электронные кошельки</strong></li>
+                <li><strong>🤝 Корпоративный счет</strong> (для юридических лиц)</li>
+              </ul>
+              <p>Все платежи защищены SSL-шифрованием и обрабатываются безопасно.</p>
+            </div>
+
+            <div class="info-card">
+              <h3 style="color: #f59e0b;">📞 Помощь с оплатой</h3>
+              <p>Если у вас возникли вопросы или проблемы с оплатой:</p>
+              <ul>
+                <li><strong>Отдел биллинга:</strong> billing@rentalsite.com</li>
+                <li><strong>Телефон:</strong> +7 (XXX) XXX-XXXX (оплата)</li>
+                <li><strong>Часы работы:</strong> Пн-Пт, 9:00-18:00</li>
+              </ul>
+              <p style="font-size: 14px; color: #6b7280;">Это автоматическое напоминание. Пожалуйста, не отвечайте на это письмо.</p>
+            </div>
+          </div>
+
+          <div class="footer">
+            <p>Это автоматическое напоминание об оплате от RentalSite</p>
+            <p>💼 <strong>RentalSite Business</strong> | Профессиональная аренда сайтов</p>
+            <p>📍 ${new Date().getFullYear()} RentalSite. Все права защищены.</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `
     })
 };
 
@@ -944,6 +1257,9 @@ export const sendEmailNotification = async (type, contactData, siteData = null, 
             case 'rentalExpiringSoon':
             case 'rentalExpired':
             case 'paymentReceived':
+            case 'clientWelcome':
+            case 'clientRentalStarted':
+            case 'clientPaymentReminder':
                 toEmail = contactData.email;
                 break;
             case 'newRentalInquiry':

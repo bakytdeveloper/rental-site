@@ -9,6 +9,7 @@ import siteRoutes from './routes/siteRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import contactRoutes from './routes/contactRoutes.js';
 import { setupRentalCronJobs } from './cronJobs.js';
+import clientRoutes from "./routes/clientRoutes.js";
 
 // ES modules fix for __dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +40,7 @@ mongoose.connect(process.env.MONGO_URI)
 app.use('/api/sites', siteRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/client', clientRoutes); // Добавляем эту строку
 
 // Health check
 app.get('/api/health', (req, res) => {

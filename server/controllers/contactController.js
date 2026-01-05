@@ -1,6 +1,7 @@
 import Contact from '../models/Contact.js';
 import Site from '../models/Site.js';
 import { sendEmailNotification } from '../services/emailService.js';
+import User from "../models/User.js";
 
 // @desc    Create new contact
 // @route   POST /api/contacts
@@ -21,9 +22,10 @@ export const createContact = async (req, res) => {
 
         // Если есть siteId, получим siteTitle из базы
         let siteTitle = req.body.siteTitle || '';
+        let site = null;
         if (req.body.siteId && !siteTitle) {
             try {
-                const site = await Site.findById(req.body.siteId);
+                site = await Site.findById(req.body.siteId);
                 if (site) {
                     siteTitle = site.title;
                     console.log('🏷️ Found site title:', siteTitle);
@@ -63,11 +65,59 @@ export const createContact = async (req, res) => {
         const contact = await Contact.create(contactData);
         console.log('✅ Contact saved to database:', contact._id);
 
+        // ✅ ДОБАВЛЯЕМ: Привязка контакта к пользователю
+        try {
+            // Проверяем, есть ли пользователь с таким email
+            const user = await User.findOne({ email: contactData.email });
+            if (user && user.role === 'client') {
+                // Привязываем контакт к пользователю
+                contact.userId = user._id;
+                await contact.save();
+                console.log(`🔗 Contact linked to user: ${user._id}`);
+
+                // Добавляем сайт в список арендованных пользователя
+                if (req.body.siteId) {
+                    user.addRentedSite({
+                        siteId: req.body.siteId,
+                        contactId: contact._id,
+                        rentalStartDate: contact.rentalStartDate || new Date(),
+                        rentalEndDate: contact.rentalEndDate,
+                        monthlyPrice: contact.monthlyPrice || (site ? site.price : 0),
+                        status: 'active'
+                    });
+                    await user.save();
+                    console.log(`🏠 Site added to user's rented sites: ${req.body.siteId}`);
+
+                    // Добавляем уведомление пользователю
+                    if (user.addNotification) {
+                        user.addNotification({
+                            type: 'rental_expiring',
+                            message: `Вы начали аренду сайта "${siteTitle}"`,
+                            data: {
+                                contactId: contact._id,
+                                siteId: req.body.siteId,
+                                rentalEndDate: contact.rentalEndDate
+                            }
+                        });
+                        await user.save();
+                        console.log(`🔔 Notification added to user: ${user.email}`);
+                    }
+                }
+            }
+        } catch (userLinkError) {
+            console.error('⚠️ Error linking contact to user:', userLinkError);
+            // Не прерываем основной поток, так как это дополнительный функционал
+        }
+
         // Отправляем email уведомление (асинхронно, не блокируем ответ)
         setTimeout(async () => {
             try {
                 if (req.body.siteId) {
-                    const site = await Site.findById(req.body.siteId);
+                    // Если site еще не загружен, загружаем его
+                    if (!site) {
+                        site = await Site.findById(req.body.siteId);
+                    }
+
                     if (site) {
                         console.log('🌐 Sending rental inquiry email for site:', site.title);
 

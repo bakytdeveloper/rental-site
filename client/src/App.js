@@ -8,14 +8,15 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import SiteDetail from './pages/SiteDetail';
 import Admin from './pages/Admin';
+import ClientAuth from './pages/ClientAuth';
+import ClientDashboard from './pages/ClientDashboard';
 import { LoadingProvider } from './context/LoadingContext';
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 import './App.css';
-import {HelmetProvider} from "react-helmet-async";
+import './global.css';
 
 function App() {
   return (
-      <HelmetProvider>
       <LoadingProvider>
         <Router>
           <div className="App">
@@ -28,6 +29,11 @@ function App() {
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/admin/*" element={<Admin />} />
+
+                {/* Client Routes */}
+                <Route path="/client/register" element={<ClientAuth type="register" />} />
+                <Route path="/client/login" element={<ClientAuth type="login" />} />
+                <Route path="/client/dashboard" element={<ClientDashboard />} />
               </Routes>
             </main>
 
@@ -50,7 +56,6 @@ function App() {
           </div>
         </Router>
       </LoadingProvider>
-      </HelmetProvider>
   );
 }
 
@@ -58,8 +63,8 @@ function App() {
 const ConditionalWhatsAppButton = () => {
   const location = useLocation();
 
-  // Не показываем на админских страницах
-  if (location.pathname.startsWith('/admin')) {
+  // Не показываем на админских и клиентских страницах
+  if (location.pathname.startsWith('/admin') || location.pathname.startsWith('/client')) {
     return null;
   }
 
@@ -67,4 +72,3 @@ const ConditionalWhatsAppButton = () => {
 };
 
 export default App;
-

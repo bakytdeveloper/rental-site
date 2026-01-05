@@ -1,0 +1,86 @@
+/* Client Authentication Styles */
+.client-auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-primary), var(--bg-secondary));
+}
+
+.client-auth-card {
+    max-width: 500px;
+    margin: 0 auto;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-xl);
+}
+
+.auth-logo {
+    font-size: 2rem;
+    font-weight: 700;
+}
+
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.auth-subtitle {
+    font-size: 0.9rem;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.auth-btn {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.auth-footer {
+    border-top-color: var(--border-color) !important;
+}
+
+.auth-footer a {
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.auth-footer a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Form validation styles */
+.form-control-custom:invalid {
+    border-color: var(--danger-color);
+}
+
+.form-control-custom:valid {
+    border-color: var(--success-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .client-auth-card {
+        margin: 1rem;
+    }
+
+    .auth-logo {
+        font-size: 1.75rem;
+    }
+
+    .auth-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .client-auth-page {
+        padding: 1rem;
+    }
+
+    .client-auth-card {
+        margin: 0;
+    }
+
+    .auth-btn {
+        padding: 0.75rem !important;
+    }
+}

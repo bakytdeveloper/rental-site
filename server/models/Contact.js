@@ -113,7 +113,12 @@ const ContactSchema = new mongoose.Schema({
     lastNotificationDate: {
         type: Date,
         default: null
-    }
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        default: null
+    },
 }, {
     timestamps: true
 });
@@ -197,6 +202,11 @@ ContactSchema.methods.updateRentalStatus = function() {
         }
     }
     return this;
+};
+
+ContactSchema.methods.linkToUser = async function(userId) {
+    this.userId = userId;
+    await this.save();
 };
 
 // pre('save') без next()
