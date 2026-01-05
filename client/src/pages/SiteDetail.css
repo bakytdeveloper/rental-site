@@ -601,7 +601,7 @@
     font-size: 1rem;
 }
 
-/* Responsive Design */
+
 @media (max-width: 992px) {
     .site-detail-info-section {
         margin-left: 0;
