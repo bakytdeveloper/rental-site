@@ -101,7 +101,7 @@ const Auth = () => {
         <div className="admin-login-page">
             <Container className="container-custom">
                 <Row className="justify-content-center align-items-center min-vh-100">
-                    <Col lg={5} md={6} sm={8}>
+                    <Col lg={8} md={6} sm={8}>
                         <Card className="login-card card-custom">
                             <Card.Body className="p-4 p-md-5">
                                 <div className="text-center mb-4">
