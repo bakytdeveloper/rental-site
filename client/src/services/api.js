@@ -14,10 +14,19 @@ const api = axios.create({
 // Request interceptor to add auth token
 api.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('adminToken');
-        if (token) {
-            config.headers.Authorization = `Bearer ${token}`;
+        // Проверяем clientToken в первую очередь
+        const clientToken = localStorage.getItem('clientToken');
+        if (clientToken) {
+            config.headers.Authorization = `Bearer ${clientToken}`;
+            return config;
         }
+
+        // Затем проверяем adminToken
+        const adminToken = localStorage.getItem('adminToken');
+        if (adminToken) {
+            config.headers.Authorization = `Bearer ${adminToken}`;
+        }
+
         return config;
     },
     (error) => {
@@ -30,10 +39,26 @@ api.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response?.status === 401) {
-            localStorage.removeItem('adminToken');
-            localStorage.removeItem('adminUser');
-            window.location.href = '/admin/login';
+            // Определяем, какой токен удалять
+            const path = error.config.url;
+
+            if (path.includes('/admin') || path.includes('/auth')) {
+                // Админская авторизация
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('adminUser');
+                if (window.location.pathname.startsWith('/admin')) {
+                    window.location.href = '/admin/login';
+                }
+            } else if (path.includes('/client')) {
+                // Клиентская авторизация
+                localStorage.removeItem('clientToken');
+                localStorage.removeItem('clientData');
+                if (window.location.pathname.startsWith('/client')) {
+                    window.location.href = '/client/login';
+                }
+            }
         }
+
         return Promise.reject(error);
     }
 );
@@ -72,8 +97,7 @@ export const authAPI = {
     updateProfile: (data) => api.put('/auth/profile', data),
 };
 
-// Contact API - удаляем priority из комментариев
-// Обновим contactAPI
+// Contact API
 export const contactAPI = {
     getAll: (params = {}) => api.get('/contacts', { params }),
     getById: (id) => api.get(`/contacts/${id}`),
@@ -88,13 +112,6 @@ export const contactAPI = {
     sendReminders: () => api.post('/contacts/rentals/send-reminders'),
     getRentalStats: () => api.get('/contacts/rentals/stats'),
     checkExpiredRentals: () => api.post('/contacts/rentals/check-expired'),
-};
-
-// Utility function to handle API errors
-export const handleApiError = (error, defaultMessage = 'Something went wrong') => {
-    const message = error.response?.data?.message || defaultMessage;
-    toast.error(message);
-    return message;
 };
 
 // Client API
@@ -119,6 +136,29 @@ export const checkClientAuth = () => {
 export const checkAdminAuth = () => {
     const token = localStorage.getItem('adminToken');
     return !!token;
+};
+
+// Utility function to handle API errors
+export const handleApiError = (error, defaultMessage = 'Что-то пошло не так') => {
+    const message = error.response?.data?.message || defaultMessage;
+
+    // Не показываем toast для 401 ошибок (перенаправляем на логин)
+    if (error.response?.status !== 401) {
+        toast.error(message);
+    }
+
+    return message;
+};
+
+// Проверка, какой токен сейчас активен
+export const getCurrentAuthType = () => {
+    if (localStorage.getItem('clientToken')) {
+        return 'client';
+    }
+    if (localStorage.getItem('adminToken')) {
+        return 'admin';
+    }
+    return null;
 };
 
 export default api;
