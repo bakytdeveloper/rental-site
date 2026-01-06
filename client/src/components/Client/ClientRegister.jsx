@@ -102,7 +102,7 @@ const ClientRegister = () => {
         <div className="client-auth-page">
             <Container className="container-custom py-5">
                 <Row className="justify-content-center">
-                    <Col lg={6} md={8} sm={12}>
+                    <Col lg={8} md={8} sm={12}>
                         <Card className="client-auth-card card-custom">
                             <Card.Body className="p-4 p-md-5">
                                 <div className="text-center mb-4">
