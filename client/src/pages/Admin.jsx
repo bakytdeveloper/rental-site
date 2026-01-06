@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Nav, Button, Dropdown } from 'react-bootstrap';
-import { Routes, Route, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import ProtectedRoute from '../components/Admin/ProtectedRoute';
-import AdminLogin from '../components/Admin/AdminLogin';
+// import AdminLogin from '../components/Admin/AdminLogin';
+// import Auth from '../components/Auth/Auth'; // Импортируем универсальную авторизацию
 import AdminDashboard from '../components/Admin/AdminDashboard';
 import AdminSites from '../components/Admin/AdminSites';
 import AdminContacts from '../components/Admin/AdminContacts';
@@ -26,7 +27,7 @@ const AdminLayout = ({ children }) => {
         localStorage.removeItem('adminUser');
         setUser(null);
         toast.success('Вы успешно вышли из системы');
-        navigate('/admin/login');
+        navigate('/auth/login'); // Перенаправляем на универсальную авторизацию
     };
 
     return (
@@ -96,8 +97,8 @@ const AdminLayout = ({ children }) => {
 const Admin = () => {
     return (
         <Routes>
-            {/* Публичный маршрут - страница входа */}
-            <Route path="/login" element={<AdminLogin />} />
+            {/* Редирект с /admin/login на /auth/login */}
+            <Route path="/login" element={<Navigate to="/auth/login" replace />} />
 
             {/* Защищенные маршруты - требуют аутентификации */}
             <Route
