@@ -492,7 +492,7 @@ const SiteDetail = () => {
                                         required
                                         placeholder="Введите ваше полное имя"
                                         disabled={loading}
-                                        className="bg-secondary-bg text-light border-secondary"
+                                        className="bg-secondary-bg text-muted border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
@@ -508,7 +508,7 @@ const SiteDetail = () => {
                                         required
                                         placeholder="Введите ваш email"
                                         disabled={loading}
-                                        className="bg-secondary-bg text-light border-secondary"
+                                        className="bg-secondary-bg text-muted border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
@@ -526,7 +526,7 @@ const SiteDetail = () => {
                                         required
                                         placeholder="Введите ваш номер телефона"
                                         disabled={loading}
-                                        className="bg-secondary-bg text-light border-secondary"
+                                        className="bg-secondary-bg text-muted border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
@@ -541,7 +541,7 @@ const SiteDetail = () => {
                                         onChange={handleInputChange}
                                         placeholder="Ваша компания (необязательно)"
                                         disabled={loading}
-                                        className="bg-secondary-bg text-light border-secondary"
+                                        className="bg-secondary-bg text-muted border-secondary"
                                     />
                                 </Form.Group>
                             </Col>
