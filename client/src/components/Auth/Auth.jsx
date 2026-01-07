@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, Spinner, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, Spinner, ToggleButton, ToggleButtonGroup, InputGroup } from 'react-bootstrap';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { authAPI, clientAPI } from '../../services/api';
 import { toast } from 'react-toastify';
@@ -12,6 +12,7 @@ const Auth = () => {
         userType: 'client' // 'client' или 'admin'
     });
 
+    const [showPassword, setShowPassword] = useState(false); // Состояние для отображения пароля
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -97,11 +98,16 @@ const Auth = () => {
         }
     };
 
+    // Функция для переключения видимости пароля
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
     return (
         <div className="admin-login-page">
             <Container className="container-custom">
                 <Row className="justify-content-center align-items-center min-vh-100">
-                    <Col lg={8} md={6} sm={8}>
+                    <Col lg={7} md={6} sm={8}>
                         <Card className="login-card card-custom">
                             <Card.Body className="p-4 p-md-5">
                                 <div className="text-center mb-4">
@@ -165,16 +171,26 @@ const Auth = () => {
 
                                     <Form.Group className="mb-4">
                                         <Form.Label className="mb-2">Пароль</Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            name="password"
-                                            value={formData.password}
-                                            onChange={handleInputChange}
-                                            required
-                                            placeholder="Введите пароль"
-                                            disabled={loading}
-                                            className="login-form-control glass-effect"
-                                        />
+                                        <InputGroup>
+                                            <Form.Control
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                value={formData.password}
+                                                onChange={handleInputChange}
+                                                required
+                                                placeholder="Введите пароль"
+                                                disabled={loading}
+                                                className="login-form-control glass-effect"
+                                            />
+                                            <Button
+                                                variant="outline-secondary"
+                                                onClick={togglePasswordVisibility}
+                                                disabled={loading}
+                                                className="password-toggle-btn"
+                                            >
+                                                {showPassword ? '🙈' : '👁️'}
+                                            </Button>
+                                        </InputGroup>
 
                                         {formData.userType === 'client' && (
                                             <div className="text-end mt-2">
