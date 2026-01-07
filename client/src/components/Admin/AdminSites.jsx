@@ -499,7 +499,7 @@ const AdminSites = () => {
                                             </td>
                                             <td className="admin-sites-featured-cell">
                                                 <Badge
-                                                    bg={site.isFeatured ? 'warning' : 'outline-warning'}
+                                                    bg={site.isFeatured ? 'warning' : 'secondary'}
                                                     className="admin-sites-featured-badge"
                                                     role="button"
                                                     onClick={() => toggleFeatured(site._id, site.isFeatured)}
