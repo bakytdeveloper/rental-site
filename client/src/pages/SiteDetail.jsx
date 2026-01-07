@@ -519,7 +519,7 @@ const SiteDetail = () => {
             >
                 <Modal.Header closeButton className="border-bottom">
                     <div>
-                        <Modal.Title className="text-light">Арендовать {site.title || 'сайт'}</Modal.Title>
+                        <Modal.Title className="text-muted">Арендовать {site.title || 'сайт'}</Modal.Title>
                         <div className="site-detail-modal-subtitle text-muted">
                             ₸{site.price || 0}/месяц • {site.category || 'Сайт'}
                         </div>
