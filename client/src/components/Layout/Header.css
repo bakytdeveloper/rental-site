@@ -200,7 +200,8 @@
 }
 
 .header-dropdown-menu {
-    background: var(--card-bg);
+    background: var(--gradient-bg-light);
+    /*background: var(--card-bg);*/
     backdrop-filter: blur(15px);
     border: var(--border-width-thin) solid var(--card-border);
     border-radius: var(--border-radius-lg);
