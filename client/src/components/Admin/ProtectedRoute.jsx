@@ -20,11 +20,12 @@ const ProtectedRoute = ({ children }) => {
         }
 
         try {
-            // Verify token is still valid
-            await authAPI.getMe();
+            // Проверяем профиль админа
+            await authAPI.getAdminProfile();
             setIsAuthenticated(true);
         } catch (error) {
-            // Token is invalid
+            console.error('Auth check failed:', error);
+            // Токен недействителен
             localStorage.removeItem('adminToken');
             localStorage.removeItem('adminUser');
             setIsAuthenticated(false);
@@ -40,8 +41,8 @@ const ProtectedRoute = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-        // Redirect to login page with return url
-        return <Navigate to="/admin/login" state={{ from: location }} replace />;
+        // Перенаправляем на универсальную страницу авторизации
+        return <Navigate to="/auth/login" state={{ from: location }} replace />;
     }
 
     return children;

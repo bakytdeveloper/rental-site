@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Container, Row, Col, Nav, Button, Dropdown } from 'react-bootstrap';
 import { Routes, Route, Link, useLocation, Navigate, useNavigate } from 'react-router-dom';
 import ProtectedRoute from '../components/Admin/ProtectedRoute';
-// import AdminLogin from '../components/Admin/AdminLogin';
 // import Auth from '../components/Auth/Auth'; // Импортируем универсальную авторизацию
 import AdminDashboard from '../components/Admin/AdminDashboard';
 import AdminSites from '../components/Admin/AdminSites';
