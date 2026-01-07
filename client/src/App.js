@@ -16,6 +16,7 @@ import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 import './App.css';
 import './global.css';
 import ClientRegister from "./components/Client/ClientRegister";
+import ClientProtectedRoute from "./components/Client/ClientProtectedRoute";
 
 function App() {
   return (
@@ -44,10 +45,11 @@ function App() {
 
                 {/* Клиентские маршруты */}
                 <Route path="/client/register" element={<ClientRegister />} />
+                {/* Защищенные маршруты клиента */}
                 <Route path="/client/dashboard" element={
-                  <RequireAuth type="client">
+                  <ClientProtectedRoute>
                     <ClientDashboard />
-                  </RequireAuth>
+                  </ClientProtectedRoute>
                 } />
                 <Route path="/client/forgot-password" element={
                   <div className="container-custom py-5 text-center">

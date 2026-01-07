@@ -28,6 +28,11 @@ const UserSchema = new mongoose.Schema({
         phone: { type: String, trim: true },
         company: { type: String, trim: true }
     },
+    role: {
+        type: String,
+        enum: ['client', 'admin'],
+        default: 'client'
+    },
     isActive: {
         type: Boolean,
         default: true

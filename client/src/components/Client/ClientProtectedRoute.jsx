@@ -1,11 +1,11 @@
+// ClientProtectedRoute.jsx
 import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Spinner, Container } from 'react-bootstrap';
-import { clientAPI } from '../../services/api';
+import {clientAPI} from "../../services/api";
 
 const ClientProtectedRoute = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
-    const [loading, setLoading] = useState(true);
     const location = useLocation();
 
     useEffect(() => {
@@ -17,25 +17,22 @@ const ClientProtectedRoute = ({ children }) => {
 
         if (!token) {
             setIsAuthenticated(false);
-            setLoading(false);
             return;
         }
 
         try {
-            // Verify token is still valid
+            // Проверяем профиль клиента
             await clientAPI.getProfile();
             setIsAuthenticated(true);
         } catch (error) {
-            // Token is invalid
+            console.error('Client auth check failed:', error);
             localStorage.removeItem('clientToken');
             localStorage.removeItem('clientData');
             setIsAuthenticated(false);
-        } finally {
-            setLoading(false);
         }
     };
 
-    if (loading) {
+    if (isAuthenticated === null) {
         return (
             <Container className="d-flex justify-content-center align-items-center min-vh-100">
                 <Spinner animation="border" variant="primary" />
@@ -44,8 +41,7 @@ const ClientProtectedRoute = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-        // Redirect to login page with return url
-        return <Navigate to="/client/login" state={{ from: location }} replace />;
+        return <Navigate to="/auth/login" state={{ from: location }} replace />;
     }
 
     return children;
