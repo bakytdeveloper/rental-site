@@ -27,7 +27,7 @@ export const requestRental = async (req, res) => {
 
         // Проверяем существование сайта
         const site = await Site.findById(siteId);
-        if (!site || !site.isAvailable) {
+        if (!site || !site.isActive) {
             return res.status(404).json({
                 success: false,
                 message: 'Сайт не найден или недоступен для аренды'
