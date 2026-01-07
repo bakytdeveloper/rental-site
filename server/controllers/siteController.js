@@ -8,8 +8,11 @@ import path from 'path';
 // @access  Public
 export const getAllSites = async (req, res) => {
     try {
+        console.log('GET /api/sites - Query params:', req.query);
+
         const { category, featured, page = 1, limit = 12 } = req.query;
 
+        // ВАЖНО: Используем isActive вместо isAvailable
         let query = { isActive: true };
 
         if (category && category !== 'all') {
@@ -20,21 +23,32 @@ export const getAllSites = async (req, res) => {
             query.isFeatured = true;
         }
 
+        const currentPage = parseInt(page);
+        const pageLimit = parseInt(limit);
+
         const sites = await Site.find(query)
             .sort({ sortOrder: -1, createdAt: -1 })
-            .limit(limit * 1)
-            .skip((page - 1) * limit);
+            .limit(pageLimit)
+            .skip((currentPage - 1) * pageLimit);
 
         const total = await Site.countDocuments(query);
 
+        console.log(`Found ${sites.length} sites out of ${total} total`);
+
         res.json({
+            success: true,
             sites,
-            totalPages: Math.ceil(total / limit),
-            currentPage: page,
+            totalPages: Math.ceil(total / pageLimit),
+            currentPage: currentPage,
             total
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error in getAllSites:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Ошибка при загрузке сайтов',
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 
@@ -44,9 +58,15 @@ export const getAllSites = async (req, res) => {
 export const getAllSitesAdmin = async (req, res) => {
     try {
         const sites = await Site.find().sort({ createdAt: -1 });
-        res.json({ sites });
+        res.json({
+            success: true,
+            sites
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
@@ -57,12 +77,21 @@ export const getSiteById = async (req, res) => {
     try {
         const site = await Site.findById(req.params.id);
         if (site) {
-            res.json(site);
+            res.json({
+                success: true,
+                site
+            });
         } else {
-            res.status(404).json({ message: 'Site not found' });
+            res.status(404).json({
+                success: false,
+                message: 'Site not found'
+            });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
@@ -73,7 +102,10 @@ export const createSite = async (req, res) => {
     try {
         uploadMultiple(req, res, async (err) => {
             if (err) {
-                return res.status(400).json({ message: err.message });
+                return res.status(400).json({
+                    success: false,
+                    message: err.message
+                });
             }
 
             try {
@@ -83,14 +115,20 @@ export const createSite = async (req, res) => {
                     req.files.forEach(file => {
                         deleteFile(file.filename);
                     });
-                    return res.status(400).json({ message: 'Maximum 7 images allowed' });
+                    return res.status(400).json({
+                        success: false,
+                        message: 'Maximum 7 images allowed'
+                    });
                 }
 
                 const imagePaths = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
 
                 // Проверяем, что есть хотя бы одно изображение
                 if (imagePaths.length === 0) {
-                    return res.status(400).json({ message: 'At least one image is required' });
+                    return res.status(400).json({
+                        success: false,
+                        message: 'At least one image is required'
+                    });
                 }
 
                 // Парсим JSON строки в массивы
@@ -106,6 +144,7 @@ export const createSite = async (req, res) => {
                     price: parseFloat(req.body.price),
                     isFeatured: req.body.isFeatured === 'true' || req.body.isFeatured === true,
                     isActive: req.body.isActive === 'true' || req.body.isActive === true,
+                    isAvailable: req.body.isAvailable === 'true' || req.body.isAvailable === true,
                     sortOrder: parseInt(req.body.sortOrder || 0)
                 };
 
@@ -113,7 +152,10 @@ export const createSite = async (req, res) => {
                 const createdSite = await site.save();
 
                 console.log(`✅ Site created with ${imagePaths.length} images`);
-                res.status(201).json(createdSite);
+                res.status(201).json({
+                    success: true,
+                    site: createdSite
+                });
             } catch (parseError) {
                 console.error('Parse error:', parseError);
                 // Удаляем загруженные файлы при ошибке парсинга
@@ -122,15 +164,20 @@ export const createSite = async (req, res) => {
                         deleteFile(file.filename);
                     });
                 }
-                res.status(400).json({ message: 'Invalid data format: ' + parseError.message });
+                res.status(400).json({
+                    success: false,
+                    message: 'Invalid data format: ' + parseError.message
+                });
             }
         });
     } catch (error) {
         console.error('Create site error:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
-
 
 // @desc    Update a site with image upload
 // @route   PUT /api/sites/:id
@@ -138,9 +185,11 @@ export const createSite = async (req, res) => {
 export const updateSite = async (req, res) => {
     try {
         uploadMultiple(req, res, async (err) => {
-
             if (err) {
-                return res.status(400).json({ message: err.message });
+                return res.status(400).json({
+                    success: false,
+                    message: err.message
+                });
             }
 
             try {
@@ -152,7 +201,10 @@ export const updateSite = async (req, res) => {
                             deleteFile(file.filename);
                         });
                     }
-                    return res.status(404).json({ message: 'Site not found' });
+                    return res.status(404).json({
+                        success: false,
+                        message: 'Site not found'
+                    });
                 }
 
                 // Обрабатываем новые изображения
@@ -191,6 +243,7 @@ export const updateSite = async (req, res) => {
                         });
                     }
                     return res.status(400).json({
+                        success: false,
                         message: `Maximum 7 images allowed. You have ${existingImages.length} existing images and tried to add ${newImagePaths.length} new ones.`
                     });
                 }
@@ -216,6 +269,10 @@ export const updateSite = async (req, res) => {
                     updateData.isActive = req.body.isActive === 'true' || req.body.isActive === true;
                 }
 
+                if (req.body.isAvailable !== undefined) {
+                    updateData.isAvailable = req.body.isAvailable === 'true' || req.body.isAvailable === true;
+                }
+
                 // Преобразуем числовые значения
                 if (req.body.price !== undefined) {
                     updateData.price = parseFloat(req.body.price);
@@ -236,7 +293,10 @@ export const updateSite = async (req, res) => {
                 console.log(`✅ Site updated with ${newImagePaths.length} new images, total: ${updatedSite.images.length}`);
                 console.log(`🗑️ Deleted ${imagesToDelete.length} old images`);
 
-                res.json(updatedSite);
+                res.json({
+                    success: true,
+                    site: updatedSite
+                });
             } catch (parseError) {
                 console.error('Parse error in update:', parseError);
                 // Удаляем загруженные файлы при ошибке парсинга
@@ -245,12 +305,18 @@ export const updateSite = async (req, res) => {
                         deleteFile(file.filename);
                     });
                 }
-                res.status(400).json({ message: 'Invalid data format: ' + parseError.message });
+                res.status(400).json({
+                    success: false,
+                    message: 'Invalid data format: ' + parseError.message
+                });
             }
         });
     } catch (error) {
         console.error('Update site error:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
@@ -263,11 +329,17 @@ export const deleteSiteImages = async (req, res) => {
         const site = await Site.findById(req.params.id);
 
         if (!site) {
-            return res.status(404).json({ message: 'Site not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'Site not found'
+            });
         }
 
         if (!imageUrls || !Array.isArray(imageUrls)) {
-            return res.status(400).json({ message: 'Image URLs array is required' });
+            return res.status(400).json({
+                success: false,
+                message: 'Image URLs array is required'
+            });
         }
 
         // Удаляем файлы с сервера
@@ -282,12 +354,16 @@ export const deleteSiteImages = async (req, res) => {
 
         console.log(`🗑️ Deleted ${imageUrls.length} images from site`);
         res.json({
+            success: true,
             message: 'Images deleted successfully',
             remainingImages: site.images.length
         });
     } catch (error) {
         console.error('Delete images error:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
@@ -311,13 +387,22 @@ export const deleteSite = async (req, res) => {
 
             console.log(`✅ Site deleted: ${site.title}`);
 
-            res.json({ message: 'Site and all images removed successfully' });
+            res.json({
+                success: true,
+                message: 'Site and all images removed successfully'
+            });
         } else {
-            res.status(404).json({ message: 'Site not found' });
+            res.status(404).json({
+                success: false,
+                message: 'Site not found'
+            });
         }
     } catch (error) {
         console.error('Delete site error:', error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
@@ -326,6 +411,8 @@ export const deleteSite = async (req, res) => {
 // @access  Public
 export const getFeaturedSites = async (req, res) => {
     try {
+        console.log('GET /api/sites/featured');
+
         const sites = await Site.find({
             isFeatured: true,
             isActive: true
@@ -333,9 +420,19 @@ export const getFeaturedSites = async (req, res) => {
             .sort({ sortOrder: -1, createdAt: -1 })
             .limit(6);
 
-        res.json(sites);
+        console.log(`Found ${sites.length} featured sites`);
+
+        // ВАЖНО: Возвращаем объект с полем data для соответствия фронтенду
+        res.json({
+            success: true,
+            data: sites  // Изменено с sites на data для совместимости
+        });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error in getFeaturedSites:', error);
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
 
@@ -346,17 +443,24 @@ export const toggleFeatured = async (req, res) => {
     try {
         const site = await Site.findById(req.params.id);
         if (!site) {
-            return res.status(404).json({ message: 'Site not found' });
+            return res.status(404).json({
+                success: false,
+                message: 'Site not found'
+            });
         }
 
         site.isFeatured = !site.isFeatured;
         await site.save();
 
         res.json({
+            success: true,
             message: `Site ${site.isFeatured ? 'marked as' : 'unmarked from'} featured`,
             isFeatured: site.isFeatured
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };

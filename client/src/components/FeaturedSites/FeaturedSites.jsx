@@ -18,10 +18,18 @@ const FeaturedSites = () => {
     const fetchFeaturedSites = async () => {
         startLoading();
         try {
+            console.log('Fetching featured sites...');
             const response = await siteAPI.getFeatured();
-            setFeaturedSites(response.data);
+            console.log('Featured sites response:', response.data);
+
+            // ВАЖНО: Бэкенд теперь возвращает data.sites или data.data
+            const sites = response.data.data || response.data.sites || [];
+            setFeaturedSites(sites);
+
+            console.log(`Set ${sites.length} featured sites`);
         } catch (error) {
             console.error('Ошибка при загрузке рекомендуемых сайтов:', error);
+            setFeaturedSites([]); // Устанавливаем пустой массив при ошибке
         } finally {
             stopLoading();
         }

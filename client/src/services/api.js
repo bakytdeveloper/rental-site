@@ -65,8 +65,16 @@ api.interceptors.response.use(
 
 // ==================== API ДЛЯ САЙТОВ ====================
 export const siteAPI = {
-    getAll: (params = {}) => api.get('/sites', { params }),
-    getFeatured: () => api.get('/sites/featured'),
+    // getAll: (params = {}) => api.get('/sites', { params }),
+    // getFeatured: () => api.get('/sites/featured'),
+    getAll: (params = {}) => {
+        console.log('siteAPI.getAll called with params:', params);
+        return api.get('/sites', { params });
+    },
+    getFeatured: () => {
+        console.log('siteAPI.getFeatured called');
+        return api.get('/sites/featured');
+    },
     getById: (id) => api.get(`/sites/${id}`),
 
     // Админские методы

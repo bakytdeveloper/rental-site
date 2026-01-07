@@ -7,6 +7,7 @@ import { siteAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import SiteCard from '../components/SiteCard/SiteCard';
 import SEO from '../components/SEO/SEO';
+import { toast } from 'react-toastify';
 import './Catalog.css';
 
 const Catalog = () => {
@@ -128,16 +129,24 @@ const Catalog = () => {
                 limit: 12
             };
 
+            console.log('Fetching sites with params:', params);
             const response = await siteAPI.getAll(params);
-            setSites(response.data.sites);
-            setFilteredSites(response.data.sites);
+            console.log('Sites response:', response.data);
+
+            // ВАЖНО: Проверяем структуру ответа
+            const sites = response.data.sites || [];
+            setSites(sites);
+            setFilteredSites(sites);
             setPagination(prev => ({
                 ...prev,
-                totalPages: response.data.totalPages,
-                total: response.data.total
+                totalPages: response.data.totalPages || 1,
+                total: response.data.total || 0
             }));
         } catch (error) {
             console.error('Ошибка при загрузке сайтов:', error);
+            setSites([]);
+            setFilteredSites([]);
+            toast.error('Не удалось загрузить сайты. Пожалуйста, попробуйте позже.');
         } finally {
             stopLoading();
         }

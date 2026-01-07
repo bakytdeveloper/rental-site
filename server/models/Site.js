@@ -46,6 +46,10 @@ const SiteSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    isActive: {  // ДОБАВЛЕНО: поле для контроля доступности сайта
+        type: Boolean,
+        default: true
+    },
     isAvailable: {
         type: Boolean,
         default: true
@@ -58,7 +62,8 @@ const SiteSchema = new mongoose.Schema({
     timestamps: true
 });
 
-// Индекс для быстрого поиска
-SiteSchema.index({ category: 1, isAvailable: 1, sortOrder: -1 });
+// Обновляем индексы
+SiteSchema.index({ isActive: 1, isFeatured: 1, sortOrder: -1 });
+SiteSchema.index({ category: 1, isActive: 1, sortOrder: -1 });
 
 export default mongoose.model('Site', SiteSchema);
