@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Badge, Spinner, Alert, Tab, Nav } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import { clientAPI } from '../services/api';
+import { clientAPI, rentalAPI } from '../services/api'; // Добавил rentalAPI
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './ClientDashboard.css';
 
 const ClientDashboard = () => {
     const [userData, setUserData] = useState(null);
+    const [rentals, setRentals] = useState([]);
     const [activeTab, setActiveTab] = useState('rentals');
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -22,27 +23,30 @@ const ClientDashboard = () => {
     const checkAuth = () => {
         const token = localStorage.getItem('clientToken');
         if (!token) {
-            navigate('/client/login');
+            navigate('/auth/login');
         }
     };
 
     const fetchDashboardData = async () => {
         startLoading();
         try {
-            const [profileRes, notificationsRes] = await Promise.all([
+            // Загружаем данные параллельно
+            const [profileRes, notificationsRes, rentalsRes] = await Promise.all([
                 clientAPI.getProfile(),
-                clientAPI.getNotifications()
+                clientAPI.getNotifications(),
+                rentalAPI.getMyRentals()
             ]);
 
             setUserData(profileRes.data.user);
             setNotifications(notificationsRes.data.notifications || []);
             setUnreadCount(notificationsRes.data.unreadCount || 0);
+            setRentals(rentalsRes.data.rentals || []);
         } catch (error) {
             console.error('Ошибка при загрузке данных:', error);
             if (error.response?.status === 401) {
                 localStorage.removeItem('clientToken');
                 localStorage.removeItem('clientData');
-                navigate('/client/login');
+                navigate('/auth/login');
             }
         } finally {
             stopLoading();
@@ -71,16 +75,33 @@ const ClientDashboard = () => {
     };
 
     const getRentalStatusBadge = (status, daysRemaining) => {
-        if (status === 'expired') {
-            return <Badge bg="danger">Истек</Badge>;
+        const statusText = {
+            'pending': 'В ожидании',
+            'active': 'Активна',
+            'payment_due': 'Ожидает оплаты',
+            'cancelled': 'Отменена'
+        };
+
+        if (status === 'cancelled') {
+            return <Badge bg="secondary">{statusText[status]}</Badge>;
         }
+
+        if (status === 'payment_due') {
+            return <Badge bg="danger">{statusText[status]}</Badge>;
+        }
+
+        if (status === 'pending') {
+            return <Badge bg="warning">{statusText[status]}</Badge>;
+        }
+
+        // Для активной аренды
         if (daysRemaining <= 0) {
-            return <Badge bg="warning">Требуется оплата</Badge>;
+            return <Badge bg="danger">Истекла</Badge>;
         }
         if (daysRemaining <= 3) {
-            return <Badge bg="warning">Скоро истекает ({daysRemaining} дн.)</Badge>;
+            return <Badge bg="warning">Заканчивается ({daysRemaining} дн.)</Badge>;
         }
-        return <Badge bg="success">Активен ({daysRemaining} дн.)</Badge>;
+        return <Badge bg="success">Активна ({daysRemaining} дн.)</Badge>;
     };
 
     const handleLogout = () => {
@@ -88,6 +109,15 @@ const ClientDashboard = () => {
         localStorage.removeItem('clientData');
         navigate('/');
         toast.success('Вы успешно вышли из системы');
+    };
+
+    // Расчет статистики из аренд
+    const stats = {
+        totalRentals: rentals.length,
+        activeRentals: rentals.filter(r => r.status === 'active').length,
+        pendingRentals: rentals.filter(r => r.status === 'pending').length,
+        paymentDueRentals: rentals.filter(r => r.status === 'payment_due').length,
+        totalSpent: rentals.reduce((sum, rental) => sum + (rental.totalPaid || 0), 0)
     };
 
     if (loading && !userData) {
@@ -107,7 +137,7 @@ const ClientDashboard = () => {
                 <Alert variant="danger">
                     <h4>Ошибка загрузки данных</h4>
                     <p>Не удалось загрузить данные личного кабинета.</p>
-                    <Button onClick={() => navigate('/client/login')} variant="primary">
+                    <Button onClick={() => navigate('/auth/login')} variant="primary">
                         Войти снова
                     </Button>
                 </Alert>
@@ -130,13 +160,13 @@ const ClientDashboard = () => {
                                     Добро пожаловать, {userData.profile?.firstName || userData.username}!
                                 </p>
                             </div>
-                            {/*<Button*/}
-                            {/*    variant="outline-light"*/}
-                            {/*    onClick={handleLogout}*/}
-                            {/*    className="logout-btn"*/}
-                            {/*>*/}
-                            {/*    🚪 Выйти*/}
-                            {/*</Button>*/}
+                            <Button
+                                variant="outline-light"
+                                onClick={handleLogout}
+                                className="logout-btn"
+                            >
+                                🚪 Выйти
+                            </Button>
                         </div>
 
                         {/* Quick Stats */}
@@ -146,7 +176,7 @@ const ClientDashboard = () => {
                                     <Card.Body className="p-3">
                                         <div className="stats-content">
                                             <div className="stats-number text-primary">
-                                                {userData.statistics?.totalRentals || 0}
+                                                {stats.totalRentals}
                                             </div>
                                             <div className="stats-label text-muted">Всего аренд</div>
                                         </div>
@@ -158,7 +188,7 @@ const ClientDashboard = () => {
                                     <Card.Body className="p-3">
                                         <div className="stats-content">
                                             <div className="stats-number text-success">
-                                                {userData.statistics?.activeRentals || 0}
+                                                {stats.activeRentals}
                                             </div>
                                             <div className="stats-label text-muted">Активных</div>
                                         </div>
@@ -170,9 +200,9 @@ const ClientDashboard = () => {
                                     <Card.Body className="p-3">
                                         <div className="stats-content">
                                             <div className="stats-number text-warning">
-                                                {userData.statistics?.expiredRentals || 0}
+                                                {stats.pendingRentals}
                                             </div>
-                                            <div className="stats-label text-muted">Истекших</div>
+                                            <div className="stats-label text-muted">В ожидании</div>
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -241,18 +271,18 @@ const ClientDashboard = () => {
                                             <h4 className="mb-0">🏠 Мои арендованные сайты</h4>
                                         </Card.Header>
                                         <Card.Body className="p-4">
-                                            {userData.rentedSites && userData.rentedSites.length > 0 ? (
+                                            {rentals.length > 0 ? (
                                                 <div className="rentals-grid">
-                                                    {userData.rentedSites.map((rental, index) => {
+                                                    {rentals.map((rental) => {
                                                         const daysRemaining = getDaysRemaining(rental.rentalEndDate);
                                                         return (
-                                                            <div key={index} className="rental-card card-custom p-3 mb-3">
+                                                            <div key={rental._id} className="rental-card card-custom p-3 mb-3">
                                                                 <Row className="align-items-center">
                                                                     <Col md={3} className="mb-3 mb-md-0">
-                                                                        {rental.site?.images?.[0] ? (
+                                                                        {rental.siteId?.images?.[0] ? (
                                                                             <img
-                                                                                src={`http://localhost:5000${rental.site.images[0]}`}
-                                                                                alt={rental.site.title}
+                                                                                src={`http://localhost:5000${rental.siteId.images[0]}`}
+                                                                                alt={rental.siteId.title}
                                                                                 className="rental-site-image"
                                                                             />
                                                                         ) : (
@@ -262,25 +292,25 @@ const ClientDashboard = () => {
                                                                         )}
                                                                     </Col>
                                                                     <Col md={6}>
-                                                                        <h5 className="mb-2">{rental.site?.title || 'Сайт'}</h5>
+                                                                        <h5 className="mb-2">{rental.siteId?.title || 'Сайт'}</h5>
                                                                         <div className="rental-details text-muted mb-2">
-                                                                            <div>Категория: {rental.site?.category || 'Не указана'}</div>
+                                                                            <div>Категория: {rental.siteId?.category || 'Не указана'}</div>
                                                                             <div>Цена: ₸{rental.monthlyPrice || 0}/месяц</div>
-                                                                            <div>
-                                                                                До: {new Date(rental.rentalEndDate).toLocaleDateString()}
-                                                                            </div>
+                                                                            <div>Статус: {getRentalStatusBadge(rental.status, daysRemaining)}</div>
+                                                                            <div>Дата начала: {rental.rentalStartDate ? new Date(rental.rentalStartDate).toLocaleDateString() : 'Не указана'}</div>
+                                                                            <div>Дата окончания: {rental.rentalEndDate ? new Date(rental.rentalEndDate).toLocaleDateString() : 'Не указана'}</div>
+                                                                            <div>Всего оплачено: ₸{rental.totalPaid || 0}</div>
                                                                         </div>
-                                                                        {getRentalStatusBadge(rental.status, daysRemaining)}
                                                                     </Col>
                                                                     <Col md={3} className="text-md-end">
                                                                         <Button
                                                                             as={Link}
-                                                                            to={`/client/rental/${rental.contact?._id}`}
+                                                                            to={`/rentals/${rental._id}`}
                                                                             variant="outline-light"
                                                                             size="sm"
                                                                             className="w-100 w-md-auto"
                                                                         >
-                                                                            Детали
+                                                                            Детали аренды
                                                                         </Button>
                                                                     </Col>
                                                                 </Row>
@@ -358,25 +388,29 @@ const ClientDashboard = () => {
                                                 </Col>
                                                 <Col md={6} className="mb-4">
                                                     <div className="profile-section">
-                                                        <h6 className="section-title mb-3">Контактная информация</h6>
-                                                        {userData.profile?.address ? (
-                                                            <div className="profile-info">
-                                                                <div className="info-item mb-2">
-                                                                    <span className="info-label text-muted">Адрес:</span>
-                                                                    <span className="info-value">{userData.profile.address.street}</span>
-                                                                </div>
-                                                                <div className="info-item mb-2">
-                                                                    <span className="info-label text-muted">Город:</span>
-                                                                    <span className="info-value">{userData.profile.address.city}</span>
-                                                                </div>
-                                                                <div className="info-item">
-                                                                    <span className="info-label text-muted">Страна:</span>
-                                                                    <span className="info-value">{userData.profile.address.country}</span>
-                                                                </div>
+                                                        <h6 className="section-title mb-3">Статистика аренды</h6>
+                                                        <div className="profile-info">
+                                                            <div className="info-item mb-2">
+                                                                <span className="info-label text-muted">Всего аренд:</span>
+                                                                <span className="info-value">{stats.totalRentals}</span>
                                                             </div>
-                                                        ) : (
-                                                            <p className="text-muted">Контактная информация не указана</p>
-                                                        )}
+                                                            <div className="info-item mb-2">
+                                                                <span className="info-label text-muted">Активные аренды:</span>
+                                                                <span className="info-value text-success">{stats.activeRentals}</span>
+                                                            </div>
+                                                            <div className="info-item mb-2">
+                                                                <span className="info-label text-muted">В ожидании:</span>
+                                                                <span className="info-value text-warning">{stats.pendingRentals}</span>
+                                                            </div>
+                                                            <div className="info-item mb-2">
+                                                                <span className="info-label text-muted">Ожидают оплаты:</span>
+                                                                <span className="info-value text-danger">{stats.paymentDueRentals}</span>
+                                                            </div>
+                                                            <div className="info-item">
+                                                                <span className="info-label text-muted">Всего оплачено:</span>
+                                                                <span className="info-value text-primary">₸{stats.totalSpent}</span>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </Col>
                                             </Row>
@@ -432,10 +466,29 @@ const ClientDashboard = () => {
                                                                     <div className="notification-time text-muted small">
                                                                         {new Date(notification.createdAt).toLocaleString()}
                                                                     </div>
+                                                                    {notification.rentalId && (
+                                                                        <div className="notification-link mt-2">
+                                                                            <Button
+                                                                                as={Link}
+                                                                                to={`/rentals/${notification.rentalId}`}
+                                                                                size="sm"
+                                                                                variant="link"
+                                                                                className="p-0"
+                                                                            >
+                                                                                Перейти к аренде →
+                                                                            </Button>
+                                                                        </div>
+                                                                    )}
                                                                 </div>
-                                                                {notification.type === 'rental_expiring' && (
-                                                                    <Badge bg="warning">Важно</Badge>
-                                                                )}
+                                                                <Badge bg={
+                                                                    notification.type === 'rental_expiring' ? 'warning' :
+                                                                        notification.type === 'rental_expired' ? 'danger' :
+                                                                            notification.type === 'payment' ? 'success' : 'info'
+                                                                }>
+                                                                    {notification.type === 'rental_expiring' ? 'Важно' :
+                                                                        notification.type === 'rental_expired' ? 'Истекло' :
+                                                                            notification.type === 'payment' ? 'Платеж' : 'Система'}
+                                                                </Badge>
                                                             </div>
                                                         </div>
                                                     ))}
@@ -471,7 +524,7 @@ const ClientDashboard = () => {
                                                         <input
                                                             className="form-check-input"
                                                             type="checkbox"
-                                                            defaultChecked={userData.settings?.emailNotifications?.rentalReminders}
+                                                            defaultChecked={userData.settings?.emailNotifications?.rentalReminders ?? true}
                                                         />
                                                     </div>
                                                 </div>
@@ -486,7 +539,7 @@ const ClientDashboard = () => {
                                                         <input
                                                             className="form-check-input"
                                                             type="checkbox"
-                                                            defaultChecked={userData.settings?.emailNotifications?.paymentConfirmations}
+                                                            defaultChecked={userData.settings?.emailNotifications?.paymentConfirmations ?? true}
                                                         />
                                                     </div>
                                                 </div>
@@ -501,7 +554,7 @@ const ClientDashboard = () => {
                                                         <input
                                                             className="form-check-input"
                                                             type="checkbox"
-                                                            defaultChecked={userData.settings?.emailNotifications?.systemUpdates}
+                                                            defaultChecked={userData.settings?.emailNotifications?.systemUpdates ?? true}
                                                         />
                                                     </div>
                                                 </div>

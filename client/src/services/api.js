@@ -42,19 +42,19 @@ api.interceptors.response.use(
             // Определяем, какой токен удалять
             const path = error.config.url;
 
-            if (path.includes('/admin') || path.includes('/auth')) {
+            if (path.includes('/auth/admin')) {
                 // Админская авторизация
                 localStorage.removeItem('adminToken');
                 localStorage.removeItem('adminUser');
                 if (window.location.pathname.startsWith('/admin')) {
-                    window.location.href = '/admin/login';
+                    window.location.href = '/auth/login';
                 }
-            } else if (path.includes('/client')) {
+            } else if (path.includes('/client') || path.includes('/rentals/client')) {
                 // Клиентская авторизация
                 localStorage.removeItem('clientToken');
                 localStorage.removeItem('clientData');
                 if (window.location.pathname.startsWith('/client')) {
-                    window.location.href = '/client/login';
+                    window.location.href = '/auth/login';
                 }
             }
         }
@@ -63,12 +63,14 @@ api.interceptors.response.use(
     }
 );
 
-// Site API
+// ==================== API ДЛЯ САЙТОВ ====================
 export const siteAPI = {
     getAll: (params = {}) => api.get('/sites', { params }),
-    getAllAdmin: () => api.get('/sites/admin'),
     getFeatured: () => api.get('/sites/featured'),
     getById: (id) => api.get(`/sites/${id}`),
+
+    // Админские методы
+    getAllAdmin: () => api.get('/sites/admin/list'),
     create: (data) => {
         const config = {
             headers: {
@@ -90,44 +92,56 @@ export const siteAPI = {
     delete: (id) => api.delete(`/sites/${id}`),
 };
 
-// Auth API
+// ==================== API ДЛЯ АДМИНА ====================
 export const authAPI = {
-    login: (credentials) => api.post('/auth/login', credentials),
-    getMe: () => api.get('/auth/me'),
-    updateProfile: (data) => api.put('/auth/profile', data),
+    loginAdmin: (credentials) => api.post('/auth/admin/login', credentials),
+    getAdminProfile: () => api.get('/auth/admin/me'),
 };
 
-// Contact API
-export const contactAPI = {
-    getAll: (params = {}) => api.get('/contacts', { params }),
-    getById: (id) => api.get(`/contacts/${id}`),
-    create: (data) => api.post('/contacts', data),
-    update: (id, data) => api.put(`/contacts/${id}`, data),
-    delete: (id) => api.delete(`/contacts/${id}`),
-    getStats: () => api.get('/contacts/stats/summary'),
-    // Новые методы для платежей
-    addPayment: (id, paymentData) => api.post(`/contacts/${id}/payments`, paymentData),
-    getPayments: (id) => api.get(`/contacts/${id}/payments`),
-    getExpiringRentals: (days = 3) => api.get(`/contacts/rentals/expiring?days=${days}`),
-    sendReminders: () => api.post('/contacts/rentals/send-reminders'),
-    getRentalStats: () => api.get('/contacts/rentals/stats'),
-    checkExpiredRentals: () => api.post('/contacts/rentals/check-expired'),
-};
-
-// Client API
+// ==================== API ДЛЯ КЛИЕНТОВ ====================
 export const clientAPI = {
+    // Публичные методы
     register: (data) => api.post('/client/register', data),
     login: (data) => api.post('/client/login', data),
+
+    // Защищенные методы (требуют токен клиента)
     getProfile: () => api.get('/client/profile'),
     updateProfile: (data) => api.put('/client/profile', data),
     updatePassword: (data) => api.put('/client/password', data),
-    getRentalDetails: (contactId) => api.get(`/client/rental/${contactId}`),
-    linkContact: (contactId) => api.post('/client/link-contact', { contactId }),
+    linkRental: (rentalId) => api.post('/client/link-rental', { rentalId }),
     getNotifications: () => api.get('/client/notifications'),
     markNotificationsRead: (notificationIds) => api.put('/client/notifications/read', { notificationIds }),
 };
 
-// Auth check functions
+// ==================== API ДЛЯ АРЕНД ====================
+export const rentalAPI = {
+    // Публичные методы
+    requestRental: (data) => api.post('/rentals/request', data),
+
+    // Защищенные методы для клиентов
+    getMyRentals: () => api.get('/rentals/client/my-rentals'),
+
+    // Защищенные методы для админа
+    getAll: (params = {}) => api.get('/rentals', { params }),
+    getById: (id) => api.get(`/rentals/${id}`),
+    updateStatus: (id, status) => api.put(`/rentals/${id}/status`, { status }),
+    updateDates: (id, dates) => api.put(`/rentals/${id}/dates`, dates),
+    addPayment: (id, paymentData) => api.post(`/rentals/${id}/payments`, paymentData),
+    getStats: () => api.get('/rentals/stats/overview'),
+};
+
+// ==================== API ДЛЯ КОНТАКТОВ ====================
+export const contactAPI = {
+    create: (data) => api.post('/contacts', data),
+    getAll: (params = {}) => api.get('/contacts', { params }),
+    getById: (id) => api.get(`/contacts/${id}`),
+    update: (id, data) => api.put(`/contacts/${id}`, data),
+    delete: (id) => api.delete(`/contacts/${id}`),
+    getStats: () => api.get('/contacts/stats/summary'),
+};
+
+// ==================== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ====================
+
 export const checkClientAuth = () => {
     const token = localStorage.getItem('clientToken');
     return !!token;
@@ -138,7 +152,28 @@ export const checkAdminAuth = () => {
     return !!token;
 };
 
-// Utility function to handle API errors
+export const getCurrentAuthType = () => {
+    if (localStorage.getItem('clientToken')) {
+        return 'client';
+    }
+    if (localStorage.getItem('adminToken')) {
+        return 'admin';
+    }
+    return null;
+};
+
+export const logout = (type = null) => {
+    if (type === 'client' || (!type && localStorage.getItem('clientToken'))) {
+        localStorage.removeItem('clientToken');
+        localStorage.removeItem('clientData');
+        window.location.href = '/';
+    } else if (type === 'admin' || (!type && localStorage.getItem('adminToken'))) {
+        localStorage.removeItem('adminToken');
+        localStorage.removeItem('adminUser');
+        window.location.href = '/';
+    }
+};
+
 export const handleApiError = (error, defaultMessage = 'Что-то пошло не так') => {
     const message = error.response?.data?.message || defaultMessage;
 
@@ -150,14 +185,17 @@ export const handleApiError = (error, defaultMessage = 'Что-то пошло �
     return message;
 };
 
-// Проверка, какой токен сейчас активен
-export const getCurrentAuthType = () => {
-    if (localStorage.getItem('clientToken')) {
-        return 'client';
+export const getCurrentUser = () => {
+    const clientData = localStorage.getItem('clientData');
+    if (clientData) {
+        return JSON.parse(clientData);
     }
-    if (localStorage.getItem('adminToken')) {
-        return 'admin';
+
+    const adminUser = localStorage.getItem('adminUser');
+    if (adminUser) {
+        return JSON.parse(adminUser);
     }
+
     return null;
 };
 

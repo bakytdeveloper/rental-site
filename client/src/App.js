@@ -8,14 +8,14 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import SiteDetail from './pages/SiteDetail';
 import Admin from './pages/Admin';
-import ClientAuth from './pages/ClientAuth';
 import ClientDashboard from './pages/ClientDashboard';
-import Auth from './components/Auth/Auth'; // Импортируем новый компонент
+// import ClientRegister from './pages/ClientAuth/ClientRegister'; // Обновлен импорт
+import Auth from './components/Auth/Auth';
 import { LoadingProvider } from './context/LoadingContext';
 import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
 import './App.css';
 import './global.css';
-import {Button} from "bootstrap";
+import ClientRegister from "./components/Client/ClientRegister";
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
             <Header />
             <main className="main-content">
               <Routes>
+                {/* Публичные маршруты */}
                 <Route path="/" element={<Home />} />
                 <Route path="/catalog" element={<Catalog />} />
                 <Route path="/catalog/:id" element={<SiteDetail />} />
@@ -41,21 +42,28 @@ function App() {
                 {/* Админ-маршруты */}
                 <Route path="/admin/*" element={<Admin />} />
 
-                {/* Client Routes */}
-                <Route path="/client/register" element={<ClientAuth type="register" />} />
-                <Route path="/client/dashboard" element={<ClientDashboard />} />
+                {/* Клиентские маршруты */}
+                <Route path="/client/register" element={<ClientRegister />} />
+                <Route path="/client/dashboard" element={
+                  <RequireAuth type="client">
+                    <ClientDashboard />
+                  </RequireAuth>
+                } />
                 <Route path="/client/forgot-password" element={
-                  <div className="container-custom py-5">
+                  <div className="container-custom py-5 text-center">
                     <h2>Восстановление пароля</h2>
-                    <p className="text-muted">Функция восстановления пароля в разработке.</p>
-                    <Button
-                        variant="primary"
+                    <p className="text-muted mb-4">Функция восстановления пароля в разработке.</p>
+                    <button
+                        className="btn btn-primary"
                         onClick={() => window.history.back()}
                     >
                       Назад
-                    </Button>
+                    </button>
                   </div>
                 } />
+
+                {/* 404 страница */}
+                <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
             </main>
 
@@ -86,11 +94,24 @@ const ConditionalWhatsAppButton = () => {
   const location = useLocation();
 
   // Не показываем на админских и клиентских страницах
-  if (location.pathname.startsWith('/admin') || location.pathname.startsWith('/client') || location.pathname.startsWith('/auth')) {
+  if (location.pathname.startsWith('/admin') ||
+      location.pathname.startsWith('/client') ||
+      location.pathname.startsWith('/auth')) {
     return null;
   }
 
   return <WhatsAppButton />;
+};
+
+// Компонент для защиты маршрутов
+const RequireAuth = ({ children, type = 'client' }) => {
+  const token = localStorage.getItem(`${type}Token`);
+
+  if (!token) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  return children;
 };
 
 export default App;

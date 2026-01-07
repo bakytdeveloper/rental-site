@@ -12,36 +12,38 @@ export const protect = async (req, res, next) => {
         if (!token) {
             return res.status(401).json({
                 success: false,
-                message: 'Not authorized to access this route'
+                message: 'Не авторизован для доступа к этому маршруту'
             });
         }
 
         try {
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-            // Для упрощенного админа
+            // Проверяем, админ ли это
             if (decoded.id === process.env.ADMIN_USERNAME) {
                 req.user = {
                     id: decoded.id,
-                    role: decoded.role || 'admin'
+                    username: process.env.ADMIN_USERNAME,
+                    email: process.env.ADMIN_EMAIL,
+                    role: 'admin'
                 };
                 return next();
             }
 
-            // Для обычных пользователей из базы данных
+            // Проверяем пользователя из базы данных
             const user = await User.findById(decoded.id).select('-password');
 
             if (!user) {
                 return res.status(401).json({
                     success: false,
-                    message: 'User not found'
+                    message: 'Пользователь не найден'
                 });
             }
 
             if (!user.isActive) {
                 return res.status(401).json({
                     success: false,
-                    message: 'User account is deactivated'
+                    message: 'Аккаунт деактивирован'
                 });
             }
 
@@ -51,20 +53,20 @@ export const protect = async (req, res, next) => {
         } catch (error) {
             return res.status(401).json({
                 success: false,
-                message: 'Not authorized to access this route'
+                message: 'Не авторизован'
             });
         }
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Server error in authentication'
+            message: 'Ошибка сервера при аутентификации'
         });
     }
 };
 
 export const authorize = (...roles) => {
     return (req, res, next) => {
-        // Для упрощенного админа
+        // Разрешаем доступ админу из .env
         if (req.user.id === process.env.ADMIN_USERNAME) {
             return next();
         }
@@ -72,57 +74,31 @@ export const authorize = (...roles) => {
         if (!roles.includes(req.user.role)) {
             return res.status(403).json({
                 success: false,
-                message: `User role ${req.user.role} is not authorized to access this route`
+                message: `Роль ${req.user.role} не авторизована для доступа`
             });
         }
         next();
     };
 };
 
-// Middleware только для клиентов
+// Только для клиентов
 export const clientOnly = (req, res, next) => {
     if (req.user.role !== 'client') {
         return res.status(403).json({
             success: false,
-            message: 'This route is for clients only'
+            message: 'Этот маршрут только для клиентов'
         });
     }
     next();
 };
 
-// Middleware для проверки владения контактом
-export const checkContactOwnership = async (req, res, next) => {
-    try {
-        const contactId = req.params.contactId || req.body.contactId;
-
-        if (!contactId) {
-            return next();
-        }
-
-        const contact = await Contact.findById(contactId);
-
-        if (!contact) {
-            return res.status(404).json({
-                success: false,
-                message: 'Contact not found'
-            });
-        }
-
-        // Проверяем, принадлежит ли контакт пользователю
-        if (contact.userId && contact.userId.toString() !== req.user._id.toString()) {
-            return res.status(403).json({
-                success: false,
-                message: 'You do not have permission to access this contact'
-            });
-        }
-
-        req.contact = contact;
-        next();
-
-    } catch (error) {
-        res.status(500).json({
+// Только для админа
+export const adminOnly = (req, res, next) => {
+    if (req.user.id !== process.env.ADMIN_USERNAME) {
+        return res.status(403).json({
             success: false,
-            message: 'Error checking contact ownership'
+            message: 'Этот маршрут только для администратора'
         });
     }
+    next();
 };

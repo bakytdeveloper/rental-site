@@ -1,35 +1,38 @@
 import jwt from 'jsonwebtoken';
 
-// Generate JWT Token
-const generateToken = (id, role = 'admin') => {
-    return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+// Генерация JWT токена для админа
+const generateAdminToken = () => {
+    return jwt.sign({
+        id: process.env.ADMIN_USERNAME,
+        role: 'admin'
+    }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
 };
 
-// @desc    Login user
-// @route   POST /api/auth/login
+// @desc    Вход администратора
+// @route   POST /api/auth/admin/login
 // @access  Public
-export const login = async (req, res) => {
+export const loginAdmin = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Validate email & password
+        // Проверяем email и пароль
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
-                message: 'Please provide an email and password'
+                message: 'Пожалуйста, введите email и пароль'
             });
         }
 
-        // Check for admin credentials
+        // Проверяем административные данные из .env
         const adminEmail = process.env.ADMIN_EMAIL;
         const adminPassword = process.env.ADMIN_PASSWORD;
         const adminUsername = process.env.ADMIN_USERNAME;
 
         if (email === adminEmail && password === adminPassword) {
-            // Generate token with admin ID (using username as ID for simplicity)
-            const token = generateToken(adminUsername);
+            // Генерируем токен
+            const token = generateAdminToken();
 
             res.json({
                 success: true,
@@ -38,76 +41,45 @@ export const login = async (req, res) => {
                     id: adminUsername,
                     username: adminUsername,
                     email: adminEmail,
-                    role: 'admin'
+                    role: 'admin',
+                    lastLogin: new Date()
                 }
             });
         } else {
             return res.status(401).json({
                 success: false,
-                message: 'Invalid credentials'
+                message: 'Неверные учетные данные'
             });
         }
     } catch (error) {
-        console.error('Login error:', error);
+        console.error('Ошибка входа админа:', error);
         res.status(500).json({
             success: false,
-            message: 'Server error during login'
+            message: 'Ошибка сервера при входе'
         });
     }
 };
 
-// @desc    Get current logged in user
-// @route   GET /api/auth/me
-// @access  Private
-export const getMe = async (req, res) => {
+// @desc    Получить текущего пользователя (админа)
+// @route   GET /api/auth/admin/me
+// @access  Private/Admin
+export const getAdminProfile = async (req, res) => {
     try {
-        const adminEmail = process.env.ADMIN_EMAIL;
-        const adminUsername = process.env.ADMIN_USERNAME;
-
         res.json({
             success: true,
             user: {
-                id: adminUsername,
-                username: adminUsername,
-                email: adminEmail,
+                id: process.env.ADMIN_USERNAME,
+                username: process.env.ADMIN_USERNAME,
+                email: process.env.ADMIN_EMAIL,
                 role: 'admin',
                 lastLogin: new Date()
             }
         });
     } catch (error) {
-        console.error('Get me error:', error);
+        console.error('Ошибка получения профиля админа:', error);
         res.status(500).json({
             success: false,
-            message: 'Server error'
-        });
-    }
-};
-
-// @desc    Update user profile
-// @route   PUT /api/auth/profile
-// @access  Private
-export const updateProfile = async (req, res) => {
-    try {
-        const { username, email } = req.body;
-
-        // For simplified admin, we don't actually update credentials
-        // You can update environment variables here if needed
-
-        res.json({
-            success: true,
-            message: 'Profile update functionality disabled for demo admin',
-            user: {
-                id: process.env.ADMIN_USERNAME,
-                username: process.env.ADMIN_USERNAME,
-                email: process.env.ADMIN_EMAIL,
-                role: 'admin'
-            }
-        });
-    } catch (error) {
-        console.error('Update profile error:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Server error during profile update'
+            message: 'Ошибка сервера'
         });
     }
 };

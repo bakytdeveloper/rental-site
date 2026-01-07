@@ -84,6 +84,13 @@ const ClientRegister = () => {
 
                 toast.success('🎉 Регистрация успешна! Добро пожаловать в RentalSite');
 
+                // Check if there are pending rentals to link
+                const hasPendingRentals = localStorage.getItem('hasPendingRentals');
+                if (hasPendingRentals) {
+                    toast.info('💡 Все ваши заявки на аренду теперь доступны в личном кабинете');
+                    localStorage.removeItem('hasPendingRentals');
+                }
+
                 // Redirect to dashboard
                 navigate('/client/dashboard');
             }
@@ -144,6 +151,9 @@ const ClientRegister = () => {
                                                 <Form.Control.Feedback type="invalid">
                                                     {errors.username}
                                                 </Form.Control.Feedback>
+                                                <Form.Text className="text-muted">
+                                                    Будет использоваться для входа в систему
+                                                </Form.Text>
                                             </Form.Group>
                                         </Col>
                                         <Col md={6}>
@@ -247,7 +257,7 @@ const ClientRegister = () => {
                                                     </Form.Control.Feedback>
                                                 </InputGroup>
                                                 <Form.Text className="text-muted small">
-                                                    Нажмите на глаз, чтобы показать/скрыть пароль
+                                                    Минимум 6 символов
                                                 </Form.Text>
                                             </Form.Group>
                                         </Col>
@@ -283,9 +293,21 @@ const ClientRegister = () => {
                                     </Row>
 
                                     <Alert variant="info" className="mb-4">
-                                        <small>
-                                            ✅ После регистрации все ваши арендованные сайты автоматически появятся в личном кабинете
-                                        </small>
+                                        <div className="d-flex align-items-start">
+                                            <div className="me-3">✅</div>
+                                            <div>
+                                                <small>
+                                                    После регистрации все ваши поданные заявки на аренду
+                                                    автоматически появятся в личном кабинете. Вы сможете:
+                                                </small>
+                                                <ul className="mb-0 mt-2 small">
+                                                    <li>Отслеживать статус заявок</li>
+                                                    <li>Управлять активными арендами</li>
+                                                    <li>Получать уведомления об оплате</li>
+                                                    <li>Связываться со службой поддержки</li>
+                                                </ul>
+                                            </div>
+                                        </div>
                                     </Alert>
 
                                     <Button
@@ -314,7 +336,7 @@ const ClientRegister = () => {
                                 <div className="auth-footer mt-4 pt-3 border-top">
                                     <p className="text-center text-muted small mb-0">
                                         Уже есть аккаунт?{' '}
-                                        <Link to="/client/login" className="text-primary">
+                                        <Link to="/auth/login" className="text-primary">
                                             Войдите здесь
                                         </Link>
                                     </p>

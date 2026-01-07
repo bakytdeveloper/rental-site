@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { Container, Row, Col, Button, Spinner, Alert, Modal, Form, Badge } from 'react-bootstrap';
-import { siteAPI, contactAPI } from '../services/api';
+import { siteAPI, rentalAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import SEO from '../components/SEO/SEO';
@@ -12,17 +12,37 @@ const SiteDetail = () => {
     const navigate = useNavigate();
     const [site, setSite] = useState(null);
     const [selectedImage, setSelectedImage] = useState(0);
-    const [showContactModal, setShowContactModal] = useState(false);
-    const [contactForm, setContactForm] = useState({
+    const [showRentalModal, setShowRentalModal] = useState(false);
+    const [rentalForm, setRentalForm] = useState({
         name: '',
         email: '',
         phone: '',
-        company: '',
         message: `Я заинтересован в аренде этого сайта и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
     });
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userId, setUserId] = useState(null);
     const { loading, startLoading, stopLoading } = useLoading();
 
     const location = useLocation();
+
+    // Проверяем авторизацию пользователя
+    useEffect(() => {
+        const clientData = localStorage.getItem('clientData');
+        if (clientData) {
+            const user = JSON.parse(clientData);
+            setIsLoggedIn(true);
+            setUserId(user.id);
+            // Предзаполняем форму данными пользователя
+            setRentalForm(prev => ({
+                ...prev,
+                name: user.profile?.firstName && user.profile?.lastName
+                    ? `${user.profile.firstName} ${user.profile.lastName}`
+                    : user.username || '',
+                email: user.email || '',
+                phone: user.profile?.phone || ''
+            }));
+        }
+    }, []);
 
     // Функция для прокрутки наверх
     const scrollToTop = () => {
@@ -47,7 +67,7 @@ const SiteDetail = () => {
             "name": siteData.title,
             "description": siteData.description,
             "image": siteData.images && siteData.images.length > 0
-                ? `https://rentalsite.kz${siteData.images[0]}`
+                ? `http://localhost:5000${siteData.images[0]}`
                 : "https://rentalsite.kz/images/default-site.jpg",
             "category": siteData.category,
             "sku": siteData._id,
@@ -55,7 +75,7 @@ const SiteDetail = () => {
                 "@type": "Offer",
                 "price": siteData.price,
                 "priceCurrency": "KZT",
-                "availability": siteData.isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                "availability": siteData.isAvailable ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
                 "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
                 "url": `https://rentalsite.kz/catalog/${siteData._id}`,
                 "description": `Аренда сайта "${siteData.title}" за ${siteData.price} тг/месяц`
@@ -86,19 +106,6 @@ const SiteDetail = () => {
         return () => clearTimeout(timer);
     }, [id]);
 
-    useEffect(() => {
-        const handleLoad = () => {
-            window.scrollTo(0, 0);
-            document.documentElement.scrollTop = 0;
-            document.body.scrollTop = 0;
-        };
-        handleLoad();
-        window.addEventListener('load', handleLoad);
-        return () => {
-            window.removeEventListener('load', handleLoad);
-        };
-    }, []);
-
     // Эффект для загрузки данных сайта
     useEffect(() => {
         if (id) {
@@ -112,7 +119,7 @@ const SiteDetail = () => {
         try {
             const response = await siteAPI.getById(id);
             setSite(response.data);
-            setContactForm(prev => ({
+            setRentalForm(prev => ({
                 ...prev,
                 message: `Я заинтересован в аренде сайта "${response.data.title}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
             }));
@@ -125,42 +132,46 @@ const SiteDetail = () => {
         }
     };
 
-    const handleContactSubmit = async (e) => {
+    const handleRentalSubmit = async (e) => {
         e.preventDefault();
         startLoading();
 
         try {
-            const contactData = {
-                name: contactForm.name.trim(),
-                email: contactForm.email.trim(),
-                phone: contactForm.phone.trim() || 'Не указан',
-                company: contactForm.company.trim() || '',
-                message: contactForm.message.trim(),
+            const rentalData = {
                 siteId: id,
-                siteTitle: site.title,
-                subject: `Запрос на аренду: ${site.title}`
+                name: rentalForm.name.trim(),
+                email: rentalForm.email.trim(),
+                phone: rentalForm.phone.trim() || 'Не указан',
+                message: rentalForm.message.trim(),
+                ...(userId && { userId }) // Добавляем userId если пользователь авторизован
             };
 
-            console.log('📤 Отправка данных контакта:', contactData);
+            console.log('📤 Отправка заявки на аренду:', rentalData);
 
-            const response = await contactAPI.create(contactData);
+            const response = await rentalAPI.requestRental(rentalData);
 
             if (response.data.success) {
-                toast.success('🎉 Ваш запрос на аренду отправлен! Мы свяжемся с вами в течение 24 часов.');
-                setShowContactModal(false);
-                setContactForm({
+                toast.success('🎉 Ваша заявка на аренду отправлена! Мы свяжемся с вами в течение 24 часов.');
+                setShowRentalModal(false);
+                setRentalForm({
                     name: '',
                     email: '',
                     phone: '',
-                    company: '',
                     message: `Я заинтересован в аренде сайта "${site.title}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
                 });
+
+                // Если пользователь не авторизован, предлагаем зарегистрироваться
+                if (!isLoggedIn) {
+                    setTimeout(() => {
+                        toast.info('💡 Совет: Зарегистрируйтесь, чтобы отслеживать статус вашей заявки и управлять арендой в личном кабинете!');
+                    }, 2000);
+                }
             }
         } catch (error) {
-            console.error('❌ Ошибка при отправке формы:', error);
+            console.error('❌ Ошибка при отправке заявки:', error);
             const errorMessage = error.response?.data?.message ||
                 error.response?.data?.errors?.join(', ') ||
-                'Не удалось отправить запрос. Пожалуйста, попробуйте еще раз.';
+                'Не удалось отправить заявку. Пожалуйста, попробуйте еще раз.';
 
             toast.error(errorMessage);
         } finally {
@@ -169,8 +180,8 @@ const SiteDetail = () => {
     };
 
     const handleInputChange = (e) => {
-        setContactForm({
-            ...contactForm,
+        setRentalForm({
+            ...rentalForm,
             [e.target.name]: e.target.value
         });
     };
@@ -180,6 +191,16 @@ const SiteDetail = () => {
         if (element) {
             element.scrollIntoView({ behavior: 'smooth' });
         }
+    };
+
+    const handleLoginClick = () => {
+        setShowRentalModal(false);
+        navigate('/auth/login', { state: { from: location } });
+    };
+
+    const handleRegisterClick = () => {
+        setShowRentalModal(false);
+        navigate('/client/register', { state: { from: location } });
     };
 
     if (loading && !site) {
@@ -218,7 +239,7 @@ const SiteDetail = () => {
                 keywords={`аренда ${site.category.toLowerCase()} ${site.title}, сайт ${site.category.toLowerCase()} аренда, ${site.technologies ? site.technologies.join(', ') : ''}, аренда сайта Казахстан`}
                 canonical={`https://rentalsite.kz/catalog/${site._id}`}
                 ogType="product"
-                ogImage={site.images && site.images.length > 0 ? `https://rentalsite.kz${site.images[0]}` : undefined}
+                ogImage={site.images && site.images.length > 0 ? `http://localhost:5000${site.images[0]}` : undefined}
                 structuredData={generateStructuredData(site)}
             />
 
@@ -265,7 +286,6 @@ const SiteDetail = () => {
                                                 prev === 0 ? site.images.length - 1 : prev - 1
                                             )}
                                         >
-
                                             <span className="site-detail-nav-btn-span"> ‹ </span>
                                         </Button>
                                         <span className="site-detail-image-counter">
@@ -278,7 +298,7 @@ const SiteDetail = () => {
                                                 prev === site.images.length - 1 ? 0 : prev + 1
                                             )}
                                         >
-                                           <span className="site-detail-nav-btn-span"> › </span>
+                                            <span className="site-detail-nav-btn-span"> › </span>
                                         </Button>
                                     </div>
                                 )}
@@ -312,9 +332,14 @@ const SiteDetail = () => {
                                     <Badge bg="primary" className="site-detail-category-badge">
                                         {site.category}
                                     </Badge>
-                                    {site.isActive && (
+                                    {site.isAvailable && (
                                         <Badge bg="success" className="site-detail-status-badge">
-                                            ✅ Доступен
+                                            ✅ Доступен для аренды
+                                        </Badge>
+                                    )}
+                                    {!site.isAvailable && (
+                                        <Badge bg="secondary" className="site-detail-status-badge">
+                                            ⏸️ Временно недоступен
                                         </Badge>
                                     )}
                                 </div>
@@ -335,17 +360,20 @@ const SiteDetail = () => {
                                     className="site-detail-btn-rent-now-main btn-primary-custom mb-2 mb-md-0"
                                     size="lg"
                                     onClick={scrollToRent}
+                                    disabled={!site.isAvailable}
                                 >
-                                    💳 Арендовать этот сайт
+                                    {!site.isAvailable ? '⏸️ Временно недоступен' : '💳 Арендовать этот сайт'}
                                 </Button>
-                                <Button
-                                    variant="outline-light"
-                                    className="btn-rent-now btn-outline-custom btn-outline-light-order"
-                                    size="lg"
-                                    onClick={() => setShowContactModal(true)}
-                                >
-                                    💬 Быстрый запрос
-                                </Button>
+                                {site.isAvailable && (
+                                    <Button
+                                        variant="outline-light"
+                                        className="btn-rent-now btn-outline-custom btn-outline-light-order"
+                                        size="lg"
+                                        onClick={() => setShowRentalModal(true)}
+                                    >
+                                        💬 Быстрый запрос
+                                    </Button>
+                                )}
                             </div>
 
                             {/* Ключевые особенности */}
@@ -433,9 +461,13 @@ const SiteDetail = () => {
                                 <Button
                                     className="site-detail-btn-rent-now-large btn-primary-custom"
                                     size="lg"
-                                    onClick={() => setShowContactModal(true)}
+                                    onClick={() => setShowRentalModal(true)}
+                                    disabled={!site.isAvailable}
                                 >
-                                    Начать аренду - ₸{site.price}/месяц
+                                    {!site.isAvailable
+                                        ? '⏸️ Временно недоступен для аренды'
+                                        : `Начать аренду - ₸${site.price}/месяц`
+                                    }
                                 </Button>
                             </div>
                         </Col>
@@ -446,13 +478,13 @@ const SiteDetail = () => {
                 <RelatedSites currentSiteId={site._id} category={site.category} />
             </Container>
 
-            {/* Модальное окно контакта */}
+            {/* Модальное окно заявки на аренду */}
             <Modal
-                show={showContactModal}
-                onHide={() => setShowContactModal(false)}
+                show={showRentalModal}
+                onHide={() => setShowRentalModal(false)}
                 centered
                 size="lg"
-                className="site-detail-contact-modal"
+                className="site-detail-rental-modal"
             >
                 <Modal.Header closeButton className="border-bottom">
                     <div>
@@ -464,6 +496,29 @@ const SiteDetail = () => {
                 </Modal.Header>
 
                 <Modal.Body>
+                    {!isLoggedIn && (
+                        <Alert variant="info" className="mb-4">
+                            <div className="d-flex align-items-center">
+                                <div className="me-3">💡</div>
+                                <div>
+                                    <strong>Рекомендуем зарегистрироваться!</strong>
+                                    <p className="mb-0 mt-1">
+                                        После регистрации вы сможете отслеживать статус вашей заявки,
+                                        управлять арендой и получать уведомления в личном кабинете.
+                                    </p>
+                                    <div className="mt-2">
+                                        <Button size="sm" variant="outline-primary" className="me-2" onClick={handleLoginClick}>
+                                            Войти
+                                        </Button>
+                                        <Button size="sm" variant="primary" onClick={handleRegisterClick}>
+                                            Зарегистрироваться
+                                        </Button>
+                                    </div>
+                                </div>
+                            </div>
+                        </Alert>
+                    )}
+
                     <div className="site-detail-rental-summary mb-4">
                         <div className="site-detail-summary-item">
                             <span className="text-muted">Сайт:</span>
@@ -479,7 +534,7 @@ const SiteDetail = () => {
                         </div>
                     </div>
 
-                    <Form onSubmit={handleContactSubmit}>
+                    <Form onSubmit={handleRentalSubmit}>
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
@@ -487,7 +542,7 @@ const SiteDetail = () => {
                                     <Form.Control
                                         type="text"
                                         name="name"
-                                        value={contactForm.name}
+                                        value={rentalForm.name}
                                         onChange={handleInputChange}
                                         required
                                         placeholder="Введите ваше полное имя"
@@ -503,7 +558,7 @@ const SiteDetail = () => {
                                     <Form.Control
                                         type="email"
                                         name="email"
-                                        value={contactForm.email}
+                                        value={rentalForm.email}
                                         onChange={handleInputChange}
                                         required
                                         placeholder="Введите ваш email"
@@ -521,25 +576,10 @@ const SiteDetail = () => {
                                     <Form.Control
                                         type="tel"
                                         name="phone"
-                                        value={contactForm.phone}
+                                        value={rentalForm.phone}
                                         onChange={handleInputChange}
                                         required
                                         placeholder="Введите ваш номер телефона"
-                                        disabled={loading}
-                                        className="bg-secondary-bg text-muted border-secondary"
-                                    />
-                                </Form.Group>
-                            </Col>
-
-                            <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="text-muted">Компания</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="company"
-                                        value={contactForm.company}
-                                        onChange={handleInputChange}
-                                        placeholder="Ваша компания (необязательно)"
                                         disabled={loading}
                                         className="bg-secondary-bg text-muted border-secondary"
                                     />
@@ -553,19 +593,22 @@ const SiteDetail = () => {
                                 as="textarea"
                                 rows={5}
                                 name="message"
-                                value={contactForm.message}
+                                value={rentalForm.message}
                                 onChange={handleInputChange}
                                 required
                                 placeholder="Расскажите нам о ваших потребностях в аренде..."
                                 disabled={loading}
                                 className="bg-secondary-bg text-muted border-secondary"
                             />
+                            <Form.Text className="text-muted">
+                                Опишите ваши требования, цели использования сайта и предпочтения
+                            </Form.Text>
                         </Form.Group>
 
                         <div className="site-detail-modal-actions">
                             <Button
                                 variant="outline-light"
-                                onClick={() => setShowContactModal(false)}
+                                onClick={() => setShowRentalModal(false)}
                                 className="me-2 btn-outline-custom"
                                 disabled={loading}
                             >
@@ -590,9 +633,8 @@ const SiteDetail = () => {
                                         Отправка...
                                     </>
                                 ) : (
-                                    '📧 Отправить запрос на аренду'
+                                    '📧 Отправить заявку на аренду'
                                 )}
-
                             </Button>
                         </div>
                     </Form>

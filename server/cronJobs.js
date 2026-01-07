@@ -1,147 +1,189 @@
 import cron from 'node-cron';
-import Contact from './models/Contact.js';
+import Rental from './models/Rental.js';
+import User from './models/User.js';
 import Site from './models/Site.js';
 import { sendEmailNotification } from './services/emailService.js';
 
 // Проверка истекающих аренд каждый день в 9:00
 export const setupRentalCronJobs = () => {
     // Проверка истекших аренд (каждый день в полночь)
-    // cron.schedule('*/5 * * * *', async () => {
-        cron.schedule('0 0 * * *', async () => {
-        console.log('🕛 Running expired rentals check...');
+    cron.schedule('0 0 * * *', async () => {
+        console.log('🕛 Проверка истекших аренд...');
 
         try {
             const now = new Date();
 
             // Находим все активные аренды, которые закончились
-            const expiredContacts = await Contact.find({
-                $or: [
-                    { rentalStatus: 'active' },
-                    { status: 'active_rental' }
-                ],
+            const expiredRentals = await Rental.find({
+                status: 'active',
                 rentalEndDate: { $lt: now }
-            });
+            }).populate('siteId').populate('userId');
 
-            console.log(`📧 Found ${expiredContacts.length} expired rentals`);
+            console.log(`📧 Найдено ${expiredRentals.length} истекших аренд`);
 
-            for (const contact of expiredContacts) {
+            for (const rental of expiredRentals) {
                 try {
-                    // Обновляем статусы через метод модели
-                    const needsUpdate = contact.checkAndUpdateExpiredRentals();
+                    // Обновляем статус на "ожидает оплаты"
+                    rental.status = 'payment_due';
+                    await rental.save();
 
-                    if (needsUpdate) {
-                        await contact.save();
-                        console.log(`✅ Updated expired rental for ${contact.email}`);
+                    console.log(`✅ Обновлен статус аренды для ${rental.clientEmail}`);
 
-                        // Получаем информацию о сайте
-                        const site = contact.siteId ? await Site.findById(contact.siteId) : null;
-
-                        if (!site) {
-                            console.log(`❌ Site not found for contact ${contact.email}`);
-                            continue;
-                        }
-
-                        // Отправляем уведомление клиенту
-                        if (contact.email) {
-                            await sendEmailNotification('rentalExpired', {
-                                name: contact.name,
-                                email: contact.email,
-                                rentalEndDate: contact.rentalEndDate,
-                                totalPaid: contact.totalPaid,
-                                siteTitle: contact.siteTitle || site.title
-                            }, site);
-                            console.log(`📧 Sent rental expired email to client ${contact.email}`);
-                        }
-
-                        // Отправляем уведомление админу
-                        await sendEmailNotification('adminRentalExpired', {
-                            name: contact.name,
-                            email: contact.email,
-                            rentalEndDate: contact.rentalEndDate,
-                            totalPaid: contact.totalPaid,
-                            _id: contact._id,
-                            phone: contact.phone,
-                            siteTitle: contact.siteTitle || site.title
-                        }, site);
-                        console.log(`📧 Sent admin notification for expired rental ${contact.email}`);
-                    }
-
-                } catch (error) {
-                    console.error(`❌ Failed to process expired rental for ${contact.email}:`, error);
-                }
-            }
-
-            console.log('✅ Expired rentals check completed');
-
-        } catch (error) {
-            console.error('❌ Error in expired rentals cron job:', error);
-        }
-    });
-
-    // Ежедневная проверка истекающих аренд
-    cron.schedule('0 9 * * *', async () => {
-    // cron.schedule('*/5 * * * *', async () => {
-
-        console.log('🕘 Running expiring rentals check...');
-
-        try {
-            const contacts = await Contact.findExpiringRentals(3);
-
-            console.log(`📧 Found ${contacts.length} expiring rentals`);
-
-            for (const contact of contacts) {
-                try {
-                    const site = contact.siteId ? await Site.findById(contact.siteId) : null;
-
+                    // Получаем информацию о сайте
+                    const site = rental.siteId;
                     if (!site) {
-                        console.log(`❌ Site not found for contact ${contact.email}`);
+                        console.log(`❌ Сайт не найден для аренды ${rental._id}`);
                         continue;
                     }
 
-                    const daysRemaining = contact.getDaysRemaining();
+                    // Отправляем уведомление клиенту
+                    if (rental.clientEmail) {
+                        await sendEmailNotification('rentalExpired', {
+                            name: rental.clientName,
+                            email: rental.clientEmail,
+                            rentalEndDate: rental.rentalEndDate,
+                            totalPaid: rental.totalPaid,
+                            siteTitle: site.title
+                        }, site);
+                        console.log(`📧 Отправлено письмо об истечении аренды клиенту ${rental.clientEmail}`);
+                    }
 
-                    // Проверяем, нужно ли отправлять уведомление
-                    if (contact.needsNotification()) {
+                    // Отправляем уведомление админу
+                    await sendEmailNotification('adminRentalExpired', {
+                        name: rental.clientName,
+                        email: rental.clientEmail,
+                        rentalEndDate: rental.rentalEndDate,
+                        totalPaid: rental.totalPaid,
+                        _id: rental._id,
+                        phone: rental.clientPhone,
+                        siteTitle: site.title
+                    }, site);
+                    console.log(`📧 Отправлено уведомление админу об истечении аренды ${rental.clientEmail}`);
+
+                } catch (error) {
+                    console.error(`❌ Ошибка обработки аренды ${rental._id}:`, error);
+                }
+            }
+
+            console.log('✅ Проверка истекших аренд завершена');
+
+        } catch (error) {
+            console.error('❌ Ошибка в cron-задаче проверки истекших аренд:', error);
+        }
+    });
+
+    // Ежедневная проверка истекающих аренд (за 3 дня до окончания)
+    cron.schedule('0 9 * * *', async () => {
+        console.log('🕘 Проверка истекающих аренд...');
+
+        try {
+            const now = new Date();
+            const threeDaysFromNow = new Date();
+            threeDaysFromNow.setDate(threeDaysFromNow.getDate() + 3);
+
+            // Находим активные аренды, которые истекают в течение 3 дней
+            const expiringRentals = await Rental.find({
+                status: 'active',
+                rentalEndDate: {
+                    $lte: threeDaysFromNow,
+                    $gte: now
+                }
+            }).populate('siteId').populate('userId');
+
+            console.log(`📧 Найдено ${expiringRentals.length} истекающих аренд`);
+
+            for (const rental of expiringRentals) {
+                try {
+                    const site = rental.siteId;
+                    if (!site) {
+                        console.log(`❌ Сайт не найден для аренды ${rental._id}`);
+                        continue;
+                    }
+
+                    // Рассчитываем оставшиеся дни
+                    const daysRemaining = Math.ceil((rental.rentalEndDate - now) / (1000 * 60 * 60 * 24));
+
+                    // Проверяем, нужно ли отправлять уведомление (еще не отправляли или прошло больше суток)
+                    const shouldNotify = !rental.lastNotificationDate ||
+                        (new Date() - rental.lastNotificationDate) > (24 * 60 * 60 * 1000);
+
+                    if (shouldNotify && daysRemaining <= 3 && daysRemaining >= 0) {
                         // Отправляем уведомление клиенту
-                        if (contact.email) {
+                        if (rental.clientEmail) {
                             await sendEmailNotification('rentalExpiringSoon', {
-                                name: contact.name,
-                                email: contact.email,
-                                rentalEndDate: contact.rentalEndDate,
+                                name: rental.clientName,
+                                email: rental.clientEmail,
+                                rentalEndDate: rental.rentalEndDate,
                                 daysRemaining: daysRemaining,
-                                siteTitle: contact.siteTitle || site.title
+                                siteTitle: site.title
                             }, site);
                         }
 
                         // Отправляем уведомление админу
                         await sendEmailNotification('adminRentalExpiring', {
-                            name: contact.name,
-                            email: contact.email,
-                            rentalEndDate: contact.rentalEndDate,
+                            name: rental.clientName,
+                            email: rental.clientEmail,
+                            rentalEndDate: rental.rentalEndDate,
                             daysRemaining: daysRemaining,
-                            _id: contact._id,
-                            phone: contact.phone,
-                            siteTitle: contact.siteTitle || site.title
+                            _id: rental._id,
+                            phone: rental.clientPhone,
+                            siteTitle: site.title
                         }, site);
 
                         // Обновляем дату последнего уведомления
-                        contact.lastNotificationDate = new Date();
-                        await contact.save();
+                        rental.lastNotificationDate = new Date();
+                        await rental.save();
 
-                        console.log(`✅ Sent reminders for ${contact.email}`);
+                        console.log(`✅ Отправлены напоминания для ${rental.clientEmail} (осталось ${daysRemaining} дней)`);
                     }
 
                 } catch (emailError) {
-                    console.error(`❌ Failed to send reminder for ${contact.email}:`, emailError);
+                    console.error(`❌ Ошибка отправки напоминания для ${rental.clientEmail}:`, emailError);
                 }
             }
 
-            console.log('✅ Expiring rentals check completed');
+            console.log('✅ Проверка истекающих аренд завершена');
 
         } catch (error) {
-            console.error('❌ Error in rental cron job:', error);
+            console.error('❌ Ошибка в cron-задаче проверки истекающих аренд:', error);
         }
     });
 
-    console.log('✅ Rental cron jobs scheduled');
+    // Ежемесячная статистика (1 числа каждого месяца в 8:00)
+    cron.schedule('0 8 1 * *', async () => {
+        console.log('📊 Генерация ежемесячной статистики...');
+
+        try {
+            const now = new Date();
+            const lastMonth = new Date();
+            lastMonth.setMonth(lastMonth.getMonth() - 1);
+
+            // Получаем статистику за последний месяц
+            const monthlyStats = await Rental.aggregate([
+                {
+                    $match: {
+                        lastPaymentDate: { $gte: lastMonth }
+                    }
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalPayments: { $sum: 1 },
+                        totalRevenue: { $sum: '$totalPaid' },
+                        avgPayment: { $avg: '$totalPaid' }
+                    }
+                }
+            ]);
+
+            console.log('📈 Ежемесячная статистика:', monthlyStats[0] || 'Нет данных');
+
+            // Можно отправить статистику админу на email
+            // await sendEmailNotification('adminMonthlyStats', { stats: monthlyStats[0] || {} });
+
+        } catch (error) {
+            console.error('❌ Ошибка генерации статистики:', error);
+        }
+    });
+
+    console.log('✅ Cron-задачи для аренд настроены');
 };

@@ -12,7 +12,7 @@ const Auth = () => {
         userType: 'client' // 'client' или 'admin'
     });
 
-    const [showPassword, setShowPassword] = useState(false); // Состояние для отображения пароля
+    const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -60,6 +60,55 @@ const Auth = () => {
         setError('');
     };
 
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     setError('');
+    //     setLoading(true);
+    //
+    //     try {
+    //         let response;
+    //
+    //         if (formData.userType === 'admin') {
+    //             // Вход админа
+    //             response = await authAPI.loginAdmin({
+    //                 email: formData.email,
+    //                 password: formData.password
+    //             });
+    //         } else {
+    //             // Вход клиента
+    //             response = await clientAPI.login({
+    //                 email: formData.email,
+    //                 password: formData.password
+    //             });
+    //         }
+    //
+    //         if (response.data.success) {
+    //             const tokenKey = formData.userType === 'admin' ? 'adminToken' : 'clientToken';
+    //             const userKey = formData.userType === 'admin' ? 'adminUser' : 'clientData';
+    //             const redirectPath = formData.userType === 'admin' ? '/admin' : '/client/dashboard';
+    //
+    //             // Сохраняем токен и данные пользователя
+    //             localStorage.setItem(tokenKey, response.data.token);
+    //             localStorage.setItem(userKey, JSON.stringify(response.data.user));
+    //
+    //             toast.success(formData.userType === 'admin' ? 'Добро пожаловать, администратор!' : 'Добро пожаловать обратно!');
+    //
+    //             // Перенаправляем на нужную страницу
+    //             const from = location.state?.from?.pathname || redirectPath;
+    //             navigate(from, { replace: true });
+    //         }
+    //     } catch (error) {
+    //         const message = error.response?.data?.message ||
+    //             (formData.userType === 'admin'
+    //                 ? 'Неверные учетные данные администратора'
+    //                 : 'Неверный email или пароль');
+    //         setError(message);
+    //         toast.error(message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -69,9 +118,15 @@ const Auth = () => {
             let response;
 
             if (formData.userType === 'admin') {
-                response = await authAPI.login(formData);
+                response = await authAPI.loginAdmin({
+                    email: formData.email,
+                    password: formData.password
+                });
             } else {
-                response = await clientAPI.login(formData);
+                response = await clientAPI.login({
+                    email: formData.email,
+                    password: formData.password
+                });
             }
 
             if (response.data.success) {
@@ -83,14 +138,23 @@ const Auth = () => {
                 localStorage.setItem(tokenKey, response.data.token);
                 localStorage.setItem(userKey, JSON.stringify(response.data.user));
 
-                toast.success(formData.userType === 'admin' ? 'С возвращением!' : '👋 Добро пожаловать обратно!');
+                toast.success(formData.userType === 'admin'
+                    ? 'Добро пожаловать, администратор!'
+                    : 'Добро пожаловать обратно!');
 
                 // Перенаправляем на нужную страницу
-                const from = location.state?.from?.pathname || redirectPath;
-                navigate(from, { replace: true });
+                navigate(redirectPath, {
+                    replace: true,
+                    state: { from: location.state?.from || { pathname: redirectPath } }
+                });
+
+                return; // Важно: завершаем выполнение после навигации
             }
         } catch (error) {
-            const message = error.response?.data?.message || 'Ошибка входа';
+            const message = error.response?.data?.message ||
+                (formData.userType === 'admin'
+                    ? 'Неверные учетные данные администратора'
+                    : 'Неверный email или пароль');
             setError(message);
             toast.error(message);
         } finally {
@@ -101,6 +165,11 @@ const Auth = () => {
     // Функция для переключения видимости пароля
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
+    };
+
+    // Переход на регистрацию клиента
+    const handleRegisterClick = () => {
+        navigate('/client/register');
     };
 
     return (
@@ -236,28 +305,22 @@ const Auth = () => {
                                         <>
                                             <p className="text-center text-muted small mb-2">
                                                 Нет аккаунта?{' '}
-                                                <a
-                                                    href="/client/register"
-                                                    className="text-primary"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        navigate('/client/register');
-                                                    }}
+                                                <Button
+                                                    variant="link"
+                                                    className="text-primary p-0"
+                                                    onClick={handleRegisterClick}
                                                 >
                                                     Зарегистрируйтесь
-                                                </a>
+                                                </Button>
                                             </p>
                                             <p className="text-center text-muted small mb-0">
-                                                <a
-                                                    href="/"
-                                                    className="text-muted"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        navigate('/');
-                                                    }}
+                                                <Button
+                                                    variant="link"
+                                                    className="text-muted p-0"
+                                                    onClick={() => navigate('/')}
                                                 >
                                                     ← Вернуться на главную
-                                                </a>
+                                                </Button>
                                             </p>
                                         </>
                                     ) : (

@@ -1,11 +1,15 @@
 import User from '../models/User.js';
-import Contact from '../models/Contact.js';
+import Rental from '../models/Rental.js';
 import Site from '../models/Site.js';
 import jwt from 'jsonwebtoken';
+import { sendEmailNotification } from '../services/emailService.js';
 
-// Генерация JWT токена
-const generateToken = (id, role = 'client') => {
-    return jwt.sign({ id, role }, process.env.JWT_SECRET, {
+// Генерация JWT токена для клиента
+const generateClientToken = (id) => {
+    return jwt.sign({
+        id,
+        role: 'client'
+    }, process.env.JWT_SECRET, {
         expiresIn: '30d',
     });
 };
@@ -25,7 +29,7 @@ export const registerClient = async (req, res) => {
             });
         }
 
-        // Проверяем, существует ли пользователь
+        // Проверяем существование пользователя
         const userExists = await User.findOne({
             $or: [{ email }, { username }]
         });
@@ -42,7 +46,6 @@ export const registerClient = async (req, res) => {
             username,
             email,
             password,
-            role: 'client',
             profile: {
                 firstName,
                 lastName,
@@ -51,10 +54,23 @@ export const registerClient = async (req, res) => {
         });
 
         // Генерируем токен
-        const token = generateToken(user._id, 'client');
+        const token = generateClientToken(user._id);
 
         // Обновляем последний логин
         await user.updateLastLogin();
+
+        // Отправляем приветственное письмо
+        setTimeout(async () => {
+            try {
+                await sendEmailNotification('clientWelcome', {
+                    username: user.username,
+                    email: user.email,
+                    profile: user.profile
+                });
+            } catch (emailError) {
+                console.error('Ошибка отправки приветственного письма:', emailError);
+            }
+        }, 0);
 
         res.status(201).json({
             success: true,
@@ -63,7 +79,6 @@ export const registerClient = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                role: user.role,
                 profile: user.profile
             }
         });
@@ -102,14 +117,6 @@ export const loginClient = async (req, res) => {
             });
         }
 
-        // Проверяем роль
-        if (user.role !== 'client') {
-            return res.status(403).json({
-                success: false,
-                message: 'Доступ только для клиентов'
-            });
-        }
-
         // Проверяем пароль
         const isPasswordCorrect = await user.comparePassword(password);
 
@@ -129,10 +136,13 @@ export const loginClient = async (req, res) => {
         }
 
         // Генерируем токен
-        const token = generateToken(user._id, user.role);
+        const token = generateClientToken(user._id);
 
         // Обновляем последний логин
         await user.updateLastLogin();
+
+        // Получаем количество аренд
+        const rentalCount = await Rental.countDocuments({ userId: user._id });
 
         res.json({
             success: true,
@@ -141,9 +151,8 @@ export const loginClient = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                role: user.role,
                 profile: user.profile,
-                hasRentals: user.rentedSites.length > 0
+                hasRentals: rentalCount > 0
             }
         });
 
@@ -161,9 +170,8 @@ export const loginClient = async (req, res) => {
 // @access  Private/Client
 export const getClientProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id)
-            .populate('rentedSites.siteId', 'title category price images demoUrl')
-            .populate('rentedSites.contactId', 'status rentalStatus rentalEndDate monthlyPrice');
+        const user = await User.findById(req.user._id)
+            .select('-password');
 
         if (!user) {
             return res.status(404).json({
@@ -171,6 +179,15 @@ export const getClientProfile = async (req, res) => {
                 message: 'Пользователь не найден'
             });
         }
+
+        // Получаем аренды пользователя
+        const rentals = await Rental.find({ userId: user._id })
+            .populate('siteId', 'title category price images demoUrl')
+            .sort({ createdAt: -1 });
+
+        const activeRentals = rentals.filter(r => r.status === 'active');
+        const pendingRentals = rentals.filter(r => r.status === 'pending');
+        const paymentDueRentals = rentals.filter(r => r.status === 'payment_due');
 
         res.json({
             success: true,
@@ -180,24 +197,27 @@ export const getClientProfile = async (req, res) => {
                 email: user.email,
                 profile: user.profile,
                 settings: user.settings,
-                rentedSites: user.rentedSites.map(site => ({
-                    site: site.siteId,
-                    contact: site.contactId,
-                    rentalStartDate: site.rentalStartDate,
-                    rentalEndDate: site.rentalEndDate,
-                    monthlyPrice: site.monthlyPrice,
-                    status: site.status,
-                    daysRemaining: site.rentalEndDate ?
-                        Math.ceil((new Date(site.rentalEndDate) - new Date()) / (1000 * 60 * 60 * 24)) :
-                        null
-                })),
-                notifications: user.notifications.slice(0, 10), // Последние 10 уведомлений
-                statistics: {
-                    totalRentals: user.rentedSites.length,
-                    activeRentals: user.getActiveRentals().length,
-                    expiredRentals: user.rentedSites.filter(s => s.status === 'expired').length
-                }
-            }
+                lastLogin: user.lastLogin
+            },
+            rentals: rentals.map(rental => ({
+                id: rental._id,
+                site: rental.siteId,
+                status: rental.status,
+                monthlyPrice: rental.monthlyPrice,
+                rentalStartDate: rental.rentalStartDate,
+                rentalEndDate: rental.rentalEndDate,
+                daysRemaining: rental.getDaysRemaining ? rental.getDaysRemaining() : null,
+                totalPaid: rental.totalPaid,
+                lastPaymentDate: rental.lastPaymentDate
+            })),
+            statistics: {
+                totalRentals: rentals.length,
+                activeRentals: activeRentals.length,
+                pendingRentals: pendingRentals.length,
+                paymentDueRentals: paymentDueRentals.length,
+                totalSpent: rentals.reduce((sum, rental) => sum + (rental.totalPaid || 0), 0)
+            },
+            notifications: user.notifications.slice(0, 10)
         });
 
     } catch (error) {
@@ -214,9 +234,9 @@ export const getClientProfile = async (req, res) => {
 // @access  Private/Client
 export const updateClientProfile = async (req, res) => {
     try {
-        const { firstName, lastName, phone, company, address, settings } = req.body;
+        const { firstName, lastName, phone, company, settings } = req.body;
 
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
 
         if (!user) {
             return res.status(404).json({
@@ -226,14 +246,13 @@ export const updateClientProfile = async (req, res) => {
         }
 
         // Обновляем профиль
-        if (firstName || lastName || phone || company || address) {
+        if (firstName || lastName || phone || company) {
             user.profile = {
                 ...user.profile,
                 ...(firstName && { firstName }),
                 ...(lastName && { lastName }),
                 ...(phone && { phone }),
-                ...(company && { company }),
-                ...(address && { address })
+                ...(company && { company })
             };
         }
 
@@ -252,6 +271,7 @@ export const updateClientProfile = async (req, res) => {
             message: 'Профиль успешно обновлен',
             user: {
                 id: user._id,
+                username: user.username,
                 profile: user.profile,
                 settings: user.settings
             }
@@ -280,7 +300,7 @@ export const updatePassword = async (req, res) => {
             });
         }
 
-        const user = await User.findById(req.user.id).select('+password');
+        const user = await User.findById(req.user._id).select('+password');
 
         if (!user) {
             return res.status(404).json({
@@ -303,6 +323,13 @@ export const updatePassword = async (req, res) => {
         user.password = newPassword;
         await user.save();
 
+        // Добавляем уведомление
+        user.addNotification({
+            type: 'system',
+            message: 'Пароль успешно изменен'
+        });
+        await user.save();
+
         res.json({
             success: true,
             message: 'Пароль успешно изменен'
@@ -317,136 +344,70 @@ export const updatePassword = async (req, res) => {
     }
 };
 
-// @desc    Получить детали аренды сайта
-// @route   GET /api/client/rental/:contactId
+// @desc    Связать существующую заявку с пользователем
+// @route   POST /api/client/link-rental
 // @access  Private/Client
-export const getRentalDetails = async (req, res) => {
+export const linkRentalToUser = async (req, res) => {
     try {
-        const { contactId } = req.params;
+        const { rentalId } = req.body;
 
-        // Проверяем, что контакт принадлежит пользователю
-        const contact = await Contact.findOne({
-            _id: contactId,
-            userId: req.user.id
-        }).populate('siteId', 'title category description images demoUrl technologies features');
-
-        if (!contact) {
-            return res.status(404).json({
+        if (!rentalId) {
+            return res.status(400).json({
                 success: false,
-                message: 'Аренда не найдена или у вас нет доступа'
+                message: 'ID аренды обязателен'
             });
         }
 
-        // Получаем платежи
-        const payments = contact.payments || [];
+        // Находим аренду по email пользователя
+        const user = await User.findById(req.user._id);
+        const rental = await Rental.findOne({
+            _id: rentalId,
+            clientEmail: user.email
+        }).populate('siteId', 'title category price');
+
+        if (!rental) {
+            return res.status(404).json({
+                success: false,
+                message: 'Аренда не найдена или email не совпадает'
+            });
+        }
+
+        // Проверяем, не привязана ли уже аренда к пользователю
+        if (rental.userId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Эта аренда уже привязана к другому пользователю'
+            });
+        }
+
+        // Привязываем аренду к пользователю
+        rental.userId = user._id;
+        await rental.save();
+
+        // Добавляем уведомление пользователю
+        user.addNotification({
+            type: 'system',
+            message: `Вы связали аренду сайта "${rental.siteId.title}" с вашим аккаунтом`,
+            rentalId: rental._id
+        });
+        await user.save();
 
         res.json({
             success: true,
+            message: 'Аренда успешно привязана к вашему аккаунту',
             rental: {
-                contact: {
-                    id: contact._id,
-                    name: contact.name,
-                    email: contact.email,
-                    phone: contact.phone,
-                    company: contact.company
-                },
-                site: contact.siteId,
-                rentalDetails: {
-                    status: contact.status,
-                    rentalStatus: contact.rentalStatus,
-                    monthlyPrice: contact.monthlyPrice,
-                    rentalStartDate: contact.rentalStartDate,
-                    rentalEndDate: contact.rentalEndDate,
-                    nextPaymentDate: contact.nextPaymentDate,
-                    totalPaid: contact.totalPaid,
-                    daysRemaining: contact.getDaysRemaining()
-                },
-                payments: payments.map(payment => ({
-                    amount: payment.amount,
-                    paymentDate: payment.paymentDate,
-                    periodMonths: payment.periodMonths,
-                    paymentMethod: payment.paymentMethod,
-                    notes: payment.notes
-                }))
+                id: rental._id,
+                site: rental.siteId.title,
+                status: rental.status,
+                rentalEndDate: rental.rentalEndDate
             }
         });
 
     } catch (error) {
-        console.error('Ошибка получения деталей аренды:', error);
+        console.error('Ошибка привязки аренды:', error);
         res.status(500).json({
             success: false,
-            message: 'Ошибка при получении деталей аренды'
-        });
-    }
-};
-
-// @desc    Связать существующий контакт с пользователем
-// @route   POST /api/client/link-contact
-// @access  Private/Client
-export const linkContactToUser = async (req, res) => {
-    try {
-        const { contactId } = req.body;
-
-        if (!contactId) {
-            return res.status(400).json({
-                success: false,
-                message: 'ID контакта обязателен'
-            });
-        }
-
-        // Находим контакт по email пользователя
-        const user = await User.findById(req.user.id);
-        const contact = await Contact.findOne({
-            _id: contactId,
-            email: user.email
-        });
-
-        if (!contact) {
-            return res.status(404).json({
-                success: false,
-                message: 'Контакт не найден или email не совпадает'
-            });
-        }
-
-        // Проверяем, не привязан ли уже контакт
-        if (contact.userId) {
-            return res.status(400).json({
-                success: false,
-                message: 'Этот контакт уже привязан к другому пользователю'
-            });
-        }
-
-        // Привязываем контакт к пользователю
-        await contact.linkToUser(req.user.id);
-
-        // Добавляем сайт в список арендованных пользователя
-        if (contact.siteId) {
-            user.addRentedSite({
-                siteId: contact.siteId,
-                contactId: contact._id,
-                rentalStartDate: contact.rentalStartDate,
-                rentalEndDate: contact.rentalEndDate,
-                monthlyPrice: contact.monthlyPrice,
-                status: contact.rentalStatus === 'active' ? 'active' : 'expired'
-            });
-            await user.save();
-        }
-
-        res.json({
-            success: true,
-            message: 'Контакт успешно привязан к вашему аккаунту',
-            contact: {
-                id: contact._id,
-                siteTitle: contact.siteTitle,
-                rentalEndDate: contact.rentalEndDate
-            }
-        });
-
-    } catch (error) {
-        console.error('Ошибка привязки контакта:', error);
-        res.status(500).json({
-            success: false,
-            message: 'Ошибка при привязке контакта'
+            message: 'Ошибка при привязке аренды'
         });
     }
 };
@@ -456,7 +417,7 @@ export const linkContactToUser = async (req, res) => {
 // @access  Private/Client
 export const getNotifications = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
 
         if (!user) {
             return res.status(404).json({
@@ -465,10 +426,12 @@ export const getNotifications = async (req, res) => {
             });
         }
 
+        const unreadCount = user.notifications.filter(n => !n.read).length;
+
         res.json({
             success: true,
-            notifications: user.notifications,
-            unreadCount: user.notifications.filter(n => !n.read).length
+            notifications: user.notifications.slice(0, 20), // Последние 20 уведомлений
+            unreadCount
         });
 
     } catch (error) {
@@ -487,7 +450,7 @@ export const markNotificationsAsRead = async (req, res) => {
     try {
         const { notificationIds } = req.body;
 
-        const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user._id);
 
         if (!user) {
             return res.status(404).json({

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navbar, Nav, Container, Button, Dropdown, Badge } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { checkClientAuth, checkAdminAuth } from '../../services/api.js';
+import { checkClientAuth, checkAdminAuth, logout } from '../../services/api.js';
 import './Header.css';
 
 const Header = () => {
@@ -21,8 +21,8 @@ const Header = () => {
         // Get client name if logged in
         const clientData = localStorage.getItem('clientData');
         if (clientData) {
-            const { profile } = JSON.parse(clientData);
-            setClientName(profile?.firstName || 'Клиент');
+            const userData = JSON.parse(clientData);
+            setClientName(userData.profile?.firstName || userData.username || 'Клиент');
         }
 
         // Handle scroll
@@ -53,12 +53,7 @@ const Header = () => {
     };
 
     const handleClientLogout = () => {
-        localStorage.removeItem('clientToken');
-        localStorage.removeItem('clientData');
-        setIsClientLoggedIn(false);
-        setClientName('');
-        navigate('/');
-        window.location.reload(); // Refresh to update UI
+        logout('client');
     };
 
     const handleAdminDashboard = () => {
@@ -67,10 +62,7 @@ const Header = () => {
     };
 
     const handleAdminLogout = () => {
-        localStorage.removeItem('adminToken');
-        localStorage.removeItem('adminUser');
-        setIsAdminLoggedIn(false);
-        navigate('/');
+        logout('admin');
     };
 
     const getNavLinkClass = (path) => {
@@ -90,7 +82,6 @@ const Header = () => {
                 </Navbar.Brand>
 
                 {/* Мобильная авторизация (видна только на маленьких экранах) */}
-                {/* Убрали кнопку "Вход" из этой секции */}
                 <div className="d-lg-none ms-auto me-2">
                     {isClientLoggedIn ? (
                         <Badge bg="info" className="header-mobile-badge">
@@ -100,10 +91,7 @@ const Header = () => {
                         <Badge bg="warning" className="header-mobile-badge">
                             🛠 Админ
                         </Badge>
-                    ) : (
-                        // Кнопка "Вход" была здесь - убрали
-                        null
-                    )}
+                    ) : null}
                 </div>
 
                 <Navbar.Toggle

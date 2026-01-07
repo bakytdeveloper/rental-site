@@ -1,4 +1,3 @@
-// server/models/Site.js
 import mongoose from 'mongoose';
 
 const SiteSchema = new mongoose.Schema({
@@ -47,7 +46,7 @@ const SiteSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    isActive: {
+    isAvailable: {
         type: Boolean,
         default: true
     },
@@ -60,6 +59,6 @@ const SiteSchema = new mongoose.Schema({
 });
 
 // Индекс для быстрого поиска
-SiteSchema.index({ category: 1, isActive: 1, sortOrder: -1 });
+SiteSchema.index({ category: 1, isAvailable: 1, sortOrder: -1 });
 
 export default mongoose.model('Site', SiteSchema);
