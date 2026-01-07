@@ -64,21 +64,21 @@ const SiteDetail = () => {
         return {
             "@context": "https://schema.org",
             "@type": "Product",
-            "name": siteData.title,
-            "description": siteData.description,
+            "name": siteData.title || 'Сайт для аренды',
+            "description": siteData.description || 'Профессиональный сайт для аренды',
             "image": siteData.images && siteData.images.length > 0
                 ? `http://localhost:5000${siteData.images[0]}`
                 : "https://rentalsite.kz/images/default-site.jpg",
-            "category": siteData.category,
-            "sku": siteData._id,
+            "category": siteData.category || 'Сайт',
+            "sku": siteData._id || id,
             "offers": {
                 "@type": "Offer",
-                "price": siteData.price,
+                "price": siteData.price || 0,
                 "priceCurrency": "KZT",
-                "availability": siteData.isAvailable ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+                "availability": siteData.isActive ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
                 "priceValidUntil": new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                "url": `https://rentalsite.kz/catalog/${siteData._id}`,
-                "description": `Аренда сайта "${siteData.title}" за ${siteData.price} тг/месяц`
+                "url": `https://rentalsite.kz/catalog/${siteData._id || id}`,
+                "description": `Аренда сайта "${siteData.title || 'Сайт'}" за ${siteData.price || 0} тг/месяц`
             },
             "brand": {
                 "@type": "Brand",
@@ -90,6 +90,29 @@ const SiteDetail = () => {
                 "reviewCount": "24"
             }
         };
+    };
+
+    // Функция для безопасной генерации SEO описания
+    const generateSiteDescription = (siteData) => {
+        if (!siteData) return "Аренда профессионального сайта - выгодные условия, техподдержка 24/7";
+
+        const category = siteData.category ? siteData.category.toLowerCase() : 'сайт';
+        const description = siteData.description ? siteData.description.substring(0, 150) : 'Профессиональный сайт для аренды';
+        const title = siteData.title || 'Профессиональный сайт';
+        const price = siteData.price || 0;
+
+        return `Арендуйте ${title} - профессиональный ${category}. ${description}... ${price} тг/месяц, техподдержка 24/7.`;
+    };
+
+    // Функция для безопасной генерации SEO ключевых слов
+    const generateSiteKeywords = (siteData) => {
+        if (!siteData) return 'аренда сайта, аренда сайтов Казахстан, сайт в аренду';
+
+        const category = siteData.category ? siteData.category.toLowerCase() : 'сайт';
+        const title = siteData.title || 'Сайт';
+        const technologies = siteData.technologies ? siteData.technologies.join(', ') : '';
+
+        return `аренда ${category} ${title}, сайт ${category} аренда, ${technologies}, аренда сайта Казахстан`;
     };
 
     // Эффекты для прокрутки...
@@ -118,11 +141,19 @@ const SiteDetail = () => {
         startLoading();
         try {
             const response = await siteAPI.getById(id);
-            setSite(response.data);
-            setRentalForm(prev => ({
-                ...prev,
-                message: `Я заинтересован в аренде сайта "${response.data.title}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
-            }));
+            console.log('Response from API:', response); // Для отладки
+
+            // ВАЖНО: response.data содержит { success: true, site: {...} }
+            if (response.data.success && response.data.site) {
+                const siteData = response.data.site;
+                setSite(siteData);
+                setRentalForm(prev => ({
+                    ...prev,
+                    message: `Я заинтересован в аренде сайта "${siteData.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
+                }));
+            } else {
+                throw new Error('Site data not found');
+            }
         } catch (error) {
             console.error('Ошибка при загрузке деталей сайта:', error);
             toast.error('Не удалось загрузить информацию о сайте');
@@ -157,7 +188,7 @@ const SiteDetail = () => {
                     name: '',
                     email: '',
                     phone: '',
-                    message: `Я заинтересован в аренде сайта "${site.title}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
+                    message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
                 });
 
                 // Если пользователь не авторизован, предлагаем зарегистрироваться
@@ -234,10 +265,10 @@ const SiteDetail = () => {
         <div className="site-detail-page">
             {/* SEO компонент для детальной страницы сайта */}
             <SEO
-                title={`Аренда ${site.title} - ${site.category} за ${site.price} тг/месяц`}
-                description={`Арендуйте ${site.title} - профессиональный ${site.category.toLowerCase()}. ${site.description.substring(0, 150)}... ${site.price} тг/месяц, техподдержка 24/7.`}
-                keywords={`аренда ${site.category.toLowerCase()} ${site.title}, сайт ${site.category.toLowerCase()} аренда, ${site.technologies ? site.technologies.join(', ') : ''}, аренда сайта Казахстан`}
-                canonical={`https://rentalsite.kz/catalog/${site._id}`}
+                title={`Аренда ${site.title || 'Сайта'} - ${site.category || 'Сайт'} за ${site.price || 0} тг/месяц`}
+                description={generateSiteDescription(site)}
+                keywords={generateSiteKeywords(site)}
+                canonical={`https://rentalsite.kz/catalog/${site._id || id}`}
                 ogType="product"
                 ogImage={site.images && site.images.length > 0 ? `http://localhost:5000${site.images[0]}` : undefined}
                 structuredData={generateStructuredData(site)}
@@ -250,7 +281,7 @@ const SiteDetail = () => {
                     <span className="site-detail-breadcrumb-separator mx-1">/</span>
                     <Link to="/catalog" className="site-detail-breadcrumb-link">Каталог</Link>
                     <span className="site-detail-breadcrumb-separator mx-1">/</span>
-                    <span className="site-detail-breadcrumb-current">{site.title}</span>
+                    <span className="site-detail-breadcrumb-current">{site.title || 'Сайт'}</span>
                 </nav>
 
                 <Row className="site-detail-content g-4">
@@ -262,7 +293,7 @@ const SiteDetail = () => {
                                     {site.images && site.images.length > 0 ? (
                                         <img
                                             src={`http://localhost:5000${site.images[selectedImage]}`}
-                                            alt={site.title}
+                                            alt={site.title || 'Сайт'}
                                             className="site-detail-gallery-main-img"
                                         />
                                     ) : (
@@ -314,7 +345,7 @@ const SiteDetail = () => {
                                             >
                                                 <img
                                                     src={`http://localhost:5000${image}`}
-                                                    alt={`${site.title} вид ${index + 1}`}
+                                                    alt={`${site.title || 'Сайт'} вид ${index + 1}`}
                                                 />
                                             </button>
                                         ))}
@@ -330,28 +361,28 @@ const SiteDetail = () => {
                             <div className="site-header">
                                 <div className="site-detail-meta-badges mb-3">
                                     <Badge bg="primary" className="site-detail-category-badge">
-                                        {site.category}
+                                        {site.category || 'Сайт'}
                                     </Badge>
-                                    {site.isAvailable && (
+                                    {site.isActive && (
                                         <Badge bg="success" className="site-detail-status-badge">
                                             ✅ Доступен для аренды
                                         </Badge>
                                     )}
-                                    {!site.isAvailable && (
+                                    {!site.isActive && (
                                         <Badge bg="secondary" className="site-detail-status-badge">
                                             ⏸️ Временно недоступен
                                         </Badge>
                                     )}
                                 </div>
 
-                                <h1 className="site-detail-title text-gradient mb-3">{site.title}</h1>
+                                <h1 className="site-detail-title text-gradient mb-3">{site.title || 'Сайт для аренды'}</h1>
 
                                 <div className="site-detail-price-section mb-4">
-                                    <div className="site-detail-price-amount">₸{site.price}</div>
+                                    <div className="site-detail-price-amount">₸{site.price || 0}</div>
                                     <div className="site-detail-price-period">/ месяц</div>
                                 </div>
 
-                                <p className="site-detail-description text-dark mb-4">{site.description}</p>
+                                <p className="site-detail-description text-dark mb-4">{site.description || 'Профессиональный сайт для аренды'}</p>
                             </div>
 
                             {/* Быстрые действия */}
@@ -360,11 +391,11 @@ const SiteDetail = () => {
                                     className="site-detail-btn-rent-now-main btn-primary-custom mb-2 mb-md-0"
                                     size="lg"
                                     onClick={scrollToRent}
-                                    disabled={!site.isAvailable}
+                                    disabled={!site.isActive}
                                 >
-                                    {!site.isAvailable ? '⏸️ Временно недоступен' : '💳 Арендовать этот сайт'}
+                                    {!site.isActive ? '⏸️ Временно недоступен' : '💳 Арендовать этот сайт'}
                                 </Button>
-                                {site.isAvailable && (
+                                {site.isActive && (
                                     <Button
                                         variant="outline-light"
                                         className="btn-rent-now btn-outline-custom btn-outline-light-order"
@@ -462,11 +493,11 @@ const SiteDetail = () => {
                                     className="site-detail-btn-rent-now-large btn-primary-custom"
                                     size="lg"
                                     onClick={() => setShowRentalModal(true)}
-                                    disabled={!site.isAvailable}
+                                    disabled={!site.isActive}
                                 >
-                                    {!site.isAvailable
+                                    {!site.isActive
                                         ? '⏸️ Временно недоступен для аренды'
-                                        : `Начать аренду - ₸${site.price}/месяц`
+                                        : `Начать аренду - ₸${site.price || 0}/месяц`
                                     }
                                 </Button>
                             </div>
@@ -488,9 +519,9 @@ const SiteDetail = () => {
             >
                 <Modal.Header closeButton className="border-bottom">
                     <div>
-                        <Modal.Title className="text-light">Арендовать {site.title}</Modal.Title>
+                        <Modal.Title className="text-light">Арендовать {site.title || 'сайт'}</Modal.Title>
                         <div className="site-detail-modal-subtitle text-muted">
-                            ₸{site.price}/месяц • {site.category}
+                            ₸{site.price || 0}/месяц • {site.category || 'Сайт'}
                         </div>
                     </div>
                 </Modal.Header>
@@ -522,15 +553,15 @@ const SiteDetail = () => {
                     <div className="site-detail-rental-summary mb-4">
                         <div className="site-detail-summary-item">
                             <span className="text-muted">Сайт:</span>
-                            <strong className="text-primary">{site.title}</strong>
+                            <strong className="text-primary">{site.title || 'Сайт'}</strong>
                         </div>
                         <div className="site-detail-summary-item">
                             <span className="text-muted">Месячная цена:</span>
-                            <strong className="text-primary">₸{site.price}</strong>
+                            <strong className="text-primary">₸{site.price || 0}</strong>
                         </div>
                         <div className="site-detail-summary-item">
                             <span className="text-muted">Категория:</span>
-                            <strong className="text-primary">{site.category}</strong>
+                            <strong className="text-primary">{site.category || 'Сайт'}</strong>
                         </div>
                     </div>
 
@@ -683,7 +714,7 @@ const RelatedSites = ({ currentSiteId, category }) => {
                                 {site.images && site.images.length > 0 ? (
                                     <img
                                         src={`http://localhost:5000${site.images[0]}`}
-                                        alt={site.title}
+                                        alt={site.title || 'Сайт'}
                                         className="w-100 h-100 object-fit-cover"
                                     />
                                 ) : (
@@ -697,9 +728,9 @@ const RelatedSites = ({ currentSiteId, category }) => {
                             </div>
 
                             <div className="site-detail-related-site-info p-3">
-                                <h4 className="mb-2">{site.title}</h4>
-                                <p className="site-detail-related-site-description text-muted mb-2">{site.shortDescription}</p>
-                                <div className="site-detail-related-site-price text-primary mb-3">₸{site.price}/месяц</div>
+                                <h4 className="mb-2">{site.title || 'Сайт'}</h4>
+                                <p className="site-detail-related-site-description text-muted mb-2">{site.shortDescription || 'Профессиональный сайт для аренды'}</p>
+                                <div className="site-detail-related-site-price text-primary mb-3">₸{site.price || 0}/месяц</div>
                                 <Button
                                     as={Link}
                                     to={`/catalog/${site._id}`}
