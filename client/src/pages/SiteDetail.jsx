@@ -483,7 +483,7 @@ const SiteDetail = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="text-light">Полное имя *</Form.Label>
+                                    <Form.Label className="text-muted">Полное имя *</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="name"
@@ -499,7 +499,7 @@ const SiteDetail = () => {
 
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="text-light">Email адрес *</Form.Label>
+                                    <Form.Label className="text-muted">Email адрес *</Form.Label>
                                     <Form.Control
                                         type="email"
                                         name="email"
@@ -517,7 +517,7 @@ const SiteDetail = () => {
                         <Row>
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="text-light">Номер телефона *</Form.Label>
+                                    <Form.Label className="text-muted">Номер телефона *</Form.Label>
                                     <Form.Control
                                         type="tel"
                                         name="phone"
@@ -533,7 +533,7 @@ const SiteDetail = () => {
 
                             <Col md={6}>
                                 <Form.Group className="mb-3">
-                                    <Form.Label className="text-light">Компания</Form.Label>
+                                    <Form.Label className="text-muted">Компания</Form.Label>
                                     <Form.Control
                                         type="text"
                                         name="company"
@@ -548,7 +548,7 @@ const SiteDetail = () => {
                         </Row>
 
                         <Form.Group className="mb-4">
-                            <Form.Label className="text-light">Ваше сообщение *</Form.Label>
+                            <Form.Label className="text-muted">Ваше сообщение *</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={5}
@@ -558,7 +558,7 @@ const SiteDetail = () => {
                                 required
                                 placeholder="Расскажите нам о ваших потребностях в аренде..."
                                 disabled={loading}
-                                className="bg-secondary-bg text-light border-secondary"
+                                className="bg-secondary-bg text-muted border-secondary"
                             />
                         </Form.Group>
 

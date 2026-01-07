@@ -494,19 +494,21 @@
 
 /* Contact Modal */
 .site-detail-contact-modal .modal-content {
-    background: var(--gradient-bg);
+    background: var(--accent-bg);
     border: var(--border-width-thin) solid var(--glass-border);
     border-radius: var(--border-radius-xl);
-    backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px) !important;
 }
+
 
 .site-detail-contact-modal .modal-header {
     border-bottom: var(--border-width-thin) solid var(--glass-border);
     padding: 1.5rem 2rem;
+
 }
 
 .site-detail-contact-modal .modal-title {
-    color: var(--text-light);
+    color: var(--text-light) !important;
     font-weight: 700;
     font-size: 1.5rem;
 }
@@ -518,13 +520,15 @@
 
 .site-detail-contact-modal .modal-body {
     padding: 2rem;
+
 }
 
 .site-detail-rental-summary {
-    background: var(--glass-bg);
+    background: var(--primary-transparent-10);
     border-radius: var(--border-radius-md);
     padding: 1rem;
     margin-bottom: 1.5rem;
+
     border: var(--border-width-thin) solid var(--glass-border);
 }
 
