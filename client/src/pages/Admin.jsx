@@ -8,6 +8,7 @@ import AdminSites from '../components/Admin/AdminSites';
 import AdminContacts from '../components/Admin/AdminContacts';
 import { toast } from 'react-toastify';
 import './Admin.css';
+import AdminRentals from "../components/Admin/AdminRentals";
 
 const AdminLayout = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -60,6 +61,13 @@ const AdminLayout = ({ children }) => {
                             </Nav.Link>
                             <Nav.Link
                                 as={Link}
+                                to="/admin/rentals"
+                                className={`admin-nav-link ${location.pathname === '/admin/rentals' ? 'active' : ''}`}
+                            >
+                                🏠 Аренды
+                            </Nav.Link>
+                            <Nav.Link
+                                as={Link}
                                 to="/admin/contacts"
                                 className={`admin-nav-link ${location.pathname === '/admin/contacts' ? 'active' : ''}`}
                             >
@@ -108,6 +116,7 @@ const Admin = () => {
                             <Routes>
                                 <Route path="/" element={<AdminDashboard />} />
                                 <Route path="/sites" element={<AdminSites />} />
+                                <Route path="/rentals" element={<AdminRentals />} />
                                 <Route path="/contacts" element={<AdminContacts />} />
                             </Routes>
                         </AdminLayout>

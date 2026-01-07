@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Card, Table, Badge } from 'react-bootstrap';
-import { siteAPI, contactAPI } from '../../services/api';
+import { siteAPI, contactAPI, rentalAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
 import './AdminDashboard.css';
 
@@ -11,7 +11,15 @@ const AdminDashboard = () => {
         featuredSites: 0,
         totalContacts: 0,
         newContacts: 0,
-        recentContacts: 0
+        recentContacts: 0,
+        rentalStats: {
+            total: 0,
+            pending: 0,
+            active: 0,
+            paymentDue: 0,
+            expiringSoon: 0,
+            totalRevenue: 0
+        }
     });
     const [recentContacts, setRecentContacts] = useState([]);
     const [recentSites, setRecentSites] = useState([]);
@@ -33,6 +41,17 @@ const AdminDashboard = () => {
             const contactsResponse = await contactAPI.getStats();
             const contactsData = contactsResponse.data.stats;
 
+            // Получаем статистику аренд
+            const rentalsResponse = await rentalAPI.getStats();
+            const rentalStats = rentalsResponse.data.stats || {
+                total: 0,
+                pending: 0,
+                active: 0,
+                paymentDue: 0,
+                expiringSoon: 0,
+                totalRevenue: 0
+            };
+
             // Получаем последние контакты
             const recentContactsResponse = await contactAPI.getAll({
                 limit: 5,
@@ -48,35 +67,43 @@ const AdminDashboard = () => {
                 totalSites,
                 activeSites,
                 featuredSites,
-                totalContacts: contactsData.total,
-                newContacts: contactsData.new,
-                recentContacts: contactsData.recent
+                totalContacts: contactsData.total || 0,
+                newContacts: contactsData.new || 0,
+                recentContacts: contactsData.recent || 0,
+                rentalStats: rentalStats
             });
 
-            setRecentContacts(recentContactsResponse.data.contacts.slice(0, 5));
+            setRecentContacts(recentContactsResponse.data.contacts?.slice(0, 5) || []);
             setRecentSites(sites.slice(0, 5));
         } catch (error) {
             console.error('Ошибка при загрузке данных панели управления:', error);
+            // Устанавливаем значения по умолчанию в случае ошибки
+            setStats(prev => ({
+                ...prev,
+                rentalStats: {
+                    total: 0,
+                    pending: 0,
+                    active: 0,
+                    paymentDue: 0,
+                    expiringSoon: 0,
+                    totalRevenue: 0
+                }
+            }));
         } finally {
             stopLoading();
         }
     };
 
-    // const getStatusBadge = (status) => {
-    //     const variants = {
-    //         new: 'danger',
-    //         contacted: 'warning',
-    //         completed: 'success',
-    //         spam: 'secondary'
-    //     };
-    //     const statusText = {
-    //         new: 'Новый',
-    //         contacted: 'На связи',
-    //         completed: 'Завершен',
-    //         spam: 'Спам'
-    //     };
-    //     return <Badge bg={variants[status]} className="admin-dashboard-badge">{statusText[status]}</Badge>;
-    // };
+    // Форматирование валюты
+    const formatCurrency = (amount) => {
+        if (!amount) return '₸0';
+        return new Intl.NumberFormat('ru-RU', {
+            style: 'currency',
+            currency: 'KZT',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(amount).replace('KZT', '₸');
+    };
 
     if (loading) {
         return (
@@ -146,6 +173,66 @@ const AdminDashboard = () => {
                             <div className="admin-dashboard-stats-content text-center">
                                 <h3 className="text-muted mb-2">{stats.totalContacts}</h3>
                                 <p className="text-muted mb-0">Всего контактов</p>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                {/* Карточка аренд */}
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon rentals d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">🏠</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-muted mb-2">{stats.rentalStats?.total || 0}</h3>
+                                <p className="text-muted mb-0">Всего аренд</p>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                {/* Активные аренды */}
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon active-rentals d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">📈</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-muted mb-2">{stats.rentalStats?.active || 0}</h3>
+                                <p className="text-muted mb-0">Активных аренд</p>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                {/* Ожидающие аренды */}
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon pending-rentals d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">⏳</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-muted mb-2">{stats.rentalStats?.pending || 0}</h3>
+                                <p className="text-muted mb-0">В ожидании</p>
+                            </div>
+                        </Card.Body>
+                    </Card>
+                </Col>
+
+                {/* Выручка */}
+                <Col lg={3} md={6}>
+                    <Card className="admin-dashboard-stats-card card-custom">
+                        <Card.Body className="p-4">
+                            <div className="admin-dashboard-stats-icon revenue d-flex align-items-center justify-content-center mb-3">
+                                <span className="display-5">💰</span>
+                            </div>
+                            <div className="admin-dashboard-stats-content text-center">
+                                <h3 className="text-muted mb-2">{formatCurrency(stats.rentalStats?.totalRevenue || 0)}</h3>
+                                <p className="text-muted mb-0">Общая выручка</p>
                             </div>
                         </Card.Body>
                     </Card>
@@ -239,6 +326,57 @@ const AdminDashboard = () => {
                             ) : (
                                 <p className="admin-dashboard-text-muted text-center mb-0">Сайты еще не добавлены</p>
                             )}
+                        </Card.Body>
+                    </Card>
+                </Col>
+            </Row>
+
+            {/* Дополнительная статистика по арендам */}
+            <Row className="mt-4">
+                <Col lg={12}>
+                    <Card className="admin-dashboard-recent-card card-custom">
+                        <Card.Header className="border-bottom p-4">
+                            <h5 className="admin-dashboard-card-title text-gradient mb-0">Статистика по арендам</h5>
+                        </Card.Header>
+                        <Card.Body className="p-4">
+                            <Row className="g-3">
+                                <Col lg={2} md={4} sm={6}>
+                                    <div className="text-center">
+                                        <div className="admin-dashboard-stat-number text-primary">{stats.rentalStats?.total || 0}</div>
+                                        <div className="admin-dashboard-stat-label text-muted">Всего аренд</div>
+                                    </div>
+                                </Col>
+                                <Col lg={2} md={4} sm={6}>
+                                    <div className="text-center">
+                                        <div className="admin-dashboard-stat-number text-success">{stats.rentalStats?.active || 0}</div>
+                                        <div className="admin-dashboard-stat-label text-muted">Активных</div>
+                                    </div>
+                                </Col>
+                                <Col lg={2} md={4} sm={6}>
+                                    <div className="text-center">
+                                        <div className="admin-dashboard-stat-number text-warning">{stats.rentalStats?.pending || 0}</div>
+                                        <div className="admin-dashboard-stat-label text-muted">В ожидании</div>
+                                    </div>
+                                </Col>
+                                <Col lg={2} md={4} sm={6}>
+                                    <div className="text-center">
+                                        <div className="admin-dashboard-stat-number text-danger">{stats.rentalStats?.paymentDue || 0}</div>
+                                        <div className="admin-dashboard-stat-label text-muted">Просроченных</div>
+                                    </div>
+                                </Col>
+                                <Col lg={2} md={4} sm={6}>
+                                    <div className="text-center">
+                                        <div className="admin-dashboard-stat-number text-info">{stats.rentalStats?.expiringSoon || 0}</div>
+                                        <div className="admin-dashboard-stat-label text-muted">Истекает скоро</div>
+                                    </div>
+                                </Col>
+                                <Col lg={2} md={4} sm={6}>
+                                    <div className="text-center">
+                                        <div className="admin-dashboard-stat-number text-success">{formatCurrency(stats.rentalStats?.totalRevenue || 0)}</div>
+                                        <div className="admin-dashboard-stat-label text-muted">Общая выручка</div>
+                                    </div>
+                                </Col>
+                            </Row>
                         </Card.Body>
                     </Card>
                 </Col>

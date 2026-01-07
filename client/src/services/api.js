@@ -136,6 +136,11 @@ export const rentalAPI = {
     updateDates: (id, dates) => api.put(`/rentals/${id}/dates`, dates),
     addPayment: (id, paymentData) => api.post(`/rentals/${id}/payments`, paymentData),
     getStats: () => api.get('/rentals/stats/overview'),
+    // ДОБАВЬТЕ эти методы:
+    searchRentals: (search) => api.get(`/rentals/search?query=${search}`),
+    getActiveRentals: () => api.get('/rentals?status=active&limit=100'),
+    getPendingRentals: () => api.get('/rentals?status=pending&limit=100'),
+    getExpiringRentals: () => api.get('/rentals?status=active&sortBy=rentalEndDate&sortOrder=asc&limit=50'),
 };
 
 // ==================== API ДЛЯ КОНТАКТОВ ====================

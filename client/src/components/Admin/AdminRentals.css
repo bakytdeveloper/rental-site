@@ -1,0 +1,222 @@
+.admin-rentals {
+    padding: 2rem 0;
+}
+
+.admin-rentals__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.admin-rentals__stats {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.admin-rentals__stat-badge {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+}
+
+.admin-rentals__stats-row {
+    margin-bottom: 2rem;
+}
+
+.admin-rentals__stat-card {
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.admin-rentals__stat-card:hover {
+    transform: translateY(-2px);
+}
+
+.admin-rentals__stat-number {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.admin-rentals__stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.admin-rentals__filters-card {
+    margin-bottom: 2rem;
+}
+
+.admin-rentals__table-card {
+    margin-bottom: 2rem;
+}
+
+.admin-rentals__table {
+    margin-bottom: 0;
+}
+
+.admin-rentals__table-header {
+    background-color: var(--secondary-bg);
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 1rem;
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.admin-rentals__table-row:hover {
+    background-color: rgba(var(--accent-blue-medium), 0.05);
+}
+
+.admin-rentals__table-cell {
+    padding: 1rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.admin-rentals__client-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.admin-rentals__client-name {
+    font-weight: 500;
+}
+
+.admin-rentals__site-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.admin-rentals__site-title {
+    font-weight: 500;
+}
+
+.admin-rentals__site-category {
+    font-size: 0.75rem;
+    align-self: flex-start;
+}
+
+.admin-rentals__price-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.admin-rentals__monthly-price {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.admin-rentals__dates-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.admin-rentals__date-item {
+    display: flex;
+    align-items: center;
+}
+
+.admin-rentals__status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    align-self: flex-start;
+}
+
+.admin-rentals__expiring-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    align-self: flex-start;
+}
+
+.admin-rentals__action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.admin-rentals__view-btn,
+.admin-rentals__dropdown-btn {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.admin-rentals__no-data {
+    padding: 3rem 1rem;
+}
+
+.admin-rentals__pagination {
+    padding: 1rem;
+    background-color: var(--secondary-bg);
+}
+
+.admin-rentals__modal .modal-header {
+    background-color: var(--secondary-bg);
+    border-bottom: 1px solid var(--primary-color);
+}
+
+.admin-rentals__detail-section {
+    margin-bottom: 1.5rem;
+}
+
+.admin-rentals__detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed var(--primary-color);
+}
+
+.admin-rentals__detail-item strong {
+    min-width: 150px;
+}
+
+.admin-rentals__notes {
+    background-color: var(--secondary-bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    white-space: pre-wrap;
+}
+
+.admin-rentals__payment-item {
+    background-color: var(--secondary-bg);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.admin-rentals__status-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .admin-rentals__header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+
+    .admin-rentals__stats {
+        width: 100%;
+    }
+
+    .admin-rentals__action-buttons {
+        flex-direction: column;
+    }
+
+    .admin-rentals__detail-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .admin-rentals__detail-item strong {
+        min-width: auto;
+    }
+}
