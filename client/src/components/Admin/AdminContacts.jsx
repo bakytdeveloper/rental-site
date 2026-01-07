@@ -308,6 +308,9 @@ const AdminContacts = () => {
                                                 <span className="admin-contacts__no-website text-muted">Общий запрос</span>
                                             )}
                                         </td>
+
+
+
                                         <td className="admin-contacts__table-cell">
                                             <div className="d-flex flex-column gap-1">
                                                 {getStatusBadge(contact.status)}
@@ -410,17 +413,17 @@ const AdminContacts = () => {
                                     <div className="admin-contacts__detail-section">
                                         <h6 className="admin-contacts__detail-section-title highlight-text">Личная информация</h6>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label text-light">Имя:</strong>
-                                            <span className="text-light ms-2">{selectedContact.name}</span>
+                                            <strong className="admin-contacts__detail-label text-muted">Имя:</strong>
+                                            <span className="text-muted ms-2">{selectedContact.name}</span>
                                         </div>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label text-light">Email:</strong>
+                                            <strong className="admin-contacts__detail-label text-muted">Email:</strong>
                                             <span className="text-primary ms-2">{selectedContact.email}</span>
                                         </div>
                                         {selectedContact.phone && (
                                             <div className="admin-contacts__detail-item">
-                                                <strong className="admin-contacts__detail-label text-light">Телефон:</strong>
-                                                <span className="text-light ms-2">{selectedContact.phone}</span>
+                                                <strong className="admin-contacts__detail-label text-muted">Телефон:</strong>
+                                                <span className="text-muted ms-2">{selectedContact.phone}</span>
                                             </div>
                                         )}
                                     </div>
@@ -429,7 +432,7 @@ const AdminContacts = () => {
                                     <div className="admin-contacts__detail-section">
                                         <h6 className="admin-contacts__detail-section-title highlight-text">Информация о запросе</h6>
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label text-light">Статус:</strong>
+                                            <strong className="admin-contacts__detail-label text-muted">Статус:</strong>
                                             <div className="admin-contacts__status-actions mt-2">
                                                 {getStatusBadge(selectedContact.status)}
                                                 <div className="admin-contacts__status-buttons d-flex flex-wrap gap-1 mt-2">
@@ -451,13 +454,13 @@ const AdminContacts = () => {
                                         </div>
                                         {selectedContact.siteTitle && (
                                             <div className="admin-contacts__detail-item">
-                                                <strong className="admin-contacts__detail-label text-light">Сайт:</strong>
-                                                <span className="text-light ms-2">{selectedContact.siteTitle}</span>
+                                                <strong className="admin-contacts__detail-label text-muted">Сайт:</strong>
+                                                <span className="text-muted ms-2">{selectedContact.siteTitle}</span>
                                             </div>
                                         )}
                                         <div className="admin-contacts__detail-item">
-                                            <strong className="admin-contacts__detail-label text-light">Отправлено:</strong>
-                                            <span className="text-light ms-2">{new Date(selectedContact.createdAt).toLocaleString()}</span>
+                                            <strong className="admin-contacts__detail-label text-muted">Отправлено:</strong>
+                                            <span className="text-muted ms-2">{new Date(selectedContact.createdAt).toLocaleString()}</span>
                                         </div>
                                     </div>
                                 </Col>
@@ -481,7 +484,7 @@ const AdminContacts = () => {
                                             <Col md={6}>
                                                 <div className="admin-contacts__rental-date-item">
                                                     <div className="admin-contacts__rental-label text-muted">Аренда заканчивается:</div>
-                                                    <div className="admin-contacts__rental-value text-light">
+                                                    <div className="admin-contacts__rental-value text-muted">
                                                         {new Date(selectedContact.rentalEndDate).toLocaleDateString()}
                                                         {getDaysRemaining(selectedContact.rentalEndDate) !== null && (
                                                             <Badge
@@ -554,7 +557,7 @@ const AdminContacts = () => {
 
                                         <div className="admin-contacts__payment-total mt-3 p-3 card-custom">
                                             <div className="d-flex justify-content-between">
-                                                <strong className="text-light">Всего оплачено:</strong>
+                                                <strong className="text-muted">Всего оплачено:</strong>
                                                 <strong className="text-success">
                                                     ₸{payments.reduce((sum, payment) => sum + payment.amount, 0)}
                                                 </strong>
@@ -623,7 +626,7 @@ const AdminContacts = () => {
                 show={showPaymentModal}
                 onHide={() => setShowPaymentModal(false)}
                 centered
-                className="admin-contacts__modal"
+                className="admin-contacts__modal admin-contacts__modal-check"
             >
                 <Modal.Header closeButton className="admin-contacts__modal-header border-bottom">
                     <Modal.Title className="admin-contacts__modal-title text-gradient">
@@ -633,7 +636,7 @@ const AdminContacts = () => {
                 <Modal.Body className="admin-contacts__modal-body">
                     <Form>
                         <Form.Group className="mb-3">
-                            <Form.Label className="text-light mb-2">Сумма платежа (₸)</Form.Label>
+                            <Form.Label className="text-muted mb-2">Сумма платежа (₸)</Form.Label>
                             <Form.Control
                                 type="number"
                                 min="1"
@@ -649,7 +652,7 @@ const AdminContacts = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label className="text-light mb-2">Способ оплаты</Form.Label>
+                            <Form.Label className="text-muted mb-2">Способ оплаты</Form.Label>
                             <Form.Select
                                 value={paymentData.paymentMethod}
                                 onChange={(e) => setPaymentData(prev => ({
@@ -666,7 +669,7 @@ const AdminContacts = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label className="text-light mb-2">Месяцев продления (опционально)</Form.Label>
+                            <Form.Label className="text-muted mb-2">Месяцев продления (опционально)</Form.Label>
                             <Form.Control
                                 type="number"
                                 min="1"
@@ -684,7 +687,7 @@ const AdminContacts = () => {
                         </Form.Group>
 
                         <Form.Group className="mb-3">
-                            <Form.Label className="text-light mb-2">Заметки</Form.Label>
+                            <Form.Label className="text-muted mb-2">Заметки</Form.Label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}

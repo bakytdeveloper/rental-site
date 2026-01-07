@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, Spinner } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, Spinner, InputGroup } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
 import { clientAPI } from '../../services/api';
 import { toast } from 'react-toastify';
@@ -17,6 +17,8 @@ const ClientRegister = () => {
     });
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const navigate = useNavigate();
 
@@ -96,6 +98,14 @@ const ClientRegister = () => {
         } finally {
             setLoading(false);
         }
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
     };
 
     return (
@@ -212,39 +222,62 @@ const ClientRegister = () => {
                                         <Col md={6}>
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Пароль *</Form.Label>
-                                                <Form.Control
-                                                    type="password"
-                                                    name="password"
-                                                    value={formData.password}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    placeholder="Придумайте пароль"
-                                                    disabled={loading}
-                                                    isInvalid={!!errors.password}
-                                                    className="form-control-custom"
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {errors.password}
-                                                </Form.Control.Feedback>
+                                                <InputGroup>
+                                                    <Form.Control
+                                                        type={showPassword ? "text" : "password"}
+                                                        name="password"
+                                                        value={formData.password}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                        placeholder="Придумайте пароль"
+                                                        disabled={loading}
+                                                        isInvalid={!!errors.password}
+                                                        className="form-control-custom"
+                                                    />
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        onClick={togglePasswordVisibility}
+                                                        disabled={loading}
+                                                        className="password-toggle-btn"
+                                                    >
+                                                        {showPassword ? '🙈' : '👁️'}
+                                                    </Button>
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.password}
+                                                    </Form.Control.Feedback>
+                                                </InputGroup>
+                                                <Form.Text className="text-muted small">
+                                                    Нажмите на глаз, чтобы показать/скрыть пароль
+                                                </Form.Text>
                                             </Form.Group>
                                         </Col>
                                         <Col md={6}>
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Подтверждение пароля *</Form.Label>
-                                                <Form.Control
-                                                    type="password"
-                                                    name="confirmPassword"
-                                                    value={formData.confirmPassword}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    placeholder="Повторите пароль"
-                                                    disabled={loading}
-                                                    isInvalid={!!errors.confirmPassword}
-                                                    className="form-control-custom"
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {errors.confirmPassword}
-                                                </Form.Control.Feedback>
+                                                <InputGroup>
+                                                    <Form.Control
+                                                        type={showConfirmPassword ? "text" : "password"}
+                                                        name="confirmPassword"
+                                                        value={formData.confirmPassword}
+                                                        onChange={handleInputChange}
+                                                        required
+                                                        placeholder="Повторите пароль"
+                                                        disabled={loading}
+                                                        isInvalid={!!errors.confirmPassword}
+                                                        className="form-control-custom"
+                                                    />
+                                                    <Button
+                                                        variant="outline-secondary"
+                                                        onClick={toggleConfirmPasswordVisibility}
+                                                        disabled={loading}
+                                                        className="password-toggle-btn"
+                                                    >
+                                                        {showConfirmPassword ? '🙈' : '👁️'}
+                                                    </Button>
+                                                    <Form.Control.Feedback type="invalid">
+                                                        {errors.confirmPassword}
+                                                    </Form.Control.Feedback>
+                                                </InputGroup>
                                             </Form.Group>
                                         </Col>
                                     </Row>

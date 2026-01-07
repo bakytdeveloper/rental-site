@@ -139,7 +139,7 @@
 .admin-dashboard-site-badge {
     background: rgba(40, 167, 69, 0.1) !important;
     border: var(--border-width-thin) solid rgba(40, 167, 69, 0.3) !important;
-    color: #28a745 !important;
+    color: white !important;
 }
 
 .admin-dashboard-text-muted {

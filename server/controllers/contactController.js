@@ -462,7 +462,7 @@ export const addPayment = async (req, res) => {
             contact.notificationSent = false;
         }
 
-        console.log(`💰 Payment processed for ${contact.email}: $${amount} for ${actualMonths} month(s)`);
+        console.log(`💰 Payment processed for ${contact.email}: ${amount} for ${actualMonths} month(s)`);
         console.log(`📅 New rental end date: ${contact.rentalEndDate.toLocaleDateString()}`);
 
         await contact.save();

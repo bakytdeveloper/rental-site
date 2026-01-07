@@ -1,8 +1,9 @@
-/* AdminContacts.css - ОБНОВЛЕННЫЙ */
+/* AdminContacts.css - ОБНОВЛЕННЫЙ ДЛЯ СИНЕЙ ПАЛИТРЫ */
 
 .admin-contacts {
     min-height: 100vh;
     background: var(--gradient-bg);
+    padding: 2rem 0;
 }
 
 .admin-contacts__header {
@@ -16,7 +17,7 @@
 .admin-contacts__title {
     font-size: 2rem;
     font-weight: 700;
-    color: var(--text-light);
+    color: var(--text-dark);
     margin: 0;
 }
 
@@ -36,21 +37,20 @@
 
 /* Filters Card */
 .admin-contacts__filters-card-body {
-    background: var(--glass-bg);
+    background: var(--card-bg);
 }
 
 .admin-contacts__form-label {
-    color: var(--text-light);
+    color: var(--text-dark);
     font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
 .admin-contacts__form-control,
 .admin-contacts__form-select {
-    background: var(--glass-bg);
-    border: 1px solid #4a4a4a;
-    /*border: var(--border-width-thin) solid var(--glass-border);*/
-    color: var(--text-light);
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-dark);
+    color: var(--text-dark);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
     width: 100%;
@@ -58,21 +58,12 @@
     cursor: pointer;
 }
 
-.small-admin-contacts__payment-date,
-.small-admin-notes__payment-date {
-    color: var(--text-muted) !important;
-}
-
 .admin-contacts__form-control:focus,
 .admin-contacts__form-select:focus {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--secondary-bg);
     border-color: var(--primary-color);
-    color: var(--text-light);
-    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
-}
-
-.small-form-text {
-    color: var(--primary-color) !important;
+    color: var(--text-dark);
+    box-shadow: 0 0 0 0.2rem var(--primary-transparent-20);
 }
 
 .admin-contacts__form-control::placeholder {
@@ -87,33 +78,30 @@
 }
 
 .admin-contacts__table-header {
-    border-bottom: var(--border-width-thin) solid var(--glass-border);
-    color: var(--text-light) !important;
+    border-bottom: var(--border-width-thin) solid var(--card-border);
+    color: var(--text-dark) !important;
     font-weight: 600;
     font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 1rem 0.75rem;
-    background: rgba(255, 255, 255, 0.02) !important;
+    background: var(--secondary-bg) !important;
 }
 
 .admin-contacts__table-cell {
-    border-bottom: var(--border-width-thin) solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: var(--border-width-thin) solid var(--card-border) !important;
     vertical-align: middle;
     padding: 1rem 0.75rem;
-    background: transparent !important;
+    background: var(--primary-bg) !important;
 }
 
-.admin-contacts__table-row .admin-contacts__table-cell {
-    background: rgb(227, 243, 250) !important;
-}
 .admin-contacts__table-row:hover .admin-contacts__table-cell {
-    background: rgb(198, 236, 252) !important;
+    background: var(--accent-bg) !important;
 }
 
 .admin-contacts__contact-name {
     font-weight: 600;
-    color: var(--text-light);
+    color: var(--text-dark);
     margin-bottom: 0.25rem;
     font-size: 0.95rem;
 }
@@ -126,7 +114,7 @@
 }
 
 .admin-contacts__contact-phone {
-    color: var(--text-muted) !important;
+    color: var(--text-muted);
     font-size: 0.85rem;
 }
 
@@ -147,40 +135,56 @@
 
 .admin-contacts__date-info {
     font-size: 0.85rem;
-    color: var(--text-light);
+    color: var(--text-dark);
 }
 
 .admin-contacts__date-time {
-    color: var(--text-muted) !important;
+    color: var(--text-muted);
     font-size: 0.8rem;
     display: block;
     margin-top: 0.25rem;
 }
 
+/* Status Badges */
+.admin-contacts__status-badge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: var(--border-radius-full);
+}
+
+.admin-contacts__days-badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+}
+
+/* Action Buttons */
+.admin-contacts__view-btn,
+.admin-contacts__delete-btn {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+}
+
 .admin-contacts__view-btn {
-    border: var(--border-width-thin) solid var(--primary-color);
+    border-color: var(--primary-color);
     color: var(--primary-color);
-    background: transparent;
-    transition: all var(--transition-normal);
 }
 
 .admin-contacts__view-btn:hover {
     background: var(--primary-transparent-10);
-    color: var(--primary-color);
     border-color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 .admin-contacts__delete-btn {
-    border: var(--border-width-thin) solid #ff6b6b;
-    color: #ff6b6b;
-    background: transparent;
-    transition: all var(--transition-normal);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
 }
 
 .admin-contacts__delete-btn:hover {
-    background: rgba(255, 107, 107, 0.1);
-    color: #ff6b6b;
-    border-color: #ff6b6b;
+    background: rgba(239, 68, 68, 0.1);
+    border-color: var(--danger-color);
+    color: var(--danger-color);
 }
 
 /* Pagination */
@@ -191,7 +195,8 @@
     gap: 1rem;
     margin-top: 2rem;
     padding: 1.5rem;
-    border-top: var(--border-width-thin) solid var(--glass-border);
+    border-top: var(--border-width-thin) solid var(--card-border);
+    background: var(--secondary-bg);
 }
 
 .admin-contacts__pagination-info {
@@ -239,34 +244,43 @@
     font-size: 1rem;
 }
 
-/* Contact Detail Modal */
+/* Contact Detail Modal - ОБНОВЛЕНО ДЛЯ СИНЕЙ ПАЛИТРЫ */
 .admin-contacts__modal .modal-content {
-    background: var(--gradient-bg);
-    border: var(--border-width-thin) solid var(--glass-border);
+    background: var(--secondary-bg) !important;
+    border: 1px solid var(--border-dark) !important;
     border-radius: var(--border-radius-lg);
-    color: var(--text-light);
+    color: var(--text-dark);
 }
 
 .admin-contacts__modal-header {
-    border-bottom: var(--border-width-thin) solid var(--glass-border);
+    border-bottom: 1px solid var(--border-dark) !important;
     padding: 1.5rem;
+    background: var(--accent-bg);
 }
 
 .admin-contacts__modal-title {
     font-weight: 600;
     font-size: 1.5rem;
+    color: var(--text-dark);
 }
 
 .admin-contacts__modal-body {
     padding: 1.5rem;
+    background: var(--primary-bg);
 }
 
 .admin-contacts__modal-footer {
-    border-top: var(--border-width-thin) solid var(--glass-border);
+    border-top: 1px solid var(--border-dark);
     padding: 1rem 1.5rem;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--secondary-bg);
 }
 
+/* Для второго модального окна (добавление платежа) */
+.admin-contacts__modal-check .modal-content {
+    background: var(--secondary-bg) !important;
+}
+
+/* Детали контакта */
 .admin-contacts__detail-section {
     margin-bottom: 2rem;
 }
@@ -279,7 +293,7 @@
     color: var(--primary-color);
     font-weight: 600;
     margin-bottom: 1rem;
-    border-bottom: var(--border-width-thin) solid var(--glass-border);
+    border-bottom: 1px solid var(--border-dark);
     padding-bottom: 0.5rem;
     font-size: 1.1rem;
 }
@@ -296,40 +310,17 @@
 }
 
 .admin-contacts__detail-label {
-    color: var(--text-light);
+    color: var(--text-dark);
     min-width: 100px;
     margin-right: 1rem;
     font-weight: 600;
 }
 
-.admin-contacts__status-actions,
-.admin-contacts__priority-actions {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    width: 100%;
-}
-
-.admin-contacts__status-buttons,
-.admin-contacts__priority-buttons {
-    display: flex;
-    gap: 0.25rem;
-    flex-wrap: wrap;
-}
-
-.admin-contacts__status-btn,
-.admin-contacts__priority-btn {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--border-radius-sm);
-    transition: all var(--transition-fast);
-}
-
+/* Контейнеры для сообщений и заметок */
 .admin-contacts__message-content,
 .admin-contacts__notes-content {
-    background: var(--glass-bg);
-    border: var(--border-width-thin) solid var(--glass-border);
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-dark);
     border-radius: var(--border-radius-md);
     padding: 1rem;
     color: var(--text-dark);
@@ -339,15 +330,36 @@
     word-break: break-word;
 }
 
-.admin-contacts__notes-content {
-    background: var(--primary-transparent-05);
-    border-color: var(--primary-transparent-20);
+/* Стили для input и textarea в модальных окнах - ДОБАВЛЕН СВЕТЛО-СЕРЫЙ БОРДЕР */
+.admin-contacts__modal .form-control,
+.admin-contacts__modal .form-select,
+.admin-contacts__modal textarea {
+    background: var(--secondary-bg) !important;
+    border: 1px solid #d1d5db !important; /* Светло-серый бордер */
+    color: var(--text-dark) !important;
+    border-radius: var(--border-radius-md) !important;
+    padding: 0.75rem 1rem !important;
+    transition: all var(--transition-normal) !important;
+}
+
+.admin-contacts__modal .form-control:focus,
+.admin-contacts__modal .form-select:focus,
+.admin-contacts__modal textarea:focus {
+    background: var(--secondary-bg) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--text-dark) !important;
+    box-shadow: 0 0 0 0.2rem var(--primary-transparent-20) !important;
+}
+
+.admin-contacts__modal .form-control::placeholder,
+.admin-contacts__modal textarea::placeholder {
+    color: var(--text-muted) !important;
 }
 
 .admin-contacts__notes-textarea {
-    background: var(--glass-bg);
-    border: var(--border-width-thin) solid var(--glass-border);
-    color: var(--text-light);
+    background: var(--secondary-bg) !important;
+    border: 1px solid #d1d5db !important; /* Светло-серый бордер */
+    color: var(--text-dark) !important;
     border-radius: var(--border-radius-md);
     width: 100%;
     font-size: 0.95rem;
@@ -355,16 +367,13 @@
 }
 
 .admin-contacts__notes-textarea:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--primary-color);
-    color: var(--text-light);
-    box-shadow: 0 0 0 0.2rem rgba(100, 255, 218, 0.25);
+    background: var(--secondary-bg) !important;
+    border-color: var(--primary-color) !important;
+    color: var(--text-dark) !important;
+    box-shadow: 0 0 0 0.2rem var(--primary-transparent-20) !important;
 }
 
-.admin-contacts__notes-textarea::placeholder {
-    color: var(--text-muted);
-}
-
+/* Стили для кнопок в модальных окнах */
 .admin-contacts__modal-close-btn {
     border: var(--border-width-thin) solid var(--text-muted);
     color: var(--text-muted);
@@ -381,8 +390,8 @@
 }
 
 .admin-contacts__modal-delete-btn {
-    border: var(--border-width-thin) solid #ff6b6b;
-    color: #ff6b6b;
+    border: var(--border-width-thin) solid var(--danger-color);
+    color: var(--danger-color);
     background: transparent;
     padding: 0.5rem 1.5rem;
     border-radius: var(--border-radius-md);
@@ -390,15 +399,15 @@
 }
 
 .admin-contacts__modal-delete-btn:hover {
-    background: rgba(255, 107, 107, 0.1);
-    color: #ff6b6b;
-    border-color: #ff6b6b;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger-color);
+    border-color: var(--danger-color);
 }
 
 /* Rental Info Section */
 .admin-contacts__rental-info {
     background: var(--primary-transparent-05);
-    border: var(--border-width-thin) solid var(--primary-transparent-20);
+    border: 1px solid var(--primary-transparent-20);
     border-radius: var(--border-radius-md);
     padding: 1rem;
     margin-bottom: 1rem;
@@ -421,17 +430,18 @@
 }
 
 .admin-contacts__rental-value {
-    color: var(--text-light);
+    color: var(--text-dark);
     font-weight: 600;
 }
 
+/* Payment History */
 .admin-contacts__payment-history {
     margin-top: 1rem;
 }
 
 .admin-contacts__payment-item {
-    background: rgba(255, 255, 255, 0.03);
-    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.05);
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-dark);
     border-radius: var(--border-radius-md);
     padding: 0.75rem;
     margin-bottom: 0.5rem;
@@ -450,20 +460,26 @@
 
 .admin-contacts__payment-rate {
     background: var(--badge-primary-bg) !important;
-    border: var(--border-width-thin) solid var(--badge-primary-border) !important;
-    color: var(--badge-primary-text) !important;
+    border: 1px solid var(--badge-primary-border) !important;
+    color: var(--secondary-bg) !important;
 }
 
-.admin-contacts__days-badge {
-    font-size: 0.75rem;
-    padding: 0.2rem 0.5rem;
-    border-radius: var(--border-radius-sm);
+/* Small text styles - ОБНОВЛЕНО */
+.small-admin-contacts__payment-date,
+.small-admin-notes__payment-date,
+.small-form-text {
+    color: var(--text-muted) !important;
+    font-size: 0.8rem !important;
 }
 
-/* Responsive */
+.small-form-text {
+    margin-top: 0.25rem !important;
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
     .admin-contacts {
-        padding: 3rem 0 1rem;
+        padding: 1.5rem 0;
     }
 
     .admin-contacts__header {
@@ -547,5 +563,9 @@
     .admin-contacts__delete-btn {
         width: 100%;
         text-align: center;
+    }
+
+    .admin-contacts__modal .modal-dialog {
+        margin: 0.5rem;
     }
 }

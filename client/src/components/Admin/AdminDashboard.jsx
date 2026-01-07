@@ -178,8 +178,8 @@ const AdminDashboard = () => {
                                                     <small className="admin-dashboard-text-muted">{contact.email}</small>
                                                 </td>
                                                 <td className="admin-dashboard-table-cell">
-                                                    <Badge bg={contact.rentalStatus ? 'success' : 'secondary'} className="admin-dashboard-site-badge">
-                                                        {contact.rentalStatus ? 'Активен' : 'Неактивен'}
+                                                    <Badge bg={contact.status ? 'success' : 'secondary'} className="admin-dashboard-site-badge">
+                                                        {contact.status ? 'Активен' : 'Неактивен'}
                                                     </Badge>
                                                 </td>
                                                 <td className="admin-dashboard-table-cell">
