@@ -25,12 +25,10 @@ const RequestRental = ({
 
     // Форма для регистрации + заявки (для неавторизованных)
     const [registerForm, setRegisterForm] = useState({
-        username: '',
+        username: '', // Это будет использоваться и как имя пользователя, и как имя
         email: '',
         password: '',
         confirmPassword: '',
-        firstName: '',
-        lastName: '',
         phone: '',
         agreeTerms: false
     });
@@ -57,9 +55,8 @@ const RequestRental = ({
             // Предзаполняем форму регистрации данными пользователя
             setRegisterForm(prev => ({
                 ...prev,
+                username: user.username || '',
                 email: user.email || '',
-                firstName: user.profile?.firstName || '',
-                lastName: user.profile?.lastName || '',
                 phone: user.profile?.phone || ''
             }));
         } else {
@@ -97,11 +94,10 @@ const RequestRental = ({
             email,
             password,
             confirmPassword,
-            firstName,
             agreeTerms
         } = registerForm;
 
-        if (!username || !email || !password || !confirmPassword || !firstName) {
+        if (!username || !email || !password || !confirmPassword) {
             return 'Пожалуйста, заполните все обязательные поля';
         }
 
@@ -224,8 +220,8 @@ const RequestRental = ({
                 username: registerForm.username.trim(),
                 email: registerForm.email.trim(),
                 password: registerForm.password.trim(),
-                firstName: registerForm.firstName.trim(),
-                lastName: registerForm.lastName.trim() || '',
+                firstName: registerForm.username.trim(), // Автоматически используем имя пользователя как имя
+                lastName: '', // Оставляем пустым
                 phone: registerForm.phone.trim() || ''
             };
 
@@ -243,7 +239,7 @@ const RequestRental = ({
                 // 2. Отправляем заявку на аренду
                 const rentalData = {
                     siteId: site._id,
-                    name: `${registerForm.firstName} ${registerForm.lastName || ''}`.trim(),
+                    name: registerForm.username.trim(), // Используем имя пользователя как имя
                     email: registerForm.email.trim(),
                     phone: registerForm.phone.trim() || '',
                     message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды.`,
@@ -459,38 +455,7 @@ const RequestRental = ({
 
                         <Form onSubmit={handleRegisterAndRequestSubmit}>
                             <Row>
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Имя *</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="firstName"
-                                            value={registerForm.firstName}
-                                            onChange={handleRegisterInputChange}
-                                            required
-                                            placeholder="Иван"
-                                            disabled={loading}
-                                        />
-                                    </Form.Group>
-                                </Col>
-
-                                <Col md={6}>
-                                    <Form.Group className="mb-3">
-                                        <Form.Label>Фамилия</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="lastName"
-                                            value={registerForm.lastName}
-                                            onChange={handleRegisterInputChange}
-                                            placeholder="Петров"
-                                            disabled={loading}
-                                        />
-                                    </Form.Group>
-                                </Col>
-                            </Row>
-
-                            <Row>
-                                <Col md={6}>
+                                <Col md={12}>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Имя пользователя *</Form.Label>
                                         <Form.Control
@@ -499,15 +464,17 @@ const RequestRental = ({
                                             value={registerForm.username}
                                             onChange={handleRegisterInputChange}
                                             required
-                                            placeholder="ivan_petrov"
+                                            placeholder="Введите ваше имя"
                                             disabled={loading}
                                         />
                                         <Form.Text className="text-muted">
-                                            Будет использоваться для входа
+                                            Будет использоваться для входа и отображаться как ваше имя
                                         </Form.Text>
                                     </Form.Group>
                                 </Col>
+                            </Row>
 
+                            <Row>
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Email *</Form.Label>
@@ -518,6 +485,20 @@ const RequestRental = ({
                                             onChange={handleRegisterInputChange}
                                             required
                                             placeholder="ivan@example.com"
+                                            disabled={loading}
+                                        />
+                                    </Form.Group>
+                                </Col>
+
+                                <Col md={6}>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Телефон</Form.Label>
+                                        <Form.Control
+                                            type="tel"
+                                            name="phone"
+                                            value={registerForm.phone}
+                                            onChange={handleRegisterInputChange}
+                                            placeholder="+7 (999) 123-45-67"
                                             disabled={loading}
                                         />
                                     </Form.Group>
@@ -555,18 +536,6 @@ const RequestRental = ({
                                     </Form.Group>
                                 </Col>
                             </Row>
-
-                            <Form.Group className="mb-3">
-                                <Form.Label>Телефон</Form.Label>
-                                <Form.Control
-                                    type="tel"
-                                    name="phone"
-                                    value={registerForm.phone}
-                                    onChange={handleRegisterInputChange}
-                                    placeholder="+7 (999) 123-45-67"
-                                    disabled={loading}
-                                />
-                            </Form.Group>
 
                             <Form.Group className="mb-4">
                                 <Form.Check

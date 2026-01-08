@@ -7,12 +7,10 @@ import './ClientAuth.css';
 
 const ClientRegister = () => {
     const [formData, setFormData] = useState({
-        username: '',
+        username: '', // Это поле будет использоваться и как имя пользователя, и как имя
         email: '',
         password: '',
         confirmPassword: '',
-        firstName: '',
-        lastName: '',
         phone: ''
     });
     const [errors, setErrors] = useState({});
@@ -75,7 +73,13 @@ const ClientRegister = () => {
         try {
             const { confirmPassword, ...submitData } = formData;
 
-            const response = await clientAPI.register(submitData);
+            // Добавляем поле firstName равным username для сохранения в базе данных
+            const apiData = {
+                ...submitData,
+                firstName: submitData.username.trim() // Используем username как имя
+            };
+
+            const response = await clientAPI.register(apiData);
 
             if (response.data.success) {
                 // Save token and user data
@@ -134,7 +138,7 @@ const ClientRegister = () => {
 
                                 <Form onSubmit={handleSubmit}>
                                     <Row>
-                                        <Col md={6}>
+                                        <Col md={12}>
                                             <Form.Group className="mb-3">
                                                 <Form.Label>Имя пользователя *</Form.Label>
                                                 <Form.Control
@@ -143,7 +147,7 @@ const ClientRegister = () => {
                                                     value={formData.username}
                                                     onChange={handleInputChange}
                                                     required
-                                                    placeholder="Придумайте имя пользователя"
+                                                    placeholder="Введите ваше имя"
                                                     disabled={loading}
                                                     isInvalid={!!errors.username}
                                                     className="form-control-custom"
@@ -152,61 +156,29 @@ const ClientRegister = () => {
                                                     {errors.username}
                                                 </Form.Control.Feedback>
                                                 <Form.Text className="text-muted">
-                                                    Будет использоваться для входа в систему
+                                                    Будет использоваться для входа в систему и отображаться как ваше имя
                                                 </Form.Text>
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Email адрес *</Form.Label>
-                                                <Form.Control
-                                                    type="email"
-                                                    name="email"
-                                                    value={formData.email}
-                                                    onChange={handleInputChange}
-                                                    required
-                                                    placeholder="Введите ваш email"
-                                                    disabled={loading}
-                                                    isInvalid={!!errors.email}
-                                                    className="form-control-custom"
-                                                />
-                                                <Form.Control.Feedback type="invalid">
-                                                    {errors.email}
-                                                </Form.Control.Feedback>
                                             </Form.Group>
                                         </Col>
                                     </Row>
 
-                                    <Row>
-                                        <Col md={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Имя</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="firstName"
-                                                    value={formData.firstName}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Ваше имя"
-                                                    disabled={loading}
-                                                    className="form-control-custom"
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                        <Col md={6}>
-                                            <Form.Group className="mb-3">
-                                                <Form.Label>Фамилия</Form.Label>
-                                                <Form.Control
-                                                    type="text"
-                                                    name="lastName"
-                                                    value={formData.lastName}
-                                                    onChange={handleInputChange}
-                                                    placeholder="Ваша фамилия"
-                                                    disabled={loading}
-                                                    className="form-control-custom"
-                                                />
-                                            </Form.Group>
-                                        </Col>
-                                    </Row>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label>Email адрес *</Form.Label>
+                                        <Form.Control
+                                            type="email"
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleInputChange}
+                                            required
+                                            placeholder="Введите ваш email"
+                                            disabled={loading}
+                                            isInvalid={!!errors.email}
+                                            className="form-control-custom"
+                                        />
+                                        <Form.Control.Feedback type="invalid">
+                                            {errors.email}
+                                        </Form.Control.Feedback>
+                                    </Form.Group>
 
                                     <Form.Group className="mb-3">
                                         <Form.Label>Номер телефона</Form.Label>

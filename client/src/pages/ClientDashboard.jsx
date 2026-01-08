@@ -160,13 +160,13 @@ const ClientDashboard = () => {
                                     Добро пожаловать, {userData.profile?.firstName || userData.username}!
                                 </p>
                             </div>
-                            <Button
-                                variant="outline-light"
-                                onClick={handleLogout}
-                                className="logout-btn"
-                            >
-                                🚪 Выйти
-                            </Button>
+                            {/*<Button*/}
+                            {/*    variant="outline-light"*/}
+                            {/*    onClick={handleLogout}*/}
+                            {/*    className="logout-btn"*/}
+                            {/*>*/}
+                            {/*    🚪 Выйти*/}
+                            {/*</Button>*/}
                         </div>
 
                         {/* Quick Stats */}
