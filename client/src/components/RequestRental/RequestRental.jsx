@@ -14,6 +14,10 @@ const RequestRental = ({
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [passwordStrength, setPasswordStrength] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [formSubmitted, setFormSubmitted] = useState(false);
 
     // Форма для заявки (для авторизованных)
     const [rentalForm, setRentalForm] = useState({
@@ -25,7 +29,7 @@ const RequestRental = ({
 
     // Форма для регистрации + заявки (для неавторизованных)
     const [registerForm, setRegisterForm] = useState({
-        username: '', // Это будет использоваться и как имя пользователя, и как имя
+        username: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -41,7 +45,6 @@ const RequestRental = ({
             setIsLoggedIn(true);
             setUserId(user.id);
 
-            // Предзаполняем форму заявки данными пользователя
             setRentalForm(prev => ({
                 ...prev,
                 name: user.profile?.firstName && user.profile?.lastName
@@ -52,7 +55,6 @@ const RequestRental = ({
                 message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды.`
             }));
 
-            // Предзаполняем форму регистрации данными пользователя
             setRegisterForm(prev => ({
                 ...prev,
                 username: user.username || '',
@@ -60,7 +62,6 @@ const RequestRental = ({
                 phone: user.profile?.phone || ''
             }));
         } else {
-            // Для неавторизованных предзаполняем только сообщение
             setRentalForm(prev => ({
                 ...prev,
                 message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды.`
@@ -85,6 +86,70 @@ const RequestRental = ({
             [name]: type === 'checkbox' ? checked : value
         }));
         setError('');
+
+        // Проверка сложности пароля
+        if (name === 'password') {
+            checkPasswordStrength(value);
+        }
+    };
+
+    // Проверка сложности пароля
+    const checkPasswordStrength = (password) => {
+        if (!password) {
+            setPasswordStrength('');
+            return;
+        }
+
+        let strength = 0;
+        let tips = [];
+
+        // Проверка длины
+        if (password.length >= 8) strength++;
+        else tips.push('Минимум 8 символов');
+
+        // Проверка на цифры
+        if (/\d/.test(password)) strength++;
+        else tips.push('Добавьте хотя бы одну цифру');
+
+        // Проверка на буквы в разных регистрах
+        if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+        else tips.push('Добавьте буквы в верхнем и нижнем регистре');
+
+        // Проверка на специальные символы
+        if (/[^a-zA-Z0-9]/.test(password)) strength++;
+        else tips.push('Добавьте специальный символ (!@#$%^&*)');
+
+        // Определяем уровень сложности
+        let strengthText = '';
+        let strengthColor = '';
+
+        switch(strength) {
+            case 4:
+                strengthText = 'Отличный пароль! ✅';
+                strengthColor = 'text-success';
+                break;
+            case 3:
+                strengthText = 'Хороший пароль 👍';
+                strengthColor = 'text-warning';
+                break;
+            case 2:
+                strengthText = 'Слабый пароль ⚠️';
+                strengthColor = 'text-warning';
+                break;
+            case 1:
+                strengthText = 'Очень слабый пароль ❌';
+                strengthColor = 'text-danger';
+                break;
+            default:
+                strengthText = '';
+                strengthColor = '';
+        }
+
+        setPasswordStrength({
+            text: strengthText,
+            color: strengthColor,
+            tips: tips
+        });
     };
 
     // Валидация формы регистрации
@@ -97,28 +162,40 @@ const RequestRental = ({
             agreeTerms
         } = registerForm;
 
-        if (!username || !email || !password || !confirmPassword) {
-            return 'Пожалуйста, заполните все обязательные поля';
+        const errors = [];
+
+        if (!username) {
+            errors.push('Пожалуйста, введите имя пользователя');
+        } else if (username.length < 3) {
+            errors.push('Имя пользователя должно содержать минимум 3 символа');
         }
 
-        if (password !== confirmPassword) {
-            return 'Пароли не совпадают';
+        if (!email) {
+            errors.push('Пожалуйста, введите email');
+        } else {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errors.push('Пожалуйста, введите корректный email');
+            }
         }
 
-        if (password.length < 6) {
-            return 'Пароль должен содержать минимум 6 символов';
+        if (!password) {
+            errors.push('Пожалуйста, введите пароль');
+        } else if (password.length < 6) {
+            errors.push('Пароль должен содержать минимум 6 символов');
+        }
+
+        if (!confirmPassword) {
+            errors.push('Пожалуйста, подтвердите пароль');
+        } else if (password !== confirmPassword) {
+            errors.push('Пароли не совпадают');
         }
 
         if (!agreeTerms) {
-            return 'Пожалуйста, согласитесь с условиями использования';
+            errors.push('Пожалуйста, согласитесь с условиями использования');
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return 'Пожалуйста, введите корректный email';
-        }
-
-        return null;
+        return errors.length > 0 ? errors.join('. ') : null;
     };
 
     // Валидация формы заявки
@@ -174,7 +251,6 @@ const RequestRental = ({
 
                 onHide();
 
-                // Сбрасываем форму
                 setRentalForm({
                     name: '',
                     email: '',
@@ -203,6 +279,7 @@ const RequestRental = ({
     // Объединенная регистрация + заявка
     const handleRegisterAndRequestSubmit = async (e) => {
         e.preventDefault();
+        setFormSubmitted(true);
         setError('');
 
         const validationError = validateRegisterForm();
@@ -215,13 +292,12 @@ const RequestRental = ({
         setLoading(true);
 
         try {
-            // 1. Регистрируем пользователя
             const registerData = {
                 username: registerForm.username.trim(),
                 email: registerForm.email.trim(),
                 password: registerForm.password.trim(),
-                firstName: registerForm.username.trim(), // Автоматически используем имя пользователя как имя
-                lastName: '', // Оставляем пустым
+                firstName: registerForm.username.trim(),
+                lastName: '',
                 phone: registerForm.phone.trim() || ''
             };
 
@@ -230,16 +306,14 @@ const RequestRental = ({
             const registerResponse = await clientAPI.register(registerData);
 
             if (registerResponse.data.success) {
-                // Сохраняем токен и данные пользователя
                 localStorage.setItem('clientToken', registerResponse.data.token);
                 localStorage.setItem('clientData', JSON.stringify(registerResponse.data.user));
 
                 toast.success('✅ Регистрация прошла успешно!');
 
-                // 2. Отправляем заявку на аренду
                 const rentalData = {
                     siteId: site._id,
-                    name: registerForm.username.trim(), // Используем имя пользователя как имя
+                    name: registerForm.username.trim(),
                     email: registerForm.email.trim(),
                     phone: registerForm.phone.trim() || '',
                     message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды.`,
@@ -259,7 +333,6 @@ const RequestRental = ({
 
                     onHide();
 
-                    // Перенаправляем в личный кабинет
                     setTimeout(() => {
                         window.location.href = '/client/dashboard';
                     }, 2000);
@@ -276,7 +349,6 @@ const RequestRental = ({
                 errorMessage = error.response.data.errors.join(', ');
             }
 
-            // Проверяем, если пользователь уже существует
             if (error.response?.status === 400 && error.response?.data?.message?.includes('уже существует')) {
                 errorMessage = 'Пользователь с таким email или именем уже существует. Пожалуйста, войдите в систему.';
             }
@@ -288,16 +360,22 @@ const RequestRental = ({
         }
     };
 
-    // Быстрый вход для тех, кто уже зарегистрирован
     const handleQuickLogin = () => {
         onHide();
-        // Сохраняем данные формы для быстрого входа
         localStorage.setItem('rentalPendingData', JSON.stringify({
             siteId: site._id,
             siteTitle: site.title,
             formData: rentalForm
         }));
         window.location.href = '/auth/login';
+    };
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
     };
 
     return (
@@ -430,7 +508,7 @@ const RequestRental = ({
                         </Form>
                     </div>
                 ) : (
-                    // ФОРМА ДЛЯ НЕАВТОРИЗОВАННЫХ ПОЛЬЗОВАТЕЛЕЙ (РЕГИСТРАЦИЯ + ЗАЯВКА)
+                    // ФОРМА ДЛЯ НЕАВТОРИЗОВАННЫХ ПОЛЬЗОВАТЕЛЕЙ
                     <div>
                         <Alert variant="info" className="mb-4">
                             <div className="d-flex align-items-start">
@@ -466,7 +544,11 @@ const RequestRental = ({
                                             required
                                             placeholder="Введите ваше имя"
                                             disabled={loading}
+                                            isInvalid={formSubmitted && !registerForm.username}
                                         />
+                                        <Form.Control.Feedback type="invalid">
+                                            Пожалуйста, введите имя пользователя
+                                        </Form.Control.Feedback>
                                         <Form.Text className="text-muted">
                                             Будет использоваться для входа и отображаться как ваше имя
                                         </Form.Text>
@@ -486,7 +568,11 @@ const RequestRental = ({
                                             required
                                             placeholder="ivan@example.com"
                                             disabled={loading}
+                                            isInvalid={formSubmitted && !registerForm.email}
                                         />
+                                        <Form.Control.Feedback type="invalid">
+                                            Пожалуйста, введите email
+                                        </Form.Control.Feedback>
                                     </Form.Group>
                                 </Col>
 
@@ -509,69 +595,143 @@ const RequestRental = ({
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Пароль *</Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            name="password"
-                                            value={registerForm.password}
-                                            onChange={handleRegisterInputChange}
-                                            required
-                                            placeholder="Минимум 6 символов"
-                                            disabled={loading}
-                                        />
+                                        <div className="input-group">
+                                            <Form.Control
+                                                type={showPassword ? "text" : "password"}
+                                                name="password"
+                                                value={registerForm.password}
+                                                onChange={handleRegisterInputChange}
+                                                required
+                                                placeholder="Минимум 6 символов"
+                                                disabled={loading}
+                                                isInvalid={formSubmitted && !registerForm.password}
+                                                className="border-end-0"
+                                            />
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-secondary border-start-0"
+                                                onClick={togglePasswordVisibility}
+                                                disabled={loading}
+                                                style={{
+                                                    backgroundColor: 'white',
+                                                    border: '1px solid #dee2e6',
+                                                    borderLeft: 'none'
+                                                }}
+                                            >
+                                                {showPassword ? '🙈' : '👁️'}
+                                            </button>
+                                        </div>
+                                        <Form.Control.Feedback type="invalid">
+                                            Пожалуйста, введите пароль
+                                        </Form.Control.Feedback>
+
+                                        {passwordStrength.text && (
+                                            <div className={`mt-1 small ${passwordStrength.color}`}>
+                                                <strong>{passwordStrength.text}</strong>
+                                                {passwordStrength.tips && passwordStrength.tips.length > 0 && (
+                                                    <div className="text-muted mt-1">
+                                                        <small>Для улучшения пароля: {passwordStrength.tips.join(', ')}</small>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
                                     </Form.Group>
                                 </Col>
 
                                 <Col md={6}>
                                     <Form.Group className="mb-3">
                                         <Form.Label>Подтвердите пароль *</Form.Label>
-                                        <Form.Control
-                                            type="password"
-                                            name="confirmPassword"
-                                            value={registerForm.confirmPassword}
-                                            onChange={handleRegisterInputChange}
-                                            required
-                                            placeholder="Повторите пароль"
-                                            disabled={loading}
-                                        />
+                                        <div className="input-group">
+                                            <Form.Control
+                                                type={showConfirmPassword ? "text" : "password"}
+                                                name="confirmPassword"
+                                                value={registerForm.confirmPassword}
+                                                onChange={handleRegisterInputChange}
+                                                required
+                                                placeholder="Повторите пароль"
+                                                disabled={loading}
+                                                isInvalid={formSubmitted && !registerForm.confirmPassword ||
+                                                (registerForm.password && registerForm.confirmPassword &&
+                                                    registerForm.password !== registerForm.confirmPassword)}
+                                                className="border-end-0"
+                                            />
+                                            <button
+                                                type="button"
+                                                className="btn btn-outline-secondary border-start-0"
+                                                onClick={toggleConfirmPasswordVisibility}
+                                                disabled={loading}
+                                                style={{
+                                                    backgroundColor: 'white',
+                                                    border: '1px solid #dee2e6',
+                                                    borderLeft: 'none'
+                                                }}
+                                            >
+                                                {showConfirmPassword ? '🙈' : '👁️'}
+                                            </button>
+                                        </div>
+                                        <Form.Control.Feedback type="invalid">
+                                            {!registerForm.confirmPassword ? 'Пожалуйста, подтвердите пароль' : 'Пароли не совпадают'}
+                                        </Form.Control.Feedback>
+
+                                        {registerForm.password && registerForm.confirmPassword &&
+                                        registerForm.password === registerForm.confirmPassword && (
+                                            <div className="text-success small mt-1">
+                                                <strong>✓ Пароли совпадают</strong>
+                                            </div>
+                                        )}
                                     </Form.Group>
                                 </Col>
                             </Row>
 
+                            {/* Улучшенный чекбокс */}
                             <Form.Group className="mb-4">
-                                <Form.Check
-                                    type="checkbox"
-                                    id="agreeTerms"
-                                    name="agreeTerms"
-                                    label={
-                                        <span>
-                                            Я соглашаюсь с{' '}
-                                            <a href="/terms" target="_blank" rel="noopener noreferrer">
-                                                условиями использования
-                                            </a>{' '}
-                                            и{' '}
-                                            <a href="/privacy" target="_blank" rel="noopener noreferrer">
-                                                политикой конфиденциальности
-                                            </a>
-                                        </span>
-                                    }
-                                    checked={registerForm.agreeTerms}
-                                    onChange={handleRegisterInputChange}
-                                    disabled={loading}
-                                />
+                                <div className={`border rounded p-3 ${formSubmitted && !registerForm.agreeTerms ? 'border-danger bg-danger-light' : 'border-light'}`}>
+                                    <Form.Check
+                                        type="checkbox"
+                                        id="agreeTerms"
+                                        name="agreeTerms"
+                                        label={
+                                            <div>
+                                                <span className="fw-bold">Я соглашаюсь с условиями использования</span>
+                                                <div className="mt-1">
+                                                    <small className="text-muted">
+                                                        Прочитайте{' '}
+                                                        <a href="/terms" target="_blank" rel="noopener noreferrer"
+                                                           className="text-primary">
+                                                            условия использования
+                                                        </a>{' '}
+                                                        и{' '}
+                                                        <a href="/privacy" target="_blank" rel="noopener noreferrer"
+                                                           className="text-primary">
+                                                            политику конфиденциальности
+                                                        </a>
+                                                        {' '}перед продолжением
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        }
+                                        checked={registerForm.agreeTerms}
+                                        onChange={handleRegisterInputChange}
+                                        disabled={loading}
+                                        className="mb-0"
+                                    />
+                                </div>
+
+                                {formSubmitted && !registerForm.agreeTerms && (
+                                    <div className="text-danger small mt-2">
+                                        <strong>⚠️ Пожалуйста, согласитесь с условиями использования</strong>
+                                    </div>
+                                )}
                             </Form.Group>
 
-                            {error && (
-                                <Alert variant="danger" className="mb-3">
-                                    {error}
-                                </Alert>
-                            )}
-
+                            {/* Кнопка регистрации с предупреждением */}
                             <div className="d-grid gap-2">
                                 <Button
                                     type="submit"
-                                    variant="success"
+                                    variant={formSubmitted && !registerForm.agreeTerms ? "warning" : "success"}
                                     size="lg"
-                                    disabled={loading || !registerForm.agreeTerms}
+                                    disabled={loading}
+                                    className={formSubmitted && !registerForm.agreeTerms ? "animate__animated animate__shakeX" : ""}
                                 >
                                     {loading ? (
                                         <>
@@ -584,7 +744,12 @@ const RequestRental = ({
                                             Регистрация...
                                         </>
                                     ) : (
-                                        '🚀 Зарегистрироваться и отправить заявку'
+                                        <>
+                                            🚀 Зарегистрироваться и отправить заявку
+                                            {!registerForm.agreeTerms && (
+                                                <span className="ms-2">(требуется согласие)</span>
+                                            )}
+                                        </>
                                     )}
                                 </Button>
 
@@ -596,6 +761,26 @@ const RequestRental = ({
                                     Уже есть аккаунт? Войти
                                 </Button>
                             </div>
+
+                            {error && (
+                                <Alert variant="danger" className="mb-3 mt-3">
+                                    <strong>Ошибка:</strong> {error}
+                                </Alert>
+                            )}
+
+                            {/* Подсказки по паролю */}
+                            {registerForm.password && (
+                                <div className="mt-3 p-3 border rounded bg-light">
+                                    <h6 className="mb-2">📝 Советы по созданию надежного пароля:</h6>
+                                    <ul className="mb-0 small">
+                                        <li>Используйте не менее 8 символов</li>
+                                        <li>Добавьте заглавные и строчные буквы</li>
+                                        <li>Включите цифры (1, 2, 3...)</li>
+                                        <li>Добавьте специальные символы (!@#$%^&*)</li>
+                                        <li>Избегайте простых комбинаций (123456, password)</li>
+                                    </ul>
+                                </div>
+                            )}
                         </Form>
                     </div>
                 )}

@@ -4,6 +4,7 @@ import { contactAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './AdminContacts.css';
+import {useLocation} from "react-router-dom";
 
 const AdminContacts = () => {
     const [contacts, setContacts] = useState([]);
@@ -29,7 +30,20 @@ const AdminContacts = () => {
     });
     const [payments, setPayments] = useState([]);
     const [loadingPayments, setLoadingPayments] = useState(false);
+    const location = useLocation();
 
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
     // Функция для загрузки платежей
     const loadPayments = async (contactId) => {
         setLoadingPayments(true);

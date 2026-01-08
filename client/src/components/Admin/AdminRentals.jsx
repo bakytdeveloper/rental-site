@@ -4,6 +4,7 @@ import { rentalAPI, siteAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
 import './AdminRentals.css';
+import {useLocation} from "react-router-dom";
 
 const AdminRentals = () => {
     const [rentals, setRentals] = useState([]);
@@ -41,6 +42,20 @@ const AdminRentals = () => {
         rentalEndDate: ''
     });
     const { loading, startLoading, stopLoading } = useLoading();
+    const location = useLocation();
+
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
 
     useEffect(() => {
         fetchRentals();

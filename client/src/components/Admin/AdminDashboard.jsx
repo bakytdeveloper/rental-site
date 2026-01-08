@@ -3,6 +3,7 @@ import { Row, Col, Card, Table, Badge } from 'react-bootstrap';
 import { siteAPI, contactAPI, rentalAPI } from '../../services/api';
 import { useLoading } from '../../context/LoadingContext';
 import './AdminDashboard.css';
+import {useLocation} from "react-router-dom";
 
 const AdminDashboard = () => {
     const [stats, setStats] = useState({
@@ -29,6 +30,21 @@ const AdminDashboard = () => {
         fetchDashboardData();
         // eslint-disable-next-line
     }, []);
+
+    const location = useLocation();
+
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
 
     const fetchDashboardData = async () => {
         startLoading();

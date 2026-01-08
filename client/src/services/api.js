@@ -137,7 +137,7 @@ export const clientAPI = {
                         }
                     };
                 }).catch(error => {
-                    console.error('Ошибка при создании заявки после логина:', error);
+                    // console.error('Ошибка при создании заявки после логина:', error);
                     // Если не удалось создать заявку, все равно возвращаем успешный логин
                     localStorage.removeItem('rentalPendingData');
                     return response;

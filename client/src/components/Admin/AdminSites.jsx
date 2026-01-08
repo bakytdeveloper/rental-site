@@ -5,6 +5,7 @@ import { useLoading } from '../../context/LoadingContext';
 import { toast } from 'react-toastify';
 import ConfirmationModal from '../ConfirmationModal/ConfirmationModal'; // Добавляем новый компонент
 import './AdminSites.css';
+import {useLocation} from "react-router-dom";
 
 const AdminSites = () => {
     const [sites, setSites] = useState([]);
@@ -33,6 +34,22 @@ const AdminSites = () => {
     const [techInput, setTechInput] = useState('');
     const [featureInput, setFeatureInput] = useState('');
     const { loading, startLoading, stopLoading } = useLoading();
+
+    const location = useLocation();
+
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
+
 
     // Категории на русском языке (совпадают с enum в модели Site.js)
     const categoryOptions = [
