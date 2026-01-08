@@ -110,7 +110,42 @@ export const authAPI = {
 export const clientAPI = {
     // Публичные методы
     register: (data) => api.post('/client/register', data),
-    login: (data) => api.post('/client/login', data),
+    // В функции login в clientAPI
+    login: (data) => {
+        return api.post('/client/login', data).then(response => {
+            // Проверяем, есть ли сохраненные данные для заявки
+            const pendingRental = localStorage.getItem('rentalPendingData');
+            if (pendingRental && response.data.success) {
+                const rentalData = JSON.parse(pendingRental);
+
+                // Отправляем заявку с привязкой к пользователю
+                return api.post('/rentals/request', {
+                    ...rentalData.formData,
+                    siteId: rentalData.siteId,
+                    userId: response.data.user.id
+                }).then(rentalResponse => {
+                    // Очищаем сохраненные данные
+                    localStorage.removeItem('rentalPendingData');
+
+                    // Возвращаем объединенный ответ
+                    return {
+                        ...response,
+                        data: {
+                            ...response.data,
+                            rentalCreated: true,
+                            rental: rentalResponse.data.rental
+                        }
+                    };
+                }).catch(error => {
+                    console.error('Ошибка при создании заявки после логина:', error);
+                    // Если не удалось создать заявку, все равно возвращаем успешный логин
+                    localStorage.removeItem('rentalPendingData');
+                    return response;
+                });
+            }
+            return response;
+        });
+    },
 
     // Защищенные методы (требуют токен клиента)
     getProfile: () => api.get('/client/profile'),

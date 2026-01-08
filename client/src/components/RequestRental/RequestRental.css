@@ -1,0 +1,175 @@
+/* RequestRental.css */
+.rental-request-modal .modal-header {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    color: white;
+    border-bottom: none;
+}
+
+.rental-request-modal .modal-header .close {
+    color: white;
+    opacity: 0.8;
+}
+
+.rental-request-modal .modal-header .close:hover {
+    opacity: 1;
+}
+
+.rental-request-modal .modal-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+.rental-request-modal .nav-tabs {
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.rental-request-modal .nav-tabs .nav-link {
+    border: none;
+    color: #64748b;
+    font-weight: 600;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.rental-request-modal .nav-tabs .nav-link:hover {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.05);
+    border: none;
+}
+
+.rental-request-modal .nav-tabs .nav-link.active {
+    color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.1);
+    border: none;
+    border-bottom: 2px solid #2563eb;
+}
+
+.rental-request-modal .tab-content {
+    padding-top: 1rem;
+}
+
+.rental-request-modal .form-label {
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.rental-request-modal .form-control {
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.rental-request-modal .form-control:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.rental-request-modal .form-text {
+    font-size: 0.85rem;
+    color: #64748b;
+}
+
+.rental-request-modal .alert {
+    border-radius: 8px;
+    border: none;
+    padding: 1rem;
+}
+
+.rental-request-modal .alert-info {
+    background-color: rgba(59, 130, 246, 0.1);
+    color: #1e40af;
+    border-left: 4px solid #3b82f6;
+}
+
+.rental-request-modal .alert-success {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+    border-left: 4px solid #10b981;
+}
+
+.rental-request-modal .alert-danger {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #7f1d1d;
+    border-left: 4px solid #ef4444;
+}
+
+.rental-request-modal .btn {
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.rental-request-modal .btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    border: none;
+}
+
+.rental-request-modal .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.rental-request-modal .btn-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border: none;
+}
+
+.rental-request-modal .btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.rental-request-modal .btn-outline-primary {
+    color: #2563eb;
+    border: 2px solid #2563eb;
+    background: transparent;
+}
+
+.rental-request-modal .btn-outline-primary:hover {
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
+.rental-request-modal .form-check-input:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+.rental-request-modal a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.rental-request-modal a:hover {
+    text-decoration: underline;
+}
+
+.rental-request-modal .modal-footer {
+    background-color: #f8fafc;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .rental-request-modal .modal-dialog {
+        margin: 0.5rem;
+    }
+
+    .rental-request-modal .modal-header {
+        padding: 1rem;
+    }
+
+    .rental-request-modal .modal-body {
+        padding: 1rem;
+    }
+
+    .rental-request-modal .nav-tabs .nav-link {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .rental-request-modal .btn {
+        padding: 0.6rem 1rem;
+    }
+}

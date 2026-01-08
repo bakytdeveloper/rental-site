@@ -6,6 +6,102 @@ import { sendEmailNotification } from '../services/emailService.js';
 // @desc    Создать заявку на аренду
 // @route   POST /api/rentals/request
 // @access  Public
+// export const requestRental = async (req, res) => {
+//     try {
+//         const {
+//             siteId,
+//             name,
+//             email,
+//             phone,
+//             message,
+//             userId
+//         } = req.body;
+//
+//         // Проверяем обязательные поля
+//         if (!siteId || !name || !email) {
+//             return res.status(400).json({
+//                 success: false,
+//                 message: 'Пожалуйста, заполните все обязательные поля'
+//             });
+//         }
+//
+//         // Проверяем существование сайта
+//         const site = await Site.findById(siteId);
+//         if (!site || !site.isActive) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: 'Сайт не найден или недоступен для аренды'
+//             });
+//         }
+//
+//         // Проверяем пользователя, если userId указан
+//         let user = null;
+//         if (userId) {
+//             user = await User.findById(userId);
+//             if (!user) {
+//                 return res.status(404).json({
+//                     success: false,
+//                     message: 'Пользователь не найден'
+//                 });
+//             }
+//         }
+//
+//         // Создаем заявку на аренду
+//         const rental = await Rental.create({
+//             userId: userId || null,
+//             siteId,
+//             clientName: name,
+//             clientEmail: email,
+//             clientPhone: phone || '',
+//             monthlyPrice: site.price,
+//             status: 'pending',
+//             notes: message || ''
+//         });
+//
+//         // Если пользователь зарегистрирован, добавляем уведомление
+//         if (user) {
+//             user.addNotification({
+//                 type: 'system',
+//                 message: `Вы подали заявку на аренду сайта "${site.title}"`,
+//                 rentalId: rental._id
+//             });
+//             await user.save();
+//         }
+//
+//         // Отправляем email уведомление админу
+//         setTimeout(async () => {
+//             try {
+//                 await sendEmailNotification('newRentalInquiry', {
+//                     name,
+//                     email,
+//                     phone: phone || '',
+//                     message: message || 'Запрос на аренду сайта'
+//                 }, site);
+//             } catch (emailError) {
+//                 console.error('Ошибка отправки email:', emailError);
+//             }
+//         }, 0);
+//
+//         res.status(201).json({
+//             success: true,
+//             message: 'Заявка на аренду успешно отправлена!',
+//             rental: {
+//                 id: rental._id,
+//                 site: site.title,
+//                 status: rental.status,
+//                 price: rental.monthlyPrice
+//             }
+//         });
+//
+//     } catch (error) {
+//         console.error('Ошибка создания заявки:', error);
+//         res.status(500).json({
+//             success: false,
+//             message: 'Ошибка при создании заявки на аренду'
+//         });
+//     }
+// };
+
 export const requestRental = async (req, res) => {
     try {
         const {
@@ -16,6 +112,10 @@ export const requestRental = async (req, res) => {
             message,
             userId
         } = req.body;
+
+        console.log('📥 Полученные данные заявки:', {
+            siteId, name, email, phone, message, userId
+        });
 
         // Проверяем обязательные поля
         if (!siteId || !name || !email) {
@@ -34,15 +134,17 @@ export const requestRental = async (req, res) => {
             });
         }
 
+        console.log('✅ Сайт найден:', site.title);
+
         // Проверяем пользователя, если userId указан
         let user = null;
         if (userId) {
             user = await User.findById(userId);
             if (!user) {
-                return res.status(404).json({
-                    success: false,
-                    message: 'Пользователь не найден'
-                });
+                console.log('⚠️ Пользователь не найден по ID:', userId);
+                // Не возвращаем ошибку, просто создаем заявку без привязки
+            } else {
+                console.log('✅ Пользователь найден:', user.email);
             }
         }
 
@@ -58,6 +160,8 @@ export const requestRental = async (req, res) => {
             notes: message || ''
         });
 
+        console.log('✅ Заявка создана:', rental._id);
+
         // Если пользователь зарегистрирован, добавляем уведомление
         if (user) {
             user.addNotification({
@@ -66,6 +170,7 @@ export const requestRental = async (req, res) => {
                 rentalId: rental._id
             });
             await user.save();
+            console.log('✅ Уведомление добавлено пользователю');
         }
 
         // Отправляем email уведомление админу
@@ -77,8 +182,9 @@ export const requestRental = async (req, res) => {
                     phone: phone || '',
                     message: message || 'Запрос на аренду сайта'
                 }, site);
+                console.log('✅ Email уведомление отправлено админу');
             } catch (emailError) {
-                console.error('Ошибка отправки email:', emailError);
+                console.error('❌ Ошибка отправки email:', emailError);
             }
         }, 0);
 
@@ -89,15 +195,35 @@ export const requestRental = async (req, res) => {
                 id: rental._id,
                 site: site.title,
                 status: rental.status,
-                price: rental.monthlyPrice
+                price: rental.monthlyPrice,
+                clientEmail: rental.clientEmail
             }
         });
 
     } catch (error) {
-        console.error('Ошибка создания заявки:', error);
+        console.error('❌ Ошибка создания заявки:', error);
+        console.error('❌ Stack trace:', error.stack);
+
+        // Детализированные ошибки
+        if (error.name === 'ValidationError') {
+            const errors = Object.values(error.errors).map(err => err.message);
+            return res.status(400).json({
+                success: false,
+                message: 'Ошибка валидации данных',
+                errors: errors
+            });
+        }
+
+        if (error.code === 11000) {
+            return res.status(400).json({
+                success: false,
+                message: 'Заявка с таким email уже существует'
+            });
+        }
+
         res.status(500).json({
             success: false,
-            message: 'Ошибка при создании заявки на аренду'
+            message: 'Ошибка при создании заявки на аренду: ' + error.message
         });
     }
 };

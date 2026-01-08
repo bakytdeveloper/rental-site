@@ -6,6 +6,7 @@ import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import SEO from '../components/SEO/SEO';
 import './SiteDetail.css';
+import RequestRental from "../components/RequestRental/RequestRental";
 
 const SiteDetail = () => {
     const { id } = useParams();
@@ -19,6 +20,7 @@ const SiteDetail = () => {
         phone: '',
         message: `Я заинтересован в аренде этого сайта и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
     });
+
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userId, setUserId] = useState(null);
     const { loading, startLoading, stopLoading } = useLoading();
@@ -32,15 +34,6 @@ const SiteDetail = () => {
             const user = JSON.parse(clientData);
             setIsLoggedIn(true);
             setUserId(user.id);
-            // Предзаполняем форму данными пользователя
-            setRentalForm(prev => ({
-                ...prev,
-                name: user.profile?.firstName && user.profile?.lastName
-                    ? `${user.profile.firstName} ${user.profile.lastName}`
-                    : user.username || '',
-                email: user.email || '',
-                phone: user.profile?.phone || ''
-            }));
         }
     }, []);
 
@@ -163,59 +156,59 @@ const SiteDetail = () => {
         }
     };
 
-    const handleRentalSubmit = async (e) => {
-        e.preventDefault();
-        startLoading();
+    // const handleRentalSubmit = async (e) => {
+    //     e.preventDefault();
+    //     startLoading();
+    //
+    //     try {
+    //         const rentalData = {
+    //             siteId: id,
+    //             name: rentalForm.name.trim(),
+    //             email: rentalForm.email.trim(),
+    //             phone: rentalForm.phone.trim() || 'Не указан',
+    //             message: rentalForm.message.trim(),
+    //             ...(userId && { userId }) // Добавляем userId если пользователь авторизован
+    //         };
+    //
+    //         console.log('📤 Отправка заявки на аренду:', rentalData);
+    //
+    //         const response = await rentalAPI.requestRental(rentalData);
+    //
+    //         if (response.data.success) {
+    //             toast.success('🎉 Ваша заявка на аренду отправлена! Мы свяжемся с вами в течение 24 часов.');
+    //             setShowRentalModal(false);
+    //             setRentalForm({
+    //                 name: '',
+    //                 email: '',
+    //                 phone: '',
+    //                 message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
+    //             });
+    //
+    //             // Если пользователь не авторизован, предлагаем зарегистрироваться
+    //             if (!isLoggedIn) {
+    //                 setTimeout(() => {
+    //                     toast.info('💡 Совет: Зарегистрируйтесь, чтобы отслеживать статус вашей заявки и управлять арендой в личном кабинете!');
+    //                 }, 2000);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('❌ Ошибка при отправке заявки:', error);
+    //         const errorMessage = error.response?.data?.message ||
+    //             error.response?.data?.errors?.join(', ') ||
+    //             'Не удалось отправить заявку. Пожалуйста, попробуйте еще раз.';
+    //
+    //         toast.error(errorMessage);
+    //     } finally {
+    //         stopLoading();
+    //     }
+    // };
 
-        try {
-            const rentalData = {
-                siteId: id,
-                name: rentalForm.name.trim(),
-                email: rentalForm.email.trim(),
-                phone: rentalForm.phone.trim() || 'Не указан',
-                message: rentalForm.message.trim(),
-                ...(userId && { userId }) // Добавляем userId если пользователь авторизован
-            };
-
-            console.log('📤 Отправка заявки на аренду:', rentalData);
-
-            const response = await rentalAPI.requestRental(rentalData);
-
-            if (response.data.success) {
-                toast.success('🎉 Ваша заявка на аренду отправлена! Мы свяжемся с вами в течение 24 часов.');
-                setShowRentalModal(false);
-                setRentalForm({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    message: `Я заинтересован в аренде сайта "${site?.title || 'этого сайта'}" и хотел бы узнать больше о процессе аренды, ценах и требованиях к настройке.`
-                });
-
-                // Если пользователь не авторизован, предлагаем зарегистрироваться
-                if (!isLoggedIn) {
-                    setTimeout(() => {
-                        toast.info('💡 Совет: Зарегистрируйтесь, чтобы отслеживать статус вашей заявки и управлять арендой в личном кабинете!');
-                    }, 2000);
-                }
-            }
-        } catch (error) {
-            console.error('❌ Ошибка при отправке заявки:', error);
-            const errorMessage = error.response?.data?.message ||
-                error.response?.data?.errors?.join(', ') ||
-                'Не удалось отправить заявку. Пожалуйста, попробуйте еще раз.';
-
-            toast.error(errorMessage);
-        } finally {
-            stopLoading();
-        }
-    };
-
-    const handleInputChange = (e) => {
-        setRentalForm({
-            ...rentalForm,
-            [e.target.name]: e.target.value
-        });
-    };
+    // const handleInputChange = (e) => {
+    //     setRentalForm({
+    //         ...rentalForm,
+    //         [e.target.name]: e.target.value
+    //     });
+    // };
 
     const scrollToRent = () => {
         const element = document.getElementById('rent-section');
@@ -224,15 +217,15 @@ const SiteDetail = () => {
         }
     };
 
-    const handleLoginClick = () => {
-        setShowRentalModal(false);
-        navigate('/auth/login', { state: { from: location } });
-    };
-
-    const handleRegisterClick = () => {
-        setShowRentalModal(false);
-        navigate('/client/register', { state: { from: location } });
-    };
+    // const handleLoginClick = () => {
+    //     setShowRentalModal(false);
+    //     navigate('/auth/login', { state: { from: location } });
+    // };
+    //
+    // const handleRegisterClick = () => {
+    //     setShowRentalModal(false);
+    //     navigate('/client/register', { state: { from: location } });
+    // };
 
     if (loading && !site) {
         return (
@@ -510,167 +503,179 @@ const SiteDetail = () => {
             </Container>
 
             {/* Модальное окно заявки на аренду */}
-            <Modal
+            {/*<Modal*/}
+            {/*    show={showRentalModal}*/}
+            {/*    onHide={() => setShowRentalModal(false)}*/}
+            {/*    centered*/}
+            {/*    size="lg"*/}
+            {/*    className="site-detail-rental-modal"*/}
+            {/*>*/}
+            {/*    <Modal.Header closeButton className="border-bottom">*/}
+            {/*        <div>*/}
+            {/*            <Modal.Title className="text-muted">Арендовать {site.title || 'сайт'}</Modal.Title>*/}
+            {/*            <div className="site-detail-modal-subtitle text-muted">*/}
+            {/*                ₸{site.price || 0}/месяц • {site.category || 'Сайт'}*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+            {/*    </Modal.Header>*/}
+
+            {/*    <Modal.Body>*/}
+            {/*        {!isLoggedIn && (*/}
+            {/*            <Alert variant="info" className="mb-4">*/}
+            {/*                <div className="d-flex align-items-center">*/}
+            {/*                    <div className="me-3">💡</div>*/}
+            {/*                    <div>*/}
+            {/*                        <strong>Рекомендуем зарегистрироваться!</strong>*/}
+            {/*                        <p className="mb-0 mt-1">*/}
+            {/*                            После регистрации вы сможете отслеживать статус вашей заявки,*/}
+            {/*                            управлять арендой и получать уведомления в личном кабинете.*/}
+            {/*                        </p>*/}
+            {/*                        <div className="mt-2">*/}
+            {/*                            <Button size="sm" variant="outline-primary" className="me-2" onClick={handleLoginClick}>*/}
+            {/*                                Войти*/}
+            {/*                            </Button>*/}
+            {/*                            <Button size="sm" variant="primary" onClick={handleRegisterClick}>*/}
+            {/*                                Зарегистрироваться*/}
+            {/*                            </Button>*/}
+            {/*                        </div>*/}
+            {/*                    </div>*/}
+            {/*                </div>*/}
+            {/*            </Alert>*/}
+            {/*        )}*/}
+
+            {/*        <div className="site-detail-rental-summary mb-4">*/}
+            {/*            <div className="site-detail-summary-item">*/}
+            {/*                <span className="text-muted">Сайт:</span>*/}
+            {/*                <strong className="text-primary">{site.title || 'Сайт'}</strong>*/}
+            {/*            </div>*/}
+            {/*            <div className="site-detail-summary-item">*/}
+            {/*                <span className="text-muted">Месячная цена:</span>*/}
+            {/*                <strong className="text-primary">₸{site.price || 0}</strong>*/}
+            {/*            </div>*/}
+            {/*            <div className="site-detail-summary-item">*/}
+            {/*                <span className="text-muted">Категория:</span>*/}
+            {/*                <strong className="text-primary">{site.category || 'Сайт'}</strong>*/}
+            {/*            </div>*/}
+            {/*        </div>*/}
+
+            {/*        <Form onSubmit={handleRentalSubmit}>*/}
+            {/*            <Row>*/}
+            {/*                <Col md={6}>*/}
+            {/*                    <Form.Group className="mb-3">*/}
+            {/*                        <Form.Label className="text-muted">Полное имя *</Form.Label>*/}
+            {/*                        <Form.Control*/}
+            {/*                            type="text"*/}
+            {/*                            name="name"*/}
+            {/*                            value={rentalForm.name}*/}
+            {/*                            onChange={handleInputChange}*/}
+            {/*                            required*/}
+            {/*                            placeholder="Введите ваше полное имя"*/}
+            {/*                            disabled={loading}*/}
+            {/*                            className="bg-secondary-bg text-muted border-secondary"*/}
+            {/*                        />*/}
+            {/*                    </Form.Group>*/}
+            {/*                </Col>*/}
+
+            {/*                <Col md={6}>*/}
+            {/*                    <Form.Group className="mb-3">*/}
+            {/*                        <Form.Label className="text-muted">Email адрес *</Form.Label>*/}
+            {/*                        <Form.Control*/}
+            {/*                            type="email"*/}
+            {/*                            name="email"*/}
+            {/*                            value={rentalForm.email}*/}
+            {/*                            onChange={handleInputChange}*/}
+            {/*                            required*/}
+            {/*                            placeholder="Введите ваш email"*/}
+            {/*                            disabled={loading}*/}
+            {/*                            className="bg-secondary-bg text-muted border-secondary"*/}
+            {/*                        />*/}
+            {/*                    </Form.Group>*/}
+            {/*                </Col>*/}
+            {/*            </Row>*/}
+
+            {/*            <Row>*/}
+            {/*                <Col md={6}>*/}
+            {/*                    <Form.Group className="mb-3">*/}
+            {/*                        <Form.Label className="text-muted">Номер телефона *</Form.Label>*/}
+            {/*                        <Form.Control*/}
+            {/*                            type="tel"*/}
+            {/*                            name="phone"*/}
+            {/*                            value={rentalForm.phone}*/}
+            {/*                            onChange={handleInputChange}*/}
+            {/*                            required*/}
+            {/*                            placeholder="Введите ваш номер телефона"*/}
+            {/*                            disabled={loading}*/}
+            {/*                            className="bg-secondary-bg text-muted border-secondary"*/}
+            {/*                        />*/}
+            {/*                    </Form.Group>*/}
+            {/*                </Col>*/}
+            {/*            </Row>*/}
+
+            {/*            <Form.Group className="mb-4">*/}
+            {/*                <Form.Label className="text-muted">Ваше сообщение *</Form.Label>*/}
+            {/*                <Form.Control*/}
+            {/*                    as="textarea"*/}
+            {/*                    rows={5}*/}
+            {/*                    name="message"*/}
+            {/*                    value={rentalForm.message}*/}
+            {/*                    onChange={handleInputChange}*/}
+            {/*                    required*/}
+            {/*                    placeholder="Расскажите нам о ваших потребностях в аренде..."*/}
+            {/*                    disabled={loading}*/}
+            {/*                    className="bg-secondary-bg text-muted border-secondary"*/}
+            {/*                />*/}
+            {/*                <Form.Text className="text-muted">*/}
+            {/*                    Опишите ваши требования, цели использования сайта и предпочтения*/}
+            {/*                </Form.Text>*/}
+            {/*            </Form.Group>*/}
+
+            {/*            <div className="site-detail-modal-actions">*/}
+            {/*                <Button*/}
+            {/*                    variant="outline-light"*/}
+            {/*                    onClick={() => setShowRentalModal(false)}*/}
+            {/*                    className="me-2 btn-outline-custom"*/}
+            {/*                    disabled={loading}*/}
+            {/*                >*/}
+            {/*                    Отмена*/}
+            {/*                </Button>*/}
+
+            {/*                <Button*/}
+            {/*                    type="submit"*/}
+            {/*                    className="site-detail-btn-submit-request btn-primary-custom"*/}
+            {/*                    disabled={loading}*/}
+            {/*                >*/}
+            {/*                    {loading ? (*/}
+            {/*                        <>*/}
+            {/*                            <Spinner*/}
+            {/*                                as="span"*/}
+            {/*                                animation="border"*/}
+            {/*                                size="sm"*/}
+            {/*                                role="status"*/}
+            {/*                                aria-hidden="true"*/}
+            {/*                                className="me-2"*/}
+            {/*                            />*/}
+            {/*                            Отправка...*/}
+            {/*                        </>*/}
+            {/*                    ) : (*/}
+            {/*                        '📧 Отправить заявку на аренду'*/}
+            {/*                    )}*/}
+            {/*                </Button>*/}
+            {/*            </div>*/}
+            {/*        </Form>*/}
+            {/*    </Modal.Body>*/}
+            {/*</Modal>*/}
+
+            {/* Модальное окно заявки на аренду */}
+            <RequestRental
+                site={site}
                 show={showRentalModal}
                 onHide={() => setShowRentalModal(false)}
-                centered
-                size="lg"
-                className="site-detail-rental-modal"
-            >
-                <Modal.Header closeButton className="border-bottom">
-                    <div>
-                        <Modal.Title className="text-muted">Арендовать {site.title || 'сайт'}</Modal.Title>
-                        <div className="site-detail-modal-subtitle text-muted">
-                            ₸{site.price || 0}/месяц • {site.category || 'Сайт'}
-                        </div>
-                    </div>
-                </Modal.Header>
+                onSuccess={(rental) => {
+                    // Дополнительные действия после успешной заявки
+                    console.log('Заявка создана:', rental);
+                }}
+            />
 
-                <Modal.Body>
-                    {!isLoggedIn && (
-                        <Alert variant="info" className="mb-4">
-                            <div className="d-flex align-items-center">
-                                <div className="me-3">💡</div>
-                                <div>
-                                    <strong>Рекомендуем зарегистрироваться!</strong>
-                                    <p className="mb-0 mt-1">
-                                        После регистрации вы сможете отслеживать статус вашей заявки,
-                                        управлять арендой и получать уведомления в личном кабинете.
-                                    </p>
-                                    <div className="mt-2">
-                                        <Button size="sm" variant="outline-primary" className="me-2" onClick={handleLoginClick}>
-                                            Войти
-                                        </Button>
-                                        <Button size="sm" variant="primary" onClick={handleRegisterClick}>
-                                            Зарегистрироваться
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
-                        </Alert>
-                    )}
-
-                    <div className="site-detail-rental-summary mb-4">
-                        <div className="site-detail-summary-item">
-                            <span className="text-muted">Сайт:</span>
-                            <strong className="text-primary">{site.title || 'Сайт'}</strong>
-                        </div>
-                        <div className="site-detail-summary-item">
-                            <span className="text-muted">Месячная цена:</span>
-                            <strong className="text-primary">₸{site.price || 0}</strong>
-                        </div>
-                        <div className="site-detail-summary-item">
-                            <span className="text-muted">Категория:</span>
-                            <strong className="text-primary">{site.category || 'Сайт'}</strong>
-                        </div>
-                    </div>
-
-                    <Form onSubmit={handleRentalSubmit}>
-                        <Row>
-                            <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="text-muted">Полное имя *</Form.Label>
-                                    <Form.Control
-                                        type="text"
-                                        name="name"
-                                        value={rentalForm.name}
-                                        onChange={handleInputChange}
-                                        required
-                                        placeholder="Введите ваше полное имя"
-                                        disabled={loading}
-                                        className="bg-secondary-bg text-muted border-secondary"
-                                    />
-                                </Form.Group>
-                            </Col>
-
-                            <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="text-muted">Email адрес *</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        name="email"
-                                        value={rentalForm.email}
-                                        onChange={handleInputChange}
-                                        required
-                                        placeholder="Введите ваш email"
-                                        disabled={loading}
-                                        className="bg-secondary-bg text-muted border-secondary"
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-
-                        <Row>
-                            <Col md={6}>
-                                <Form.Group className="mb-3">
-                                    <Form.Label className="text-muted">Номер телефона *</Form.Label>
-                                    <Form.Control
-                                        type="tel"
-                                        name="phone"
-                                        value={rentalForm.phone}
-                                        onChange={handleInputChange}
-                                        required
-                                        placeholder="Введите ваш номер телефона"
-                                        disabled={loading}
-                                        className="bg-secondary-bg text-muted border-secondary"
-                                    />
-                                </Form.Group>
-                            </Col>
-                        </Row>
-
-                        <Form.Group className="mb-4">
-                            <Form.Label className="text-muted">Ваше сообщение *</Form.Label>
-                            <Form.Control
-                                as="textarea"
-                                rows={5}
-                                name="message"
-                                value={rentalForm.message}
-                                onChange={handleInputChange}
-                                required
-                                placeholder="Расскажите нам о ваших потребностях в аренде..."
-                                disabled={loading}
-                                className="bg-secondary-bg text-muted border-secondary"
-                            />
-                            <Form.Text className="text-muted">
-                                Опишите ваши требования, цели использования сайта и предпочтения
-                            </Form.Text>
-                        </Form.Group>
-
-                        <div className="site-detail-modal-actions">
-                            <Button
-                                variant="outline-light"
-                                onClick={() => setShowRentalModal(false)}
-                                className="me-2 btn-outline-custom"
-                                disabled={loading}
-                            >
-                                Отмена
-                            </Button>
-
-                            <Button
-                                type="submit"
-                                className="site-detail-btn-submit-request btn-primary-custom"
-                                disabled={loading}
-                            >
-                                {loading ? (
-                                    <>
-                                        <Spinner
-                                            as="span"
-                                            animation="border"
-                                            size="sm"
-                                            role="status"
-                                            aria-hidden="true"
-                                            className="me-2"
-                                        />
-                                        Отправка...
-                                    </>
-                                ) : (
-                                    '📧 Отправить заявку на аренду'
-                                )}
-                            </Button>
-                        </div>
-                    </Form>
-                </Modal.Body>
-            </Modal>
         </div>
     );
 };
