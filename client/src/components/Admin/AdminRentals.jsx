@@ -654,7 +654,7 @@ const AdminRentals = () => {
                                                 <div className="d-flex align-items-center mb-2">
                                                     <i className="bi bi-grid text-muted me-2"></i>
                                                     <div>
-                                                        <Badge bg="primary" className="badge-primary">
+                                                        <Badge bg="primary" className="badge-primary text-light">
                                                             {selectedRental.siteId.category}
                                                         </Badge>
                                                         <div className="text-muted small mt-1">Категория</div>
