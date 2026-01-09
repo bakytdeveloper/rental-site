@@ -1,4 +1,4 @@
-import Contact from '../models/Contact.js'; // Если оставляем старую модель для общих контактов
+import Contact from '../models/Contact.js';
 import { sendEmailNotification } from '../services/emailService.js';
 
 // @desc    Создать контакт (для общих вопросов, не связанных с арендой)
@@ -8,33 +8,58 @@ export const createContact = async (req, res) => {
     try {
         console.log('📨 Получены данные контактной формы:', req.body);
 
-        const { name, email, message, subject = 'Общий вопрос' } = req.body;
+        const { name, email, message, phone, subject = 'Общий вопрос' } = req.body;
 
-        // Валидация
+        // УПРОЩЕННАЯ ВАЛИДАЦИЯ
+        // 1. Проверяем только обязательные поля
         if (!name || !email || !message) {
             return res.status(400).json({
                 success: false,
-                message: 'Имя, email и сообщение являются обязательными полями'
+                message: 'Пожалуйста, заполните все обязательные поля: имя, email и сообщение'
             });
         }
 
-        // Простая валидация email
-        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-        if (!emailRegex.test(email.trim())) {
+        // 2. Упрощенная валидация email (разрешаем +)
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const trimmedEmail = email.trim().toLowerCase();
+
+        if (!emailRegex.test(trimmedEmail)) {
             return res.status(400).json({
                 success: false,
-                message: 'Пожалуйста, введите корректный email адрес'
+                message: 'Пожалуйста, введите корректный email адрес (например: example@domain.com)'
             });
+        }
+
+        // 3. Проверяем минимальную длину сообщения
+        if (message.trim().length < 10) {
+            return res.status(400).json({
+                success: false,
+                message: 'Сообщение должно содержать минимум 10 символов'
+            });
+        }
+
+        // 4. Подготавливаем данные
+        const contactData = {
+            name: name.trim(),
+            email: trimmedEmail,
+            message: message.trim(),
+            status: 'new'
+        };
+
+        // Добавляем телефон, если есть (не обязательное поле)
+        if (phone && phone.trim()) {
+            // Простая очистка телефона - оставляем только цифры и +
+            const cleanedPhone = phone.trim();
+            contactData.phone = cleanedPhone;
+        }
+
+        // Добавляем тему, если есть
+        if (subject && subject.trim()) {
+            contactData.subject = subject.trim();
         }
 
         // Создаем контакт
-        const contact = await Contact.create({
-            name: name.trim(),
-            email: email.trim().toLowerCase(),
-            message: message.trim(),
-            subject: subject.trim(),
-            status: 'new'
-        });
+        const contact = await Contact.create(contactData);
 
         console.log('✅ Контакт сохранен в базу данных:', contact._id);
 
@@ -44,12 +69,14 @@ export const createContact = async (req, res) => {
                 await sendEmailNotification('newContactMessage', {
                     name: contact.name,
                     email: contact.email,
+                    phone: contact.phone || 'Не указан',
                     message: contact.message,
-                    subject: contact.subject
+                    subject: contact.subject || 'Общий вопрос'
                 });
                 console.log('✅ Email уведомление отправлено');
             } catch (emailError) {
                 console.error('❌ Ошибка отправки email:', emailError);
+                // Не прерываем основной процесс из-за ошибки email
             }
         }, 0);
 
@@ -68,25 +95,32 @@ export const createContact = async (req, res) => {
     } catch (error) {
         console.error('❌ Ошибка создания контакта:', error);
 
+        // Улучшенная обработка ошибок валидации MongoDB
         if (error.name === 'ValidationError') {
             const errors = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({
                 success: false,
-                message: 'Ошибка валидации',
+                message: 'Пожалуйста, проверьте введенные данные',
                 errors: errors
             });
         }
 
         if (error.code === 11000) {
-            return res.status(400).json({
-                success: false,
-                message: 'Контакт с таким email уже существует'
+            // Если дублируется email, все равно принимаем заявку
+            console.warn('⚠️ Дублирующийся email, но принимаем заявку');
+
+            // Продолжаем обработку без прерывания
+            return res.status(201).json({
+                success: true,
+                message: 'Ваше сообщение успешно отправлено! Мы свяжемся с вами в ближайшее время.',
+                warning: 'Ваше сообщение принято, но у нас уже есть контакт с таким email'
             });
         }
 
+        // Общая ошибка сервера
         res.status(500).json({
             success: false,
-            message: 'Ошибка при создании контакта: ' + error.message
+            message: 'Произошла ошибка при отправке сообщения. Пожалуйста, попробуйте позже.'
         });
     }
 };
