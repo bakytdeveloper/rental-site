@@ -161,9 +161,9 @@ const Contact = () => {
                                                     pattern="^[\+]?[1-9][\d\s\-\(\)\.]{7,}$"
                                                     title="Введите корректный номер телефона"
                                                 />
-                                                <Form.Text className="text-muted">
-                                                    Например: +7 (999) 123-45-67 или 89991234567
-                                                </Form.Text>
+                                                {/*<Form.Text className="text-muted">*/}
+                                                {/*    Например: +7 (999) 123-45-67 или 89991234567*/}
+                                                {/*</Form.Text>*/}
                                             </Form.Group>
                                         </Col>
                                         <Col md={6}>
