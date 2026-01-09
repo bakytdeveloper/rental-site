@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import { Container, Row, Col, Form, Button, Card, Spinner } from 'react-bootstrap';
 import { contactAPI } from '../services/api';
 import { useLoading } from '../context/LoadingContext';
 import { toast } from 'react-toastify';
 import SEO from '../components/SEO/SEO';
 import './Contact.css';
+import {useLocation} from "react-router-dom";
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const Contact = () => {
     });
 
     const { loading, startLoading, stopLoading } = useLoading();
+    const location = useLocation();
 
     const structuredData = {
         "@context": "https://schema.org",
@@ -44,6 +46,19 @@ const Contact = () => {
             [e.target.name]: e.target.value
         });
     };
+
+    // Функция для прокрутки наверх
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    };
+
+    useEffect(() => {
+        scrollToTop();
+    }, [location.search]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

@@ -454,9 +454,9 @@ const AdminRentals = () => {
                                                         Просмотр
                                                     </Button>
                                                     <Dropdown>
-                                                        <Dropdown.Toggle size="sm" variant="outline-secondary" className="admin-rentals__dropdown-btn">
-                                                            Действия
-                                                        </Dropdown.Toggle>
+                                                        {/*<Dropdown.Toggle size="sm" variant="outline-secondary" className="admin-rentals__dropdown-btn">*/}
+                                                        {/*    Действия*/}
+                                                        {/*</Dropdown.Toggle>*/}
                                                         <Dropdown.Menu>
                                                             <Dropdown.Item
                                                                 onClick={() => updateRentalStatus(rental._id, 'pending')}
