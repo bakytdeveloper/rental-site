@@ -145,10 +145,9 @@ const AdminRentals = () => {
             });
             fetchRentals();
             fetchRentalStats();
-            // Обновляем выбранную аренду
-            if (selectedRental) {
-                const updated = await rentalAPI.getById(selectedRental._id);
-                setSelectedRental(updated.data.rental);
+            // Закрываем модальное окно деталей, если оно открыто
+            if (showDetailModal) {
+                setShowDetailModal(false);
             }
         } catch (error) {
             toast.error('Не удалось добавить платеж');
@@ -162,11 +161,6 @@ const AdminRentals = () => {
             toast.success('Даты аренды обновлены');
             setShowDatesModal(false);
             fetchRentals();
-            // Обновляем выбранную аренду
-            if (selectedRental) {
-                const updated = await rentalAPI.getById(selectedRental._id);
-                setSelectedRental(updated.data.rental);
-            }
         } catch (error) {
             toast.error('Не удалось обновить даты');
             console.error('Ошибка обновления дат:', error);
@@ -464,20 +458,48 @@ const AdminRentals = () => {
                                                             Действия
                                                         </Dropdown.Toggle>
                                                         <Dropdown.Menu>
-                                                            <Dropdown.Item onClick={() => updateRentalStatus(rental._id, 'active')}>
+                                                            <Dropdown.Item
+                                                                onClick={() => updateRentalStatus(rental._id, 'pending')}
+                                                                disabled={rental.status === 'pending'}
+                                                                className={rental.status === 'pending' ? 'text-muted' : ''}
+                                                            >
+                                                                <i className="bi bi-clock me-2"></i>
+                                                                Вернуть в ожидание
+                                                            </Dropdown.Item>
+
+                                                            <Dropdown.Item
+                                                                onClick={() => updateRentalStatus(rental._id, 'active')}
+                                                                disabled={rental.status === 'active'}
+                                                                className={rental.status === 'active' ? 'text-muted' : ''}
+                                                            >
+                                                                <i className="bi bi-check-circle me-2"></i>
                                                                 Активировать
                                                             </Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => updateRentalStatus(rental._id, 'payment_due')}>
+
+                                                            <Dropdown.Item
+                                                                onClick={() => updateRentalStatus(rental._id, 'payment_due')}
+                                                                disabled={rental.status === 'payment_due'}
+                                                                className={rental.status === 'payment_due' ? 'text-muted' : ''}
+                                                            >
+                                                                <i className="bi bi-exclamation-triangle me-2"></i>
                                                                 Отметить как просроченную
                                                             </Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => updateRentalStatus(rental._id, 'cancelled')}>
+
+                                                            <Dropdown.Item
+                                                                onClick={() => updateRentalStatus(rental._id, 'cancelled')}
+                                                                disabled={rental.status === 'cancelled'}
+                                                                className={rental.status === 'cancelled' ? 'text-muted' : ''}
+                                                            >
+                                                                <i className="bi bi-x-circle me-2"></i>
                                                                 Отменить
                                                             </Dropdown.Item>
+
                                                             <Dropdown.Divider />
                                                             <Dropdown.Item onClick={() => {
                                                                 setSelectedRental(rental);
                                                                 setShowPaymentModal(true);
                                                             }}>
+                                                                <i className="bi bi-credit-card me-2"></i>
                                                                 Добавить платеж
                                                             </Dropdown.Item>
                                                             <Dropdown.Item onClick={() => {
@@ -488,6 +510,7 @@ const AdminRentals = () => {
                                                                 });
                                                                 setShowDatesModal(true);
                                                             }}>
+                                                                <i className="bi bi-calendar-range me-2"></i>
                                                                 Изменить даты
                                                             </Dropdown.Item>
                                                         </Dropdown.Menu>
@@ -706,7 +729,7 @@ const AdminRentals = () => {
                                     <div className="card-custom p-4 h-100">
                                         <h6 className="highlight-text mb-4 d-flex align-items-center">
                                             <i className="bi bi-calendar-week me-2"></i>
-                                            Даты аренды
+                                            Даты аренды и статус
                                         </h6>
 
                                         <div className="admin-rentals__dates-details">
@@ -733,22 +756,80 @@ const AdminRentals = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="mt-4">
-                                                <div className="text-muted small mb-2">Сменить статус</div>
-                                                <div className="admin-rentals__status-buttons d-flex flex-wrap gap-1">
-                                                    {['pending', 'active', 'payment_due', 'cancelled'].map(status => (
-                                                        <Button
-                                                            key={status}
-                                                            size="sm"
-                                                            variant={selectedRental.status === status ? 'primary' : 'outline-primary'}
-                                                            onClick={() => updateRentalStatus(selectedRental._id, status)}
-                                                            className="btn-primary-custom py-1 px-2"
-                                                            style={{ fontSize: '0.75rem' }}
-                                                        >
-                                                            {getStatusText(status)}
-                                                        </Button>
-                                                    ))}
+                                            {/* Внутри Modal.Body, где отображается текущий статус */}
+                                            <div className="mt-4 pt-3 border-top">
+                                                <div className="text-muted small mb-2">Текущий статус</div>
+                                                <div className="d-flex align-items-center justify-content-between mb-3">
+                                                    <div className="d-flex align-items-center">
+                                                        <i className="bi bi-info-circle text-primary me-2"></i>
+                                                        <span className="fw-bold">{getStatusText(selectedRental.status)}</span>
+                                                    </div>
+                                                    {getStatusBadge(selectedRental.status)}
                                                 </div>
+
+                                                {/* Кнопки для изменения статуса */}
+                                                <div className="d-grid gap-2">
+                                                    {selectedRental.status !== 'pending' && (
+                                                        <Button
+                                                            variant="outline-warning"
+                                                            size="sm"
+                                                            onClick={() => updateRentalStatus(selectedRental._id, 'pending')}
+                                                            className="w-100 d-flex align-items-center justify-content-center"
+                                                        >
+                                                            <i className="bi bi-clock me-2"></i>
+                                                            Вернуть в ожидание
+                                                        </Button>
+                                                    )}
+
+                                                    {selectedRental.status !== 'active' && selectedRental.status !== 'cancelled' && (
+                                                        <Button
+                                                            variant="outline-success"
+                                                            size="sm"
+                                                            onClick={() => updateRentalStatus(selectedRental._id, 'active')}
+                                                            className="w-100 d-flex align-items-center justify-content-center mt-2"
+                                                        >
+                                                            <i className="bi bi-check-circle me-2"></i>
+                                                            Активировать аренду
+                                                        </Button>
+                                                    )}
+
+                                                    {selectedRental.status !== 'payment_due' && selectedRental.status !== 'cancelled' && (
+                                                        <Button
+                                                            variant="outline-danger"
+                                                            size="sm"
+                                                            onClick={() => updateRentalStatus(selectedRental._id, 'payment_due')}
+                                                            className="w-100 d-flex align-items-center justify-content-center mt-2"
+                                                        >
+                                                            <i className="bi bi-exclamation-triangle me-2"></i>
+                                                            Отметить как просроченную
+                                                        </Button>
+                                                    )}
+
+                                                    {selectedRental.status !== 'cancelled' && (
+                                                        <Button
+                                                            variant="outline-secondary"
+                                                            size="sm"
+                                                            onClick={() => updateRentalStatus(selectedRental._id, 'cancelled')}
+                                                            className="w-100 d-flex align-items-center justify-content-center mt-2"
+                                                        >
+                                                            <i className="bi bi-x-circle me-2"></i>
+                                                            Отменить аренду
+                                                        </Button>
+                                                    )}
+                                                </div>
+
+                                                {/* Информация для активных аренд */}
+                                                {selectedRental.status === 'active' && (
+                                                    <div className="mt-3">
+                                                        <div className="text-muted small mb-1">Последний платеж</div>
+                                                        <div className="text-success small">
+                                                            {selectedRental.lastPaymentDate
+                                                                ? formatDate(selectedRental.lastPaymentDate)
+                                                                : 'Нет данных'
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>

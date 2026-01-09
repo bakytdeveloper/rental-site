@@ -167,7 +167,7 @@ export const rentalAPI = {
     // Защищенные методы для админа
     getAll: (params = {}) => api.get('/rentals', { params }),
     getById: (id) => api.get(`/rentals/${id}`),
-    updateStatus: (id, status) => api.put(`/rentals/${id}/status`, { status }),
+    updateStatus: (id, data) => api.put(`/rentals/${id}/status`, data), // Изменено с { status } на data
     updateDates: (id, dates) => api.put(`/rentals/${id}/dates`, dates),
     addPayment: (id, paymentData) => api.post(`/rentals/${id}/payments`, paymentData),
     getStats: () => api.get('/rentals/stats/overview'),

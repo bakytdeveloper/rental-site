@@ -358,17 +358,23 @@ export const updateRentalStatus = async (req, res) => {
         const oldStatus = rental.status;
         rental.status = status;
 
-        // Если активируем аренду, устанавливаем даты
-        if (status === 'active' && oldStatus !== 'active') {
-            rental.rentalStartDate = new Date();
+        // Если активируем аренду, устанавливаем/обновляем даты
+        if (status === 'active') {
+            // Если дата начала не установлена, устанавливаем текущую дату
+            if (!rental.rentalStartDate) {
+                rental.rentalStartDate = new Date();
+            }
 
-            // Если дата окончания не установлена, ставим через месяц
-            if (!rental.rentalEndDate) {
+            // Если дата окончания не установлена или уже прошла, продлеваем
+            if (!rental.rentalEndDate || rental.rentalEndDate < new Date()) {
                 const endDate = new Date();
                 endDate.setMonth(endDate.getMonth() + 1);
                 rental.rentalEndDate = endDate;
             }
         }
+
+        // Если переводим в ожидание (pending), не трогаем даты
+        // Они сохраняются как есть, чтобы можно было вернуть в актив без потери данных
 
         await rental.save();
 
@@ -384,7 +390,7 @@ export const updateRentalStatus = async (req, res) => {
                 await user.save();
 
                 // Отправляем email при активации аренды
-                if (status === 'active') {
+                if (status === 'active' && oldStatus !== 'active') {
                     setTimeout(async () => {
                         try {
                             await sendEmailNotification('clientRentalStarted', {
@@ -413,6 +419,7 @@ export const updateRentalStatus = async (req, res) => {
         });
     }
 };
+
 
 // @desc    Добавить платеж к аренде
 // @route   POST /api/rentals/:id/payments
