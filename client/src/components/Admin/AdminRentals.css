@@ -333,3 +333,17 @@
 .admin-rentals__modal .modal-content {
     animation: slideIn 0.3s ease-out;
 }
+
+@media (min-width: 1200px) {
+    .admin-rentals__modal .modal-lg {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .admin-rentals__modal .modal-xl {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}

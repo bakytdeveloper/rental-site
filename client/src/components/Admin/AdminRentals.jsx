@@ -569,11 +569,11 @@ const AdminRentals = () => {
                         <i className="bi bi-info-circle me-2"></i>
                         Детали аренды
                     </Modal.Title>
-                    {selectedRental && (
-                        <div className="ms-auto">
-                            {getStatusBadge(selectedRental.status)}
-                        </div>
-                    )}
+                    {/*{selectedRental && (*/}
+                    {/*    <div className="ms-auto">*/}
+                    {/*        {getStatusBadge(selectedRental.status)}*/}
+                    {/*    </div>*/}
+                    {/*)}*/}
                 </Modal.Header>
 
                 {selectedRental && (
