@@ -226,21 +226,21 @@ const Contact = () => {
 
                 <Row className="contact-info-section">
                     <Col md={4} className="text-center">
-                        <div className="contact-info-item">
+                        <div className="contact-info-item card-custom">
                             <div className="contact-icon">📧</div>
                             <h4>Напишите нам</h4>
                             <p>rentalsite@gmail.com</p>
                         </div>
                     </Col>
                     <Col md={4} className="text-center">
-                        <div className="contact-info-item">
+                        <div className="contact-info-item card-custom">
                             <div className="contact-icon">📞</div>
                             <h4>Позвоните нам</h4>
                             <p>+7 (778) 008-33-14</p>
                         </div>
                     </Col>
                     <Col md={4} className="text-center">
-                        <div className="contact-info-item">
+                        <div className="contact-info-item card-custom">
                             <div className="contact-icon">📍</div>
                             <h4>Посетите нас</h4>
                             <p>Бизнес Авеню, Офис 100</p>

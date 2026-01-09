@@ -50,6 +50,7 @@
     --gradient-primary: linear-gradient(135deg, #023cba 0%, #3b82f6 50%, #60a5fa 100%);
     --gradient-primary-short: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
     --gradient-bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+    --gradient-bg-dark: linear-gradient(135deg, #65aef5 0%, #c6e0fa 50%, #b3e5f8 100%);
     --gradient-bg-light: linear-gradient(135deg, #f1f5f9 0%, #f8fafc 100%);
     --gradient-accent: linear-gradient(45deg, #1e40af, #2563eb);
     --gradient-glow: linear-gradient(45deg, #1d4ed8, #2563eb, #3b82f6);

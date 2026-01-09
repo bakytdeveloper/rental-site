@@ -18,7 +18,7 @@
 }
 
 .contact-form-card {
-    background: var(--card-bg);
+    background: var(--gradient-bg-dark);
     backdrop-filter: blur(10px);
     border: var(--border-width-thin) solid var(--card-border);
     border-radius: var(--border-radius-xl);
@@ -36,8 +36,9 @@
 }
 
 .form-control {
-    background: var(--glass-bg);
-    border: var(--border-width-thin) solid var(--glass-border);
+    /*background: var(--glass-bg);*/
+    border: 1px solid var(--text-muted);
+    /*border: var(--border-width-thin) solid var(--glass-border);*/
     color: var(--text-light);
     border-radius: var(--border-radius-md);
     padding: 0.75rem 1rem;
@@ -55,7 +56,7 @@
 }
 
 .btn-submit-message {
-    background: var(--gradient-primary-short);
+    /*background: var(--gradient-primary-short);*/
     border: none;
     color: var(--primary-bg);
     padding: 0.75rem 2rem;
