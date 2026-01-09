@@ -541,185 +541,316 @@ const AdminRentals = () => {
                 centered
                 className="admin-rentals__modal"
             >
-                <Modal.Header closeButton className="border-bottom">
-                    <Modal.Title className="text-gradient">
+                <Modal.Header closeButton className="border-bottom bg-gradient-bg-modals">
+                    <Modal.Title className="text-gradient mb-0">
+                        <i className="bi bi-info-circle me-2"></i>
                         Детали аренды
                     </Modal.Title>
+                    {selectedRental && (
+                        <div className="ms-auto">
+                            {getStatusBadge(selectedRental.status)}
+                        </div>
+                    )}
                 </Modal.Header>
-                {selectedRental && (
-                    <Modal.Body>
-                        <Row className="g-3 mb-4">
-                            <Col md={6}>
-                                <div className="admin-rentals__detail-section">
-                                    <h6 className="highlight-text mb-3">Информация о клиенте</h6>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Имя:</strong>
-                                        <span className="ms-2">{selectedRental.clientName}</span>
-                                    </div>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Email:</strong>
-                                        <span className="ms-2 text-primary">{selectedRental.clientEmail}</span>
-                                    </div>
-                                    {selectedRental.clientPhone && (
-                                        <div className="admin-rentals__detail-item">
-                                            <strong className="text-muted">Телефон:</strong>
-                                            <span className="ms-2">{selectedRental.clientPhone}</span>
-                                        </div>
-                                    )}
-                                    {selectedRental.userId?.username && (
-                                        <div className="admin-rentals__detail-item">
-                                            <strong className="text-muted">Аккаунт:</strong>
-                                            <span className="ms-2">{selectedRental.userId.username}</span>
-                                        </div>
-                                    )}
-                                </div>
-                            </Col>
-                            <Col md={6}>
-                                <div className="admin-rentals__detail-section">
-                                    <h6 className="highlight-text mb-3">Информация о сайте</h6>
-                                    {selectedRental.siteId ? (
-                                        <>
-                                            <div className="admin-rentals__detail-item">
-                                                <strong className="text-muted">Название:</strong>
-                                                <span className="ms-2">{selectedRental.siteId.title}</span>
-                                            </div>
-                                            <div className="admin-rentals__detail-item">
-                                                <strong className="text-muted">Категория:</strong>
-                                                <Badge bg="outline-primary" className="ms-2">
-                                                    {selectedRental.siteId.category}
-                                                </Badge>
-                                            </div>
-                                            <div className="admin-rentals__detail-item">
-                                                <strong className="text-muted">Цена:</strong>
-                                                <span className="ms-2 text-primary">
-                                                    {formatCurrency(selectedRental.monthlyPrice)}/месяц
-                                                </span>
-                                            </div>
-                                        </>
-                                    ) : (
-                                        <p className="text-muted">Информация о сайте недоступна</p>
-                                    )}
-                                </div>
-                            </Col>
-                        </Row>
 
-                        <div className="admin-rentals__detail-section mb-4">
-                            <h6 className="highlight-text mb-3">Статус и даты</h6>
-                            <Row className="g-3">
-                                <Col md={6}>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Статус:</strong>
-                                        <div className="d-flex align-items-center gap-2 mt-1">
-                                            {getStatusBadge(selectedRental.status)}
-                                            <div className="admin-rentals__status-buttons d-flex gap-1">
-                                                {['pending', 'active', 'payment_due', 'cancelled'].map(status => (
-                                                    <Button
-                                                        key={status}
-                                                        size="sm"
-                                                        variant={selectedRental.status === status ? 'primary' : 'outline-primary'}
-                                                        onClick={() => updateRentalStatus(selectedRental._id, status)}
-                                                        className="btn-primary-custom"
-                                                    >
-                                                        {getStatusText(status)}
-                                                    </Button>
-                                                ))}
+                {selectedRental && (
+                    <Modal.Body className="p-0">
+                        {/* Блок с основной информацией */}
+                        <div className="p-4 bg-gradient-bg-light border-bottom">
+                            <Row className="g-4">
+                                {/* Информация о клиенте */}
+                                <Col lg={6}>
+                                    <div className="card-custom p-3 h-100">
+                                        <div className="d-flex align-items-center mb-3">
+                                            <div className="bg-primary-transparent rounded-circle p-2 me-3">
+                                                <i className="bi bi-person text-primary fs-4"></i>
                                             </div>
+                                            <h6 className="highlight-text mb-0">Информация о клиенте</h6>
                                         </div>
-                                    </div>
-                                </Col>
-                                <Col md={3}>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Начало:</strong>
-                                        <div>{formatDate(selectedRental.rentalStartDate)}</div>
-                                    </div>
-                                </Col>
-                                <Col md={3}>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Окончание:</strong>
-                                        <div className="d-flex align-items-center gap-2">
-                                            {formatDate(selectedRental.rentalEndDate)}
-                                            {selectedRental.rentalEndDate && (
-                                                <Badge bg={getDaysRemaining(selectedRental.rentalEndDate) <= 3 ? 'warning' : 'info'}>
-                                                    {getDaysRemaining(selectedRental.rentalEndDate)} дн.
-                                                </Badge>
+
+                                        <div className="admin-rentals__client-details">
+                                            <div className="d-flex align-items-center mb-2">
+                                                <i className="bi bi-person-circle text-muted me-2"></i>
+                                                <div>
+                                                    <div className="fw-bold text-dark">{selectedRental.clientName}</div>
+                                                    <small className="text-muted">Клиент</small>
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex align-items-center mb-2">
+                                                <i className="bi bi-envelope text-muted me-2"></i>
+                                                <div>
+                                                    <div className="text-primary">{selectedRental.clientEmail}</div>
+                                                    <small className="text-muted">Email</small>
+                                                </div>
+                                            </div>
+
+                                            {selectedRental.clientPhone && (
+                                                <div className="d-flex align-items-center mb-2">
+                                                    <i className="bi bi-telephone text-muted me-2"></i>
+                                                    <div>
+                                                        <div className="text-dark">{selectedRental.clientPhone}</div>
+                                                        <small className="text-muted">Телефон</small>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {selectedRental.userId?.username && (
+                                                <div className="d-flex align-items-center">
+                                                    <i className="bi bi-person-badge text-muted me-2"></i>
+                                                    <div>
+                                                        <div className="text-dark">{selectedRental.userId.username}</div>
+                                                        <small className="text-muted">Аккаунт</small>
+                                                    </div>
+                                                </div>
                                             )}
                                         </div>
                                     </div>
                                 </Col>
-                            </Row>
-                        </div>
 
-                        {selectedRental.notes && (
-                            <div className="admin-rentals__detail-section mb-4">
-                                <h6 className="highlight-text mb-3">Заметки клиента</h6>
-                                <div className="admin-rentals__notes card-custom p-3">
-                                    {selectedRental.notes}
-                                </div>
-                            </div>
-                        )}
-
-                        <div className="admin-rentals__detail-section mb-4">
-                            <h6 className="highlight-text mb-3">Финансовая информация</h6>
-                            <Row className="g-3">
-                                <Col md={4}>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Месячная цена:</strong>
-                                        <div className="text-primary">{formatCurrency(selectedRental.monthlyPrice)}</div>
-                                    </div>
-                                </Col>
-                                <Col md={4}>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Всего оплачено:</strong>
-                                        <div className="text-success">{formatCurrency(selectedRental.totalPaid)}</div>
-                                    </div>
-                                </Col>
-                                <Col md={4}>
-                                    <div className="admin-rentals__detail-item">
-                                        <strong className="text-muted">Последний платеж:</strong>
-                                        <div>{formatDate(selectedRental.lastPaymentDate)}</div>
-                                    </div>
-                                </Col>
-                            </Row>
-                        </div>
-
-                        <div className="admin-rentals__detail-section">
-                            <h6 className="highlight-text mb-3">История платежей</h6>
-                            {selectedRental.payments?.length > 0 ? (
-                                selectedRental.payments.map((payment, index) => (
-                                    <div key={index} className="admin-rentals__payment-item card-custom p-3 mb-2">
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <div className="text-primary mb-1">{formatCurrency(payment.amount)}</div>
-                                                <div className="text-muted small">
-                                                    {formatDate(payment.paymentDate)} • {payment.periodMonths} месяц(а) • {payment.paymentMethod}
-                                                </div>
-                                                {payment.notes && (
-                                                    <div className="text-muted small mt-1">{payment.notes}</div>
-                                                )}
+                                {/* Информация о сайте */}
+                                <Col lg={6}>
+                                    <div className="card-custom p-3 h-100">
+                                        <div className="d-flex align-items-center mb-3">
+                                            <div className="bg-primary-transparent rounded-circle p-2 me-3">
+                                                <i className="bi bi-globe text-primary fs-4"></i>
                                             </div>
-                                            <Badge bg="info">
-                                                {formatCurrency(payment.amount / payment.periodMonths)}/месяц
-                                            </Badge>
+                                            <h6 className="highlight-text mb-0">Информация о сайте</h6>
+                                        </div>
+
+                                        {selectedRental.siteId ? (
+                                            <div className="admin-rentals__site-details">
+                                                <div className="d-flex align-items-center mb-2">
+                                                    <i className="bi bi-tag text-muted me-2"></i>
+                                                    <div>
+                                                        <div className="fw-bold text-dark">{selectedRental.siteId.title}</div>
+                                                        <small className="text-muted">Название сайта</small>
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-flex align-items-center mb-2">
+                                                    <i className="bi bi-grid text-muted me-2"></i>
+                                                    <div>
+                                                        <Badge bg="primary" className="badge-primary">
+                                                            {selectedRental.siteId.category}
+                                                        </Badge>
+                                                        <div className="text-muted small mt-1">Категория</div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-flex align-items-center">
+                                                    <i className="bi bi-cash text-muted me-2"></i>
+                                                    <div>
+                                                        <div className="text-primary fw-bold">
+                                                            {formatCurrency(selectedRental.monthlyPrice)} <small className="text-muted">/месяц</small>
+                                                        </div>
+                                                        <small className="text-muted">Месячная аренда</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-3">
+                                                <i className="bi bi-exclamation-triangle text-warning fs-1 mb-2"></i>
+                                                <p className="text-muted mb-0">Информация о сайте недоступна</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </Col>
+                            </Row>
+                        </div>
+
+                        {/* Финансовая информация и даты */}
+                        <div className="p-4">
+                            <Row className="g-4 mb-4">
+                                {/* Финансовая информация */}
+                                <Col lg={8}>
+                                    <div className="card-custom p-4 h-100">
+                                        <h6 className="highlight-text mb-4 d-flex align-items-center">
+                                            <i className="bi bi-currency-exchange me-2"></i>
+                                            Финансовая информация
+                                        </h6>
+
+                                        <Row className="g-3">
+                                            <Col md={4}>
+                                                <div className="text-center p-3 bg-primary-transparent rounded-lg">
+                                                    <div className="text-muted small mb-1">Месячная цена</div>
+                                                    <div className="text-primary fw-bold fs-5">
+                                                        {formatCurrency(selectedRental.monthlyPrice)}
+                                                    </div>
+                                                </div>
+                                            </Col>
+
+                                            <Col md={4}>
+                                                <div className="text-center p-3 bg-success-transparent rounded-lg">
+                                                    <div className="text-muted small mb-1">Всего оплачено</div>
+                                                    <div className="text-success fw-bold fs-5">
+                                                        {formatCurrency(selectedRental.totalPaid)}
+                                                    </div>
+                                                </div>
+                                            </Col>
+
+                                            <Col md={4}>
+                                                <div className="text-center p-3 bg-info-transparent rounded-lg">
+                                                    <div className="text-muted small mb-1">Последний платеж</div>
+                                                    <div className="text-info fw-bold fs-5">
+                                                        {formatDate(selectedRental.lastPaymentDate)}
+                                                    </div>
+                                                </div>
+                                            </Col>
+                                        </Row>
+                                    </div>
+                                </Col>
+
+                                {/* Даты и статус */}
+                                <Col lg={4}>
+                                    <div className="card-custom p-4 h-100">
+                                        <h6 className="highlight-text mb-4 d-flex align-items-center">
+                                            <i className="bi bi-calendar-week me-2"></i>
+                                            Даты аренды
+                                        </h6>
+
+                                        <div className="admin-rentals__dates-details">
+                                            <div className="mb-3">
+                                                <div className="text-muted small mb-1">Начало аренды</div>
+                                                <div className="d-flex align-items-center">
+                                                    <i className="bi bi-calendar-plus text-primary me-2"></i>
+                                                    <span className="fw-bold">{formatDate(selectedRental.rentalStartDate)}</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="mb-3">
+                                                <div className="text-muted small mb-1">Окончание аренды</div>
+                                                <div className="d-flex align-items-center justify-content-between">
+                                                    <div className="d-flex align-items-center">
+                                                        <i className="bi bi-calendar-check text-primary me-2"></i>
+                                                        <span className="fw-bold">{formatDate(selectedRental.rentalEndDate)}</span>
+                                                    </div>
+                                                    {selectedRental.rentalEndDate && (
+                                                        <Badge bg={getDaysRemaining(selectedRental.rentalEndDate) <= 3 ? 'warning' : 'info'}>
+                                                            {getDaysRemaining(selectedRental.rentalEndDate)} дн.
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-4">
+                                                <div className="text-muted small mb-2">Сменить статус</div>
+                                                <div className="admin-rentals__status-buttons d-flex flex-wrap gap-1">
+                                                    {['pending', 'active', 'payment_due', 'cancelled'].map(status => (
+                                                        <Button
+                                                            key={status}
+                                                            size="sm"
+                                                            variant={selectedRental.status === status ? 'primary' : 'outline-primary'}
+                                                            onClick={() => updateRentalStatus(selectedRental._id, status)}
+                                                            className="btn-primary-custom py-1 px-2"
+                                                            style={{ fontSize: '0.75rem' }}
+                                                        >
+                                                            {getStatusText(status)}
+                                                        </Button>
+                                                    ))}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                ))
-                            ) : (
-                                <p className="text-muted">Платежи не найдены</p>
+                                </Col>
+                            </Row>
+
+                            {/* Заметки клиента */}
+                            {selectedRental.notes && (
+                                <div className="card-custom p-4 mb-4">
+                                    <h6 className="highlight-text mb-3 d-flex align-items-center">
+                                        <i className="bi bi-chat-left-text me-2"></i>
+                                        Заметки клиента
+                                    </h6>
+                                    <div className="admin-rentals__notes p-3 bg-secondary-bg rounded">
+                                        <div className="d-flex align-items-start">
+                                            <i className="bi bi-quote text-muted me-2 mt-1"></i>
+                                            <div className="text-dark" style={{ lineHeight: '1.6' }}>
+                                                {selectedRental.notes}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             )}
+
+                            {/* История платежей */}
+                            <div className="card-custom p-4">
+                                <h6 className="highlight-text mb-4 d-flex align-items-center">
+                                    <i className="bi bi-clock-history me-2"></i>
+                                    История платежей
+                                </h6>
+
+                                {selectedRental.payments?.length > 0 ? (
+                                    <div className="admin-rentals__payments-history">
+                                        {selectedRental.payments.map((payment, index) => (
+                                            <div key={index} className="admin-rentals__payment-item card-custom p-3 mb-3 hover-lift">
+                                                <Row className="align-items-center">
+                                                    <Col md={4}>
+                                                        <div className="d-flex align-items-center">
+                                                            <div className="bg-success-transparent rounded-circle p-2 me-3">
+                                                                <i className="bi bi-check-circle text-success"></i>
+                                                            </div>
+                                                            <div>
+                                                                <div className="fw-bold text-success">
+                                                                    {formatCurrency(payment.amount)}
+                                                                </div>
+                                                                <small className="text-muted">Сумма</small>
+                                                            </div>
+                                                        </div>
+                                                    </Col>
+
+                                                    <Col md={3}>
+                                                        <div className="text-muted small">Способ оплаты</div>
+                                                        <div className="text-dark fw-bold">{payment.paymentMethod}</div>
+                                                    </Col>
+
+                                                    <Col md={3}>
+                                                        <div className="text-muted small">Период</div>
+                                                        <div className="text-dark fw-bold">
+                                                            {payment.periodMonths} месяц(а)
+                                                        </div>
+                                                    </Col>
+
+                                                    <Col md={2}>
+                                                        <div className="text-muted small">Дата</div>
+                                                        <div className="text-dark fw-bold">
+                                                            {formatDate(payment.paymentDate)}
+                                                        </div>
+                                                    </Col>
+                                                </Row>
+
+                                                {payment.notes && (
+                                                    <div className="mt-2 pt-2 border-top">
+                                                        <div className="text-muted small mb-1">Примечание:</div>
+                                                        <div className="text-dark small">{payment.notes}</div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-4">
+                                        <i className="bi bi-wallet2 text-muted fs-1 mb-3"></i>
+                                        <p className="text-muted mb-0">История платежей отсутствует</p>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </Modal.Body>
                 )}
-                <Modal.Footer className="border-top">
-                    <div className="d-flex justify-content-between w-100">
-                        <div>
+
+                <Modal.Footer className="border-top bg-gradient-bg-modals">
+                    <div className="d-flex justify-content-between w-100 align-items-center">
+                        <div className="d-flex gap-2">
                             <Button
                                 variant="outline-primary"
                                 onClick={() => {
                                     setShowPaymentModal(true);
                                     setShowDetailModal(false);
                                 }}
-                                className="me-2 btn-outline-custom"
+                                className="btn-outline-custom d-flex align-items-center"
                             >
+                                <i className="bi bi-plus-circle me-2"></i>
                                 Добавить платеж
                             </Button>
                             <Button
@@ -732,12 +863,18 @@ const AdminRentals = () => {
                                     setShowDatesModal(true);
                                     setShowDetailModal(false);
                                 }}
-                                className="btn-outline-custom"
+                                className="btn-outline-custom d-flex align-items-center"
                             >
+                                <i className="bi bi-calendar-range me-2"></i>
                                 Изменить даты
                             </Button>
                         </div>
-                        <Button variant="secondary" onClick={handleCloseModal} className="btn-outline-custom">
+                        <Button
+                            variant="secondary"
+                            onClick={handleCloseModal}
+                            className="btn-outline-custom d-flex align-items-center"
+                        >
+                            <i className="bi bi-x-circle me-2"></i>
                             Закрыть
                         </Button>
                     </div>
