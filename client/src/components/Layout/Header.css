@@ -46,7 +46,7 @@
 }
 
 .header-auth-btn {
-    border: var(--border-width-thin) solid var(--primary-color);
+    border: var(--border-width-thin) solid var(--primary-color) !important;
     color: var(--primary-color) !important;
     background: transparent;
     padding: 0.5rem 1.5rem!important;

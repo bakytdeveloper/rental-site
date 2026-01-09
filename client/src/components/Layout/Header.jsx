@@ -232,7 +232,7 @@ const Header = () => {
                                 <Button
                                     variant="outline-light"
                                     onClick={handleLogin}
-                                    className="mb-2"
+                                    className="mb-2 border-primary"
                                 >
                                     Вход
                                 </Button>
