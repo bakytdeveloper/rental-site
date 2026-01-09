@@ -592,38 +592,42 @@ const AdminRentals = () => {
                                         </div>
 
                                         <div className="admin-rentals__client-details">
-                                            <div className="d-flex align-items-center mb-2">
+                                            {/* Клиент */}
+                                            <div className="admin-rentals__detail-item">
                                                 <i className="bi bi-person-circle text-muted me-2"></i>
-                                                <div>
+                                                <div className="flex-grow-1">
+                                                    <div className="text-muted small mb-1">Клиент:</div>
                                                     <div className="fw-bold text-dark">{selectedRental.clientName}</div>
-                                                    <small className="text-muted">Клиент</small>
                                                 </div>
                                             </div>
 
-                                            <div className="d-flex align-items-center mb-2">
+                                            {/* Email */}
+                                            <div className="admin-rentals__detail-item">
                                                 <i className="bi bi-envelope text-muted me-2"></i>
-                                                <div>
+                                                <div className="flex-grow-1">
+                                                    <div className="text-muted small mb-1">Email:</div>
                                                     <div className="text-primary">{selectedRental.clientEmail}</div>
-                                                    <small className="text-muted">Email</small>
                                                 </div>
                                             </div>
 
+                                            {/* Телефон, если есть */}
                                             {selectedRental.clientPhone && (
-                                                <div className="d-flex align-items-center mb-2">
+                                                <div className="admin-rentals__detail-item">
                                                     <i className="bi bi-telephone text-muted me-2"></i>
-                                                    <div>
+                                                    <div className="flex-grow-1">
+                                                        <div className="text-muted small mb-1">Телефон:</div>
                                                         <div className="text-dark">{selectedRental.clientPhone}</div>
-                                                        <small className="text-muted">Телефон</small>
                                                     </div>
                                                 </div>
                                             )}
 
+                                            {/* Аккаунт, если есть */}
                                             {selectedRental.userId?.username && (
-                                                <div className="d-flex align-items-center">
+                                                <div className="admin-rentals__detail-item">
                                                     <i className="bi bi-person-badge text-muted me-2"></i>
-                                                    <div>
+                                                    <div className="flex-grow-1">
+                                                        <div className="text-muted small mb-1">Аккаунт:</div>
                                                         <div className="text-dark">{selectedRental.userId.username}</div>
-                                                        <small className="text-muted">Аккаунт</small>
                                                     </div>
                                                 </div>
                                             )}
@@ -643,33 +647,62 @@ const AdminRentals = () => {
 
                                         {selectedRental.siteId ? (
                                             <div className="admin-rentals__site-details">
-                                                <div className="d-flex align-items-center mb-2">
+                                                {/* Название сайта */}
+                                                <div className="admin-rentals__detail-item">
                                                     <i className="bi bi-tag text-muted me-2"></i>
-                                                    <div>
+                                                    <div className="flex-grow-1">
+                                                        <div className="text-muted small mb-1">Название сайта:</div>
                                                         <div className="fw-bold text-dark">{selectedRental.siteId.title}</div>
-                                                        <small className="text-muted">Название сайта</small>
                                                     </div>
                                                 </div>
 
-                                                <div className="d-flex align-items-center mb-2">
+                                                {/* Категория */}
+                                                <div className="admin-rentals__detail-item">
                                                     <i className="bi bi-grid text-muted me-2"></i>
-                                                    <div>
-                                                        <Badge bg="primary" className="badge-primary text-light">
-                                                            {selectedRental.siteId.category}
-                                                        </Badge>
-                                                        <div className="text-muted small mt-1">Категория</div>
+                                                    <div className="flex-grow-1">
+                                                        <div className="text-muted small mb-1">Категория:</div>
+                                                        <div>
+                                                            <Badge bg="primary" className="badge-primary text-light">
+                                                                {selectedRental.siteId.category}
+                                                            </Badge>
+                                                        </div>
                                                     </div>
                                                 </div>
 
-                                                <div className="d-flex align-items-center">
+                                                {/* Цена аренды */}
+                                                <div className="admin-rentals__detail-item">
                                                     <i className="bi bi-cash text-muted me-2"></i>
-                                                    <div>
+                                                    <div className="flex-grow-1">
+                                                        <div className="text-muted small mb-1">Месячная аренда:</div>
                                                         <div className="text-primary fw-bold">
-                                                            {formatCurrency(selectedRental.monthlyPrice)} <small className="text-muted">/месяц</small>
+                                                            {formatCurrency(selectedRental.monthlyPrice)} <span className="text-muted">/месяц</span>
                                                         </div>
-                                                        <small className="text-muted">Месячная аренда</small>
                                                     </div>
                                                 </div>
+
+                                                {/* Дополнительная информация о сайте, если есть */}
+                                                {selectedRental.siteId.demoUrl && (
+                                                    <div className="admin-rentals__detail-item">
+                                                        <i className="bi bi-link-45deg text-muted me-2"></i>
+                                                        <div className="flex-grow-1">
+                                                            <div className="text-muted small mb-1">Демо-ссылка:</div>
+                                                            <a href={selectedRental.siteId.demoUrl} target="_blank" rel="noopener noreferrer" className="text-primary">
+                                                                Перейти на демо-сайт
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {/* Описание, если есть */}
+                                                {selectedRental.siteId.description && (
+                                                    <div className="admin-rentals__detail-item">
+                                                        <i className="bi bi-text-paragraph text-muted me-2"></i>
+                                                        <div className="flex-grow-1">
+                                                            <div className="text-muted small mb-1">Описание</div>
+                                                            <div className="text-dark small">{selectedRental.siteId.description.substring(0, 100)}...</div>
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         ) : (
                                             <div className="text-center py-3">
