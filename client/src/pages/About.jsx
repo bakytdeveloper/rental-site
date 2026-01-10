@@ -3,9 +3,19 @@ import './About.css';
 import {useEffect} from "react";
 import { useLocation } from 'react-router-dom';
 import SEO from '../components/SEO/SEO';
+import Features from "../components/Features/Features";
+import AOS from 'aos';
 
 const About = () => {
     const location = useLocation();
+
+    useEffect(() => {
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    }, []);
 
     const structuredData = {
         "@context": "https://schema.org",
@@ -97,6 +107,8 @@ const About = () => {
                     </Col>
                 </Row>
 
+                {/*<Features />*/}
+
                 <Row className="stats-section">
                     <Col md={4} className="text-center">
                         <div className="stat-item">
@@ -117,6 +129,9 @@ const About = () => {
                         </div>
                     </Col>
                 </Row>
+
+                <Features />
+                
             </Container>
         </div>
     );

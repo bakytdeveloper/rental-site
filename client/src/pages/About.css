@@ -46,10 +46,10 @@
 }
 
 .stats-section {
-    margin-top: 4rem;
-    padding: 3rem 0;
-    border-top: var(--border-width-thin) solid var(--glass-border);
-    border-bottom: var(--border-width-thin) solid var(--glass-border);
+    margin-top: 1rem;
+    padding: 1rem 0;
+    border-top: 2px solid var(--border-dark);
+    border-bottom: 2px solid var(--border-dark);
 }
 
 .stat-item {

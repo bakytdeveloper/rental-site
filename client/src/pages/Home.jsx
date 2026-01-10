@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import Hero from '../components/Hero/Hero';
-import Features from '../components/Features/Features';
+// import Features from '../components/Features/Features';
 import TargetAudience from '../components/TargetAudience/TargetAudience';
 import WhyRent from '../components/WhyRent/WhyRent';
 import Benefits from '../components/Benefits/Benefits';
@@ -58,7 +58,7 @@ const Home = () => {
             />
 
             <Hero />
-            <Features />
+            {/*<Features />*/}
             <TargetAudience />
             <WhyRent />
             <Benefits />
