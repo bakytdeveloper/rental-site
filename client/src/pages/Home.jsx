@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import Hero from '../components/Hero/Hero';
 // import Features from '../components/Features/Features';
-import TargetAudience from '../components/TargetAudience/TargetAudience';
+// import TargetAudience from '../components/TargetAudience/TargetAudience';
 import WhyRent from '../components/WhyRent/WhyRent';
 import Benefits from '../components/Benefits/Benefits';
-import CooperationFormats from '../components/CooperationFormats/CooperationFormats';
+// import CooperationFormats from '../components/CooperationFormats/CooperationFormats';
 import WorkStages from '../components/WorkStages/WorkStages'; // Добавляем новый компонент
 import FeaturedSites from '../components/FeaturedSites/FeaturedSites';
 import CTA from '../components/CTA/CTA';
@@ -59,10 +59,10 @@ const Home = () => {
 
             <Hero />
             {/*<Features />*/}
-            <TargetAudience />
+            {/*<TargetAudience />*/}
             <WhyRent />
             <Benefits />
-            <CooperationFormats />
+            {/*<CooperationFormats />*/}
             <WorkStages />
             <Tariffs />
             <FeaturedSites />

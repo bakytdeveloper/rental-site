@@ -131,7 +131,7 @@ const About = () => {
                 </Row>
 
                 <Features />
-                
+
             </Container>
         </div>
     );
