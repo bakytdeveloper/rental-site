@@ -9,14 +9,16 @@ const CTA = () => {
                 <Row className="text-center">
                     <Col lg={8} className="mx-auto">
                         <div className="cta-content">
-                            <h2 className="cta-title">
-                                Готовы запустить свое
-                                <span className="text-gradient"> онлайн-присутствие?</span>
+                            {/* Рекомендуемый вариант */}
+                            <h2 className="text-gradient">
+                                Начните бизнес онлайн без разработки с нуля
                             </h2>
+
                             <p className="cta-description">
-                                Присоединяйтесь к сотням бизнесов, которые ускорили свой рост
-                                с помощью нашей услуги аренды сайтов. Никаких технических навыков не требуется.
+                                Арендуйте профессиональный сайт за короткое время. Никаких длительных  ожиданий,
+                                технических сложностей или больших вложений. Если вы только начинаете своё дело, то мы поможем это сделать быстро и качественно
                             </p>
+
                             <div className="cta-buttons">
                                 <Button
                                     as={Link}
@@ -24,7 +26,7 @@ const CTA = () => {
                                     className="btn-cta-primary"
                                     size="lg"
                                 >
-                                    Смотреть все сайты
+                                    Выбрать сайт
                                 </Button>
                                 <Button
                                     as={Link}
@@ -32,9 +34,10 @@ const CTA = () => {
                                     className="btn-cta-secondary"
                                     size="lg"
                                 >
-                                    Связаться с нами
+                                    Бесплатная консультация
                                 </Button>
                             </div>
+
                         </div>
                     </Col>
                 </Row>
