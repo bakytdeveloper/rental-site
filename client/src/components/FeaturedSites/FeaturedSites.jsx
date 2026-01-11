@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { siteAPI } from '../../services/api';
@@ -9,31 +9,38 @@ import './FeaturedSites.css';
 const FeaturedSites = () => {
     const [featuredSites, setFeaturedSites] = useState([]);
     const { loading, startLoading, stopLoading } = useLoading();
+    const hasFetched = useRef(false); // Используем useRef вместо useState
 
-    useEffect(() => {
-        fetchFeaturedSites();
-        // eslint-disable-next-line
-    }, []);
+    // Выносим функцию с useCallback, чтобы она не пересоздавалась
+    const fetchFeaturedSites = useCallback(async () => {
+        // Если уже загружали, не загружаем снова
+        if (hasFetched.current) {
+            console.log('Featured sites already fetched, skipping');
+            return;
+        }
 
-    const fetchFeaturedSites = async () => {
+        hasFetched.current = true;
         startLoading();
+
         try {
             console.log('Fetching featured sites...');
             const response = await siteAPI.getFeatured();
-            console.log('Featured sites response:', response.data);
 
-            // ВАЖНО: Бэкенд теперь возвращает data.sites или data.data
             const sites = response.data.data || response.data.sites || [];
             setFeaturedSites(sites);
-
-            console.log(`Set ${sites.length} featured sites`);
+            console.log(`Successfully loaded ${sites.length} featured sites`);
         } catch (error) {
             console.error('Ошибка при загрузке рекомендуемых сайтов:', error);
-            setFeaturedSites([]); // Устанавливаем пустой массив при ошибке
+            setFeaturedSites([]);
+            hasFetched.current = false; // Сбрасываем флаг при ошибке
         } finally {
             stopLoading();
         }
-    };
+    }, [startLoading, stopLoading]); // Зависимости только от функций контекста
+
+    useEffect(() => {
+        fetchFeaturedSites();
+    }, [fetchFeaturedSites]); // Теперь зависит от мемоизированной функции
 
     // Структурированные данные для коллекции
     const collectionStructuredData = {
@@ -77,6 +84,8 @@ const FeaturedSites = () => {
             </Col>
         ));
     };
+
+    console.log('FeaturedSites rendering, sites count:', featuredSites.length); // Для отладки
 
     return (
         <section className="featured-sites-section" itemScope itemType="https://schema.org/ItemList">

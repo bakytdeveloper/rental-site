@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -10,6 +9,105 @@ const api = axios.create({
         'Content-Type': 'application/json',
     },
 });
+
+// ==================== КЕШИРОВАНИЕ ====================
+const cache = {
+    featuredSites: null,
+    featuredSitesTime: null,
+    featuredSitesDuration: 30000, // 30 секунд кеширования
+    featuredSitesPromise: null, // Чтобы избежать параллельных запросов
+};
+
+// ==================== API ДЛЯ САЙТОВ ====================
+export const siteAPI = {
+    getAll: (params = {}) => {
+        console.log('siteAPI.getAll called with params:', params);
+        return api.get('/sites', { params });
+    },
+
+    getFeatured: async () => {
+        const now = Date.now();
+
+        // Если уже есть активный промис, возвращаем его (предотвращаем дублирование)
+        if (cache.featuredSitesPromise) {
+            console.log('📦 Returning existing promise for featured sites');
+            return cache.featuredSitesPromise;
+        }
+
+        // Если есть кеш и он еще актуален, возвращаем его
+        if (cache.featuredSites && cache.featuredSitesTime &&
+            (now - cache.featuredSitesTime) < cache.featuredSitesDuration) {
+            console.log('📦 Returning cached featured sites');
+            return {
+                data: cache.featuredSites,
+                fromCache: true
+            };
+        }
+
+        console.log('🌐 Making fresh API call for featured sites');
+
+        // Создаем промис для запроса
+        cache.featuredSitesPromise = api.get('/sites/featured')
+            .then(response => {
+                // Кешируем успешный ответ
+                cache.featuredSites = response.data;
+                cache.featuredSitesTime = now;
+                console.log('✅ Featured sites cached successfully');
+                return response;
+            })
+            .catch(error => {
+                // В случае ошибки, если есть старый кеш, возвращаем его
+                if (cache.featuredSites) {
+                    console.log('⚠️ API error, returning cached data');
+                    return {
+                        data: cache.featuredSites,
+                        fromCache: true,
+                        error: true,
+                        originalError: error
+                    };
+                }
+                throw error;
+            })
+            .finally(() => {
+                // Очищаем промис после завершения
+                cache.featuredSitesPromise = null;
+            });
+
+        return cache.featuredSitesPromise;
+    },
+
+    // Очистка кеша (может понадобиться при логауте или обновлении данных)
+    clearFeaturedCache: () => {
+        cache.featuredSites = null;
+        cache.featuredSitesTime = null;
+        cache.featuredSitesPromise = null;
+        console.log('🧹 Featured sites cache cleared');
+    },
+
+    getById: (id) => api.get(`/sites/${id}`),
+
+    // Админские методы
+    getAllAdmin: () => api.get('/sites/admin/list'),
+    create: (data) => {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        return api.post('/sites', data, config);
+    },
+    update: (id, data) => {
+        const config = {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        };
+        return api.put(`/sites/${id}`, data, config);
+    },
+    toggleFeatured: (id) => api.patch(`/sites/${id}/featured`),
+    deleteImages: (id, imageUrls) => api.delete(`/sites/${id}/images`, { data: { imageUrls } }),
+    delete: (id) => api.delete(`/sites/${id}`),
+};
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
@@ -57,48 +155,14 @@ api.interceptors.response.use(
                     window.location.href = '/auth/login';
                 }
             }
+
+            // Очищаем кеш при логауте
+            siteAPI.clearFeaturedCache();
         }
 
         return Promise.reject(error);
     }
 );
-
-// ==================== API ДЛЯ САЙТОВ ====================
-export const siteAPI = {
-    // getAll: (params = {}) => api.get('/sites', { params }),
-    // getFeatured: () => api.get('/sites/featured'),
-    getAll: (params = {}) => {
-        console.log('siteAPI.getAll called with params:', params);
-        return api.get('/sites', { params });
-    },
-    getFeatured: () => {
-        console.log('siteAPI.getFeatured called');
-        return api.get('/sites/featured');
-    },
-    getById: (id) => api.get(`/sites/${id}`),
-
-    // Админские методы
-    getAllAdmin: () => api.get('/sites/admin/list'),
-    create: (data) => {
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        return api.post('/sites', data, config);
-    },
-    update: (id, data) => {
-        const config = {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        };
-        return api.put(`/sites/${id}`, data, config);
-    },
-    toggleFeatured: (id) => api.patch(`/sites/${id}/featured`),
-    deleteImages: (id, imageUrls) => api.delete(`/sites/${id}/images`, { data: { imageUrls } }),
-    delete: (id) => api.delete(`/sites/${id}`),
-};
 
 // ==================== API ДЛЯ АДМИНА ====================
 export const authAPI = {
@@ -110,7 +174,6 @@ export const authAPI = {
 export const clientAPI = {
     // Публичные методы
     register: (data) => api.post('/client/register', data),
-    // В функции login в clientAPI
     login: (data) => {
         return api.post('/client/login', data).then(response => {
             // Проверяем, есть ли сохраненные данные для заявки
@@ -137,8 +200,6 @@ export const clientAPI = {
                         }
                     };
                 }).catch(error => {
-                    // console.error('Ошибка при создании заявки после логина:', error);
-                    // Если не удалось создать заявку, все равно возвращаем успешный логин
                     localStorage.removeItem('rentalPendingData');
                     return response;
                 });
@@ -167,11 +228,10 @@ export const rentalAPI = {
     // Защищенные методы для админа
     getAll: (params = {}) => api.get('/rentals', { params }),
     getById: (id) => api.get(`/rentals/${id}`),
-    updateStatus: (id, data) => api.put(`/rentals/${id}/status`, data), // Изменено с { status } на data
+    updateStatus: (id, data) => api.put(`/rentals/${id}/status`, data),
     updateDates: (id, dates) => api.put(`/rentals/${id}/dates`, dates),
     addPayment: (id, paymentData) => api.post(`/rentals/${id}/payments`, paymentData),
     getStats: () => api.get('/rentals/stats/overview'),
-    // ДОБАВЬТЕ эти методы:
     searchRentals: (search) => api.get(`/rentals/search?query=${search}`),
     getActiveRentals: () => api.get('/rentals?status=active&limit=100'),
     getPendingRentals: () => api.get('/rentals?status=pending&limit=100'),
@@ -214,23 +274,14 @@ export const logout = (type = null) => {
     if (type === 'client' || (!type && localStorage.getItem('clientToken'))) {
         localStorage.removeItem('clientToken');
         localStorage.removeItem('clientData');
+        siteAPI.clearFeaturedCache(); // Очищаем кеш
         window.location.href = '/';
     } else if (type === 'admin' || (!type && localStorage.getItem('adminToken'))) {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
+        siteAPI.clearFeaturedCache(); // Очищаем кеш
         window.location.href = '/';
     }
-};
-
-export const handleApiError = (error, defaultMessage = 'Что-то пошло не так') => {
-    const message = error.response?.data?.message || defaultMessage;
-
-    // Не показываем toast для 401 ошибок (перенаправляем на логин)
-    if (error.response?.status !== 401) {
-        toast.error(message);
-    }
-
-    return message;
 };
 
 export const getCurrentUser = () => {

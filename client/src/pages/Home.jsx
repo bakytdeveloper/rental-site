@@ -22,7 +22,10 @@ const Home = () => {
             once: true,
             offset: 100
         });
+        console.log('Home component mounted'); // Добавьте это
     }, []);
+
+    console.log('Home component rendering'); // И это
 
     const structuredData = {
         "@context": "https://schema.org",
