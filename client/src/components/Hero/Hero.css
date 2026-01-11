@@ -110,7 +110,7 @@
     line-height: 1.1;
     margin-bottom: 1.5rem;
     height: auto;
-    /*text-align: left; !* Добавляем выравнивание *!*/
+    text-align: left; /* Добавляем выравнивание */
 }
 
 .cursor {
@@ -128,7 +128,7 @@
     color: var(--text-muted);
     margin-bottom: 2rem;
     line-height: 1.6;
-    text-align: left; /* Добавляем выравнивание */
+    /*text-align: left; !* Добавляем выравнивание *!*/
 }
 
 .hero-buttons {

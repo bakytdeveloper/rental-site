@@ -8,7 +8,7 @@ const Hero = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
     const [isInView, setIsInView] = useState(false);
-    const fullText = "Аренда сайта, запуск от 8 дней без лишних трат";
+    const fullText = "Сервис аренды, онлайн торговли. Запуск от 3-8 дней";
     const heroRef = useRef(null);
 
     const location = useLocation();
@@ -121,7 +121,10 @@ const Hero = () => {
                                 </h1>
 
                                 <p className="hero-description">
-                                    Экономия до 70% бюджета, для малого и среднего бизнеса. Аренда с возможностью выкупа. Бизнес планирование, Seo оптимизация - внутренняя и внешняя перелинковка страниц, Покупка готового интернет - магазина
+                                    Экономия 80%, малый средний бизнес, услуги временного
+                                    пользования с возможностью выкупа. Бизнес планирование,
+                                    оптимизированная поисковая структура. Продажа готового интернет -
+                                    магазина
                                 </p>
 
                                 <div className="hero-buttons">
@@ -130,7 +133,7 @@ const Hero = () => {
                                         to="/catalog"
                                         className="btn-primary-custom me-3 hero-btn-primary-custom"
                                     >
-                                        {isMobile ? 'Каталог' : 'Исследовать каталог'}
+                                        {isMobile ? 'Каталог' : 'Каталог сайтов'}
                                     </Button>
 
                                     <Button
