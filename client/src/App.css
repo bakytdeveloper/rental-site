@@ -1,5 +1,11 @@
+/* App.css - ОБНОВЛЕННЫЙ */
+
 .App {
   text-align: center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
 }
 
 .App-logo {
@@ -37,6 +43,21 @@
   }
 }
 
+/* Основной контент - исправляем проблему с шириной */
+.main-content {
+  flex: 1;
+  width: 100%;
+  max-width: 100vw; /* Ограничиваем максимальную ширину */
+  overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
+  position: relative;
+}
+
+/* Убираем любые возможные отступы справа */
+body, html {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
 /* WhatsApp кнопка - адаптивность */
 @media (max-width: 768px) {
   .whatsapp-button-container {
@@ -58,4 +79,23 @@
 .login-page .whatsapp-button-container,
 .admin-page .whatsapp-button-container {
   display: none !important;
+}
+
+/* Утилитарные классы для фикса ширины */
+.w-100 {
+  width: 100% !important;
+}
+
+.mw-100 {
+  max-width: 100% !important;
+}
+
+/* Исправление для всех контейнеров */
+.container-fluid,
+.container,
+.container-custom {
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
 }
