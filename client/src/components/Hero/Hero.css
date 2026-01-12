@@ -463,6 +463,12 @@
     }
 }
 
+@media (max-width: 768px) {
+    .hero-btn-outline-custom {
+        margin-top: 1rem;
+    }
+}
+
 /* Очень маленькие устройства */
 @media (max-width: 480px) {
     .hero-section {
