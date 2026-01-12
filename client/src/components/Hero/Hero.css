@@ -354,7 +354,7 @@
     }
 
     .hero-buttons {
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem;
     }
 
     .hero-btn-primary-custom {
@@ -472,9 +472,9 @@
 /* Очень маленькие устройства */
 @media (max-width: 480px) {
     .hero-section {
-        min-height: 85vh;
-        height: 85vh;
-        max-height: 85vh;
+        min-height: 88vh;
+        height: 88vh;
+        max-height: 88vh;
     }
 
     .hero-align-items-center {
@@ -497,7 +497,7 @@
     }
 
     .hero-badge {
-        margin-top: 8rem;
+        margin-top: 9rem;
     }
 
     .col-hero-visual {
