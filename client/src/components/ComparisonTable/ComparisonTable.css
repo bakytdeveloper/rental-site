@@ -1,0 +1,362 @@
+/* ComparisonTable.css */
+
+.comparison-table-section {
+    padding: 5rem 0;
+    background: var(--gradient-bg-light);
+    position: relative;
+}
+
+.comparison-table-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+}
+
+.table-responsive {
+    border-radius: var(--border-radius-lg);
+}
+
+/* Десктопная таблица */
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-medium);
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: center;
+    border: 1px solid var(--card-border);
+}
+
+.comparison-table th {
+    background: var(--primary-transparent-05);
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+}
+
+.comparison-table .criteria-col {
+    width: 25%;
+    background: var(--accent-bg);
+    text-align: left;
+    font-weight: 600;
+    color: var(--primary-dark);
+}
+
+.comparison-table .competitor-col {
+    width: 18.75%;
+    background: var(--overlay-light);
+}
+
+.comparison-table .competitor-col.primary {
+    background: linear-gradient(135deg, var(--primary-transparent-10), var(--primary-transparent-20));
+    border: 2px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.comparison-table .competitor-col.primary::before {
+    content: '★';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color: var(--primary-color);
+    font-size: 0.8rem;
+}
+
+.competitor-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.competitor-name {
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-dark);
+}
+
+.competitor-col.primary .competitor-name {
+    color: var(--primary-dark);
+    font-weight: 800;
+}
+
+.best-badge {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.criterion-cell {
+    background: var(--accent-bg);
+}
+
+.criterion-text {
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.advantage-cell {
+    transition: all var(--transition-normal);
+}
+
+.advantage-cell.primary {
+    background: var(--primary-transparent-05);
+}
+
+.advantage-cell:hover {
+    background: var(--primary-transparent-10);
+}
+
+.advantage-text {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Стили для преимуществ */
+.advantage-check {
+    color: var(--success-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.advantage-included {
+    color: var(--success-color);
+    font-weight: 600;
+    background: var(--status-success-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    display: inline-block;
+}
+
+.advantage-best {
+    color: var(--primary-dark);
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary-transparent-10), var(--primary-transparent-20));
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-sm);
+    display: inline-block;
+}
+
+.advantage-partial {
+    color: var(--warning-color);
+    font-weight: 600;
+    background: var(--status-warning-bg);
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    display: inline-block;
+}
+
+.advantage-neutral {
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+/* Мобильная версия */
+.competitor-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-light);
+    transition: all var(--transition-normal);
+}
+
+.competitor-card.primary {
+    border: 2px solid var(--primary-color);
+    background: linear-gradient(135deg, var(--primary-transparent-10), var(--primary-transparent-05));
+    box-shadow: var(--shadow-medium);
+    position: relative;
+}
+
+.competitor-card.primary::before {
+    content: '⭐ ЛУЧШИЙ ВЫБОР';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.25rem 1rem;
+    border-radius: var(--border-radius-full);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.competitor-header-mobile {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-dark);
+}
+
+.competitor-card.primary .competitor-header-mobile {
+    border-bottom-color: var(--primary-color);
+}
+
+.competitor-name-mobile {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.competitor-card.primary .competitor-name-mobile {
+    color: var(--primary-dark);
+}
+
+.best-badge-mobile {
+    background: var(--gradient-primary);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: var(--border-radius-full);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.advantages-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.advantage-item-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.75rem;
+    background: var(--overlay-light);
+    border-radius: var(--border-radius-sm);
+    border: 1px solid var(--border-dark);
+}
+
+.criterion-mobile {
+    font-size: 0.85rem;
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.advantage-mobile {
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--border-radius-sm);
+    text-align: center;
+}
+
+/* Ключевые преимущества */
+.key-advantages {
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius-lg);
+    border: 1px solid var(--card-border);
+}
+
+.key-title {
+    color: var(--primary-dark);
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.key-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+}
+
+.key-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.key-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-align: center;
+}
+
+/* Адаптивность */
+@media (max-width: 992px) {
+    .comparison-table-section {
+        padding: 3rem 0;
+    }
+
+    .competitor-card {
+        padding: 1rem;
+    }
+
+    .key-advantages {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .competitor-name-mobile {
+        font-size: 1.1rem;
+    }
+
+    .advantage-item-mobile {
+        padding: 0.5rem;
+    }
+
+    .criterion-mobile {
+        font-size: 0.8rem;
+    }
+
+    .advantage-mobile {
+        font-size: 0.85rem;
+    }
+
+    .key-item {
+        padding: 0.75rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .comparison-table-section {
+        padding: 2rem 0;
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+    }
+
+    .section-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .key-title {
+        font-size: 1.1rem;
+    }
+
+    .key-icon {
+        font-size: 1.5rem;
+    }
+
+    .key-text {
+        font-size: 0.8rem;
+    }
+}

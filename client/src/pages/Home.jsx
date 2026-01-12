@@ -14,6 +14,7 @@ import 'aos/dist/aos.css';
 import './Home.css';
 import Tariffs from "../components/Tariffs/Tariffs";
 import Reviews from "../components/Reviews/Reviews";
+import ComparisonTable from "../components/ComparisonTable/ComparisonTable";
 
 const Home = () => {
     useEffect(() => {
@@ -68,6 +69,7 @@ const Home = () => {
             {/*<CooperationFormats />*/}
             <WorkStages />
             <Tariffs />
+            <ComparisonTable />
             <FeaturedSites />
             <Reviews /> {/* Добавляем новый компонент отзывов */}
             <CTA />
