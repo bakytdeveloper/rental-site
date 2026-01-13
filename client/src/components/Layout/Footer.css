@@ -188,7 +188,7 @@
     transition: all var(--transition-normal);
 }
 
-/* Эф   */
+/* Эф  */
 .footer-link:hover {
     text-shadow: 0 0 8px var(--primary-transparent-40);
 }
