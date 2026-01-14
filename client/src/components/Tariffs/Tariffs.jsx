@@ -130,7 +130,14 @@ const Tariffs = () => {
         }
     };
 
-    const activeTariffData = tariffs.find(tariff => tariff.id === activeTariff);
+    // Функция для переключения тарифа
+    const toggleTariff = (tariffId) => {
+        if (activeTariff === tariffId) {
+            setActiveTariff(null); // Закрыть если уже открыт
+        } else {
+            setActiveTariff(tariffId); // Открыть новый
+        }
+    };
 
     return (
         <section className="tariffs-section section-padding" id="tariffs">
@@ -144,91 +151,175 @@ const Tariffs = () => {
                     </p>
                 </div>
 
-                {/* Кликабельные карточки тарифов */}
-                <div className="tariffs-grid mb-5" data-aos="fade-up" data-aos-delay="100">
-                    {tariffs.map((tariff) => (
-                        <div
-                            key={tariff.id}
-                            className={`tariff-card-select ${activeTariff === tariff.id ? 'active' : ''}`}
-                            onClick={() => setActiveTariff(tariff.id)}
-                        >
-                            <div className="tariff-icon">{getIcon(tariff.id)}</div>
-                            <h3 className="tariff-title">{tariff.title}</h3>
-                            <p className="tariff-subtitle">{tariff.subtitle}</p>
+                {/* Десктопная версия (как было) */}
+                <div className="tariffs-desktop d-none d-lg-block">
+                    {/* Кликабельные карточки тарифов */}
+                    <div className="tariffs-grid mb-5" data-aos="fade-up" data-aos-delay="100">
+                        {tariffs.map((tariff) => (
+                            <div
+                                key={tariff.id}
+                                className={`tariff-card-select ${activeTariff === tariff.id ? 'active' : ''}`}
+                                onClick={() => setActiveTariff(tariff.id)}
+                            >
+                                <div className="tariff-icon">{getIcon(tariff.id)}</div>
+                                <h3 className="tariff-title">{tariff.title}</h3>
+                                <p className="tariff-subtitle">{tariff.subtitle}</p>
 
-                            {/* Отображение цены в зависимости от типа тарифа */}
-                            <div className="tariff-price">
-                                <span className="price-main">
-                                    {tariff.priceYearly ? tariff.priceMonthly : tariff.priceMonthly}
-                                </span>
-                                {tariff.priceYearly && (
-                                    <span className="price-yearly">
-                                        / {tariff.priceYearly.includes('мес.') ? tariff.priceYearly : `${tariff.priceYearly} мес.`}
+                                {/* Отображение цены в зависимости от типа тарифа */}
+                                <div className="tariff-price">
+                                    <span className="price-main">
+                                        {tariff.priceYearly ? tariff.priceMonthly : tariff.priceMonthly}
                                     </span>
-                                )}
-                            </div>
-
-                            <div className="tariff-indicator">
-                                <div className="indicator-dot"></div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Детальная информация о выбранном тарифе */}
-                <div className="tariff-details-container" data-aos="fade-up" data-aos-delay="200">
-                    <div className="tariff-details-card">
-                        {/* Заголовок детальной информации */}
-                        {/* Заголовок детальной информации */}
-                        <div className="tariff-details-header">
-                            <div className="tariff-details-icon">{getIcon(activeTariff)}</div>
-                            <div className="tariff-details-header-content">
-                                <h3 className="tariff-details-title">{activeTariffData.title}</h3>
-                                <p className="tariff-details-subtitle">{activeTariffData.subtitle}</p>
-                                <div className="tariff-details-price">
-                                    <span className="details-price-main">{activeTariffData.priceMonthly}</span>
-                                    {activeTariffData.priceYearly && (
-                                        <span className="details-price-yearly">
-                                            / {activeTariffData.priceYearly.includes('мес.') ? activeTariffData.priceYearly : `${activeTariffData.priceYearly} мес.`}
+                                    {tariff.priceYearly && (
+                                        <span className="price-yearly">
+                                            / {tariff.priceYearly.includes('мес.') ? tariff.priceYearly : `${tariff.priceYearly} мес.`}
                                         </span>
                                     )}
                                 </div>
+
+                                <div className="tariff-indicator">
+                                    <div className="indicator-dot"></div>
+                                </div>
                             </div>
-                        </div>
-
-                        {/* Описание тарифа */}
-                        <div className="tariff-description">
-                            <p>{activeTariffData.description}</p>
-                            {activeTariffData.includes && (
-                                <p className="includes-note">
-                                    <strong>Включает:</strong> {activeTariffData.includes}
-                                </p>
-                            )}
-                        </div>
-
-                        {/* Список функций - разделяем на 3 колонки */}
-                        <div className="tariff-features">
-                            <h4 className="features-title">Что входит в тариф:</h4>
-                            <div className="features-grid">
-                                {activeTariffData.features.map((feature, index) => (
-                                    <div key={index} className="feature-item">
-                                        <span className="feature-check">✓</span>
-                                        <span className="feature-item-span">{feature}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Кнопка выбора тарифа */}
-                        <div className="tariff-cta">
-                            {/*<button className="btn-primary-custom w-100">*/}
-                            {/*    Выбрать тариф "{activeTariff}"*/}
-                            {/*</button>*/}
-                            <p className="tariff-note">
-                                Все цены указаны в тенге. Возможна оплата в рассрочку.
-                            </p>
-                        </div>
+                        ))}
                     </div>
+
+                    {/* Детальная информация о выбранном тарифе (только для десктопа) */}
+                    {activeTariff && (
+                        <div className="tariff-details-container" data-aos="fade-up" data-aos-delay="200">
+                            <div className="tariff-details-card">
+                                {/* Заголовок детальной информации */}
+                                <div className="tariff-details-header">
+                                    <div className="tariff-details-icon">{getIcon(activeTariff)}</div>
+                                    <div className="tariff-details-header-content">
+                                        <h3 className="tariff-details-title">
+                                            {tariffs.find(t => t.id === activeTariff)?.title}
+                                        </h3>
+                                        <p className="tariff-details-subtitle">
+                                            {tariffs.find(t => t.id === activeTariff)?.subtitle}
+                                        </p>
+                                        <div className="tariff-details-price">
+                                            <span className="details-price-main">
+                                                {tariffs.find(t => t.id === activeTariff)?.priceMonthly}
+                                            </span>
+                                            {tariffs.find(t => t.id === activeTariff)?.priceYearly && (
+                                                <span className="details-price-yearly">
+                                                    / {tariffs.find(t => t.id === activeTariff)?.priceYearly?.includes('мес.')
+                                                    ? tariffs.find(t => t.id === activeTariff)?.priceYearly
+                                                    : `${tariffs.find(t => t.id === activeTariff)?.priceYearly} мес.`}
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Описание тарифа */}
+                                <div className="tariff-description">
+                                    <p>{tariffs.find(t => t.id === activeTariff)?.description}</p>
+                                    {tariffs.find(t => t.id === activeTariff)?.includes && (
+                                        <p className="includes-note">
+                                            <strong>Включает:</strong> {tariffs.find(t => t.id === activeTariff)?.includes}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Список функций - разделяем на 3 колонки */}
+                                <div className="tariff-features">
+                                    <h4 className="features-title">Что входит в тариф:</h4>
+                                    <div className="features-grid">
+                                        {tariffs.find(t => t.id === activeTariff)?.features.map((feature, index) => (
+                                            <div key={index} className="feature-item">
+                                                <span className="feature-check">✓</span>
+                                                <span className="feature-item-span">{feature}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Кнопка выбора тарифа */}
+                                <div className="tariff-cta">
+                                    <p className="tariff-note">
+                                        Все цены указаны в тенге. Возможна оплата в рассрочку.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+
+                {/* Мобильная версия - аккордеон */}
+                <div className="tariffs-mobile d-lg-none">
+                    {tariffs.map((tariff) => (
+                        <div
+                            key={tariff.id}
+                            className={`tariff-mobile-card ${activeTariff === tariff.id ? 'active' : ''}`}
+                        >
+                            {/* Кликабельный заголовок карточки */}
+                            <div
+                                className="tariff-mobile-header"
+                                onClick={() => toggleTariff(tariff.id)}
+                            >
+                                <div className="tariff-mobile-header-content">
+                                    <div className="tariff-mobile-icon-title">
+                                        <div className="tariff-mobile-icon">{getIcon(tariff.id)}</div>
+                                        <div>
+                                            <h3 className="tariff-mobile-title">{tariff.title}</h3>
+                                            <p className="tariff-mobile-subtitle">{tariff.subtitle}</p>
+                                        </div>
+                                    </div>
+
+                                    <div className="tariff-mobile-price-section">
+                                        <div className="tariff-mobile-price">
+                                            <span className="tariff-mobile-price-main">
+                                                {tariff.priceYearly ? tariff.priceMonthly : tariff.priceMonthly}
+                                            </span>
+                                            {tariff.priceYearly && (
+                                                <span className="tariff-mobile-price-yearly">
+                                                    / {tariff.priceYearly.includes('мес.')
+                                                    ? tariff.priceYearly
+                                                    : `${tariff.priceYearly} мес.`}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="tariff-mobile-arrow">
+                                            {activeTariff === tariff.id ? '▲' : '▼'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Детали тарифа (открывается при клике) */}
+                            <div className={`tariff-mobile-details ${activeTariff === tariff.id ? 'open' : ''}`}>
+                                {/* Описание тарифа */}
+                                <div className="tariff-mobile-description">
+                                    <p>{tariff.description}</p>
+                                    {tariff.includes && (
+                                        <p className="tariff-mobile-includes">
+                                            <strong>Включает:</strong> {tariff.includes}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Список функций */}
+                                <div className="tariff-mobile-features">
+                                    <h4 className="tariff-mobile-features-title">Что входит в тариф:</h4>
+                                    <div className="tariff-mobile-features-list">
+                                        {tariff.features.map((feature, index) => (
+                                            <div key={index} className="tariff-mobile-feature-item">
+                                                <span className="tariff-mobile-feature-check">✓</span>
+                                                <span className="tariff-mobile-feature-text">{feature}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Примечание */}
+                                <div className="tariff-mobile-note">
+                                    <p>Все цены указаны в тенге. Возможна оплата в рассрочку.</p>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>
