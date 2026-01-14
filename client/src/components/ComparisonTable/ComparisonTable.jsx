@@ -1,7 +1,11 @@
 import { Container, Row, Col } from 'react-bootstrap';
+import { useState } from 'react'; // Добавляем импорт useState
 import './ComparisonTable.css';
 
 const ComparisonTable = () => {
+    // Состояние для отслеживания открытых карточек в мобильной версии
+    const [openMobileCard, setOpenMobileCard] = useState(null);
+
     const competitors = [
         {
             name: 'RentalSite',
@@ -125,6 +129,15 @@ const ComparisonTable = () => {
         return '';
     };
 
+    // Функция для переключения карточки
+    const toggleMobileCard = (index) => {
+        if (openMobileCard === index) {
+            setOpenMobileCard(null); // Закрыть если уже открыта
+        } else {
+            setOpenMobileCard(index); // Открыть новую
+        }
+    };
+
     return (
         <section className="comparison-table-section">
             <Container className="container-custom">
@@ -187,28 +200,41 @@ const ComparisonTable = () => {
                     </div>
                 </div>
 
-                {/* Мобильная версия таблицы */}
+                {/* Мобильная версия таблицы - АККОРДЕОН */}
                 <div className="comparison-table-mobile d-lg-none">
                     {competitors.map((competitor, index) => (
                         <div
                             key={index}
-                            className={`competitor-card ${competitor.isPrimary ? 'primary' : ''}`}
+                            className={`competitor-card-mobile ${competitor.isPrimary ? 'primary' : ''} ${openMobileCard === index ? 'open' : ''}`}
                         >
-                            <div className="competitor-header-mobile">
-                                <h3 className="competitor-name-mobile">{competitor.name}</h3>
-                                {competitor.isPrimary && (
-                                    <span className="best-badge-mobile">🏆 Лучший выбор</span>
-                                )}
+                            {/* Кликабельный заголовок */}
+                            <div
+                                className="competitor-header-mobile clickable"
+                                onClick={() => toggleMobileCard(index)}
+                            >
+                                <div className="header-content">
+                                    <h3 className="competitor-name-mobile">{competitor.name}</h3>
+                                    {competitor.isPrimary && (
+                                        <span className="best-badge-mobile">🏆 Лучший выбор</span>
+                                    )}
+                                </div>
+                                <div className="mobile-arrow">
+                                    {openMobileCard === index ? '▲' : '▼'}
+                                </div>
                             </div>
-                            <div className="advantages-list">
-                                {criteria.map((criterion, idx) => (
-                                    <div key={idx} className="advantage-item-mobile">
-                                        <div className="criterion-mobile">{criterion}</div>
-                                        <div className={`advantage-mobile ${getAdvantageClass(competitor.advantages[idx])}`}>
-                                            {competitor.advantages[idx]}
+
+                            {/* Контент, который открывается/закрывается */}
+                            <div className={`advantages-container ${openMobileCard === index ? 'open' : ''}`}>
+                                <div className="advantages-list">
+                                    {criteria.map((criterion, idx) => (
+                                        <div key={idx} className="advantage-item-mobile">
+                                            <div className="criterion-mobile">{criterion}</div>
+                                            <div className={`advantage-mobile ${getAdvantageClass(competitor.advantages[idx])}`}>
+                                                {competitor.advantages[idx]}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
                             </div>
                         </div>
                     ))}
