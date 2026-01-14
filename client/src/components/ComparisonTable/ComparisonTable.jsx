@@ -131,7 +131,7 @@ const ComparisonTable = () => {
                 <Row className="mb-5">
                     <Col lg={10} className="mx-auto text-center">
                         <h2 className="section-title">
-                            Почему RentalSite — лучшее решение
+                            RentalSite — лучшее решение
                         </h2>
                         <p className="section-subtitle mb-4">
                             Сравните нас с конкурентами и убедитесь в наших преимуществах
