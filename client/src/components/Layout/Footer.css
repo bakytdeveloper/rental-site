@@ -192,7 +192,7 @@
     text-shadow: 0 0 8px var(--primary-transparent-40);
 }
 
-/* Адаптивность для больших мониторов (+) */
+/* Адаптивность для больших  (+) */
 @media (min-width: 1440px) {
     .footer {
         padding: 4rem 0 2rem;
