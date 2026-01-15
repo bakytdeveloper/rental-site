@@ -22,7 +22,7 @@
     color: var(--text-light);
 }
 
-/* Основная навигация */
+/* Основная навигация */header-navbar-toggler
 .header-custom-navbar .navbar-nav .nav-link {
     color: var(--text-dark) !important;
     font-weight: 500;
@@ -30,6 +30,7 @@
     padding: 0.5rem 1rem !important;
     border-radius: var(--border-radius-sm);
     transition: all var(--transition-normal);
+
 }
 
 .header-custom-navbar .navbar-nav .nav-link:hover,
@@ -133,14 +134,16 @@
 
 /* Кнопка меню */
 .header-navbar-toggler {
-    border: var(--border-width-thin) solid #363737 !important;
+    border: none;
     padding: 0.25rem 0.5rem;
-    background-color: #3b82f6;
-    box-shadow: 4px 8px 12px grey;
+    background-color: #a9c8fc;
+    box-shadow: 1px 2px 3px grey;
+    font-weight: 300;
 }
 
 .header-navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28100, 255, 218, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+
 }
 
 /* Адаптивность */
