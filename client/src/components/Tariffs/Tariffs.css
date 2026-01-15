@@ -454,12 +454,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0;
 }
 
 .tariff-mobile-price {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
 }
 
 .tariff-mobile-price-main {
