@@ -18,6 +18,7 @@
 
 .table-responsive {
     border-radius: var(--border-radius-lg);
+    border: 1px solid var(--primary-transparent-30);
 }
 
 /* Десктопная таблица */
@@ -34,7 +35,7 @@
 .comparison-table td {
     padding: 1rem;
     text-align: center;
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--primary-transparent-30);
 }
 
 .comparison-table th {
@@ -533,6 +534,13 @@
 .advantage-neutral {
     color: var(--text-muted);
     font-weight: 500;
+}
+
+/* Добавьте этот стиль в ComparisonTable.css */
+.advantage-cross {
+    color: var(--danger-color);
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 /* Для очень маленьких экранов */

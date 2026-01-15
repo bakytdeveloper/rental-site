@@ -1,9 +1,8 @@
 import { Container, Row, Col } from 'react-bootstrap';
-import { useState } from 'react'; // Добавляем импорт useState
+import { useState } from 'react';
 import './ComparisonTable.css';
 
 const ComparisonTable = () => {
-    // Состояние для отслеживания открытых карточек в мобильной версии
     const [openMobileCard, setOpenMobileCard] = useState(null);
 
     const competitors = [
@@ -36,15 +35,15 @@ const ComparisonTable = () => {
                 '30–90 дней',
                 'Частично',
                 '✅',
-                '✅',
+                '❌',
                 'Частично',
-                '✅',
+                '❌',
                 'Иногда',
-                '✅',
-                '✅',
-                '✅',
+                '❌',
+                '❌',
+                '❌',
                 'Частично',
-                '✅',
+                '❌',
                 'Платно',
                 'Высокая',
                 'Высокий'
@@ -52,20 +51,20 @@ const ComparisonTable = () => {
             isPrimary: false
         },
         {
-            name: 'SaaS-платформы',
+            name: 'SaaS-платформы (Tilda, Ecwid, InSales)',
             advantages: [
                 'SaaS-сервис',
                 '1–3 дня',
                 'Частично',
                 '✅',
-                '✅',
-                '✅',
+                '❌',
+                '❌',
                 'Ограничено',
                 '✅',
-                '✅',
-                '✅',
-                '✅',
-                '✅',
+                '❌',
+                '❌',
+                '❌',
+                '❌',
                 'Ограничено',
                 'Ограничено',
                 'Средняя',
@@ -78,17 +77,17 @@ const ComparisonTable = () => {
             advantages: [
                 'Услуга',
                 '14–30 дней',
-                '✅',
-                '✅',
-                '✅',
+                '❌',
+                '❌',
+                '❌',
                 'Частично',
                 '✅',
-                '✅',
-                '✅',
-                '✅',
-                '✅',
+                '❌',
+                '❌',
+                '❌',
+                '❌',
                 'Частично',
-                '✅',
+                '❌',
                 'Платно',
                 'Высокая',
                 'Высокий'
@@ -126,15 +125,15 @@ const ComparisonTable = () => {
         if (advantage.includes('Платно')) return 'advantage-neutral';
         if (advantage.includes('Частично') || advantage.includes('Ограничено')) return 'advantage-partial';
         if (advantage.includes('Иногда')) return 'advantage-partial';
+        if (advantage === '❌') return 'advantage-cross';
         return '';
     };
 
-    // Функция для переключения карточки
     const toggleMobileCard = (index) => {
         if (openMobileCard === index) {
-            setOpenMobileCard(null); // Закрыть если уже открыта
+            setOpenMobileCard(null);
         } else {
-            setOpenMobileCard(index); // Открыть новую
+            setOpenMobileCard(index);
         }
     };
 
@@ -207,7 +206,6 @@ const ComparisonTable = () => {
                             key={index}
                             className={`competitor-card-mobile ${competitor.isPrimary ? 'primary' : ''} ${openMobileCard === index ? 'open' : ''}`}
                         >
-                            {/* Кликабельный заголовок */}
                             <div
                                 className="competitor-header-mobile clickable"
                                 onClick={() => toggleMobileCard(index)}
@@ -223,7 +221,6 @@ const ComparisonTable = () => {
                                 </div>
                             </div>
 
-                            {/* Контент, который открывается/закрывается */}
                             <div className={`advantages-container ${openMobileCard === index ? 'open' : ''}`}>
                                 <div className="advantages-list">
                                     {criteria.map((criterion, idx) => (
